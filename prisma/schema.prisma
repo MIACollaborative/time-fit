@@ -17,3 +17,23 @@ model log {
   createdAt DateTime @default(now())
   content  Json
 }
+
+
+model users {
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+  username String @unique
+  password String
+
+
+  // for Fitbit
+  fitbitId String?
+  fitbitDisplayName String?
+  fitbitFullName String?
+  accessToken String?
+  refreshToken String?
+
+
+  // for time
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}

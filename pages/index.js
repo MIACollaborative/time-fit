@@ -49,7 +49,7 @@ export default function Home({logList}) {
   if (session) {
     return (
       <>
-        Signed in as {session.user.email} <br />
+        Signed in as {session.user.username} <br />
         <button onClick={() => signOut()}>Sign out</button>
       </>
     )
@@ -78,8 +78,7 @@ export default function Home({logList}) {
 
         
         <Button label="Sign in" className="p-button-danger" onClick={() => signIn()}/>
-        <div>Please do not share your participant ID and token with others.</div>
-
+        
 
 
 
@@ -106,6 +105,9 @@ export default function Home({logList}) {
 
 
 /*
+
+<div>Please do not share your participant ID and token with others.</div>
+
 <div>Participant ID</div>
         <InputText value={value1} placeholder={"Enter your participant ID"} onChange={(e) => setValue1(e.target.value)} />
         <Password value={value2} placeholder={"Enter your 8-digit token"} feedback={false} onChange={(e) => setValue2(e.target.value)} toggleMask />

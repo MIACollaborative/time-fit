@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-//import GithubProvider from "next-auth/providers/github"
+import prisma from "../../../lib/prisma";
 
 export default NextAuth({
   // Configure one or more authentication providers
@@ -28,13 +28,30 @@ export default NextAuth({
       async authorize(credentials, req) {
         // Add logic here to look up the user from the credentials supplied
         console.log(`credentials: ${JSON.stringify(credentials)}`);
-        const user = { id: 1, name: "J Smith", email: "jsmith@example.com", username: "test1", password: "test1" };
 
-        if (user.username == credentials.username && user.password == credentials.password) {
+
+        //const user = { id: 1, name: "J Smith", email: "jsmith@example.com", username: "test1", password: "test1" };
+
+        
+        const user = await prisma.users.findFirst({
+          where: { username: credentials.username }
+        });
+        
+
+        console.log(`authorize: user: ${JSON.stringify(user)}`);
+
+        if( user == null){
+          console.log(`No such user`);
+          return null;
+        }
+        else if (user.username == credentials.username && user.password == credentials.password) {
           // Any object returned will be saved in `user` property of the JWT
+          console.log(`Found this user`);
           return user;
+          //return { email: user.username };
         } else {
           // If you return null then an error will be displayed advising the user to check their details.
+          console.log(`Credentials issue`);
           return null;
 
           // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter

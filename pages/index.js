@@ -9,6 +9,7 @@ import 'primeflex/primeflex.css';
 import logger from "../lib/logger";
 import prisma from '../lib/prisma';
 
+import { useSession, signIn, signOut } from "next-auth/react"
 import React, { useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
@@ -38,10 +39,29 @@ export const getServerSideProps = async ({ req }) => {
 
 export default function Home({logList}) {
 
+  const { data: session } = useSession()
+
   logger.logToDB("home", {message: "test"});
 
   const [value1, setValue1] = useState('');
   const [value2, setValue2] = useState('');
+
+  if (session) {
+    return (
+      <>
+        Signed in as {session.user.email} <br />
+        <button onClick={() => signOut()}>Sign out</button>
+      </>
+    )
+  }
+  /*
+  return (
+    <>
+      Not signed in <br />
+      <button onClick={() => signIn()}>Sign in</button>
+    </>
+  )
+  */
 
   return (
     <div className={styles.container}>
@@ -55,10 +75,9 @@ export default function Home({logList}) {
         <h1 className={styles.title}>
         Walk To Joy
         </h1>
-        <div>Participant ID</div>
-        <InputText value={value1} placeholder={"Enter your participant ID"} onChange={(e) => setValue1(e.target.value)} />
-        <Password value={value2} placeholder={"Enter your 8-digit token"} feedback={false} onChange={(e) => setValue2(e.target.value)} toggleMask />
-        <Button label="Sign in" className="p-button-danger" />
+
+        
+        <Button label="Sign in" className="p-button-danger" onClick={() => signIn()}/>
         <div>Please do not share your participant ID and token with others.</div>
 
 
@@ -85,6 +104,12 @@ export default function Home({logList}) {
   )
 }
 
+
+/*
+<div>Participant ID</div>
+        <InputText value={value1} placeholder={"Enter your participant ID"} onChange={(e) => setValue1(e.target.value)} />
+        <Password value={value2} placeholder={"Enter your 8-digit token"} feedback={false} onChange={(e) => setValue2(e.target.value)} toggleMask />
+*/
 
 /*
 <div>

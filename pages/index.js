@@ -10,6 +10,7 @@ import logger from "../lib/logger";
 import prisma from '../lib/prisma';
 
 import { useSession, signIn, signOut } from "next-auth/react"
+import { useRouter } from 'next/router'
 import React, { useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
@@ -39,12 +40,22 @@ export const getServerSideProps = async ({ req }) => {
 
 export default function Home({logList}) {
 
-  const { data: session } = useSession()
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   logger.logToDB("home", {message: "test"});
 
-  const [value1, setValue1] = useState('');
-  const [value2, setValue2] = useState('');
+  //const [value1, setValue1] = useState('');
+  //const [value2, setValue2] = useState('');
+
+  
+
+  // status: enum mapping to three possible session states: "loading" | "authenticated" | "unauthenticated"
+  if (status == "loading") return <div>loading...</div>;
+  if (session){
+      router.push('/main');
+      return null;
+  }
 
   if (session) {
     return (

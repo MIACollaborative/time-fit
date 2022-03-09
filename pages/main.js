@@ -59,6 +59,7 @@ export default function Main({logList}) {
     return null;
   }
 
+  let fitbitSignInLink = "https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=23829X&redirect_uri=https%3A%2F%2Fwalktojoy.net%2Fsignin&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800";
 
   return (
     <div className={styles.container}>
@@ -72,10 +73,10 @@ export default function Main({logList}) {
 
         
       <div>
-        <Link href="/home"><button>Personalize your Experience</button></Link><br /><br />
-        <Link href="/home"><button>Complete the Baseline Survey</button></Link><br /><br />
-        <Link href="/home"><button>Connect your Fitbit</button></Link><br /><br />
-        <Link href="/home"><button>Disable Sedentary Notification on your Fitbit application</button></Link><br /><br />
+        <Link href={fitbitSignInLink}><a>Connect your Fitbit</a></Link><br /><br />
+        <Link href="/home"><a>Personalize your Experience</a></Link><br /><br />
+        <Link href="/home"><a>Complete the Baseline Survey</a></Link><br /><br />
+        <Link href="/home"><a>Disable Sedentary Notification on your Fitbit application</a></Link><br /><br />
       </div>
       <div>
         <p>1/4 complete</p>

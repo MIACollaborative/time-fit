@@ -61,7 +61,7 @@ export default function Home({logList}) {
     return (
       <>
         Signed in as {session.user.username} <br />
-        <button onClick={() => signOut()}>Sign out</button>
+        <Button label="Sign ouyt" className="p-button-danger" onClick={() => signOut()}/>
       </>
     )
   }

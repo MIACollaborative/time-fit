@@ -60,6 +60,7 @@ export default NextAuth({
           // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
         }
       },
+      /*
       callbacks: {
         async session({ session, token }) {
           console.log(`callbacks.session`);
@@ -74,8 +75,10 @@ export default NextAuth({
           return token;
         },
       },
+      */
     }),
   ],
+  /*
   session: {
     jwt: true,
     maxAge: 30 * 24 * 60 * 60,
@@ -83,4 +86,5 @@ export default NextAuth({
   jwt: {
     signingKey: "lXSW+g0cDZ4Y19NvZPrsDzIFF787vhRluTWC5igNxKY=",
   },
+  */
 });

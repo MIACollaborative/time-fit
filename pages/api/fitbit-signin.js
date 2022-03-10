@@ -30,6 +30,13 @@ export default async function handler(req, res) {
       let refreshToken = responseData.refresh_toekn;
 
       // To Do: ideally, store both
+      const updateUser = await prisma.user.update({
+        where: { hash: hashCode},
+        data: {
+            accessToken: accessToken,
+            refreshToken: refreshToken
+        },
+      })
 
       return {username: user.username, accessToken, refreshToken };
     }

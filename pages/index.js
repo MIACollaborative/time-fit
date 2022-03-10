@@ -52,16 +52,18 @@ export default function Home({logList}) {
 
   // status: enum mapping to three possible session states: "loading" | "authenticated" | "unauthenticated"
   if (status == "loading") return <div>loading...</div>;
+  /*
   if (session){
       router.push('/main');
       return null;
   }
+  */
 
   if (session) {
     return (
       <>
         Signed in as {session.user.username} <br />
-        <Button label="Sign ouyt" className="p-button-danger" onClick={() => signOut()}/>
+        <Button label="Sign out" className="p-button-danger" onClick={() => signOut()}/>
       </>
     )
   }

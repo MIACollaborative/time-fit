@@ -59,7 +59,9 @@ export default function Main({logList}) {
     return null;
   }
 
-  let fitbitSignInLink = "https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=23829X&redirect_uri=https%3A%2F%2Fwalktojoy.net%2Fsignin&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800";
+  let redirectURL = `https://walktojoy.net/signin`;
+
+  let fitbitSignInLink = `https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=23829X&redirect_uri=${encodeURIComponent(redirectURL)}&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800`;
 
   return (
     <div className={styles.container}>
@@ -83,10 +85,6 @@ export default function Main({logList}) {
         <p>Once all tasks are completed, your study will be activiated the upcoming Monday for the duration of 6 weeks.</p>
 
       </div>
-        
-
-
-
 
       </main>
 

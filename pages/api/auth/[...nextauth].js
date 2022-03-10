@@ -25,28 +25,32 @@ export default NextAuth({
           placeholder: "Enter your 8-digit token",
         },
       },
+
       async authorize(credentials, req) {
         // Add logic here to look up the user from the credentials supplied
         console.log(`credentials: ${JSON.stringify(credentials)}`);
 
         //const user = { id: 1, name: "J Smith", email: "jsmith@example.com", username: "test1", password: "test1" };
 
-        
+
         const user = await prisma.users.findFirst({
           where: { username: credentials.username }
         });
-        
+
 
         console.log(`authorize: user: ${JSON.stringify(user)}`);
 
-        if( user == null){
+        if (user == null) {
           console.log(`No such user`);
           return null;
         }
         else if (user.username == credentials.username && user.password == credentials.password) {
           // Any object returned will be saved in `user` property of the JWT
-          console.log(`Found this user`);
-          return user;
+          console.log(`Found this user: ${JSON.stringify(user)}`);
+          return {
+            name: credentials.username
+          };
+          // return username
           //return { email: user.username };
         } else {
           // If you return null then an error will be displayed advising the user to check their details.
@@ -56,6 +60,27 @@ export default NextAuth({
           // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
         }
       },
+      callbacks: {
+        async session({ session, token }) {
+          console.log(`callbacks.session`);
+          session.user = token.user;
+          return session;
+        },
+        async jwt({ token, user }) {
+          console.log(`callbacks.jwt`);
+          if (user) {
+            token.user = user;
+          }
+          return token;
+        },
+      },
     }),
   ],
+  session: {
+    jwt: true,
+    maxAge: 30 * 24 * 60 * 60,
+  },
+  jwt: {
+    signingKey: "lXSW+g0cDZ4Y19NvZPrsDzIFF787vhRluTWC5igNxKY=",
+  },
 });

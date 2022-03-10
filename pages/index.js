@@ -59,10 +59,14 @@ export default function Home({logList}) {
   }
   */
 
+  console.log(`session: ${JSON.stringify(session)}`);
+
+  // I store username in "name" to be properly returned
+  
   if (session) {
     return (
       <>
-        Signed in as {session.user.username} <br />
+        Signed in as {session.user.name} <br />
         <Button label="Sign out" className="p-button-danger" onClick={() => signOut()}/>
       </>
     )

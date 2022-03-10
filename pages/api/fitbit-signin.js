@@ -1,22 +1,37 @@
 import prisma from "../../lib/prisma";
+import FitbitHelper from "../../lib/FitbitHelper.mjs";
 
 export default async function handler(req, res) {
-  const { function_name } = req.query;
-  const { type, content } = req.body;
+  const { code, state } = req.query;
+  //const { type, content } = req.body;
 
-  console.log(`function: ${function_name}`);
+  console.log(`authCode: ${code}`);
+  console.log(`state: ${state}`);
 
-  switch (function_name) {
-    case "logToDB":
-      const aLog = await prisma.log.create({
-        data: {
-          type: type,
-          content: content,
-        },
-      });
-      res.status(200).json({ result: aLog });
-      return;
-    default:
-      return;
-  }
+  let authCode = code;
+  let stateSplit = state.split("-");
+  let hashCode = stateSplit[2];
+
+  const user = await prisma.users.findFirst({
+    where: { hash: hashCode}
+  });
+
+  return FitbitHelper.getAuthorizationInformation(authCode).then(
+    (responseData) => {
+      console.log(
+        `FitbitHelper.getAuthorizationInformation: ${JSON.stringify(
+          responseData
+        )}`
+      );
+
+      let accessToken = responseData.access_token;
+
+      // If you followed the Authorization Code Flow, you were issued a refresh token. You can use your refresh token to get a new access token in case the one that you currently have has expired. Enter or paste your refresh token below. Also make sure you enteryour data in section 1 and 3 since it's used to refresh your access token.
+      let refreshToken = responseData.refresh_toekn;
+
+      // To Do: ideally, store both
+
+      return {username: user.username, accessToken, refreshToken };
+    }
+  );
 }

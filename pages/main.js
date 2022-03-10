@@ -46,7 +46,7 @@ export default function Main({logList}) {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  logger.logToDB("main", {message: "test"});
+  //logger.logToDB("main", {message: "test"});
 
   //const [value1, setValue1] = useState('');
   //const [value2, setValue2] = useState('');

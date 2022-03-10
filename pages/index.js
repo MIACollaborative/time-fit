@@ -43,7 +43,7 @@ export default function Home({logList}) {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  logger.logToDB("home", {message: "test"});
+  //logger.logToDB("home", {message: "test"});
 
   //const [value1, setValue1] = useState('');
   //const [value2, setValue2] = useState('');

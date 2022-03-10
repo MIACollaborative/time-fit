@@ -24,23 +24,21 @@ function replacer(key, value) {
   return value;
 }
 
-/*
 export const getServerSideProps = async ({ req }) => {
   // const token = req.headers.AUTHORIZATION
   // const userId = await getUserId(token)\
 
-  const logs = await prisma.log.findMany();
+  //const logs = await prisma.log.findMany();
 
-  const logList = JSON.parse(JSON.stringify(logs, replacer));
+  //const logList = JSON.parse(JSON.stringify(logs, replacer));
 
   return {
-    props : { logList }
+    props : {  }
   }
 }
-*/
 
 
-export default function Home() {
+export default function Home({}) {
 
   const { data: session, status } = useSession();
   const router = useRouter();

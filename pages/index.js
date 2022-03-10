@@ -52,17 +52,17 @@ export default function Home({logList}) {
 
   // status: enum mapping to three possible session states: "loading" | "authenticated" | "unauthenticated"
   if (status == "loading") return <div>loading...</div>;
-  /*
+  
   if (session){
       router.push('/main');
       return null;
   }
-  */
+  
 
   console.log(`session: ${JSON.stringify(session)}`);
 
   // I store username in "name" to be properly returned
-  
+  /*
   if (session) {
     return (
       <>
@@ -71,7 +71,6 @@ export default function Home({logList}) {
       </>
     )
   }
-  /*
   return (
     <>
       Not signed in <br />

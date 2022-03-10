@@ -16,6 +16,8 @@ import React, { useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
+import { Divider } from 'primereact/divider';
+import md5 from "md5";
 
 
 function replacer(key, value) {
@@ -60,9 +62,12 @@ export default function Main({logList}) {
   }
 
   console.log(`session: ${JSON.stringify(session)}`);
-  let redirectURL = `https://walktojoy.net/signin?username=${session.user.username}`;
+  // username=${session.user.username}
+  let redirectURL = `https://walktojoy.net/api/fitbit-signin`;
 
-  let fitbitSignInLink = `https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=23829X&redirect_uri=${encodeURIComponent(redirectURL)}&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800`;
+  let state = `auth-walktojoy-${md5(session.user.name)}`;
+
+  let fitbitSignInLink = `https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=23829X&redirect_uri=${encodeURIComponent(redirectURL)}&state=${state}&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800`;
 
   return (
     <div className={styles.container}>
@@ -74,18 +79,23 @@ export default function Main({logList}) {
 
       <main className={styles.main}>
 
-        
+      
       <div>
+        <div>Signed in as {session.user.name} <br /></div>
+        <Divider />
         <Link href={fitbitSignInLink}><a>Connect your Fitbit</a></Link><br /><br />
         <Link href="/home"><a>Personalize your Experience</a></Link><br /><br />
         <Link href="/home"><a>Complete the Baseline Survey</a></Link><br /><br />
         <Link href="/home"><a>Disable Sedentary Notification on your Fitbit application</a></Link><br /><br />
+        <Divider />
+        
       </div>
       <div>
         <p>1/4 complete</p>
         <p>Once all tasks are completed, your study will be activiated the upcoming Monday for the duration of 6 weeks.</p>
 
       </div>
+      
 
       </main>
 

@@ -5,10 +5,10 @@ import "primereact/resources/themes/nova/theme.css"
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import 'primeflex/primeflex.css';
-
+/*
 import logger from "../lib/logger";
 import prisma from '../lib/prisma';
-
+*/
 import Link from 'next/link';
 import { useSession, signIn, signOut } from "next-auth/react"
 import { useRouter } from 'next/router'
@@ -19,7 +19,7 @@ import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
 import md5 from "md5";
 
-
+/*
 function replacer(key, value) {
   if (typeof value === 'Date') {
     return value.toString();
@@ -39,9 +39,10 @@ export const getServerSideProps = async ({ req }) => {
     props : { logList }
   }
 }
+*/
 
 
-export default function Main({logList}) {
+export default function Main() {
 
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -90,6 +91,7 @@ export default function Main({logList}) {
         <Divider />
         
       </div>
+      <div><Button label="Sign out" className="p-button-danger" onClick={() => signOut()}/></div>
       <div>
         <p>1/4 complete</p>
         <p>Once all tasks are completed, your study will be activiated the upcoming Monday for the duration of 6 weeks.</p>

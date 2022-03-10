@@ -24,6 +24,7 @@ function replacer(key, value) {
   return value;
 }
 
+/*
 export const getServerSideProps = async ({ req }) => {
   // const token = req.headers.AUTHORIZATION
   // const userId = await getUserId(token)\
@@ -36,9 +37,10 @@ export const getServerSideProps = async ({ req }) => {
     props : { logList }
   }
 }
+*/
 
 
-export default function Home({logList}) {
+export default function Home() {
 
   const { data: session, status } = useSession();
   const router = useRouter();

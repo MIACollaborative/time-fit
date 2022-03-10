@@ -1,4 +1,4 @@
-import FitbitHelper from "../utilities/FitbitHelper.mjs";
+import FitbitHelper from "../lib/FitbitHelper.mjs";
 
 //import MongoDBHelper from "../utilities/MongoDBHelper.mjs"
 import * as dotenv from "dotenv";
@@ -16,8 +16,27 @@ if (process.env.NODE_ENV !== "production") {
 
 // MongoDBHelper.insertDataIntoTable("walk_to_joy", "logs", [{message: "test3"}], true);
 
-
+/*
 FitbitHelper.getProfile(`${process.env.FITBIT_ACCESS_TOKEN}`)
 .then((responseData) => {
-    console.log(`FitbitHelper.getProfile: ${JSON.stringify(responseData)}`);
+    console.log(`FitbitHelper.getProfile: responseData`);
+
+    // console.log(`FitbitHelper.getProfile: responseData ${JSON.stringify(responseData)}`);
+});
+*/
+
+
+FitbitHelper.getAuthorizationInformation("***REMOVED***07")
+.then((responseData) => {
+    /*
+    console.log(
+      `FitbitHelper.getAuthorizationInformation: ${JSON.stringify(
+        responseData
+      )}`
+    );
+    */
+
+    console.log(
+        `FitbitHelper.getAuthorizationInformation: responseData: ${responseData}`
+      );
 });

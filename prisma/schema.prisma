@@ -23,7 +23,7 @@ model users {
   id  String  @id @default(auto()) @map("_id") @db.ObjectId
   username String @unique
   password String
-  hash String
+  hash String @unique
 
 
   // for Fitbit

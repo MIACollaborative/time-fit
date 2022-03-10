@@ -6,8 +6,8 @@ import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import 'primeflex/primeflex.css';
 
-import logger from "../lib/logger";
-import prisma from '../lib/prisma';
+//import logger from "../lib/logger";
+//import prisma from '../lib/prisma';
 
 import { useSession, signIn, signOut } from "next-auth/react"
 import { useRouter } from 'next/router'
@@ -16,7 +16,7 @@ import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 
-
+/*
 function replacer(key, value) {
   if (typeof value === 'Date') {
     return value.toString();
@@ -36,7 +36,7 @@ export const getServerSideProps = async ({ req }) => {
     props : {  }
   }
 }
-
+*/
 
 export default function Home({}) {
 

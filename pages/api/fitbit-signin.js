@@ -1,5 +1,6 @@
 import prisma from "../../lib/prisma";
 import FitbitHelper from "../../lib/FitbitHelper.mjs";
+import { inspect } from 'util' 
 
 export default async function handler(req, res) {
   const { code, state } = req.query;
@@ -92,6 +93,6 @@ export default async function handler(req, res) {
       }
       res
         .status(error.response.status)
-        .json({ response: error.response });
+        .json({ response: util.inspect(error.response) });
     });
 }

@@ -66,7 +66,7 @@ async function updateToken(hashCode, accessToken, refreshToken) {
 
 async function updateFitbitProfile(hashCode, fitbitId, fitbitDisplayName, fitbitFullName) {
   console.log(`updateFitbitId, hashCode: ${hashCode}`);
-  console.log(`updateFitbitId, fitbitId: ${accessToken}`);
+  console.log(`updateFitbitId, fitbitId: ${fitbitId}`);
   console.log(`updateFitbitId, fitbitDisplayName: ${fitbitDisplayName}`);
   console.log(`updateFitbitId, fitbitFullName: ${fitbitFullName}`);
 
@@ -186,9 +186,6 @@ export async function getServerSideProps({ query }) {
 export default function FitbitSignin({result}) {
   const { data: session, status } = useSession();
   const router = useRouter();
-
-  console.log(`authCode: ${code}`);
-  console.log(`state: ${state}`);
 
   if (status == "loading") return <div>loading...</div>;
   if (!session){

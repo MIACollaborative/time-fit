@@ -93,6 +93,6 @@ export default async function handler(req, res) {
       }
       res
         .status(error.response.status)
-        .json({ response: util.inspect(error.response) });
+        .json({ response: inspect(error.response) });
     });
 }

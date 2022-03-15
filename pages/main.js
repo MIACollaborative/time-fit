@@ -64,7 +64,7 @@ export default function Main() {
 
   console.log(`session: ${JSON.stringify(session)}`);
   // username=${session.user.username}
-  let redirectURL = `https://walktojoy.net/api/fitbit-signin`;
+  let redirectURL = `https://walktojoy.net/fitbit-signin`;
 
   let state = `auth-walktojoy-${md5(session.user.name)}`;
 

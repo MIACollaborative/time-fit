@@ -17,8 +17,8 @@ import React, { useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
-import FitbitHelper from "../../lib/FitbitHelper.mjs";
-import { inspect } from 'util' 
+import FitbitHelper from "../lib/FitbitHelper.mjs";
+import { inspect } from 'util';
 
 /*
 function replacer(key, value) {

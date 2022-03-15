@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 
 export default async function handler(req, res) {
   const { code, state } = req.query;
+  const router = useRouter();
   //const { type, content } = req.body;
 
   console.log(`authCode: ${code}`);

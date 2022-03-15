@@ -179,7 +179,7 @@ export async function getServerSideProps({ query }) {
       })
 
   return {
-    props: { result: [authResult, profileResult]},
+    props: { result: {authResult, profileResult}},
   };
 }
 

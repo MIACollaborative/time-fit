@@ -1,6 +1,8 @@
 import prisma from "../../lib/prisma";
 import FitbitHelper from "../../lib/FitbitHelper.mjs";
 import { inspect } from 'util' 
+import { useRouter } from 'next/router'
+
 
 export default async function handler(req, res) {
   const { code, state } = req.query;
@@ -64,6 +66,7 @@ export default async function handler(req, res) {
       updateToken(hashCode, accessToken, refreshToken);
 
       res.status(200).json({ message: "authentication success" });
+      router.push('/fitbit-result');
       //return {message: "authentication success"}; //res.status(200).end();
       //return {username: user.username, accessToken, refreshToken };
     })

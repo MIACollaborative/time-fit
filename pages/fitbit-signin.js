@@ -41,51 +41,7 @@ export const getServerSideProps = async ({ req }) => {
 }
 */
 
-async function updateToken(hashCode, accessToken, refreshToken) {
-  console.log(`updateToken, hashCode: ${hashCode}`);
-  console.log(`updateToken, accessToken: ${accessToken}`);
-  console.log(`updateToken, refreshToken: ${refreshToken}`);
-  const firstUser = await prisma.users.findFirst({
-    where: { hash: hashCode },
-  });
 
-  console.log(`firstUser: ${JSON.stringify(firstUser)}`);
-
-  const updateUser = await prisma.users.update({
-    where: { username: firstUser.username },
-    data: {
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-    },
-  });
-
-  console.log(`updateUser: ${JSON.stringify(updateUser)}`);
-}
-
-
-async function updateFitbitProfile(hashCode, fitbitId, fitbitDisplayName, fitbitFullName) {
-  console.log(`updateFitbitId, hashCode: ${hashCode}`);
-  console.log(`updateFitbitId, fitbitId: ${fitbitId}`);
-  console.log(`updateFitbitId, fitbitDisplayName: ${fitbitDisplayName}`);
-  console.log(`updateFitbitId, fitbitFullName: ${fitbitFullName}`);
-
-  const firstUser = await prisma.users.findFirst({
-    where: { hash: hashCode },
-  });
-
-  console.log(`firstUser: ${JSON.stringify(firstUser)}`);
-
-  const updateUser = await prisma.users.update({
-    where: { username: firstUser.username },
-    data: {
-      fitbitId: fitbitId,
-      fitbitDisplayName: fitbitDisplayName,
-      fitbitFullName: fitbitFullName
-    },
-  });
-
-  console.log(`updateUser: ${JSON.stringify(updateUser)}`);
-}
 
 export async function getServerSideProps({ query }) {
   const { code, state } = query;
@@ -93,6 +49,52 @@ export async function getServerSideProps({ query }) {
   let authCode = code;
   let stateSplit = state.split("-");
   let hashCode = stateSplit[2];
+
+  async function updateToken(hashCode, accessToken, refreshToken) {
+    console.log(`updateToken, hashCode: ${hashCode}`);
+    console.log(`updateToken, accessToken: ${accessToken}`);
+    console.log(`updateToken, refreshToken: ${refreshToken}`);
+    const firstUser = await prisma.users.findFirst({
+      where: { hash: hashCode },
+    });
+  
+    console.log(`firstUser: ${JSON.stringify(firstUser)}`);
+  
+    const updateUser = await prisma.users.update({
+      where: { username: firstUser.username },
+      data: {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      },
+    });
+  
+    console.log(`updateUser: ${JSON.stringify(updateUser)}`);
+  }
+  
+  
+  async function updateFitbitProfile(hashCode, fitbitId, fitbitDisplayName, fitbitFullName) {
+    console.log(`updateFitbitId, hashCode: ${hashCode}`);
+    console.log(`updateFitbitId, fitbitId: ${fitbitId}`);
+    console.log(`updateFitbitId, fitbitDisplayName: ${fitbitDisplayName}`);
+    console.log(`updateFitbitId, fitbitFullName: ${fitbitFullName}`);
+  
+    const firstUser = await prisma.users.findFirst({
+      where: { hash: hashCode },
+    });
+  
+    console.log(`firstUser: ${JSON.stringify(firstUser)}`);
+  
+    const updateUser = await prisma.users.update({
+      where: { username: firstUser.username },
+      data: {
+        fitbitId: fitbitId,
+        fitbitDisplayName: fitbitDisplayName,
+        fitbitFullName: fitbitFullName
+      },
+    });
+  
+    console.log(`updateUser: ${JSON.stringify(updateUser)}`);
+  }
 
   const user = await prisma.users.findFirst({
     where: { hash: hashCode },

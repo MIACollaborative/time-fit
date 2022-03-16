@@ -66,7 +66,7 @@ export async function getServerSideProps(ctx) {
 
   const introspectResult = await FitbitHelper.introspectToken(user.accessToken)
       .then((responseData) => {
-        console.log(`FitbitHelper.introspectToken: ${JSON.stringify(responseData)}`);
+        console.log(`main.FitbitHelper.introspectToken: ${JSON.stringify(responseData)}`);
         //isAccessTokenActive = responseData.active;
         return responseData;
       })

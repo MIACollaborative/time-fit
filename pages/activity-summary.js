@@ -243,7 +243,7 @@ export default function ActivitySummary({result}) {
         </div>
         <div>
             {
-                hasAuthorizationError? <Button
+                resultData.errors[0]["errorType"] == "expired_token"? <Button
                 label="Refresh token"
                 className="p-button-danger"
                 onClick={() => {

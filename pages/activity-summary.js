@@ -7,7 +7,7 @@ import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
 
 //import logger from "../lib/logger";
-//import prisma from '../lib/prisma';
+import prisma from '../lib/prisma';
 
 
 

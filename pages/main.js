@@ -70,7 +70,7 @@ export async function getServerSideProps(ctx) {
 
   let isAccessTokenActive = false;
 
-  /*
+  
   const introspectResult = await FitbitHelper.introspectToken(user.accessToken)
     .then((responseData) => {
       console.log(`main.FitbitHelper.introspectToken: ${JSON.stringify(responseData)}`);
@@ -80,7 +80,7 @@ export async function getServerSideProps(ctx) {
     .catch((error) => { return error; });
 
   isAccessTokenActive = introspectResult.active;
-  */
+  
   return {
     props: { hasFitbitConnection, isAccessTokenActive },
   };

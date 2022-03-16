@@ -11,7 +11,7 @@ import logger from "../lib/logger";
 */
 
 import { inspect } from 'util';
-import prisma from '../lib/prisma';
+
 import Link from 'next/link';
 import { useSession, signIn, signOut, getSession } from "next-auth/react"
 import { useRouter } from 'next/router'
@@ -22,6 +22,9 @@ import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
 import md5 from "md5";
 import FitbitHelper from '../lib/FitbitHelper.mjs';
+
+
+import prisma from '../lib/prisma';
 
 /*
 function replacer(key, value) {
@@ -47,6 +50,7 @@ export const getServerSideProps = async ({ req }) => {
 
 
 export async function getServerSideProps(ctx) {
+  
   const session = await getSession(ctx);
   console.log(
     `main.getServerSideProps: session: ${JSON.stringify(session)}`

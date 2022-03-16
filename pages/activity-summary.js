@@ -73,7 +73,9 @@ export async function getServerSideProps(ctx) {
     where: { username: session.user.name },
   });
 
-  const activityResult = await FitbitHelper.getActvitySummaryForFitbitId(user.fitbitId, user.accessToken, DateTime.fromISO("2016-03-10"))
+  let targetDate = DateTime.fromISO("2022-03-10");
+
+  const activityResult = await FitbitHelper.getActvitySummaryForFitbitId(user.fitbitId, user.accessToken, targetDate)
     .then((responseData) => {
       console.log(
         `FitbitHelper.getActvitySummaryForFitbitId: ${JSON.stringify(
@@ -132,11 +134,11 @@ export async function getServerSideProps(ctx) {
 
 
   return {
-    props: { result: activityResult},
+    props: { result: activityResult, dateString: targetDate.toISO()},
   };
 }
 
-export default function ActivitySummary({result}) {
+export default function ActivitySummary({result, dateString}) {
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -152,10 +154,10 @@ export default function ActivitySummary({result}) {
   let message = "";
 
   if(result.value == "failed"){
-    message = "Fail to get activity summary!\n";
+    message = `Fail to get activity summary for ${dateString}!\n`;
   }
   else{
-    message = "Succeed to get activity summary!\n";
+    message = `Succeed to get activity summary ${dateString}!\n`;
   }
 
 
@@ -188,6 +190,9 @@ export default function ActivitySummary({result}) {
 
       <main className={styles.main}>
       <h1 className={styles.title}>{message}</h1>
+        <div>
+            {result.value == "success"? <h2>Steps: {responseData.summary.steps}</h2>:null}
+        </div>
         <div>
             {
                 JSON.stringify(result.data)

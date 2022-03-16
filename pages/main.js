@@ -21,7 +21,7 @@ import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
 import md5 from "md5";
-import FitbitHelper from '../lib/FitbitHelper.mjs';
+import FitbitHelper from '../lib/FitbitHelper';
 
 
 import prisma from '../lib/prisma.js';

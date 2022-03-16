@@ -9,13 +9,11 @@ import "primeflex/primeflex.css";
 //import logger from "../lib/logger";
 //import prisma from '../lib/prisma';
 
-import prisma from "../lib/prisma";
+
 
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
-import { InputText } from "primereact/inputtext";
-import { Password } from "primereact/password";
+import React from "react";
 import { Button } from "primereact/button";
 import FitbitHelper from "../lib/FitbitHelper.mjs";
 import { inspect } from 'util';
@@ -62,49 +60,7 @@ async function updateFitbitProfile(hashCode, fitbitId, fitbitDisplayName, fitbit
 }
 */
 
-async function updateToken(hashCode, accessToken, refreshToken) {
-    console.log(`updateToken, hashCode: ${hashCode}`);
-    console.log(`updateToken, accessToken: ${accessToken}`);
-    console.log(`updateToken, refreshToken: ${refreshToken}`);
-    const firstUser = await prisma.users.findFirst({
-      where: { hash: hashCode },
-    });
-  
-    console.log(`firstUser: ${JSON.stringify(firstUser)}`);
-  
-    const updateUser = await prisma.users.update({
-      where: { username: firstUser.username },
-      data: {
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-      },
-    });
-  
-    console.log(`updateUser: ${JSON.stringify(updateUser)}`);
-  }
 
-
-
-  async function refreshToken() {
-    console.log(`updateToken, hashCode: ${hashCode}`);
-    console.log(`updateToken, accessToken: ${accessToken}`);
-    console.log(`updateToken, refreshToken: ${refreshToken}`);
-    const firstUser = await prisma.users.findFirst({
-      where: { hash: hashCode },
-    });
-  
-    console.log(`firstUser: ${JSON.stringify(firstUser)}`);
-  
-    const updateUser = await prisma.users.update({
-      where: { username: firstUser.username },
-      data: {
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-      },
-    });
-  
-    console.log(`updateUser: ${JSON.stringify(updateUser)}`);
-  }
 
 
 

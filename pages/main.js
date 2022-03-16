@@ -49,13 +49,13 @@ export const getServerSideProps = async ({ req }) => {
 export async function getServerSideProps(ctx) {
   const session = await getSession(ctx);
   console.log(
-      `main.getServerSideProps: session: ${JSON.stringify(session)}`
+    `main.getServerSideProps: session: ${JSON.stringify(session)}`
   );
 
   let userName = session.user.name;
 
   const user = await prisma.users.findFirst({
-      where: { username: userName },
+    where: { username: userName },
   });
 
 
@@ -65,20 +65,22 @@ export async function getServerSideProps(ctx) {
   let isAccessTokenActive = false;
 
   const introspectResult = await FitbitHelper.introspectToken(user.accessToken)
-      .then((responseData) => {
-        console.log(`main.FitbitHelper.introspectToken: ${JSON.stringify(responseData)}`);
-        //isAccessTokenActive = responseData.active;
-        return responseData;
-      })
-      .catch((error) => {return error;})
+    .then((responseData) => {
+      console.log(`main.FitbitHelper.introspectToken: ${JSON.stringify(responseData)}`);
+      //isAccessTokenActive = responseData.active;
+      return responseData;
+    })
+    .catch((error) => { return error; });
+
+  isAccessTokenActive = introspectResult.active;
 
   return {
-      props: { hasFitbitConnection, isAccessTokenActive: introspectResult.active},
+    props: { hasFitbitConnection, isAccessTokenActive },
   };
 }
 
 
-export default function Main({hasFitbitConnection, isAccessTokenActive}) {
+export default function Main({ hasFitbitConnection, isAccessTokenActive }) {
 
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -88,12 +90,12 @@ export default function Main({hasFitbitConnection, isAccessTokenActive}) {
   //const [value1, setValue1] = useState('');
   //const [value2, setValue2] = useState('');
 
-  
+
 
   // status: enum mapping to three possible session states: "loading" | "authenticated" | "unauthenticated"
   if (status == "loading") return <div>loading...</div>;
 
-  if (!session){
+  if (!session) {
     router.push('/');
     return null;
   }
@@ -123,31 +125,31 @@ export default function Main({hasFitbitConnection, isAccessTokenActive}) {
 
       <main className={styles.main}>
 
-      
-      <div>
-        <div>Signed in as {session.user.name} </div><br />
-        <div>Fitbit: {hasFitbitConnection? "connected": "not connected"}</div><br />
-        <div>Access Token: {isAccessTokenActive? "active": "inactive"}</div><br />
-        <Divider />
-        <Link href={fitbitSignInLink}><Button label="Connect your Fitbit" className="p-button-info" style={{width: "100%"}}/></Link><br /><br />
+
+        <div>
+          <div>Signed in as {session.user.name} </div><br />
+          <div>Fitbit: {hasFitbitConnection ? "connected" : "not connected"}</div><br />
+          <div>Access Token: {isAccessTokenActive ? "active" : "inactive"}</div><br />
+          <Divider />
+          <Link href={fitbitSignInLink}><Button label="Connect your Fitbit" className="p-button-info" style={{ width: "100%" }} /></Link><br /><br />
 
 
-        <Link href={"/activity-summary"}><Button label="Get Activity Summary" className="p-button-info" style={{width: "100%"}}/></Link><br /><br />
+          <Link href={"/activity-summary"}><Button label="Get Activity Summary" className="p-button-info" style={{ width: "100%" }} /></Link><br /><br />
 
-        
-        <Link href="/home"><a>Personalize your Experience</a></Link><br /><br />
-        <Link href="/home"><a>Complete the Baseline Survey</a></Link><br /><br />
-        <Link href="/home"><a>Disable Sedentary Notification on your Fitbit application</a></Link><br /><br />
-        <Divider />
-        
-      </div>
-      <div><Button label="Sign out" className="p-button-danger" onClick={() => signOut()}/></div>
-      <div>
-        <p>1/4 complete</p>
-        <p>Once all tasks are completed, your study will be activiated the upcoming Monday for the duration of 6 weeks.</p>
 
-      </div>
-      
+          <Link href="/home"><a>Personalize your Experience</a></Link><br /><br />
+          <Link href="/home"><a>Complete the Baseline Survey</a></Link><br /><br />
+          <Link href="/home"><a>Disable Sedentary Notification on your Fitbit application</a></Link><br /><br />
+          <Divider />
+
+        </div>
+        <div><Button label="Sign out" className="p-button-danger" onClick={() => signOut()} /></div>
+        <div>
+          <p>1/4 complete</p>
+          <p>Once all tasks are completed, your study will be activiated the upcoming Monday for the duration of 6 weeks.</p>
+
+        </div>
+
 
       </main>
 
@@ -161,8 +163,8 @@ export default function Main({hasFitbitConnection, isAccessTokenActive}) {
           rel="noopener noreferrer"
         >
           <div>School of Informaiton</div>
-        <div>University of Michigan</div>
-          
+          <div>University of Michigan</div>
+
         </a>
       </footer>
     </div>

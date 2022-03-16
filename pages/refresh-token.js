@@ -10,8 +10,7 @@ import "primeflex/primeflex.css";
 //import prisma from '../lib/prisma';
 
 import prisma from "../lib/prisma";
-
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { InputText } from "primereact/inputtext";
@@ -107,19 +106,24 @@ async function updateToken(hashCode, accessToken, refreshToken) {
   }
 
 
-
+  
 
 export async function getServerSideProps({ query }) {
-  const { encodedId, accessToken, dateTimeStr } = query;
+    const session = await getSession({ req });
+  console.log(
+    `refresh-token.getServerSideProps: session: ${JSON.stringify(session)}`
+  );
+
+  let userName = session.user.name;
 
   const user = await prisma.users.findFirst({
-    where: { fitbitId: encodedId },
+    where: { username: userName },
   });
 
-  const activityResult = await FitbitHelper.getActvitySummaryForFitbitId(encodedId, user.accessToken, DateTime.fromISO("2016-02-07"))
+  const refreshResult = await FitbitHelper.refreshToken(user.refreshToken)
     .then((responseData) => {
       console.log(
-        `FitbitHelper.getActvitySummaryForFitbitId: ${JSON.stringify(
+        `FitbitHelper.refreshToken: ${JSON.stringify(
           responseData
         )}`
       );
@@ -130,14 +134,25 @@ export async function getServerSideProps({ query }) {
           // I supposed this mean we need to authenticate again
       }
       */
+     
 
-      accessToken = responseData.access_token;
+      /*
+      {
+        "access_token": "eyJhbGciOiJIUzI1...",
+        "expires_in": 28800,
+        "refresh_token": "c643a63c072f0f05478e9d18b991db80ef6061e...",
+        "token_type": "Bearer",
+        "user_id": "GGNJL9"
+      }
+      */
+
+      let newAccessToken = responseData.access_token;
 
       // If you followed the Authorization Code Flow, you were issued a refresh token. You can use your refresh token to get a new access token in case the one that you currently have has expired. Enter or paste your refresh token below. Also make sure you enteryour data in section 1 and 3 since it's used to refresh your access token.
-      refreshToken = responseData.refresh_token;
+      let newRefreshToken = responseData.refresh_token;
 
       // To Do: ideally, store both
-      updateToken(hashCode, accessToken, refreshToken);
+      updateToken(user.hash, newAccessToken, newRefreshToken);
 
       return {value: "success", data: responseData};
 
@@ -174,11 +189,11 @@ export async function getServerSideProps({ query }) {
 
 
   return {
-    props: { result: activityResult},
+    props: { result: refreshResult},
   };
 }
 
-export default function ActivitySummary({result}) {
+export default function RefreshToken({result}) {
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -191,16 +206,6 @@ export default function ActivitySummary({result}) {
   console.log(`session: ${JSON.stringify(session)}`);
 
 
-  let message = "";
-
-  if(result.value == "failed"){
-    message = "Fail to get activity summary!\n";
-  }
-  else{
-    message = "Succeed to get activity summary!\n";
-  }
-
-
 
   return (
     <div className={styles.container}>
@@ -211,7 +216,7 @@ export default function ActivitySummary({result}) {
       </Head>
 
       <main className={styles.main}>
-      <h1 className={styles.title}>{message}</h1>
+      <h1 className={styles.title}>{`Refresh token ${result.value}`}</h1>
         <div>
             {
                 JSON.stringify(result.data)
@@ -222,20 +227,6 @@ export default function ActivitySummary({result}) {
                 result.value == "failed"? `Error: ${result.data.errorType}`: null
             }
         </div>
-        <div>
-            {
-                result.data.errorType == "expired_token"? <Button
-                label="Refresh token"
-                className="p-button-danger"
-                onClick={() => {
-                  router.push("/refresh-token");
-                  return;
-                }}
-              />:null
-            }
-        </div>
-
-
         <Button
           label="Return to settings"
           className="p-button-danger"

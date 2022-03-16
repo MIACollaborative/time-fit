@@ -200,7 +200,7 @@ export default function ActivitySummary({result}) {
         </div>
         <div>
             {
-                resultData.errors[0]["errorType"] == "expired_token"? <Button
+                result.value == "failed" && resultData.errors[0]["errorType"] == "expired_token"? <Button
                 label="Refresh token"
                 className="p-button-danger"
                 onClick={() => {

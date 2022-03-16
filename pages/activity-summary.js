@@ -191,7 +191,7 @@ export default function ActivitySummary({result, dateString}) {
       <main className={styles.main}>
       <h1 className={styles.title}>{message}</h1>
         <div>
-            {result.value == "success"? <h2>Steps: {responseData.summary.steps}</h2>:null}
+            {result.value == "success"? <h2>Steps: {resultData.summary.steps}</h2>:null}
         </div>
         <div>
             {

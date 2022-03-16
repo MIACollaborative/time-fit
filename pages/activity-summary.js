@@ -117,7 +117,7 @@ export async function getServerSideProps(ctx) {
     where: { username: session.user.name },
   });
 
-  const activityResult = await FitbitHelper.getActvitySummaryForFitbitId(user.fitbitId, user.accessToken, DateTime.fromISO("2016-02-07"))
+  const activityResult = await FitbitHelper.getActvitySummaryForFitbitId(user.fitbitId, user.accessToken, DateTime.fromISO("2016-03-10"))
     .then((responseData) => {
       console.log(
         `FitbitHelper.getActvitySummaryForFitbitId: ${JSON.stringify(
@@ -132,13 +132,13 @@ export async function getServerSideProps(ctx) {
       }
       */
 
-      accessToken = responseData.access_token;
+      //accessToken = responseData.access_token;
 
       // If you followed the Authorization Code Flow, you were issued a refresh token. You can use your refresh token to get a new access token in case the one that you currently have has expired. Enter or paste your refresh token below. Also make sure you enteryour data in section 1 and 3 since it's used to refresh your access token.
-      refreshToken = responseData.refresh_token;
+      //refreshToken = responseData.refresh_token;
 
       // To Do: ideally, store both
-      updateToken(hashCode, accessToken, refreshToken);
+      //updateToken(hashCode, accessToken, refreshToken);
 
       return {value: "success", data: responseData};
 

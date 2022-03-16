@@ -68,7 +68,13 @@ export default function Main() {
 
   let state = `auth-walktojoy-${md5(session.user.name)}`;
 
-  let fitbitSignInLink = `https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=23829X&redirect_uri=${encodeURIComponent(redirectURL)}&state=${state}&scope=activity%20profile%20settings%20&expires_in=604800`;
+  // Tutorial example: https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=23829X&redirect_uri=https%3A%2F%2Fwalktojoy.net%2Ffitbit-signin&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800
+
+  // short: activity%20profile%20settings%20
+
+  let scope = "activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight";
+
+  let fitbitSignInLink = `https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=23829X&redirect_uri=${encodeURIComponent(redirectURL)}&state=${state}&scope=${scope}&expires_in=604800`;
 
   return (
     <div className={styles.container}>

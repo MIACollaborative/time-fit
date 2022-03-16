@@ -66,12 +66,13 @@ export async function getServerSideProps(ctx) {
 
   const introspectResult = await FitbitHelper.introspectToken(user.accessToken)
       .then((responseData) => {
-        isAccessTokenActive = responseData.active;
+        //isAccessTokenActive = responseData.active;
+        return responseData;
       })
       .catch((error) => {return error;})
 
   return {
-      props: { hasFitbitConnection, isAccessTokenActive},
+      props: { hasFitbitConnection, isAccessTokenActive: introspectResult.active},
   };
 }
 

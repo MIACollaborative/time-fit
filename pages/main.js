@@ -62,6 +62,10 @@ export async function getServerSideProps(ctx) {
   const user = await prisma.users.findFirst({
     where: { username: userName },
   });
+
+  console.log(
+    `main.getServerSideProps: user: ${JSON.stringify(user)}`
+  );
   
 
 
@@ -78,6 +82,11 @@ export async function getServerSideProps(ctx) {
       return responseData;
     })
     .catch((error) => { return error; });
+
+
+    console.log(
+      `main.getServerSideProps: introspectResult: ${JSON.stringify(introspectResult)}`
+    );
 
   isAccessTokenActive = introspectResult.active;
   

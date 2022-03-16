@@ -88,15 +88,15 @@ export async function getServerSideProps(ctx) {
       `main.getServerSideProps: introspectResult: ${JSON.stringify(introspectResult)}`
     );
 
-  isAccessTokenActive = introspectResult.active;
+  //isAccessTokenActive = introspectResult.active;
   
   return {
-    props: { hasFitbitConnection, isAccessTokenActive },
+    props: { hasFitbitConnection, isAccessTokenActive, introspectResult },
   };
 }
 
 
-export default function Main({ hasFitbitConnection, isAccessTokenActive }) {
+export default function Main({ hasFitbitConnection, isAccessTokenActive, introspectResult }) {
 
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -117,6 +117,8 @@ export default function Main({ hasFitbitConnection, isAccessTokenActive }) {
   }
 
   console.log(`session: ${JSON.stringify(session)}`);
+
+  console.log(`introspectResult: ${JSON.stringify(introspectResult)}`);
   // username=${session.user.username}
   let redirectURL = `https://walktojoy.net/fitbit-signin`;
 

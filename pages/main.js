@@ -7,10 +7,13 @@ import "primeicons/primeicons.css";
 import 'primeflex/primeflex.css';
 /*
 import logger from "../lib/logger";
-import prisma from '../lib/prisma';
+
 */
+
+import { inspect } from 'util';
+import prisma from '../lib/prisma';
 import Link from 'next/link';
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession, signIn, signOut, getSession } from "next-auth/react"
 import { useRouter } from 'next/router'
 import React, { useState } from 'react';
 import { InputText } from 'primereact/inputtext';
@@ -18,6 +21,7 @@ import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
 import md5 from "md5";
+import FitbitHelper from '../lib/FitbitHelper.mjs';
 
 /*
 function replacer(key, value) {
@@ -42,7 +46,104 @@ export const getServerSideProps = async ({ req }) => {
 */
 
 
-export default function Main() {
+export async function getServerSideProps(ctx) {
+  const session = await getSession(ctx);
+  console.log(
+      `main.getServerSideProps: session: ${JSON.stringify(session)}`
+  );
+
+  let userName = session.user.name;
+
+  const user = await prisma.users.findFirst({
+      where: { username: userName },
+  });
+
+
+  let hasFitbitConnection = user.fitbiId != "" && user.accessToken != "" && user.refreshToekn != "";
+
+
+  let isAccessTokenActive = false;
+
+  const refreshResult = await FitbitHelper.refreshToken(user.refreshToken)
+      .then((responseData) => {
+          console.log(
+              `FitbitHelper.refreshToken: ${JSON.stringify(
+                  responseData
+              )}`
+          );
+
+          /*
+          if(responseData.status == 400){
+              // cannot auth: Bad Request
+              // I supposed this mean we need to authenticate again
+          }
+          */
+
+
+          /*
+          {
+            "access_token": "eyJhbGciOiJIUzI1...",
+            "expires_in": 28800,
+            "refresh_token": "c643a63c072f0f05478e9d18b991db80ef6061e...",
+            "token_type": "Bearer",
+            "user_id": "GGNJL9"
+          }
+          */
+
+          let newAccessToken = responseData.access_token;
+
+          // If you followed the Authorization Code Flow, you were issued a refresh token. You can use your refresh token to get a new access token in case the one that you currently have has expired. Enter or paste your refresh token below. Also make sure you enteryour data in section 1 and 3 since it's used to refresh your access token.
+          let newRefreshToken = responseData.refresh_token;
+
+          // To Do: ideally, store both
+          updateToken(user.hash, newAccessToken, newRefreshToken);
+
+          return { value: "success", data: responseData };
+
+          //res.status(200).json({ message: "authentication success" });
+      })
+      .catch((error) => {
+          if (error.response) {
+              // The request was made and the server responded with a status code
+              // that falls out of the range of 2xx
+              console.log(`Data: ${error.response.data}`);
+              console.log(`Status: ${error.response.status}`);
+              console.log(`StatusText: ${error.response.statusText}`);
+              console.log(`Headers: ${error.response.headers}`);
+
+              console.log(`Error response`);
+              // which means, authentication falil
+          } else if (error.request) {
+              // The request was made but no response was received
+              // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+              // http.ClientRequest in node.js
+              console.log(error.request);
+
+              console.log(`Error request`);
+          } else {
+              // Something happened in setting up the request that triggered an Error
+              // console.log('Error', error.message);
+
+              console.log("Error else");
+          }
+          //res.status(error.response.status).json({ response: inspect(error.response.data) });
+
+          return { value: "failed", data: inspect(error.response.data) };
+      });
+
+  const introspectResult = await FitbitHelper.introspectToken(user.accessToken)
+      .then((responseData) => {
+        isAccessTokenActive = responseData.active;
+      })
+      .catch((error) => {return error;})
+
+  return {
+      props: { hasFitbitConnection, isAccessTokenActive},
+  };
+}
+
+
+export default function Main({hasFitbitConnection, isAccessTokenActive}) {
 
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -70,9 +171,10 @@ export default function Main() {
 
   // Tutorial example: https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=23829X&redirect_uri=https%3A%2F%2Fwalktojoy.net%2Ffitbit-signin&scope=activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight&expires_in=604800
 
+  // long: activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight
   // short: activity%20profile%20settings%20
 
-  let scope = "activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight";
+  let scope = "activity%20profile%20settings%20";
 
   let fitbitSignInLink = `https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=23829X&redirect_uri=${encodeURIComponent(redirectURL)}&state=${state}&scope=${scope}&expires_in=604800`;
 
@@ -88,7 +190,9 @@ export default function Main() {
 
       
       <div>
-        <div>Signed in as {session.user.name} <br /></div>
+        <div>Signed in as {session.user.name} </div><br />
+        <div>Fitbit: {hasFitbitConnection? "connected": "not connected"}</div><br />
+        <div>Access Token: {isAccessTokenActive? "active": "inactive"}</div><br />
         <Divider />
         <Link href={fitbitSignInLink}><Button label="Connect your Fitbit" className="p-button-info" style={{width: "100%"}}/></Link><br /><br />
 

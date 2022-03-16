@@ -114,7 +114,7 @@ export async function getServerSideProps(ctx) {
   //const { encodedId, accessToken, dateTimeStr } = query;
 
   const user = await prisma.users.findFirst({
-    where: { username: ctx.user.name },
+    where: { username: session.user.name },
   });
 
   const activityResult = await FitbitHelper.getActvitySummaryForFitbitId(user.fitbitId, user.accessToken, DateTime.fromISO("2016-02-07"))

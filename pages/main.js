@@ -82,6 +82,7 @@ export async function getServerSideProps(ctx) {
       return responseData;
     })
     .catch((error) => {
+      let resultObj = {};
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
@@ -91,6 +92,7 @@ export async function getServerSideProps(ctx) {
         console.log(`Headers: ${error.response.headers}`);
 
         console.log(`Error response`);
+        resultObj = eval(`(${inspect(error.response.data)})`);
         // which means, authentication falil
       } else if (error.request) {
         // The request was made but no response was received
@@ -101,13 +103,13 @@ export async function getServerSideProps(ctx) {
         console.log(`Error request`);
       } else {
         // Something happened in setting up the request that triggered an Error
-        // console.log('Error', error.message);
+        console.log('Error', error.message);
 
         console.log("Error else");
       }
       //res.status(error.response.status).json({ response: inspect(error.response.data) });
 
-      let resultObj = eval(`(${inspect(error.response.data)})`);
+      
       return {value: "failed", data: resultObj};
     });
 

@@ -11,7 +11,7 @@ import "primeflex/primeflex.css";
 
 import prisma from "../lib/prisma";
 
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { InputText } from "primereact/inputtext";
@@ -109,14 +109,15 @@ async function updateToken(hashCode, accessToken, refreshToken) {
 
 
 
-export async function getServerSideProps({ query }) {
-  const { encodedId, accessToken, dateTimeStr } = query;
+export async function getServerSideProps(ctx) {
+    const session = await getSession(ctx);
+  //const { encodedId, accessToken, dateTimeStr } = query;
 
   const user = await prisma.users.findFirst({
-    where: { fitbitId: encodedId },
+    where: { username: ctx.user.name },
   });
 
-  const activityResult = await FitbitHelper.getActvitySummaryForFitbitId(encodedId, user.accessToken, DateTime.fromISO("2016-02-07"))
+  const activityResult = await FitbitHelper.getActvitySummaryForFitbitId(user.fitbitId, user.accessToken, DateTime.fromISO("2016-02-07"))
     .then((responseData) => {
       console.log(
         `FitbitHelper.getActvitySummaryForFitbitId: ${JSON.stringify(

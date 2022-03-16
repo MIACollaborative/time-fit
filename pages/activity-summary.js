@@ -169,7 +169,8 @@ export async function getServerSideProps({ query }) {
       }
       //res.status(error.response.status).json({ response: inspect(error.response.data) });
 
-      return {value: "failed", data: inspect(error.response.data)};
+      let resultObj = eval(`(${inspect(error.response.data)})`);
+      return {value: "failed", data: resultObj};
     });
 
 
@@ -201,6 +202,24 @@ export default function ActivitySummary({result}) {
   }
 
 
+  console.log(`result.data: ${result.data}`);
+  console.log(`typeof result.data: ${typeof result.data}`);
+
+  let resultData = result.data;
+
+
+  
+
+  // {\n  errors: [\n    {\n      errorType: 'system',\n      fieldName: 'n/a',\n      message: 'Authorization Error: Invalid authorization token type'\n    }\n  ],\n  success: false\n}"
+
+
+  let hasAuthorizationError = false;
+
+  console.log(`result Data type: ${typeof resultData}`);
+
+  if(result.value == "failed" && resultData.errors[0].message.includes("Authorization Error")){
+    hasAuthorizationError = true;
+  }
 
   return (
     <div className={styles.container}>
@@ -219,12 +238,12 @@ export default function ActivitySummary({result}) {
         </div>
         <div>
             {
-                result.value == "failed"? `Error: ${result.data.errorType}`: null
+                result.value == "failed"? `Error: ${resultData.errors[0]["errorType"]}`: null
             }
         </div>
         <div>
             {
-                result.data.errorType == "expired_token"? <Button
+                hasAuthorizationError? <Button
                 label="Refresh token"
                 className="p-button-danger"
                 onClick={() => {
@@ -234,6 +253,8 @@ export default function ActivitySummary({result}) {
               />:null
             }
         </div>
+        <br />
+        <br />
 
 
         <Button

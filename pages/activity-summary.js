@@ -7,6 +7,7 @@ import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
 
 //import logger from "../lib/logger";
+//import prisma from '../lib/prisma';
 
 import prisma from "../lib/prisma";
 
@@ -19,6 +20,10 @@ import { Button } from "primereact/button";
 import FitbitHelper from "../lib/FitbitHelper.mjs";
 import { inspect } from 'util';
 
+const { DateTime } = require("luxon");
+//import pkg from 'luxon';
+//const {DataTime} = pkg;
+
 /*
 function replacer(key, value) {
   if (typeof value === 'Date') {
@@ -26,21 +31,9 @@ function replacer(key, value) {
   }
   return value;
 }
-
-export const getServerSideProps = async ({ req }) => {
-  // const token = req.headers.AUTHORIZATION
-  // const userId = await getUserId(token)\
-
-  //const logs = await prisma.log.findMany();
-
-  //const logList = JSON.parse(JSON.stringify(logs, replacer));
-
-  return {
-    props : {  }
-  }
-}
 */
 
+/*
 async function updateToken(hashCode, accessToken, refreshToken) {
   console.log(`updateToken, hashCode: ${hashCode}`);
   console.log(`updateToken, accessToken: ${accessToken}`);
@@ -86,25 +79,20 @@ async function updateFitbitProfile(hashCode, fitbitId, fitbitDisplayName, fitbit
 
   console.log(`updateUser: ${JSON.stringify(updateUser)}`);
 }
+*/
+
 
 export async function getServerSideProps({ query }) {
-  const { code, state } = query;
-
-  let authCode = code;
-  let stateSplit = state.split("-");
-  let hashCode = stateSplit[2];
+  const { encodedId, accessToken, dateTimeStr } = query;
 
   const user = await prisma.users.findFirst({
-    where: { hash: hashCode },
+    where: { fitbitId: encodedId },
   });
 
-  let accessToken = "";
-  let refreshToken = "";
-
-  const authResult = await FitbitHelper.getAuthorizationInformation(authCode)
+  const activityResult = await FitbitHelper.getActvitySummaryForFitbitId(encodedId, user.accessToken, DateTime.fromISO("2016-02-07"))
     .then((responseData) => {
       console.log(
-        `FitbitHelper.getAuthorizationInformation: ${JSON.stringify(
+        `FitbitHelper.getActvitySummaryForFitbitId: ${JSON.stringify(
           responseData
         )}`
       );
@@ -124,7 +112,7 @@ export async function getServerSideProps({ query }) {
       // To Do: ideally, store both
       updateToken(hashCode, accessToken, refreshToken);
 
-      return {value: "success", stage: "authentication"};
+      return {value: "success", data: responseData};
 
       //res.status(200).json({ message: "authentication success" });
     })
@@ -154,35 +142,16 @@ export async function getServerSideProps({ query }) {
       }
       //res.status(error.response.status).json({ response: inspect(error.response.data) });
 
-      return {value: "failed", stage: "authentication", data: inspect(error.response.data)};
+      return {value: "failed", data: inspect(error.response.data)};
     });
 
 
-    const profileResult = await FitbitHelper.getProfile(accessToken)
-      .then((responseData) => {
-        let rUser = responseData.user;
-
-        let fId = rUser.encodedId;
-        let fDisplayName = rUser.displayName;
-        let fFullName = rUser.fullName;
-
-        updateFitbitProfile(hashCode, fId, fDisplayName, fFullName);
-
-
-        return {value: "success", stage: "profile"};
-
-      })
-      .catch((error) => {
-        console.log();
-        return {value: "failed", stage: "profile"};
-      })
-
   return {
-    props: { result: {authResult, profileResult}},
+    props: { result: activityResult},
   };
 }
 
-export default function FitbitSignin({result}) {
+export default function ActivitySummary({result}) {
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -195,18 +164,13 @@ export default function FitbitSignin({result}) {
   console.log(`session: ${JSON.stringify(session)}`);
 
 
-  let combinedResult = result.authResult.value == "success" && result.profileResult.value == "success";
-
-  if(!combinedResult){
-    let message = "";
-
-    if(result.authResult.value == "failed"){
-      message += "Fail to authenticate!\n";
-    }
-
-    if(result.profileResult.value == "failed"){
-      message += "Fail to retrieve profile information.!\n";
-    }
+  let message = "";
+  
+  if(result.value == "failed"){
+    message = "Fail to get activity summary!\n";
+  }
+  else{
+    message = "Succeed to get activity summary!\n";
   }
 
 
@@ -220,19 +184,12 @@ export default function FitbitSignin({result}) {
       </Head>
 
       <main className={styles.main}>
-        
-        
+      <h1 className={styles.title}>{message}</h1>
         <div>
-        {
-          combinedResult? <h1 className={styles.title}>Fitbit connection success!</h1>: <h1 className={styles.title}>Fitbit connection failed!</h1>
-        }
+            {
+                JSON.stringify(result.data)
+            }
         </div>
-        <div>
-        {
-          !combinedResult? <div>{message}</div>:null
-        }
-        </div>
-
         <Button
           label="Return to settings"
           className="p-button-danger"

@@ -84,7 +84,12 @@ export default function Main() {
       <div>
         <div>Signed in as {session.user.name} <br /></div>
         <Divider />
-        <Link href={fitbitSignInLink}><a>Connect your Fitbit</a></Link><br /><br />
+        <Link href={fitbitSignInLink}><Button label="Connect your Fitbit" className="p-button-info" style={{width: "100%"}}/></Link><br /><br />
+
+
+        <Link href={"/activity-summary"}><Button label="Get Activity Summary" className="p-button-info" style={{width: "100%"}}/></Link><br /><br />
+
+        
         <Link href="/home"><a>Personalize your Experience</a></Link><br /><br />
         <Link href="/home"><a>Complete the Baseline Survey</a></Link><br /><br />
         <Link href="/home"><a>Disable Sedentary Notification on your Fitbit application</a></Link><br /><br />

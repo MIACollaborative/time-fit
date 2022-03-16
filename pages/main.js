@@ -24,7 +24,7 @@ import md5 from "md5";
 import FitbitHelper from '../lib/FitbitHelper.mjs';
 
 
-import prisma from '../lib/prisma';
+//import prisma from '../lib/prisma.js';
 
 /*
 function replacer(key, value) {
@@ -58,9 +58,11 @@ export async function getServerSideProps(ctx) {
 
   let userName = session.user.name;
 
+  /*
   const user = await prisma.users.findFirst({
     where: { username: userName },
   });
+  */
 
 
   let hasFitbitConnection = user.fitbiId != "" && user.accessToken != "" && user.refreshToekn != "";

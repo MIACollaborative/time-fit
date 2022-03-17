@@ -184,7 +184,7 @@ export default function Main({ hasFitbitConnection, isAccessTokenActive, introsp
         <div>
           <div>Signed in as {session.user.name} </div><br />
           <div>Fitbit: {hasFitbitConnection ? "connected" : "not connected"}</div><br />
-          <div>Access Token: {isAccessTokenActive ? "active" : "inactive"}</div><br />
+          <div>Access Token (not working yet): {isAccessTokenActive ? "active" : "inactive"}</div><br />
           <Divider />
           <Link href={fitbitSignInLink}><Button label="Connect your Fitbit" className="p-button-info" style={{ width: "100%" }} /></Link><br /><br />
 

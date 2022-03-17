@@ -217,6 +217,11 @@ export default function ActivitySummary({result, dateString}) {
               />:null
             }
         </div>
+        <div>
+            {
+                result.value == "failed" && resultData.errors[0]["errorType"] == "invalid_token"? <div>Please onnect your Fitbit in Settings.</div>:null
+            }
+        </div>
         <br />
         <br />
 

@@ -57,7 +57,9 @@ export async function getServerSideProps(ctx) {
   );
 
   if(!session){
-    return {};
+    return {
+      props: {},
+    };
   }
 
   let userName = session.user.name;

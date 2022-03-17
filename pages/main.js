@@ -56,6 +56,10 @@ export async function getServerSideProps(ctx) {
     `main.getServerSideProps: session: ${JSON.stringify(session)}`
   );
 
+  if(!session){
+    return {};
+  }
+
   let userName = session.user.name;
 
   

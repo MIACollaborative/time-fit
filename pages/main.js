@@ -75,6 +75,7 @@ export async function getServerSideProps(ctx) {
   
 
 
+  console.log(`name: ${userName} - fitbiId: ${user.fitbiId}`);
   let hasFitbitConnection = user.fitbiId != "" && user.accessToken != "" && user.refreshToekn != "";
 
 

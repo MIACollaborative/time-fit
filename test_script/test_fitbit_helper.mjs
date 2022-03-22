@@ -37,8 +37,12 @@ FitbitHelper.getAuthorizationInformation("***REMOVED***07")
 });
 */
 
-let testToken = "***REMOVED***";
-FitbitHelper.introspectToken(testToken)
+let accessToken = "***REMOVED***";
+let testToken = accessToken;
+
+
+
+FitbitHelper.introspectToken(accessToken, testToken)
 .then((responseData) => {
   console.log(
       `FitbitHelper.introspectToken: responseData: ${responseData}`

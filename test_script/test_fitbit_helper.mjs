@@ -37,8 +37,12 @@ FitbitHelper.getAuthorizationInformation("627b2644ca77031de5cccd447c8ed04ba7af79
 });
 */
 
-let testToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzgyOVgiLCJzdWIiOiI0U1c5VzkiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyYWN0IHJwcm8iLCJleHAiOjE2NDc0ODY3OTYsImlhdCI6MTY0NzQ1Nzk5Nn0.Mn9t4rnUfSWavNLowTgyfi4Ncu91oxFjXM0uhs09lwQ";
-FitbitHelper.introspectToken(testToken)
+let accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzgyOVgiLCJzdWIiOiI0U1c5VzkiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyYWN0IHJzZXQgcnBybyIsImV4cCI6MTY0Nzk5NzM0NywiaWF0IjoxNjQ3OTY4NTQ3fQ.PXuwG94BvrUOE05QIr6Tut4YGd8H-06af14vbr91IvQ";
+let testToken = accessToken;
+
+
+
+FitbitHelper.introspectToken(accessToken, testToken)
 .then((responseData) => {
   console.log(
       `FitbitHelper.introspectToken: responseData: ${responseData}`

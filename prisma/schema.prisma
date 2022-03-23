@@ -33,6 +33,12 @@ model users {
   accessToken String?
   refreshToken String?
 
+  // for user preference
+  weekdayWakeup DateTime?
+  weekdayBed DateTime?
+  weekendWakeup DateTime?
+  weekendBed DateTime?
+
 
   // for time
   createdAt DateTime? @default(now())

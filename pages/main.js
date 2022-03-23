@@ -10,6 +10,7 @@ import logger from "../lib/logger";
 
 */
 
+
 import { inspect } from 'util';
 
 import Link from 'next/link';
@@ -190,6 +191,8 @@ export default function Main({ hasFitbitConnection, isAccessTokenActive, introsp
 
 
           <Link href={"/activity-summary"}><Button label="Get Activity Summary" className="p-button-info" style={{ width: "100%" }} /></Link><br /><br />
+
+          <Link href={"/time-setting"}><Button label="Setting Time Preference" className="p-button-info" style={{ width: "100%" }} /></Link><br /><br />
 
 
           <Link href="/home"><a>Personalize your Experience</a></Link><br /><br />

@@ -9,6 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@date-io/luxon": "^2.13.1",
+    "@emotion/react": "^11.8.2",
+    "@emotion/styled": "^11.8.1",
+    "@mui/lab": "^5.0.0-alpha.74",
+    "@mui/material": "^5.5.2",
     "@prisma/client": "^3.10.0",
     "axios": "^0.26.1",
     "luxon": "^2.3.1",

@@ -5,6 +5,10 @@ import "primereact/resources/themes/nova/theme.css"
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import 'primeflex/primeflex.css';
+
+
+import TextField from '@mui/material/TextField';
+import TimePicker from '@mui/lab/TimePicker';
 /*
 import logger from "../lib/logger";
 
@@ -25,6 +29,7 @@ import FitbitHelper from '../lib/FitbitHelper';
 
 
 import prisma from '../lib/prisma.js';
+import { ConnectedOverlayScrollHandler } from 'primereact/utils';
 
 /*
 function replacer(key, value) {
@@ -128,15 +133,21 @@ export async function getServerSideProps(ctx) {
   //isAccessTokenActive = introspectResult.active;
   
   return {
-    props: { hasFitbitConnection, isAccessTokenActive, introspectResult },
+    props: { userInfo: user, hasFitbitConnection, isAccessTokenActive, introspectResult },
   };
 }
 
 
-export default function TimeSetting({ hasFitbitConnection, isAccessTokenActive, introspectResult }) {
+export default function TimeSetting({ userInfo, hasFitbitConnection, isAccessTokenActive, introspectResult }) {
 
   const { data: session, status } = useSession();
   const router = useRouter();
+
+  const [weekdayWakeup, setWeekdayWakeup] = useState(userInfo.weekdayWakeup != undefined? userInfo.weekdayWakeup: "");
+  const [weekdayBed, setWeekdayBed] = useState(userInfo.weekdayBed != undefined? userInfo.weekdayBed: "");
+
+  const [weekendWakeup, setWeekendWakeup] = useState(userInfo.weekendWakeup != undefined? userInfo.weekendWakeup: "");
+  const [weekendBed, setWeekendBed] = useState(userInfo.weekendBed != undefined? userInfo.weekendBed: "");
 
   //logger.logToDB("main", {message: "test"});
 
@@ -170,6 +181,31 @@ export default function TimeSetting({ hasFitbitConnection, isAccessTokenActive, 
 
   let fitbitSignInLink = `https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=23829X&redirect_uri=${encodeURIComponent(redirectURL)}&state=${state}&scope=${scope}&expires_in=604800`;
 
+
+  async function updateTimePreference(dayWake, dayBed, endWake, endBed) {
+    console.log(`updateTimePreference, dayWake: ${dayWake}`);
+    console.log(`updateTimePreference, dayBed: ${dayBed}`);
+    console.log(`updateTimePreference, endWake: ${endWake}`);
+    console.log(`updateTimePreference, endBed: ${endBed}`);
+
+    const updateUser = await prisma.users.update({
+        where: { username: userInfo.username },
+        data: {
+          weekdayWakeup: accessToken,
+          weekdayBed: dayBed,
+          weekendWakeup: endWake,
+          weekendBed: endBed
+        },
+    });
+
+    console.log(`updateTimePreference: ${JSON.stringify(updateUser)}`);
+  }
+
+  function onSaveClick(event){
+    updateTimePreference(weekdayWakeup, weekdayBed, weekendWakeup, weekendBed);
+  }
+
+
   return (
     <div className={styles.container}>
       <Head>
@@ -182,15 +218,51 @@ export default function TimeSetting({ hasFitbitConnection, isAccessTokenActive, 
 
 
         <div>
-            <div>On weekdays, when do you typically wakeup?</div>
+            <div>On weekdays, when do you typically wakeup?</div><br />
+            <TimePicker
+              label="Weekday Wake Up Time"
+              value={weekdayWakeup}
+              onChange={(newValue) => {
+                setWeekdayWakeup(newValue);
+                console.log(`setWeekdayWakeup: ${newValue}`);
+              }}
+              renderInput={(params) => <TextField {...params} />}
+            />
             <Divider />
-            <div>On weekdays, when do you typically go to bed?</div>
+            <div>On weekdays, when do you typically go to bed?</div><br />
+            <TimePicker
+              label="Weekday Bed Time"
+              value={weekdayBed}
+              onChange={(newValue) => {
+                setWeekdayBed(newValue);
+                console.log(`setWeekdayBed: ${newValue}`);
+              }}
+              renderInput={(params) => <TextField {...params} />}
+            />
             <Divider />
-            <div>On weekends, when do you typically wakeup?</div>
+            <div>On weekends, when do you typically wakeup?</div><br />
+            <TimePicker
+              label="Weekend Wake Up Time"
+              value={weekendWakeup}
+              onChange={(newValue) => {
+                setWeekendWakeup(newValue);
+                console.log(`setWeekendWakeup: ${newValue}`);
+              }}
+              renderInput={(params) => <TextField {...params} />}
+            />
             <Divider />
-            <div>On weekends, when do you typically go to bed?</div>
+            <div>On weekends, when do you typically go to bed?</div><br />
+            <TimePicker
+              label="Weekend Bed Time"
+              value={weekendBed}
+              onChange={(newValue) => {
+                setWeekendBed(newValue);
+                console.log(`setWeekendBed: ${newValue}`);
+              }}
+              renderInput={(params) => <TextField {...params} />}
+            />
             <Divider />
-            <Button label="Save" className="p-button-info" style={{ width: "100%" }} />
+            <Button label="Save" onClick={onSaveClick} className="p-button-info" style={{ width: "100%" }} />
         </div>
       </main>
 

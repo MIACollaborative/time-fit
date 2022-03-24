@@ -25,6 +25,10 @@ model users {
   password String
   hash String @unique
 
+  // additional user information
+  preferredName String?
+  phone String?
+
 
   // for Fitbit
   fitbitId String?

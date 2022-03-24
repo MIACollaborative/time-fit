@@ -214,7 +214,7 @@ export default function Main({ userInfo, hasFitbitConnection, isAccessTokenActiv
           <Divider />
 
         </div>
-        <div><Button label="Sign out" className="p-button-danger" onClick={() => signOut()} /></div>
+        <div><Button variant="outlined" color="error" style={{ width: "100%" }} onClick={() => signOut()} >Sign out</Button></div>
         <div>
           <p>1/4 complete</p>
           <p>Once all tasks are completed, your study will be activiated the upcoming Monday for the duration of 6 weeks.</p>

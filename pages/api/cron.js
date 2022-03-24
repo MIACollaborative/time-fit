@@ -23,6 +23,8 @@ export default async function handler(req, res) {
     let now = DateTime.now();
     // .toLocaleString(DateTime.TIME_SIMPLE);
 
+    let pingTimeLocal = now.toLocaleString(DateTime.TIME_WITH_SECONDS);
+
     switch (function_name) {
         case "check_user_weekday_wakeup_time":
             
@@ -42,6 +44,15 @@ export default async function handler(req, res) {
             });
 
             let userList = JSON.parse(JSON.stringify(users, replacer));
+
+            userList = userList.map((userInfo) => {
+                let localWeekdayWakeup = DateTime.fromISO(userInfo.weekdayWakeup).toLocaleString(DateTime.TIME_WITH_SECONDS);
+
+                return {...userInfo, localWeekdayWakeup, pingTimeLocal};
+            })
+            .filter((newUserInfo) => {
+                return newUserInfo.localWeekdayWakeup == newUserInfo.pingTimeLocal;
+            });
             
             res.status(200).json({ result: userList });
             return;

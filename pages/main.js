@@ -10,6 +10,7 @@ import logger from "../lib/logger";
 
 */
 
+import { Button } from '@mui/material';
 
 import { inspect } from 'util';
 
@@ -19,7 +20,7 @@ import { useRouter } from 'next/router'
 import React, { useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
-import { Button } from 'primereact/button';
+//import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
 import md5 from "md5";
 import FitbitHelper from '../lib/FitbitHelper';
@@ -27,27 +28,14 @@ import FitbitHelper from '../lib/FitbitHelper';
 
 import prisma from '../lib/prisma.js';
 
-/*
+
+
 function replacer(key, value) {
-  if (typeof value === 'Date') {
+  if (typeof value === "Date") {
     return value.toString();
   }
   return value;
 }
-
-export const getServerSideProps = async ({ req }) => {
-  // const token = req.headers.AUTHORIZATION
-  // const userId = await getUserId(token)\
-
-  const logs = await prisma.log.findMany();
-
-  const logList = JSON.parse(JSON.stringify(logs, replacer));
-
-  return {
-    props : { logList }
-  }
-}
-*/
 
 
 export async function getServerSideProps(ctx) {
@@ -74,6 +62,7 @@ export async function getServerSideProps(ctx) {
     `main.getServerSideProps: user: ${JSON.stringify(user)}`
   );
   
+  const userInfo = JSON.parse(JSON.stringify(user, replacer));
 
 
   console.log(`name: ${userName} - fitbiId: ${user.fitbitId}`);
@@ -129,12 +118,12 @@ export async function getServerSideProps(ctx) {
   //isAccessTokenActive = introspectResult.active;
   
   return {
-    props: { hasFitbitConnection, isAccessTokenActive, introspectResult },
+    props: {userInfo, hasFitbitConnection, isAccessTokenActive, introspectResult },
   };
 }
 
 
-export default function Main({ hasFitbitConnection, isAccessTokenActive, introspectResult }) {
+export default function Main({ userInfo, hasFitbitConnection, isAccessTokenActive, introspectResult }) {
 
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -171,6 +160,28 @@ export default function Main({ hasFitbitConnection, isAccessTokenActive, introsp
 
   let fitbitSignInLink = `https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=23829X&redirect_uri=${encodeURIComponent(redirectURL)}&state=${state}&scope=${scope}&expires_in=604800`;
 
+  async function sendTwilioMessage(phone, messageBody) {
+    console.log(`Main.sendTwilioMessage: ${phone} - ${messageBody}`);
+
+
+    
+
+    const result = await fetch("/api/twilio?function_name=send_message", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        phone,
+        messageBody
+      }),
+    }).then((r) => {
+      return r.json();
+    });
+
+    return result;
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -187,13 +198,13 @@ export default function Main({ hasFitbitConnection, isAccessTokenActive, introsp
           <div>Fitbit: {hasFitbitConnection ? "connected" : "not connected"}</div><br />
           <div>Access Token (not working yet): {isAccessTokenActive ? "active" : "inactive"}</div><br />
           <Divider />
-          <Link href={fitbitSignInLink}><Button label="Connect your Fitbit" className="p-button-info" style={{ width: "100%" }} /></Link><br /><br />
+          <Link href={fitbitSignInLink}><Button variant="contained" style={{ width: "100%" }} >Connect your Fitbit</Button></Link><br /><br />
+          <Link href={"/activity-summary"}><Button variant="contained" style={{ width: "100%" }} >Get Activity Summary</Button></Link><br /><br />
+          <Link href={"/time-setting"}><Button variant="contained" style={{ width: "100%" }} >Set Time Preference</Button></Link><br /><br />
 
-
-          <Link href={"/activity-summary"}><Button label="Get Activity Summary" className="p-button-info" style={{ width: "100%" }} /></Link><br /><br />
-
-          <Link href={"/time-setting"}><Button label="Setting Time Preference" className="p-button-info" style={{ width: "100%" }} /></Link><br /><br />
-
+          <Button variant="contained" style={{ width: "100%" }} onClick={(event) => {
+            sendTwilioMessage(userInfo.phone, `Hello ${userInfo.preferredName}`);
+          }} >Send myself hello SMS</Button><br /><br />
 
           <Link href="/home"><a>Personalize your Experience</a></Link><br /><br />
           <Link href="/home"><a>Complete the Baseline Survey</a></Link><br /><br />

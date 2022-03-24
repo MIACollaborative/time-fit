@@ -202,6 +202,8 @@ export default function Main({ userInfo, hasFitbitConnection, isAccessTokenActiv
           <Link href={"/activity-summary"}><Button variant="contained" style={{ width: "100%" }} >Get Activity Summary</Button></Link><br /><br />
           <Link href={"/time-setting"}><Button variant="contained" style={{ width: "100%" }} >Set Time Preference</Button></Link><br /><br />
 
+          <Link href={"/info-edit"}><Button variant="contained" style={{ width: "100%" }} >Edit Preferred Name and Phone</Button></Link><br /><br />
+
           <Button variant="contained" style={{ width: "100%" }} onClick={(event) => {
             sendTwilioMessage(userInfo.phone, `Hello ${userInfo.preferredName}`);
           }} >Send myself hello SMS</Button><br /><br />

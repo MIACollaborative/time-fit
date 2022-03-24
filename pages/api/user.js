@@ -6,9 +6,12 @@ export default async function handler(req, res) {
 
     console.log(`function: ${function_name}`);
 
+
+    const {username} = req.body;
+
     switch (function_name) {
         case "update_time_preference":
-            const {username,  weekdayWakeup, weekdayBed, weekendWakeup, weekendBed } = req.body;
+            const {weekdayWakeup, weekdayBed, weekendWakeup, weekendBed } = req.body;
             const updateUser = await prisma.users.update({
                 where: { username: username },
                 data: {
@@ -21,6 +24,17 @@ export default async function handler(req, res) {
 
             res.status(200).json({ result: "success" });
             return;
+        case "update_info":
+                
+                const { username,  ...rest } = req.body;
+                console.log(`rest: ${JSON.stringify(rest)}`);
+                const aUser = await prisma.users.update({
+                    where: { username: username },
+                    data: rest,
+                });
+    
+                res.status(200).json({ result: "success" });
+                return;
         default:
             return;
     }

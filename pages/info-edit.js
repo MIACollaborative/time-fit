@@ -1,29 +1,27 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-import "primereact/resources/themes/nova/theme.css"
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
+import "primereact/resources/themes/nova/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
-import 'primeflex/primeflex.css';
+import "primeflex/primeflex.css";
 
-
-import TextField from '@mui/material/TextField';
-import TimePicker from '@mui/lab/TimePicker';
+import TextField from "@mui/material/TextField";
+import TimePicker from "@mui/lab/TimePicker";
 /*
 import logger from "../lib/logger";
 
 */
 
-import { inspect } from 'util';
+import { inspect } from "util";
 
-import Link from 'next/link';
-import { useSession, signIn, signOut, getSession } from "next-auth/react"
-import { useRouter } from 'next/router'
-import React, { useState } from 'react';
-import { Button } from 'primereact/button';
-import { Divider } from 'primereact/divider';
-import prisma from '../lib/prisma.js';
-
+import Link from "next/link";
+import { useSession, signIn, signOut, getSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { Button } from "primereact/button";
+import { Divider } from "primereact/divider";
+import prisma from "../lib/prisma.js";
 
 function replacer(key, value) {
   if (typeof value === "Date") {
@@ -33,13 +31,10 @@ function replacer(key, value) {
 }
 
 export async function getServerSideProps(ctx) {
-  
   const session = await getSession(ctx);
-  console.log(
-    `main.getServerSideProps: session: ${JSON.stringify(session)}`
-  );
+  console.log(`main.getServerSideProps: session: ${JSON.stringify(session)}`);
 
-  if(!session){
+  if (!session) {
     return {
       props: {},
     };
@@ -47,80 +42,78 @@ export async function getServerSideProps(ctx) {
 
   let userName = session.user.name;
 
-  
   const uniqueUser = await prisma.users.findFirst({
     where: { username: userName },
   });
 
-  console.log(
-    `main.getServerSideProps: user: ${JSON.stringify(uniqueUser)}`
-  );
-  
+  console.log(`main.getServerSideProps: user: ${JSON.stringify(uniqueUser)}`);
 
   const userInfo = JSON.parse(JSON.stringify(uniqueUser, replacer));
-  
+
   return {
-    props: { userInfo},
+    props: { userInfo },
   };
 }
 
-
-export default function InfoEdit({ userInfo}) {
-
+export default function InfoEdit({ userInfo }) {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  const [preferredName, setPreferredName] = useState(userInfo.preferredName != undefined? userInfo.preferredName: "");
-  const [phone, setPhone] = useState(userInfo.phone != undefined? userInfo.phone: "");
-
-
+  const [preferredName, setPreferredName] = useState(
+    userInfo.preferredName != undefined ? userInfo.preferredName : ""
+  );
+  const [phone, setPhone] = useState(
+    userInfo.phone != undefined ? userInfo.phone : ""
+  );
 
   // status: enum mapping to three possible session states: "loading" | "authenticated" | "unauthenticated"
   if (status == "loading") return <div>loading...</div>;
 
   if (!session) {
-    router.push('/');
+    router.push("/");
     return null;
   }
 
   console.log(`session: ${JSON.stringify(session)}`);
 
-  async function updateTimePreference(username, dayWake, dayBed, endWake, endBed) {
-    console.log(`TimSetting.updateTimePreference: ${username}`);
-    console.log(`updateTimePreference, dayWake: ${dayWake}`);
-    console.log(`updateTimePreference, dayBed: ${dayBed}`);
-    console.log(`updateTimePreference, endWake: ${endWake}`);
-    console.log(`updateTimePreference, endBed: ${endBed}`);
+  async function updateInfo(
+    username,
+    info
+  ) {
+    console.log(`InfoEdit.updateInfo: ${username}`);
+    console.log(`InfoEdit.updateInfo.info: ${info}`);
 
-    
-
-    const result = await fetch("/api/user?function_name=update_time_preference", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: username,
-        weekdayWakeup:dayWake,
-        weekdayBed: dayBed,
-        weekendWakeup: endWake,
-        weekendBed: endBed,
-      }),
-    }).then((r) => {
+    const result = await fetch(
+      "/api/user?function_name=update_info",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({...info, 
+          username: username
+        }),
+      }
+    ).then((r) => {
       return r.json();
     });
 
     return result;
   }
 
-  function onSaveClick(event){
-    updateTimePreference( userInfo.username, weekdayWakeup, weekdayBed, weekendWakeup, weekendBed)
-      .then((response) => {
-        router.push("/main");
-        return response;
-      })
-  }
+  function onSaveClick(event) {
 
+    updateInfo(
+      userInfo.username,
+      {
+          preferredName,
+          phone
+      }
+    ).then((response) => {
+      router.push("/main");
+      return response;
+    });
+  }
 
   return (
     <div className={styles.container}>
@@ -131,61 +124,43 @@ export default function InfoEdit({ userInfo}) {
       </Head>
 
       <main className={styles.main}>
-
-
         <div>
-            <div>On weekdays, when do you typically wakeup?</div><br />
-            <TimePicker
-              label="Weekday Wake Up Time"
-              value={weekdayWakeup}
-              onChange={(newValue) => {
-                setWeekdayWakeup(newValue);
-                console.log(`setWeekdayWakeup: ${newValue}`);
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
-            <Divider />
-            <div>On weekdays, when do you typically go to bed?</div><br />
-            <TimePicker
-              label="Weekday Bed Time"
-              value={weekdayBed}
-              onChange={(newValue) => {
-                setWeekdayBed(newValue);
-                console.log(`setWeekdayBed: ${newValue}`);
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
-            <Divider />
-            <div>On weekends, when do you typically wakeup?</div><br />
-            <TimePicker
-              label="Weekend Wake Up Time"
-              value={weekendWakeup}
-              onChange={(newValue) => {
-                setWeekendWakeup(newValue);
-                console.log(`setWeekendWakeup: ${newValue}`);
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
-            <Divider />
-            <div>On weekends, when do you typically go to bed?</div><br />
-            <TimePicker
-              label="Weekend Bed Time"
-              value={weekendBed}
-              onChange={(newValue) => {
-                setWeekendBed(newValue);
-                console.log(`setWeekendBed: ${newValue}`);
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
-            <Divider />
-            <Button label="Save" onClick={onSaveClick} className="p-button-info" style={{ width: "100%" }} />
+          <TextField
+            fullWidth
+            label="Preferred Name"
+            id="fullWidth"
+            value={preferredName}
+            onChange={(event) => {
+                console.log(`setPreferredName: ${event.currentTarget.value}`);
+              setPreferredName(event.currentTarget.value);
+              
+            }}
+          />
+          <Divider />
+          <TextField
+            fullWidth
+            label="Phone Number"
+            id="fullWidth"
+            value={phone}
+            onChange={(event) => {
+                console.log(`setPhone: ${event.currentTarget.value}`);
+              setPhone(event.currentTarget.value);
+              
+            }}
+          />
+          <br />
+          <br />
+          <Button
+            label="Save"
+            onClick={onSaveClick}
+            className="p-button-info"
+            style={{ width: "100%" }}
+          />
         </div>
       </main>
 
       <footer className={styles.main}>
-        <div>
-          WalkToJoy Study
-        </div>
+        <div>WalkToJoy Study</div>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           target="_blank"
@@ -193,9 +168,8 @@ export default function InfoEdit({ userInfo}) {
         >
           <div>School of Informaiton</div>
           <div>University of Michigan</div>
-
         </a>
       </footer>
     </div>
-  )
+  );
 }

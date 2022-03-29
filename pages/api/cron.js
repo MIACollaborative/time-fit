@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     // .toLocaleString(DateTime.TIME_SIMPLE);
     let pingTimeLocal = now.toLocaleString(DateTime.TIME_WITH_SECONDS);
     console.log(`cron UTC: ${pingTimeUTC} - function: ${function_name}`);
-    console.log(`url: ${process.env.NEXTAUTH_URL}`);
+    //console.log(`url: ${process.env.NEXTAUTH_URL}`);
 
     async function sendTwilioMessage(phone, messageBody) {
         console.log(`Main.sendTwilioMessage: ${phone} - ${messageBody}`);
@@ -59,7 +59,6 @@ export default async function handler(req, res) {
 
     switch (function_name) {
         case "check_user_weekday_wakeup_time":
-
             userList = userList.map((userInfo) => {
                 let localWeekdayWakeup = DateTime.fromISO(userInfo.weekdayWakeup).toLocaleString(DateTime.TIME_SIMPLE);
 
@@ -71,7 +70,7 @@ export default async function handler(req, res) {
             })
             .filter((newUserInfo) => {
                 let diffInMins = newUserInfo.pingTimeUTC.diff(newUserInfo.localWeekdayWakeupUTC, 'minutes');
-                console.log(`pingTimeUTC: ${newUserInfo.pingTimeUTC}, localWeekdayWakeupUTC: ${newUserInfo.localWeekdayWakeupUTC}, diffInMins: ${diffInMins.toObject().minutes}`);
+                console.log(`[${newUserInfo.username}]\t-pingTimeUTC: ${newUserInfo.pingTimeUTC}, localWeekdayWakeupUTC: ${newUserInfo.localWeekdayWakeupUTC}, diffInMins: ${diffInMins.toObject().minutes}`);
                 
                 return diffInMins.toObject().minutes == 0;
                 //return newUserInfo.localWeekdayWakeupUTC == newUserInfo.pingTimeUTC;
@@ -80,16 +79,17 @@ export default async function handler(req, res) {
 
             // those who pass should get the wake up message
             userList.forEach((userInfo) => {
-                console.log(`userInfo: ${JSON.stringify(userInfo)}`);
                 //let localWeekdayWakeup = DateTime.fromISO(userInfo.weekdayWakeup).toLocaleString(DateTime.TIME_WITH_SECONDS);
                 // sendTwilioMessage(userInfo.phone, `Hello ${userInfo.preferredName}`);
-                sendTwilioMessage(userInfo.phone, `[WalkToJoy] Hello ${userInfo.preferredName},\n It's your wake up time: ${userInfo.localWeekdayWakeup}. Here is a random survey for you: https://umich.qualtrics.com/jfe/form/SV_cACIS909SMXMUp8?study_code=${userInfo.username}`);
+                let messageBody = `[WalkToJoy] Hello ${userInfo.preferredName},\n It's your wake up time: ${userInfo.localWeekdayWakeup}. Here is a random survey for you: https://umich.qualtrics.com/jfe/form/SV_cACIS909SMXMUp8?study_code=${userInfo.username}`;
+
+                console.log(`[On time] userInfo: ${JSON.stringify(userInfo)}\n Message: ${messageBody}`);
+
+                sendTwilioMessage(userInfo.phone, messageBody);
             });
             res.status(200).json({ result: userList });
             return;
         case "check_user_weekday_bed_time":
-            
-
             userList = userList.map((userInfo) => {
                 let localWeekdayBed= DateTime.fromISO(userInfo.weekdayBed).toLocaleString(DateTime.TIME_SIMPLE);
 
@@ -101,7 +101,7 @@ export default async function handler(req, res) {
             })
             .filter((newUserInfo) => {
                 let diffInMins = newUserInfo.pingTimeUTC.diff(newUserInfo.localWeekdayBedUTC, 'minutes');
-                console.log(`pingTimeUTC: ${newUserInfo.pingTimeUTC}, localWeekdayBedUTC: ${newUserInfo.localWeekdayBedUTC}, diffInMins: ${diffInMins.toObject().minutes}`);
+                console.log(`[${newUserInfo.username}]\t-pingTimeUTC: ${newUserInfo.pingTimeUTC}, localWeekdayBedUTC: ${newUserInfo.localWeekdayBedUTC}, diffInMins: ${diffInMins.toObject().minutes}`);
                 
                 return diffInMins.toObject().minutes == 0;
                 //return newUserInfo.localWeekdayWakeupUTC == newUserInfo.pingTimeUTC;
@@ -110,10 +110,14 @@ export default async function handler(req, res) {
 
             // those who pass should get the wake up message
             userList.forEach((userInfo) => {
-                console.log(`userInfo: ${JSON.stringify(userInfo)}`);
+                
                 //let localWeekdayWakeup = DateTime.fromISO(userInfo.weekdayWakeup).toLocaleString(DateTime.TIME_WITH_SECONDS);
                 // sendTwilioMessage(userInfo.phone, `Hello ${userInfo.preferredName}`);
-                sendTwilioMessage(userInfo.phone, `[WalkToJoy] Hello ${userInfo.preferredName},\n It's your bed time: ${userInfo.localWeekdayBed}. Here is a random survey for you: https://umich.qualtrics.com/jfe/form/SV_cACIS909SMXMUp8?study_code=${userInfo.username}`);
+                let messageBody = `[WalkToJoy] Hello ${userInfo.preferredName},\n It's your bed time: ${userInfo.localWeekdayBed}. Here is a random survey for you: https://umich.qualtrics.com/jfe/form/SV_cACIS909SMXMUp8?study_code=${userInfo.username}`;
+
+                console.log(`[On time] userInfo: ${JSON.stringify(userInfo)}\n Message: ${messageBody}`);
+
+                sendTwilioMessage(userInfo.phone, messageBody);
             });
             res.status(200).json({ result: userList });
             return;

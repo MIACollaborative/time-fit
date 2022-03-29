@@ -1,8 +1,11 @@
 import nodeCron from "node-cron";
 import axios from "axios";
+import { DateTime } from "luxon";
 
-nodeCron.schedule('*/2 * * * * *', async () => {
-    console.log('execute task every 2 seconds');
+// '*/2 * * * * *' -> every 2 seconds
+// '* * * * *' -> every 1 minute
+nodeCron.schedule('*/10 * * * * *', async () => {
+    console.log(`execute task every 10 seconds at ${DateTime.now()}`);
     return axios({
       method: 'post',
       url: 'http://localhost:3000/api/cron',

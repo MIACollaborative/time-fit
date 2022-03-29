@@ -6,7 +6,7 @@ import { DateTime } from "luxon";
 // '*/10 * * * * *' -> every 10 seconds
 // '* * * * *' -> every 1 minute
 nodeCron.schedule('* * * * *', async () => {
-    console.log(`execute task every 10 seconds at ${DateTime.now()}`);
+    console.log(`execute task every 1 minute at ${DateTime.now()}`);
     let weekdayWakeupPromise = axios({
       method: 'post',
       url: 'http://localhost:3000/api/cron',

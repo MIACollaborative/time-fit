@@ -11,14 +11,15 @@ export default async function handler(req, res) {
 
     switch (function_name) {
         case "update_time_preference":
-            const {weekdayWakeup, weekdayBed, weekendWakeup, weekendBed } = req.body;
+            const {weekdayWakeup, weekdayBed, weekendWakeup, weekendBed, timezone } = req.body;
             const updateUser = await prisma.users.update({
                 where: { username: username },
                 data: {
                     weekdayWakeup,
                     weekdayBed,
                     weekendWakeup,
-                    weekendBed
+                    weekendBed,
+                    timezone
                 },
             });
 

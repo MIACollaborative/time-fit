@@ -156,9 +156,6 @@ export default function Main({ userInfo, hasFitbitConnection, isAccessTokenActiv
   async function sendTwilioMessage(phone, messageBody) {
     console.log(`Main.sendTwilioMessage: ${phone} - ${messageBody}`);
 
-
-    
-
     const result = await fetch("/api/twilio?function_name=send_message", {
       method: "POST",
       headers: {
@@ -174,6 +171,7 @@ export default function Main({ userInfo, hasFitbitConnection, isAccessTokenActiv
 
     return result;
   }
+
 
   return (
     <div className={styles.container}>

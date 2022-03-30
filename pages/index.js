@@ -1,10 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import "primereact/resources/themes/nova/theme.css"
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
-import 'primeflex/primeflex.css';
 
 //import logger from "../lib/logger";
 //import prisma from '../lib/prisma';
@@ -12,10 +8,7 @@ import 'primeflex/primeflex.css';
 import { useSession, signIn, signOut } from "next-auth/react"
 import { useRouter } from 'next/router'
 import React, { useState } from 'react';
-import { InputText } from 'primereact/inputtext';
-import { Password } from 'primereact/password';
-import { Button } from 'primereact/button';
-
+import Button from '@mui/material/Button';
 /*
 function replacer(key, value) {
   if (typeof value === 'Date') {
@@ -92,11 +85,9 @@ export default function Home({}) {
         Walk To Joy
         </h1>
 
-        
-        <Button label="Sign in" className="p-button-danger" onClick={() => signIn()}/>
-        
-
-
+        <Button variant="contained" onClick={(event) => {
+            signIn();
+          }} >Sign in</Button>
 
 
       </main>

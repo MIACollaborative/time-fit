@@ -1,10 +1,4 @@
 import prisma from "../../lib/prisma";
-
-/*
-import pkg from 'luxon';
-const {DataTime} = pkg;
-*/
-
 import { DateTime } from "luxon";
 
 
@@ -15,16 +9,36 @@ function replacer(key, value) {
     return value;
 }
 
+function getLocalTime(datetime, timezone){
+    return datetime.setZone(timezone);
+}
+
+function getWeekdayOrWeekend(datetime){
+    console.log(`getWeekdayOrWeekend: ${datetime.weekday}`);
+    if(datetime.weekday< 6){
+        return "weekday";
+    }
+    else{
+        return "weekend";
+    }
+}
+
 
 export default async function handler(req, res) {
     const { function_name } = req.query;
     
-    let now = DateTime.now();
+    let now = DateTime.now().plus({day: 2}); // DateTime.now();
     let pingTimeUTC = now.toUTC();
     // .toLocaleString(DateTime.TIME_SIMPLE);
     let pingTimeLocal = now.toLocaleString(DateTime.TIME_WITH_SECONDS);
     console.log(`cron UTC: ${pingTimeUTC} - function: ${function_name}`);
+
+    let tempTimezone = "Asia/Taipei"; // "America/New_York";
+    console.log(`Local time for ${tempTimezone} is ${getLocalTime(now, tempTimezone)} [${getWeekdayOrWeekend(getLocalTime(now, tempTimezone))}]`);
     //console.log(`url: ${process.env.NEXTAUTH_URL}`);
+
+    // see if I can detect weekday and weekend for a particular timezone, then
+
 
     async function sendTwilioMessage(phone, messageBody) {
         console.log(`Main.sendTwilioMessage: ${phone} - ${messageBody}`);

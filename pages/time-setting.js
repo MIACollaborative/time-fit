@@ -94,12 +94,13 @@ export default function TimeSetting({ userInfo}) {
 
   console.log(`session: ${JSON.stringify(session)}`);
 
-  async function updateTimePreference(username, dayWake, dayBed, endWake, endBed) {
+  async function updateTimePreference(username, dayWake, dayBed, endWake, endBed, timezone) {
     console.log(`TimSetting.updateTimePreference: ${username}`);
     console.log(`updateTimePreference, dayWake: ${dayWake}`);
     console.log(`updateTimePreference, dayBed: ${dayBed}`);
     console.log(`updateTimePreference, endWake: ${endWake}`);
     console.log(`updateTimePreference, endBed: ${endBed}`);
+    console.log(`updateTimePreference, timezone: ${timezone}`);
 
     
 
@@ -114,6 +115,7 @@ export default function TimeSetting({ userInfo}) {
         weekdayBed: dayBed,
         weekendWakeup: endWake,
         weekendBed: endBed,
+        timezone: timezone
       }),
     }).then((r) => {
       return r.json();
@@ -122,8 +124,10 @@ export default function TimeSetting({ userInfo}) {
     return result;
   }
 
+  let nowDateTime = DateTime.now();
+
   function onSaveClick(event){
-    updateTimePreference( userInfo.username, weekdayWakeup, weekdayBed, weekendWakeup, weekendBed)
+    updateTimePreference( userInfo.username, weekdayWakeup, weekdayBed, weekendWakeup, weekendBed, nowDateTime.zoneName)
       .then((response) => {
         router.push("/main");
         return response;
@@ -131,7 +135,7 @@ export default function TimeSetting({ userInfo}) {
   }
 
 
-  let nowDateTime = DateTime.now();
+  
 
   return (
     <div className={styles.container}>

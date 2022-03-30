@@ -1,13 +1,9 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import "primereact/resources/themes/nova/theme.css";
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
-import "primeflex/primeflex.css";
+
 
 import TextField from "@mui/material/TextField";
-import TimePicker from "@mui/lab/TimePicker";
 /*
 import logger from "../lib/logger";
 
@@ -19,8 +15,8 @@ import Link from "next/link";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { Button } from "primereact/button";
-import { Divider } from "primereact/divider";
+import Button from '@mui/material/Button';
+import Divider from "@mui/material/Divider";
 import prisma from "../lib/prisma.js";
 
 function replacer(key, value) {
@@ -136,7 +132,9 @@ export default function InfoEdit({ userInfo }) {
               
             }}
           />
+          <br />
           <Divider />
+          <br />
           <TextField
             fullWidth
             label="Phone Number"
@@ -150,12 +148,7 @@ export default function InfoEdit({ userInfo }) {
           />
           <br />
           <br />
-          <Button
-            label="Save"
-            onClick={onSaveClick}
-            className="p-button-info"
-            style={{ width: "100%" }}
-          />
+          <Button variant="contained" style={{ width: "100%" }} onClick={onSaveClick} >Save</Button>
         </div>
       </main>
 

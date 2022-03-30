@@ -1,11 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import "primereact/resources/themes/nova/theme.css";
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
-import "primeflex/primeflex.css";
-
 //import logger from "../lib/logger";
 
 import prisma from "../lib/prisma";
@@ -13,9 +8,8 @@ import prisma from "../lib/prisma";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { InputText } from "primereact/inputtext";
-import { Password } from "primereact/password";
-import { Button } from "primereact/button";
+
+import Button from '@mui/material/Button';
 import FitbitHelper from "../lib/FitbitHelper.mjs";
 import { inspect } from 'util';
 
@@ -235,14 +229,10 @@ export default function FitbitSignin({result}) {
         }
         </div>
 
-        <Button
-          label="Return to settings"
-          className="p-button-danger"
-          onClick={() => {
+        <Button variant="contained" style={{ width: "100%" }} onClick={(event) => {
             router.push("/main");
             return;
-          }}
-        />
+          }} >Return to settings</Button>
       </main>
 
       <footer className={styles.main}>

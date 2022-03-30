@@ -1,10 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import "primereact/resources/themes/nova/theme.css"
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
-import 'primeflex/primeflex.css';
 /*
 import logger from "../lib/logger";
 
@@ -18,10 +14,7 @@ import Link from 'next/link';
 import { useSession, signIn, signOut, getSession } from "next-auth/react"
 import { useRouter } from 'next/router'
 import React, { useState } from 'react';
-import { InputText } from 'primereact/inputtext';
-import { Password } from 'primereact/password';
-//import { Button } from 'primereact/button';
-import { Divider } from 'primereact/divider';
+import Divider from "@mui/material/Divider";
 import md5 from "md5";
 import FitbitHelper from '../lib/FitbitHelper';
 
@@ -198,6 +191,7 @@ export default function Main({ userInfo, hasFitbitConnection, isAccessTokenActiv
           <div>Fitbit: {hasFitbitConnection ? "connected" : "not connected"}</div><br />
           <div>Access Token (not working yet): {isAccessTokenActive ? "active" : "inactive"}</div><br />
           <Divider />
+          <br />
           <Link href={fitbitSignInLink}><Button variant="contained" style={{ width: "100%" }} >Connect your Fitbit</Button></Link><br /><br />
           <Link href={"/activity-summary"}><Button variant="contained" style={{ width: "100%" }} >Get Activity Summary</Button></Link><br /><br />
           <Link href={"/time-setting"}><Button variant="contained" style={{ width: "100%" }} >Set Time Preference</Button></Link><br /><br />
@@ -212,6 +206,7 @@ export default function Main({ userInfo, hasFitbitConnection, isAccessTokenActiv
           <Link href="/home"><a>Complete the Baseline Survey</a></Link><br /><br />
           <Link href="/home"><a>Disable Sedentary Notification on your Fitbit application</a></Link><br /><br />
           <Divider />
+          <br />
 
         </div>
         <div><Button variant="outlined" color="error" style={{ width: "100%" }} onClick={() => signOut()} >Sign out</Button></div>

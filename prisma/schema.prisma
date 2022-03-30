@@ -28,6 +28,7 @@ model users {
   // additional user information
   preferredName String?
   phone String?
+  timezone String?
 
 
   // for Fitbit

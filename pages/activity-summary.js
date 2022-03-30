@@ -1,10 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import "primereact/resources/themes/nova/theme.css";
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
-import "primeflex/primeflex.css";
 
 //import logger from "../lib/logger";
 import prisma from '../lib/prisma';
@@ -14,7 +10,7 @@ import prisma from '../lib/prisma';
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React from "react";
-import { Button } from "primereact/button";
+import Button from '@mui/material/Button';
 import FitbitHelper from "../lib/FitbitHelper.mjs";
 import { inspect } from 'util';
 
@@ -207,14 +203,13 @@ export default function ActivitySummary({result, dateString}) {
         </div>
         <div>
             {
-                result.value == "failed" && resultData.errors[0]["errorType"] == "expired_token"? <Button
-                label="Refresh token"
-                className="p-button-danger"
-                onClick={() => {
+                result.value == "failed" && resultData.errors[0]["errorType"] == "expired_token"? 
+                
+                <Button variant="contained" onClick={(event) => {
                   router.push("/refresh-token");
                   return;
-                }}
-              />:null
+                }} >Refresh token</Button>
+                :null
             }
         </div>
         <br />
@@ -227,15 +222,11 @@ export default function ActivitySummary({result, dateString}) {
         <br />
         <br />
 
-
-        <Button
-          label="Return to settings"
-          className="p-button-danger"
-          onClick={() => {
+        <Button variant="contained" onClick={(event) => {
             router.push("/main");
             return;
-          }}
-        />
+          }} >Return to settings</Button>
+
       </main>
 
       <footer className={styles.main}>

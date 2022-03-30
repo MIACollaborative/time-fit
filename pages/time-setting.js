@@ -1,10 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import "primereact/resources/themes/nova/theme.css"
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
-import 'primeflex/primeflex.css';
 
 
 import TextField from '@mui/material/TextField';
@@ -20,8 +16,10 @@ import Link from 'next/link';
 import { useSession, signIn, signOut, getSession } from "next-auth/react"
 import { useRouter } from 'next/router'
 import React, { useState } from 'react';
-import { Button } from 'primereact/button';
-import { Divider } from 'primereact/divider';
+import Button from '@mui/material/Button';
+
+
+import Divider from "@mui/material/Divider";
 import prisma from '../lib/prisma.js';
 
 const { DateTime } = require("luxon");
@@ -159,7 +157,9 @@ export default function TimeSetting({ userInfo}) {
               }}
               renderInput={(params) => <TextField {...params} />}
             />
+            <br /><br />
             <Divider />
+            <br />
             <div>On weekdays, when do you typically go to bed?</div><br />
             <TimePicker
               label="Weekday Bed Time"
@@ -170,7 +170,9 @@ export default function TimeSetting({ userInfo}) {
               }}
               renderInput={(params) => <TextField {...params} />}
             />
+            <br /><br />
             <Divider />
+            <br />
             <div>On weekends, when do you typically wakeup?</div><br />
             <TimePicker
               label="Weekend Wake Up Time"
@@ -181,7 +183,9 @@ export default function TimeSetting({ userInfo}) {
               }}
               renderInput={(params) => <TextField {...params} />}
             />
+            <br /><br />
             <Divider />
+            <br />
             <div>On weekends, when do you typically go to bed?</div><br />
             <TimePicker
               label="Weekend Bed Time"
@@ -192,10 +196,14 @@ export default function TimeSetting({ userInfo}) {
               }}
               renderInput={(params) => <TextField {...params} />}
             />
+            <br /><br />
             <Divider />
+            <br />
             <div>Timzone (estimated): {nowDateTime.zoneName} </div>
+            <br />
             <Divider />
-            <Button label="Save" onClick={onSaveClick} className="p-button-info" style={{ width: "100%" }} />
+            <br />
+            <Button variant="contained" style={{ width: "100%" }} onClick={onSaveClick} >Save</Button>
         </div>
       </main>
 

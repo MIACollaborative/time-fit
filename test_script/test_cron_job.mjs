@@ -9,7 +9,7 @@ import { DateTime } from "luxon";
 let everyTenSecondsExpression = '*/10 * * * * *';
 let everyOneMinuteExpression = '* * * * *';
 
-nodeCron.schedule(everyTenSecondsExpression, async () => {
+nodeCron.schedule(everyOneMinuteExpression, async () => {
     console.log(`execute task every 1 minute at ${DateTime.now()}`);
     let weekdayWakeupPromise = axios({
       method: 'post',

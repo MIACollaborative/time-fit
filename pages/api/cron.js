@@ -27,7 +27,7 @@ function getWeekdayOrWeekend(datetime){
 export default async function handler(req, res) {
     const { function_name } = req.query;
     
-    let now = DateTime.now().plus({day: 2}); // DateTime.now();
+    let now = DateTime.now(); //.plus({day: 2}); // DateTime.now();
     let pingTimeUTC = now.toUTC();
     // .toLocaleString(DateTime.TIME_SIMPLE);
     let pingTimeLocal = now.toLocaleString(DateTime.TIME_WITH_SECONDS);

@@ -22,19 +22,19 @@ let aTaskSpec = {
         reference: {
             weekIndexList:[1,2,3,4,5,6,7],
             type: "fixed", // fixed or preference
-            value: "8:00 PM" // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
+            value: "00:07 AM" // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
         },
         offset: {
             type: "plus",
-            value: {hours: 0}
+            value: {minutes: 3} // {hours: 0}
         }
     },
     group: {
-        type: "all", // all or group
+        type: "group", // all or group
         membership: {
-            gif: [true, false],
-            salience: [true, false],
-            modification: [true, false]
+            gif: [true],
+            salience: [],
+            modification: []
         }
     },
     randomization:{
@@ -103,6 +103,9 @@ const userList = await prisma.users.findMany({
         username: true,
         phone: true,
         preferredName: true,
+        gif: true,
+        salience: true,
+        modification: true,
         weekdayWakeup: true,
         weekdayBed: true,
         weekendWakeup: true,

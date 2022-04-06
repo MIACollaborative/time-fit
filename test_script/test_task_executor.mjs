@@ -30,11 +30,11 @@ let aTaskSpec = {
 
             // preference
             type: "preference", // fixed or preference
-            value: "wakeupTime" // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
+            value: "bedTime" // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
         },
         offset: {
             type: "plus",
-            value: {minutes: 5} // {hours: 0}
+            value: {minutes: 1} // {hours: 0}
         }
     },
     group: {

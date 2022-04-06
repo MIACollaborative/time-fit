@@ -18,15 +18,15 @@ import TaskExecutor from "../lib/TaskExecutor.mjs";
 
 let aTaskSpec = {
     checkPoint: {
-        type: "absolute", // absolute vs. relative
+        type: "relative", // absolute vs. relative
         reference: {
             weekIndexList:[1,2,3,4,5,6,7],
             type: "fixed", // fixed or preference
-            value: "00:07 AM" // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
+            value: "00:14 AM" // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
         },
         offset: {
             type: "plus",
-            value: {minutes: 3} // {hours: 0}
+            value: {minutes: 2} // {hours: 0}
         }
     },
     group: {

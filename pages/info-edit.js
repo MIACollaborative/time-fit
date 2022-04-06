@@ -77,7 +77,7 @@ export default function InfoEdit({ userInfo }) {
     info
   ) {
     console.log(`InfoEdit.updateInfo: ${username}`);
-    console.log(`InfoEdit.updateInfo.info: ${info}`);
+    console.log(`InfoEdit.updateInfo.info: ${JSON.stringify(info)}`);
 
     const result = await fetch(
       "/api/user?function_name=update_info",

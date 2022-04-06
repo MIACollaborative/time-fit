@@ -1,4 +1,4 @@
-id,group,interventionMessage,walkMesssage,gif,timOfDay
+id,group,interventionMessage,walkMessage,gif,timeOfDay
 1,gif-a,"When you’re feeling down, moving your body like this buddy here will help you feel great again! :)",Can you go for a short walk this afternoon?,happy-dog-1,Afternoon
 2,gif-a,"One step, two step. Just keep moving! ",Can you go for a short walk this afternoon?,penguin-walk-3,Afternoon
 3,gif-a,A walk will make you feel pawfect! Let's go! :D,Can you go for a short walk this afternoon?,happy-dog-4,Afternoon

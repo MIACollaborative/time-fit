@@ -30,6 +30,11 @@ model users {
   phone String?
   timezone String?
 
+  // for group assignment
+  gif Boolean? @default(false)
+  salience Boolean? @default(false)
+  modification Boolean? @default(false)
+
 
   // for Fitbit
   fitbitId String?

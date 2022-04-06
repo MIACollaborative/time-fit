@@ -13,97 +13,8 @@ const databaseName = "walk_to_joy";
 
 
 import TaskExecutor from "../lib/TaskExecutor.mjs";
+import MyUtility from "../lib/MyUtility.mjs";
 
-
-
-
-let aTaskSpec = {
-    checkPoint: {
-        type: "relative", // absolute vs. relative
-        reference: {
-            weekIndexList:[1,2,3,4,5,6,7],
-            // fixed
-            /*
-            type: "fixed", // fixed or preference
-            value: "00:14 AM" // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
-            */
-
-            // preference
-            type: "preference", // fixed or preference
-            value: "bedTime" // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
-        },
-        offset: {
-            type: "plus",
-            value: {minutes: 1} // {hours: 0}
-        }
-    },
-    group: {
-        type: "group", // all or group
-        membership: {
-            gif: [true],
-            salience: [],
-            modification: []
-        }
-    },
-    randomization:{
-        // Note: could potentially separate this out to be random + action
-        enabled: true, // true or false
-        outcome: [
-            {
-                value: true, // not sure what to make out of it yet
-                chance: 0.5,
-                action: {
-                    type: "messageId", // messageId, or messageGroup
-                    messageId: "XYZ", //messageId, only matter if the type is messageId
-                    messageGroup: "gif", // messageGroup, only matter if the type is messageGroup
-                    avoidHistory: true, // if we want to minimize the chance of sending the same message to the same user in a short window
-                }
-            },
-            {
-                value: false,
-                chance: 0.5,
-                action: {
-                    type: "noAction", // no action
-                }
-            }
-        ]
-    },
-    preCondition:{
-        // stil in draft
-        type: "surveyFilled",
-        requirement: {
-            type: "surveyId",
-            surveyId: "XYZ",
-            //surveyGroup: "gif" // advanced feature I guesss
-            timingType: "absolute", // absolute vs. relative
-            periood: { // this part needs a lot more thinking
-                start: {
-                    reference: {
-                        weekday:[1,2,3,4,5,6,7],
-                        type: "preference", // fixed or preference
-                        value: "8:00 AM" // (if preference) (wakeupTime, bedTime, createdAt)
-                    },
-                    offset: {
-                        type: "minus",
-                        value: {days: 7}
-                    }
-
-                },
-                end: {
-                    reference: {
-                        weekday:[1,2,3,4,5,6,7],
-                        type: "fixed", // fixed or preference
-                        value: "8:00 PM" // (if preference) (wakeupTime, bedTime, createdAt)
-                    },
-                    offset: {
-                        type: "plus",
-                        value: {hours: 0}
-                    }
-                }
-            }
-        }
-    }
-};
 
 let users = await prisma.users.findMany({
     select: {
@@ -131,4 +42,36 @@ function replacer(key, value) {
 
 let userList = JSON.parse(JSON.stringify(users, replacer));
 
-TaskExecutor.executeTask(aTaskSpec, userList);
+
+// test randomization
+function testRandomization(choiceList, total){
+    let resultDict = {};
+
+    for(let i = 0; i < total; i++){
+        let result = TaskExecutor.randomizeSelection(choiceList);
+
+        if(resultDict[result.value] == undefined){
+            resultDict[result.value] = 1;
+        }
+        else{
+            resultDict[result.value] = resultDict[result.value] + 1;
+        }
+    }
+
+    // convert to percentage
+    Object.keys(resultDict).forEach((key) => {
+        resultDict[key] = resultDict[key]/total;
+    });
+
+    return resultDict;
+}
+
+let total = 1000000;
+let choiceList = [
+    {value: "messageLabelA", chance: 0.5},
+    {value: "messageLabelB", chance: 0.5}
+];
+//console.log(`testRandomization(${total}) for ${JSON.stringify(choiceList)}: ${JSON.stringify(testRandomization(choiceList, total))}`);
+
+
+TaskExecutor.executeTask(MyUtility.aTaskSpec, userList);

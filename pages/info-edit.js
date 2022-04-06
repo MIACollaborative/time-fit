@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import Button from '@mui/material/Button';
 import Divider from "@mui/material/Divider";
-import prisma from "../lib/prisma.js";
+import prisma from "../lib/prisma.mjs";
 
 function replacer(key, value) {
   if (typeof value === "Date") {

@@ -69,3 +69,24 @@ model response {
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
 }
+
+model message {
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+
+  // for message
+  label String @unique
+  group String
+  groupIndex Int
+  interventionMessage  String?
+  walkMessage String?
+  gif String?
+  timeOfDay String?
+  topic String?
+  sampleMessage String?
+  note String?
+
+
+  // for time
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}

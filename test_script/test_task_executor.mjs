@@ -1,5 +1,5 @@
 import * as dotenv from "dotenv";
-import prisma from "../lib/prisma.js";
+import prisma from "../lib/prisma.mjs";
 
 /*
 if (process.env.NODE_ENV !== "production") {
@@ -20,7 +20,7 @@ let aTaskSpec = {
     checkPoint: {
         type: "absolute", // absolute vs. relative
         reference: {
-            weekday:[1,2,3,4,5,6,7],
+            weekIndexList:[1,2,3,4,5,6,7],
             type: "fixed", // fixed or preference
             value: "8:00 PM" // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
         },

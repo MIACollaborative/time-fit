@@ -19,7 +19,7 @@ import md5 from "md5";
 import FitbitHelper from '../lib/FitbitHelper';
 
 
-import prisma from '../lib/prisma.js';
+import prisma from '../lib/prisma.mjs';
 
 
 

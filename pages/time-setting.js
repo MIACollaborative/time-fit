@@ -20,7 +20,7 @@ import Button from '@mui/material/Button';
 
 
 import Divider from "@mui/material/Divider";
-import prisma from '../lib/prisma.js';
+import prisma from '../lib/prisma.mjs';
 
 const { DateTime } = require("luxon");
 

@@ -24,7 +24,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 
-import prisma from '../lib/prisma.js';
+import prisma from '../lib/prisma.mjs';
 
 
 

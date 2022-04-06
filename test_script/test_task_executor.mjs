@@ -53,9 +53,9 @@ let aTaskSpec = {
                 value: true, // not sure what to make out of it yet
                 chance: 0.5,
                 action: {
-                    type: "surveyId", // surveyId, or surveyGroup
-                    surveyId: "XYZ", //surveyId, only matter if the tyep is surveyId
-                    surveyGroup: "gif", // surveyGroup, only matter if the type is surveyGroup
+                    type: "messageId", // messageId, or messageGroup
+                    messageId: "XYZ", //messageId, only matter if the type is messageId
+                    messageGroup: "gif", // messageGroup, only matter if the type is messageGroup
                     avoidHistory: true, // if we want to minimize the chance of sending the same message to the same user in a short window
                 }
             },

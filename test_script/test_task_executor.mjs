@@ -1,5 +1,6 @@
 import * as dotenv from "dotenv";
 import prisma from "../lib/prisma.mjs";
+import { DateTime } from "luxon";
 
 /*
 if (process.env.NODE_ENV !== "production") {
@@ -21,12 +22,19 @@ let aTaskSpec = {
         type: "relative", // absolute vs. relative
         reference: {
             weekIndexList:[1,2,3,4,5,6,7],
+            // fixed
+            /*
             type: "fixed", // fixed or preference
             value: "00:14 AM" // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
+            */
+
+            // preference
+            type: "preference", // fixed or preference
+            value: "wakeupTime" // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
         },
         offset: {
             type: "plus",
-            value: {minutes: 2} // {hours: 0}
+            value: {minutes: 5} // {hours: 0}
         }
     },
     group: {
@@ -97,8 +105,7 @@ let aTaskSpec = {
     }
 };
 
-
-const userList = await prisma.users.findMany({
+let users = await prisma.users.findMany({
     select: {
         username: true,
         phone: true,
@@ -113,5 +120,15 @@ const userList = await prisma.users.findMany({
         timezone: true
     },
 });
+
+
+function replacer(key, value) {
+    if (typeof value === "Date") {
+      return value.toString();
+    }
+    return value;
+}
+
+let userList = JSON.parse(JSON.stringify(users, replacer));
 
 TaskExecutor.executeTask(aTaskSpec, userList);

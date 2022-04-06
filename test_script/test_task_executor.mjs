@@ -1,19 +1,20 @@
 import * as dotenv from "dotenv";
 import prisma from "../lib/prisma.mjs";
-import { DateTime } from "luxon";
+import TaskExecutor from "../lib/TaskExecutor.mjs";
+import MyUtility from "../lib/MyUtility.mjs";
+//import { DateTime } from "luxon";
 
-/*
+
 if (process.env.NODE_ENV !== "production") {
     dotenv.config();
 }
 
-const databaseName = "walk_to_joy";
-*/
+//const databaseName = "walk_to_joy";
+
+console.log(`TWILIO_ACCOUNT_SID: ${process.env.TWILIO_ACCOUNT_SID}, TWILIO_AUTH_TOKEN: ${process.env.TWILIO_AUTH_TOKEN}`);
 
 
 
-import TaskExecutor from "../lib/TaskExecutor.mjs";
-import MyUtility from "../lib/MyUtility.mjs";
 
 
 let users = await prisma.users.findMany({

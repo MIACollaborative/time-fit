@@ -137,7 +137,7 @@ model taskLog {
 
   
   // for execution
-  executionResult Json
+  executionResult Json?
   
   // for time
   createdAt DateTime? @default(now())

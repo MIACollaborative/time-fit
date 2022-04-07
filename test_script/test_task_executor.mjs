@@ -75,4 +75,12 @@ let choiceList = [
 //console.log(`testRandomization(${total}) for ${JSON.stringify(choiceList)}: ${JSON.stringify(testRandomization(choiceList, total))}`);
 
 
-TaskExecutor.executeTask(MyUtility.aTaskSpec, userList);
+let taskCompositeResultList = await TaskExecutor.executeTaskForUserList(MyUtility.taskList[0], userList);
+
+console.log(`taskCompositeResultList: ${JSON.stringify(taskCompositeResultList)}`);
+
+let insertResult = await prisma.taskLog.createMany({
+    data: taskCompositeResultList
+});
+
+console.log(`insertResult: ${JSON.stringify(insertResult)}`);

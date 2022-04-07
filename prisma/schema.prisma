@@ -35,6 +35,9 @@ model users {
   salience Boolean? @default(false)
   modification Boolean? @default(false)
 
+  // reference other collections
+  taskLogList  taskLog[]
+
 
   // for Fitbit
   fitbitId String?
@@ -85,7 +88,57 @@ model message {
   sampleMessage String?
   note String?
 
+  // reference other collections
+  taskLogList  taskLog[]
 
+
+  // for time
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model task {
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+
+  // for task
+  label String @unique
+  index Int
+  checkPoint Json
+  group Json
+  randomization Json
+  preCondition Json?
+
+  // reference other collections
+  taskLogList  taskLog[]
+
+  // for time
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+
+model taskLog {
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+
+  // for task
+  task    task    @relation(fields: [taskLabel], references: [label])
+  taskLabel String
+
+  // for user
+  user    users    @relation(fields: [username], references: [username])
+  username String
+
+  // for action
+  randomizationResult Json
+
+  // for message, possibly none if no action or action that does not invovle message
+  message    message?    @relation(fields: [messageLabel], references: [label])
+  messageLabel String?
+
+  
+  // for execution
+  executionResult Json
+  
   // for time
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt

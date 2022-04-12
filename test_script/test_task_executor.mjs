@@ -1,4 +1,5 @@
 import * as dotenv from "dotenv";
+import { DateTime } from "luxon";
 import prisma from "../lib/prisma.mjs";
 import TaskExecutor from "../lib/TaskExecutor.mjs";
 import MyUtility from "../lib/MyUtility.mjs";
@@ -74,8 +75,8 @@ let choiceList = [
 ];
 //console.log(`testRandomization(${total}) for ${JSON.stringify(choiceList)}: ${JSON.stringify(testRandomization(choiceList, total))}`);
 
-
-let taskCompositeResultList = await TaskExecutor.executeTaskForUserList(MyUtility.taskList[0], userList);
+let now = DateTime.now();
+let taskCompositeResultList = await TaskExecutor.executeTaskForUserListForDatetime(MyUtility.taskList[0], userList, now);
 
 console.log(`taskCompositeResultList: ${JSON.stringify(taskCompositeResultList)}`);
 

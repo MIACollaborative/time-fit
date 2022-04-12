@@ -1,33 +1,106 @@
 import prisma from "../../lib/prisma";
 import { DateTime } from "luxon";
-
+import TaskExecutor from "../../lib/TaskExecutor.mjs";
 
 function replacer(key, value) {
     if (typeof value === "Date") {
-      return value.toString();
+        return value.toString();
     }
     return value;
 }
 
-function getLocalTime(datetime, timezone){
+function getLocalTime(datetime, timezone) {
     return datetime.setZone(timezone);
 }
 
-function getWeekdayOrWeekend(datetime){
+function getWeekdayOrWeekend(datetime) {
     console.log(`getWeekdayOrWeekend: ${datetime.weekday}`);
-    if(datetime.weekday< 6){
+    if (datetime.weekday < 6) {
         return "weekday";
     }
-    else{
+    else {
         return "weekend";
     }
 }
 
+async function executeTask(now) {
+    let users = await prisma.users.findMany({
+        select: {
+            username: true,
+            phone: true,
+            preferredName: true,
+            gif: true,
+            salience: true,
+            modification: true,
+            weekdayWakeup: true,
+            weekdayBed: true,
+            weekendWakeup: true,
+            weekendBed: true,
+            timezone: true
+        },
+    });
+
+    let userList = JSON.parse(JSON.stringify(users, replacer));
+
+    let tasks = await prisma.task.findMany();
+
+    let taskList = JSON.parse(JSON.stringify(tasks, replacer));
+
+
+    let taskCompositeResultList = await TaskExecutor.executeTaskForUserListForDatetime(taskList[0], userList, now);
+
+    console.log(`taskCompositeResultList: ${JSON.stringify(taskCompositeResultList)}`);
+
+    let insertResult = await prisma.taskLog.createMany({
+        data: taskCompositeResultList
+    });
+
+    console.log(`insertResult: ${JSON.stringify(insertResult)}`);
+
+    return;
+
+}
+
+async function sendTwilioMessage(phone, messageBody) {
+    console.log(`Main.sendTwilioMessage: ${phone} - ${messageBody}`);
+    const result = await fetch(`http://localhost:3000/api/twilio?function_name=send_message`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            phone,
+            messageBody
+        }),
+    }).then((r) => {
+        return r.json();
+    });
+
+    return result;
+}
+
+
 
 export default async function handler(req, res) {
     const { function_name } = req.query;
-    
+
     let now = DateTime.now(); //.plus({day: 2}); // DateTime.now();
+
+
+    switch (function_name) {
+        case "execute_task":
+            let resultList = executeTask(now);
+            res.status(200).json({ result: resultList });
+            break;
+        default:
+            break;
+    }
+
+    return;
+}
+
+
+async function testWakeupBedTime(now) {
     let pingTimeUTC = now.toUTC();
     // .toLocaleString(DateTime.TIME_SIMPLE);
     let pingTimeLocal = now.toLocaleString(DateTime.TIME_WITH_SECONDS);
@@ -39,45 +112,12 @@ export default async function handler(req, res) {
 
     // see if I can detect weekday and weekend for a particular timezone, then
 
-
-    async function sendTwilioMessage(phone, messageBody) {
-        console.log(`Main.sendTwilioMessage: ${phone} - ${messageBody}`);
-        const result = await fetch(`http://localhost:3000/api/twilio?function_name=send_message`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            phone,
-            messageBody
-          }),
-        }).then((r) => {
-          return r.json();
-        });
-    
-        return result;
-    }
-    
-    const users = await prisma.users.findMany({
-        select: {
-            username: true,
-            phone: true,
-            preferredName: true,
-            weekdayWakeup: true,
-            weekdayBed: true,
-            timezone: true
-        },
-    });
-
-    let userList = JSON.parse(JSON.stringify(users, replacer));
-
-
     switch (function_name) {
         case "check_user_weekday_wakeup_time":
             userList = userList.map((userInfo) => {
                 let localWeekdayWakeup = DateTime.fromISO(userInfo.weekdayWakeup).toLocaleString(DateTime.TIME_SIMPLE);
 
-                let localWeekdayWakeupUTC = DateTime.fromISO(userInfo.weekdayWakeup).toUTC().set({year: pingTimeUTC.year, month: pingTimeUTC.month, day: pingTimeUTC.day, second: pingTimeUTC.second, millisecond: pingTimeUTC.millisecond});
+                let localWeekdayWakeupUTC = DateTime.fromISO(userInfo.weekdayWakeup).toUTC().set({ year: pingTimeUTC.year, month: pingTimeUTC.month, day: pingTimeUTC.day, second: pingTimeUTC.second, millisecond: pingTimeUTC.millisecond });
 
                 // var overrideZone = DateTime.fromISO("2017-05-15T09:10:23", { zone: "Europe/Paris" });
                 let rezoned = DateTime.fromISO(userInfo.weekdayWakeup).setZone(userInfo.timezone);
@@ -85,18 +125,18 @@ export default async function handler(req, res) {
 
 
 
-                return {...userInfo, localWeekdayWakeup, localWeekdayWakeupUTC, weekdayWakeupTimezonedTime: timezonedTime, pingTimeLocal, pingTimeUTC};
+                return { ...userInfo, localWeekdayWakeup, localWeekdayWakeupUTC, weekdayWakeupTimezonedTime: timezonedTime, pingTimeLocal, pingTimeUTC };
             })
-            .filter((newUserInfo) => {
-                let diffInMins = newUserInfo.pingTimeUTC.diff(newUserInfo.localWeekdayWakeupUTC, 'minutes');
-                
+                .filter((newUserInfo) => {
+                    let diffInMins = newUserInfo.pingTimeUTC.diff(newUserInfo.localWeekdayWakeupUTC, 'minutes');
 
-                console.log(`[${newUserInfo.username}]\t-pingTimeUTC: ${newUserInfo.pingTimeUTC}, localWeekdayWakeupUTC: ${newUserInfo.localWeekdayWakeupUTC}, timezonedTime: ${newUserInfo.weekdayWakeupTimezonedTime}, diffInMins: ${diffInMins.toObject().minutes}`);
-                
-                return diffInMins.toObject().minutes == 0;
-                //return newUserInfo.localWeekdayWakeupUTC == newUserInfo.pingTimeUTC;
-                
-            });
+
+                    console.log(`[${newUserInfo.username}]\t-pingTimeUTC: ${newUserInfo.pingTimeUTC}, localWeekdayWakeupUTC: ${newUserInfo.localWeekdayWakeupUTC}, timezonedTime: ${newUserInfo.weekdayWakeupTimezonedTime}, diffInMins: ${diffInMins.toObject().minutes}`);
+
+                    return diffInMins.toObject().minutes == 0;
+                    //return newUserInfo.localWeekdayWakeupUTC == newUserInfo.pingTimeUTC;
+
+                });
 
             // those who pass should get the wake up message
             userList.forEach((userInfo) => {
@@ -112,31 +152,31 @@ export default async function handler(req, res) {
             return;
         case "check_user_weekday_bed_time":
             userList = userList.map((userInfo) => {
-                let localWeekdayBed= DateTime.fromISO(userInfo.weekdayBed).toLocaleString(DateTime.TIME_SIMPLE);
+                let localWeekdayBed = DateTime.fromISO(userInfo.weekdayBed).toLocaleString(DateTime.TIME_SIMPLE);
 
-                let localWeekdayBedUTC = DateTime.fromISO(userInfo.weekdayBed).toUTC().set({year: pingTimeUTC.year, month: pingTimeUTC.month, day: pingTimeUTC.day, second: pingTimeUTC.second, millisecond: pingTimeUTC.millisecond});
+                let localWeekdayBedUTC = DateTime.fromISO(userInfo.weekdayBed).toUTC().set({ year: pingTimeUTC.year, month: pingTimeUTC.month, day: pingTimeUTC.day, second: pingTimeUTC.second, millisecond: pingTimeUTC.millisecond });
 
                 // var overrideZone = DateTime.fromISO("2017-05-15T09:10:23", { zone: "Europe/Paris" });
                 let rezoned = DateTime.fromISO(userInfo.weekdayBed).setZone(userInfo.timezone);
                 let timezonedTime = rezoned.toLocaleString(DateTime.TIME_SIMPLE);
 
 
-                return {...userInfo, localWeekdayBed, localWeekdayBedUTC,  weekdayBedTimezonedTime: timezonedTime, pingTimeLocal, pingTimeUTC};
+                return { ...userInfo, localWeekdayBed, localWeekdayBedUTC, weekdayBedTimezonedTime: timezonedTime, pingTimeLocal, pingTimeUTC };
             })
-            .filter((newUserInfo) => {
-                let diffInMins = newUserInfo.pingTimeUTC.diff(newUserInfo.localWeekdayBedUTC, 'minutes');
+                .filter((newUserInfo) => {
+                    let diffInMins = newUserInfo.pingTimeUTC.diff(newUserInfo.localWeekdayBedUTC, 'minutes');
 
 
-                console.log(`[${newUserInfo.username}]\t-pingTimeUTC: ${newUserInfo.pingTimeUTC}, localWeekdayBedUTC: ${newUserInfo.localWeekdayBedUTC}, timezonedTime: ${newUserInfo.weekdayBedTimezonedTime}, diffInMins: ${diffInMins.toObject().minutes}`);
-                
-                return diffInMins.toObject().minutes == 0;
-                //return newUserInfo.localWeekdayWakeupUTC == newUserInfo.pingTimeUTC;
-                
-            });
+                    console.log(`[${newUserInfo.username}]\t-pingTimeUTC: ${newUserInfo.pingTimeUTC}, localWeekdayBedUTC: ${newUserInfo.localWeekdayBedUTC}, timezonedTime: ${newUserInfo.weekdayBedTimezonedTime}, diffInMins: ${diffInMins.toObject().minutes}`);
+
+                    return diffInMins.toObject().minutes == 0;
+                    //return newUserInfo.localWeekdayWakeupUTC == newUserInfo.pingTimeUTC;
+
+                });
 
             // those who pass should get the wake up message
             userList.forEach((userInfo) => {
-                
+
                 //let localWeekdayWakeup = DateTime.fromISO(userInfo.weekdayWakeup).toLocaleString(DateTime.TIME_WITH_SECONDS);
                 // sendTwilioMessage(userInfo.phone, `Hello ${userInfo.preferredName}`);
                 let messageBody = `[WalkToJoy] Hello ${userInfo.preferredName},\n It's your bed time: ${userInfo.weekdayBedTimezonedTime}. Here is a random survey for you: https://umich.qualtrics.com/jfe/form/SV_cACIS909SMXMUp8?study_code=${userInfo.username}`;
@@ -150,4 +190,5 @@ export default async function handler(req, res) {
         default:
             return;
     }
+
 }

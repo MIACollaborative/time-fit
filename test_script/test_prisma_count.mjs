@@ -11,12 +11,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 
-function replacer(key, value) {
-    if (typeof value === "Date") {
-        return value.toString();
-    }
-    return value;
-}
+
 
 let username = "test1";
 
@@ -36,47 +31,9 @@ const usersWithCount = await prisma.users.findMany({
 })
 */
 
-async function getUserMessageCountDict(username){
-    const results = await prisma.taskLog.groupBy({
-        by: ['messageLabel'],
-        where: {
-            username: {
-                equals: username,
-            },
-        },
-        _count: {
-            messageLabel: true,
-        },
-    });
-    
-    
-    let resultList = JSON.parse(JSON.stringify(results, replacer));
-
-    //console.log(`resultList: ${JSON.stringify(resultList, null, 2)}`);
-
-
-    let resultDict = {};
-
-    resultList.forEach((result) => {
-
-        /*()
-        {
-            "_count": {
-              "messageLabel": 1
-            },
-            "messageLabel": "nongif-m_23"
-          }
-        */
-
-        if (result["messageLabel"] != null){
-            resultDict[result["messageLabel"]] = result["_count"]["messageLabel"];
-        }
-    });
-
-    return resultDict;
-}
 
 
 
 
-console.log(`resultDict for ${username}: ${JSON.stringify(await getUserMessageCountDict(username), null, 2)}`);
+
+console.log(`resultDict for ${username}: ${JSON.stringify(await MyUtility.getUserMessageCountDict(username), null, 2)}`);

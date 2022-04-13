@@ -102,7 +102,7 @@ model task {
 
   // for task
   label String @unique
-  index Int
+  index Int?
   checkPoint Json
   group Json
   randomization Json

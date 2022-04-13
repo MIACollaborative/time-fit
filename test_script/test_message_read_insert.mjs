@@ -54,6 +54,7 @@ function readAndInsertMessage() {
   });
 }
 
+const deleteMessages = await prisma.message.deleteMany({})
 readAndInsertMessage();
 
 //readCSV("./content/Study Messages - GIF Morning.csv");

@@ -233,6 +233,13 @@ export default function Main({
           </Link>
           <br />
           <br />
+          <Link href={"/group-setting"}>
+            <Button variant="contained" style={{ width: "100%" }}>
+              Set Group Assignment
+            </Button>
+          </Link>
+          <br />
+          <br />
 
           <Button
             variant="contained"

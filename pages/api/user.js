@@ -27,13 +27,17 @@ export default async function handler(req, res) {
             return;
         case "update_group_assignment":
                 const {gif, salience, modification } = req.body;
+                console.log(`typeof gif: ${typeof gif}`);
+                console.log(`typeof salience: ${typeof salience}`);
+                console.log(`typeof modification: ${typeof modification}`);
                 await prisma.users.update({
                     where: { username: username },
-                    data: {
+                    data: 
+                    {
                         gif,
                         salience,
                         modification
-                    },
+                    }
                 });
     
                 res.status(200).json({ result: "success" });

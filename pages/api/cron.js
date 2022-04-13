@@ -51,10 +51,13 @@ async function executeTask(now) {
 
     console.log(`taskCompositeResultList: ${JSON.stringify(taskCompositeResultList)}`);
 
-    let insertResult = await prisma.taskLog.createMany({
-        data: taskCompositeResultList
-    });
-
+    let insertResult = [];
+    
+    if(taskCompositeResultList.length > 0){
+        insertResult = await prisma.taskLog.createMany({
+            data: taskCompositeResultList
+        });
+    }
     console.log(`insertResult: ${JSON.stringify(insertResult)}`);
 
     return;
@@ -90,7 +93,7 @@ export default async function handler(req, res) {
     switch (function_name) {
         case "execute_task":
             let resultList = executeTask(now);
-            res.status(200).json({ result: resultList });
+            res.status(200).json({ result: "success" });
             break;
         default:
             break;

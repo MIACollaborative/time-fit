@@ -103,6 +103,7 @@ model task {
   // for task
   label String @unique
   index Int?
+  enabled Boolean? @default(false)
   checkPoint Json
   group Json
   randomization Json

@@ -52,28 +52,32 @@ async function executeTask(now) {
 
     let taskCompositeResultList = [];
 
+    // just one task
+    /*
     let aTaskResultList = await TaskExecutor.executeTaskForUserListForDatetime(taskList[0], userList, now);
     console.log(`aTaskResultList: ${JSON.stringify(aTaskResultList)}`);
     taskCompositeResultList = taskCompositeResultList.concat(aTaskResultList);
-
-
-    /*
-    let resultPromiseList = taskList.forEach((task) => {
-        let aTaskResultList = await TaskExecutor.executeTaskForUserListForDatetime(task, userList, now);
-        taskCompositeResultList = taskCompositeResultList.concat(aTaskResultList);
-    });
     */
 
 
-    /*
+
+
+    
+    let resultPromiseList = taskList.map((task) => {
+        return TaskExecutor.executeTaskForUserListForDatetime(task, userList, now);
+        /*
+        let aTaskResultList = await TaskExecutor.executeTaskForUserListForDatetime(task, userList, now);
+        taskCompositeResultList = taskCompositeResultList.concat(aTaskResultList);
+        */
+    });
+
     await Promise.all(resultPromiseList)
     .then((resultListList) => {
         resultListList.forEach((aTaskResultList) => {
-            taskCompositeResultList.concat(aTaskResultList);
+            taskCompositeResultList = taskCompositeResultList.concat(aTaskResultList);
         });
         return taskCompositeResultList;
     });
-    */
 
     console.log(`taskCompositeResultList: ${JSON.stringify(taskCompositeResultList)}`);
 

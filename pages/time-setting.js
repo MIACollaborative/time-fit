@@ -5,6 +5,7 @@ import styles from '../styles/Home.module.css'
 
 import TextField from '@mui/material/TextField';
 import TimePicker from '@mui/lab/TimePicker';
+import MobileTimePicker from "@mui/lab/MobileTimePicker";
 /*
 import logger from "../lib/logger";
 
@@ -148,7 +149,7 @@ export default function TimeSetting({ userInfo}) {
 
         <div>
             <div>On weekdays, when do you typically wakeup?</div><br />
-            <TimePicker
+            <MobileTimePicker
               label="Weekday Wake Up Time"
               value={weekdayWakeup}
               onChange={(newValue) => {
@@ -161,7 +162,7 @@ export default function TimeSetting({ userInfo}) {
             <Divider />
             <br />
             <div>On weekdays, when do you typically go to bed?</div><br />
-            <TimePicker
+            <MobileTimePicker
               label="Weekday Bed Time"
               value={weekdayBed}
               onChange={(newValue) => {
@@ -174,7 +175,7 @@ export default function TimeSetting({ userInfo}) {
             <Divider />
             <br />
             <div>On weekends, when do you typically wakeup?</div><br />
-            <TimePicker
+            <MobileTimePicker
               label="Weekend Wake Up Time"
               value={weekendWakeup}
               onChange={(newValue) => {
@@ -187,7 +188,7 @@ export default function TimeSetting({ userInfo}) {
             <Divider />
             <br />
             <div>On weekends, when do you typically go to bed?</div><br />
-            <TimePicker
+            <MobileTimePicker
               label="Weekend Bed Time"
               value={weekendBed}
               onChange={(newValue) => {

@@ -42,17 +42,47 @@ async function executeTask(now) {
 
     let userList = JSON.parse(JSON.stringify(users, replacer));
 
-    let tasks = await prisma.task.findMany();
+    let tasks = await prisma.task.findMany({
+        where: { enabled: true}
+    });
 
     let taskList = JSON.parse(JSON.stringify(tasks, replacer));
+    console.log(`taskList.length: ${taskList.length}`);
 
 
-    let taskCompositeResultList = await TaskExecutor.executeTaskForUserListForDatetime(taskList[0], userList, now);
+    let taskCompositeResultList = [];
+
+    // just one task
+    /*
+    let aTaskResultList = await TaskExecutor.executeTaskForUserListForDatetime(taskList[0], userList, now);
+    console.log(`aTaskResultList: ${JSON.stringify(aTaskResultList)}`);
+    taskCompositeResultList = taskCompositeResultList.concat(aTaskResultList);
+    */
+
+
+
+
+    
+    let resultPromiseList = taskList.map((task) => {
+        return TaskExecutor.executeTaskForUserListForDatetime(task, userList, now);
+        /*
+        let aTaskResultList = await TaskExecutor.executeTaskForUserListForDatetime(task, userList, now);
+        taskCompositeResultList = taskCompositeResultList.concat(aTaskResultList);
+        */
+    });
+
+    await Promise.all(resultPromiseList)
+    .then((resultListList) => {
+        resultListList.forEach((aTaskResultList) => {
+            taskCompositeResultList = taskCompositeResultList.concat(aTaskResultList);
+        });
+        return taskCompositeResultList;
+    });
 
     console.log(`taskCompositeResultList: ${JSON.stringify(taskCompositeResultList)}`);
 
     let insertResult = [];
-    
+
     if(taskCompositeResultList.length > 0){
         insertResult = await prisma.taskLog.createMany({
             data: taskCompositeResultList

@@ -101,7 +101,7 @@ export default function Home({}) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <div>School of Informaiton</div>
+          <div>School of Information</div>
         <div>University of Michigan</div>
           
         </a>
@@ -146,7 +146,7 @@ export default function Home({}) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <div>School of Informaiton</div>
+          <div>School of Information</div>
         <div>University of Michigan</div>
           
         </a>

@@ -242,7 +242,7 @@ export default function FitbitSignin({result}) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <div>School of Informaiton</div>
+          <div>School of Information</div>
           <div>University of Michigan</div>
         </a>
       </footer>
@@ -283,7 +283,7 @@ export default function FitbitSignin({result}) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <div>School of Informaiton</div>
+          <div>School of Information</div>
         <div>University of Michigan</div>
           
         </a>

@@ -159,7 +159,7 @@ export default function InfoEdit({ userInfo }) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <div>School of Informaiton</div>
+          <div>School of Information</div>
           <div>University of Michigan</div>
         </a>
       </footer>

@@ -43,18 +43,37 @@ async function executeTask(now) {
     let userList = JSON.parse(JSON.stringify(users, replacer));
 
     let tasks = await prisma.task.findMany({
-        where: { enabeld: true}
+        where: { enabled: true}
     });
 
     let taskList = JSON.parse(JSON.stringify(tasks, replacer));
+    console.log(`taskList.length: ${taskList.length}`);
 
 
     let taskCompositeResultList = [];
 
-    taskList.forEach((task) => {
+    let aTaskResultList = await TaskExecutor.executeTaskForUserListForDatetime(taskList[0], userList, now);
+    console.log(`aTaskResultList: ${JSON.stringify(aTaskResultList)}`);
+    taskCompositeResultList = taskCompositeResultList.concat(aTaskResultList);
+
+
+    /*
+    let resultPromiseList = taskList.forEach((task) => {
         let aTaskResultList = await TaskExecutor.executeTaskForUserListForDatetime(task, userList, now);
-        taskCompositeResultList.concat(aTaskResultList);
+        taskCompositeResultList = taskCompositeResultList.concat(aTaskResultList);
     });
+    */
+
+
+    /*
+    await Promise.all(resultPromiseList)
+    .then((resultListList) => {
+        resultListList.forEach((aTaskResultList) => {
+            taskCompositeResultList.concat(aTaskResultList);
+        });
+        return taskCompositeResultList;
+    });
+    */
 
     console.log(`taskCompositeResultList: ${JSON.stringify(taskCompositeResultList)}`);
 

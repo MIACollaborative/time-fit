@@ -20,7 +20,7 @@ let expressionLabelDict = {
 //let everyTenSecondsExpression = '*/10 * * * * *';
 //let everyOneMinuteExpression = '* * * * *';
 
-let theExpression = expressionLabelDict["1 minute"];
+let theExpression = expressionLabelDict["10 seconds"];
 
 
 nodeCron.schedule(theExpression.expression, async () => {

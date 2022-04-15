@@ -76,12 +76,15 @@ let choiceList = [
 //console.log(`testRandomization(${total}) for ${JSON.stringify(choiceList)}: ${JSON.stringify(testRandomization(choiceList, total))}`);
 
 let now = DateTime.now();
-let taskCompositeResultList = await TaskExecutor.executeTaskForUserListForDatetime(MyUtility.taskList[0], userList, now);
+let taskCompositeResultList = await TaskExecutor.executeTaskForUserListForDatetime(MyUtility.taskList[3], userList, now);
 
 console.log(`taskCompositeResultList: ${JSON.stringify(taskCompositeResultList)}`);
 
-let insertResult = await prisma.taskLog.createMany({
-    data: taskCompositeResultList
-});
+if(taskCompositeResultList.length > 0){
+    let insertResult = await prisma.taskLog.createMany({
+        data: taskCompositeResultList
+    });
+    console.log(`insertResult: ${JSON.stringify(insertResult)}`);
+}
 
-console.log(`insertResult: ${JSON.stringify(insertResult)}`);
+

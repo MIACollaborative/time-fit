@@ -88,6 +88,9 @@ model fitbit_subscription {
   // for query data: notification -> processed
   status String @default("notification")
 
+  // for security logging
+  ip String?
+
   
 
   // for time

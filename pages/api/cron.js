@@ -1,6 +1,8 @@
 import prisma from "../../lib/prisma";
 import { DateTime } from "luxon";
 import TaskExecutor from "../../lib/TaskExecutor.mjs";
+import MyUtility from "../../lib/MyUtility.mjs";
+
 
 function replacer(key, value) {
     if (typeof value === "Date") {
@@ -117,6 +119,9 @@ async function sendTwilioMessage(phone, messageBody) {
 export default async function handler(req, res) {
     const { function_name } = req.query;
 
+    let ip = MyUtility.getIPFromRequest(req);
+    console.log(`cron.handler ip: ${ip}, function_name: ${function_name}`);
+
     let now = DateTime.now(); //.plus({day: 2}); // DateTime.now();
 
 
@@ -129,7 +134,7 @@ export default async function handler(req, res) {
             break;
     }
 
-    return;
+    res.status(200).end();
 }
 
 

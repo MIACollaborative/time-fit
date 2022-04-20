@@ -143,7 +143,7 @@ export default function Dashboard({ responseInfoList }) {
               </TableCell>
               <TableCell align="right">{row.surveyId}</TableCell>
               <TableCell align="right">{row.surveyName}</TableCell>
-              <TableCell align="right">{row.content}</TableCell>
+              <TableCell align="right">{JSON.stringify(row.content)}</TableCell>
               <TableCell align="right">{row.createdAt}</TableCell>
               <TableCell align="right">{row.updatedAt}</TableCell>
             </TableRow>

@@ -73,6 +73,31 @@ model response {
   updatedAt DateTime? @updatedAt
 }
 
+model fitbit_subscription {
+
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+
+  
+  // for subscription notification from Fitbit
+  collectionType String
+  date String
+  ownerId String
+  ownerType String
+  subscriptionId String
+
+  // for query data: notification -> processed
+  status String @default("notification")
+
+  // for security logging
+  ip String?
+
+  
+
+  // for time
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
 model message {
   id  String  @id @default(auto()) @map("_id") @db.ObjectId
 

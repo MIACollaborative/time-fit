@@ -39,7 +39,7 @@ function replacer(key, value) {
   return value;
 }
 
-const adminUsernameList = ["test1", "test2"];
+const adminUsernameList = ["test1", "test2", "test3", "test4"];
 
 export async function getServerSideProps(ctx) {
   const session = await getSession(ctx);

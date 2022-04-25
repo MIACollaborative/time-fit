@@ -46,6 +46,9 @@ model users {
   accessToken String?
   refreshToken String?
 
+  // for Fitbit subscription
+  fitbitUpdateList fitbit_subscription[]
+
   // for user preference
   weekdayWakeup DateTime?
   weekdayBed DateTime?
@@ -84,6 +87,10 @@ model fitbit_subscription {
   ownerId String
   ownerType String
   subscriptionId String
+
+
+  // connect to users collection
+  owner    users    @relation(fields: [ownerId], references: [fitbitId])
 
   // for query data: notification -> processed
   status String @default("notification")

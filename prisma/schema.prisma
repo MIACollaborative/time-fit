@@ -49,6 +49,9 @@ model users {
   // for Fitbit subscription
   fitbitUpdateList fitbit_subscription[]
 
+  // for survey response
+  responseList response[]
+
   // for user preference
   weekdayWakeup DateTime?
   weekdayBed DateTime?
@@ -66,9 +69,15 @@ model response {
   id  String  @id @default(auto()) @map("_id") @db.ObjectId
 
   // for survey response
+  participantId String
   surveyId String?
-  surveyName String?
-  content  Json
+  surveyLink String
+  surveyParamsString String?
+  content  String
+
+  // connect to users collection
+  participant    users    @relation(fields: [participantId], references: [fitbitId])
+
 
 
   // for time

@@ -154,6 +154,9 @@ model taskLog {
   user    users    @relation(fields: [username], references: [username])
   username String
 
+  // caching user info
+  userInfoCache Json?
+
   // for action
   randomizationResult Json
 

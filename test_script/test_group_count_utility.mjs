@@ -1,6 +1,6 @@
 import * as dotenv from "dotenv";
 import prisma from "../lib/prisma.mjs";
-import MyUtility from "../lib/MyUtility.mjs";
+import DatabaseUtility from "../lib/DatabaseUtility.mjs";
 //import { DateTime } from "luxon";
 
 if (process.env.NODE_ENV !== "production") {
@@ -25,7 +25,7 @@ let processedList = messaageLowerFrequencyList.map((item) => {
 console.log(`processedList: ${JSON.stringify(processedList)}`);
 */
 
-let messageInfo = await MyUtility.findMessageByGroup("test", true, "test1");
+let messageInfo = await DatabaseUtility.findMessageByGroup("test", true, "test1");
 
 console.log(`messageInfo: ${JSON.stringify(messageInfo)}`);
 

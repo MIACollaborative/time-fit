@@ -2,7 +2,7 @@ import * as dotenv from "dotenv";
 import { DateTime } from "luxon";
 import prisma from "../lib/prisma.mjs";
 import TaskExecutor from "../lib/TaskExecutor.mjs";
-import MyUtility from "../lib/MyUtility.mjs";
+import DatabaseUtility from "../lib/DatabaseUtility.mjs";
 //import { DateTime } from "luxon";
 
 
@@ -36,4 +36,4 @@ const usersWithCount = await prisma.users.findMany({
 
 
 
-console.log(`resultDict for ${username}: ${JSON.stringify(await MyUtility.getUserMessageCountDict(username), null, 2)}`);
+console.log(`resultDict for ${username}: ${JSON.stringify(await DatabaseUtility.getUserMessageCountDict(username), null, 2)}`);

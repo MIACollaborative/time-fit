@@ -73,7 +73,7 @@ model response {
   surveyId String?
   surveyLink String
   surveyParamsString String?
-  content  Json
+  content  String
 
   // connect to users collection
   participant    users    @relation(fields: [participantId], references: [fitbitId])

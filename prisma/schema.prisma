@@ -107,6 +107,7 @@ model fitbit_subscription {
 
   // for security logging
   ip String?
+  validity Boolean?
 
   
 

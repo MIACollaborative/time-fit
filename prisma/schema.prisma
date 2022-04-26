@@ -70,6 +70,7 @@ model response {
 
   // for survey response
   participantId String
+  responseId String? // optional mostly for baackward compatibility
   surveyId String?
   surveyLink String
   surveyParamsString String?

@@ -7,18 +7,29 @@ import prisma from "../../lib/prisma";
 export default async function handler(req, res) {
     console.log(`fitbit-subscription: ${JSON.stringify(req.body)}`);
 
+    const { verify } = req.query;
+
     let ip = GeneralUtility.getIPFromRequest(req);
     console.log(`fitbit-subscription.handler ip: ${ip}`);
 
+    let validity = verify == process.env.TWILIO_ACCOUNT_SID;
+
     let notificationList = req.body.map((item) => {
-        return {...item, ip, status: "notification"};
+        return {...item, ip, status: "notification", validity};
     });
 
     const aNotification = await prisma.fitbit_subscription.create({
             data: notificationList
     });
 
-    res.status(204).end();
+    if(validity){
+        res.status(204).end();
+    }
+    else{
+        res.status(404).end();
+    }
+    
+    
 }
   
 

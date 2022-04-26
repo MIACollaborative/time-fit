@@ -9,6 +9,8 @@ export default async function handler(req, res) {
 
     const { verify } = req.query;
 
+    console.log(`fitbit-subscription verify: ${verify}`);
+
     let ip = GeneralUtility.getIPFromRequest(req);
     console.log(`fitbit-subscription.handler ip: ${ip}`);
 

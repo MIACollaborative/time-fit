@@ -28,9 +28,11 @@ export default function SurveyResponseTable({ infoList }) {
         <TableHead>
           <TableRow>
             <TableCell>Id</TableCell>
+            <TableCell align="right">Participant Id</TableCell>
             <TableCell align="right">Survey Id</TableCell>
-            <TableCell align="right">Survey Name</TableCell>
             <TableCell align="right">Content</TableCell>
+            <TableCell align="right">Survey Link</TableCell>
+            <TableCell align="right">Survey Params String</TableCell>
             <TableCell align="right">Created At</TableCell>
             <TableCell align="right">Updated At</TableCell>
           </TableRow>
@@ -44,9 +46,11 @@ export default function SurveyResponseTable({ infoList }) {
               <TableCell component="th" scope="row">
                 {row.id}
               </TableCell>
+              <TableCell align="right">{row.participantId}</TableCell>
               <TableCell align="right">{row.surveyId}</TableCell>
-              <TableCell align="right">{row.surveyName}</TableCell>
               <TableCell align="right">{JSON.stringify(row.content)}</TableCell>
+              <TableCell align="right">{row.surveyLink}</TableCell>
+              <TableCell align="right">{row.surveyParamsString}</TableCell>
               <TableCell align="right">{row.createdAt}</TableCell>
               <TableCell align="right">{row.updatedAt}</TableCell>
             </TableRow>

@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     let ip = GeneralUtility.getIPFromRequest(req);
     console.log(`fitbit-subscription.handler ip: ${ip}`);
 
-    let validity = verify == process.env.TWILIO_ACCOUNT_SID;
+    let validity = verify == process.env.FITBIT_SUBSCRIPTION_VERIFICATION_CODE;
 
     console.log(`fitbit-subscription validity: ${validity}`);
 

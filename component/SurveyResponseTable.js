@@ -22,12 +22,18 @@ function replacer(key, value) {
 
 export default function SurveyResponseTable({ infoList }) {
 
+  /*
+  <TableCell>Id</TableCell>
+  <TableCell component="th" scope="row">
+    {row.id}
+  </TableCell>
+  */
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Id</TableCell>
             <TableCell align="right">Participant Id</TableCell>
             <TableCell align="right">Survey Id</TableCell>
             <TableCell align="right">Content</TableCell>
@@ -43,9 +49,6 @@ export default function SurveyResponseTable({ infoList }) {
               key={index}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
-                {row.id}
-              </TableCell>
               <TableCell align="right">{row.participantId}</TableCell>
               <TableCell align="right">{row.surveyId}</TableCell>
               <TableCell align="right">{JSON.stringify(row.content)}</TableCell>

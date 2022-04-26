@@ -16,24 +16,27 @@ export default async function handler(req, res) {
 
     let validity = verify == process.env.TWILIO_ACCOUNT_SID;
 
-    let notificationList = req.body.map((item) => {
-        return {...item, ip, status: "notification", validity};
-    });
+    console.log(`fitbit-subscription validity: ${validity}`);
 
-    const aNotification = await prisma.fitbit_subscription.create({
+    if (validity && req.body.length > 0) {
+        let notificationList = req.body.map((item) => {
+            return { ...item, ip, status: "notification", validity };
+        });
+        const aNotification = await prisma.fitbit_subscription.create({
             data: notificationList
-    });
+        });
+    }
 
-    if(validity){
+    if (validity) {
         res.status(204).end();
     }
-    else{
+    else {
         res.status(404).end();
     }
-    
-    
+
+
 }
-  
+
 
 // Example
 /*

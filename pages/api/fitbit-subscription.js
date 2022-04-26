@@ -1,12 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import MyUtility from "../../lib/MyUtility.mjs";
+
+import GeneralUtility from "../../lib/GeneralUtility.mjs";
 
 import prisma from "../../lib/prisma";
 
 export default async function handler(req, res) {
     console.log(`fitbit-subscription: ${JSON.stringify(req.body)}`);
 
-    let ip = MyUtility.getIPFromRequest(req);
+    let ip = GeneralUtility.getIPFromRequest(req);
     console.log(`fitbit-subscription.handler ip: ${ip}`);
 
     let notificationList = req.body.map((item) => {

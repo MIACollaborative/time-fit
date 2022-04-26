@@ -30,7 +30,7 @@ import prisma from "../lib/prisma.mjs";
 
 import SurveyResponseTable from "../component/SurveyResponseTable";
 import FitbitSubscriptionTable from "../component/FitbitSubscriptionTable";
-
+import TaskLogTable from "../component/TaskLogTable";
 
 function replacer(key, value) {
   if (typeof value === "Date") {
@@ -55,9 +55,13 @@ export async function getServerSideProps(ctx) {
 
   let responseList = [];
   let responseInfoList = [];
+  
 
   let fitbitNotificationList = [];
   let fitbitNotificationInfoList = [];
+
+  let taskLogList = [];
+  let taskLogInfoList = [];
 
   if (adminUsernameList.includes(userName)) {
     responseList = await prisma.response.findMany({
@@ -91,12 +95,37 @@ export async function getServerSideProps(ctx) {
     fitbitNotificationInfoList = JSON.parse(JSON.stringify(fitbitNotificationList, replacer));
   }
 
+
+  if (adminUsernameList.includes(userName)) {
+    fitbitNotificationList = await prisma.fitbit_subscription.findMany({
+      orderBy: [
+        {
+          updatedAt: "desc",
+        },
+      ],
+    });
+
+    fitbitNotificationInfoList = JSON.parse(JSON.stringify(fitbitNotificationList, replacer));
+  }
+
+  if (adminUsernameList.includes(userName)) {
+    taskLogList = await prisma.taskLog.findMany({
+      orderBy: [
+        {
+          updatedAt: "desc",
+        },
+      ],
+    });
+
+    taskLogInfoList = JSON.parse(JSON.stringify(taskLogList, replacer));
+  }
+
   return {
-    props: { responseInfoList, fitbitNotificationInfoList },
+    props: { responseInfoList, fitbitNotificationInfoList, taskLogInfoList },
   };
 }
 
-export default function Dashboard({ responseInfoList, fitbitNotificationInfoList }) {
+export default function Dashboard({ responseInfoList, fitbitNotificationInfoList, taskLogInfoList }) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [tabName, setTabName] = useState("Survey Response");
@@ -142,6 +171,12 @@ export default function Dashboard({ responseInfoList, fitbitNotificationInfoList
         >
           Fitbit Subscription
         </ToggleButton>
+        <ToggleButton
+          value="Task Log"
+          aria-label="centered"
+        >
+          Task Log
+        </ToggleButton>
       </ToggleButtonGroup>
 
       {tabName == "Survey Response" ? (
@@ -150,6 +185,10 @@ export default function Dashboard({ responseInfoList, fitbitNotificationInfoList
       
       {tabName == "Fitbit Subscription" ? (
         <FitbitSubscriptionTable infoList={fitbitNotificationInfoList} />
+      ) : null}
+
+      {tabName == "Task Log" ? (
+        <TaskLogTable infoList={taskLogInfoList} />
       ) : null}
 
       <main className={styles.main}></main>

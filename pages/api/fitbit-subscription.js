@@ -22,7 +22,7 @@ export default async function handler(req, res) {
         let notificationList = req.body.map((item) => {
             return { ...item, ip, status: "notification", validity };
         });
-        const aNotification = await prisma.fitbit_subscription.create({
+        const aNotification = await prisma.fitbit_update.create({
             data: notificationList
         });
     }

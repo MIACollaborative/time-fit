@@ -95,6 +95,80 @@ async function executeTask(now) {
 
 }
 
+async function createFitbitSubscription(now) {
+    // first, find those users who have fitbit info, but does not have subscriptions properly created for them.
+    
+    let users = await prisma.users.findMany({
+        select: {
+            username: true,
+            phone: true,
+            preferredName: true,
+            gif: true,
+            salience: true,
+            modification: true,
+            weekdayWakeup: true,
+            weekdayBed: true,
+            weekendWakeup: true,
+            weekendBed: true,
+            timezone: true
+        },
+    });
+
+    let userList = JSON.parse(JSON.stringify(users, replacer));
+
+    let tasks = await prisma.task.findMany({
+        where: { enabled: true}
+    });
+
+    let taskList = JSON.parse(JSON.stringify(tasks, replacer));
+    console.log(`taskList.length: ${taskList.length}`);
+
+
+    let taskCompositeResultList = [];
+
+    // just one task
+    /*
+    let aTaskResultList = await TaskExecutor.executeTaskForUserListForDatetime(taskList[0], userList, now);
+    console.log(`aTaskResultList: ${JSON.stringify(aTaskResultList)}`);
+    taskCompositeResultList = taskCompositeResultList.concat(aTaskResultList);
+    */
+
+
+
+
+    
+    let resultPromiseList = taskList.map((task) => {
+        return TaskExecutor.executeTaskForUserListForDatetime(task, userList, now);
+        /*
+        let aTaskResultList = await TaskExecutor.executeTaskForUserListForDatetime(task, userList, now);
+        taskCompositeResultList = taskCompositeResultList.concat(aTaskResultList);
+        */
+    });
+
+    await Promise.all(resultPromiseList)
+    .then((resultListList) => {
+        resultListList.forEach((aTaskResultList) => {
+            taskCompositeResultList = taskCompositeResultList.concat(aTaskResultList);
+        });
+        return taskCompositeResultList;
+    });
+
+    console.log(`taskCompositeResultList: ${JSON.stringify(taskCompositeResultList)}`);
+
+    let insertResult = [];
+
+    if(taskCompositeResultList.length > 0){
+        insertResult = await prisma.taskLog.createMany({
+            data: taskCompositeResultList
+        });
+    }
+    console.log(`insertResult: ${JSON.stringify(insertResult)}`);
+
+    return;
+
+}
+
+
 async function sendTwilioMessage(phone, messageBody) {
     console.log(`Main.sendTwilioMessage: ${phone} - ${messageBody}`);
     const result = await fetch(`http://localhost:3000/api/twilio?function_name=send_message`, {
@@ -128,6 +202,8 @@ export default async function handler(req, res) {
         case "execute_task":
             let resultList = executeTask(now);
             res.status(200).json({ result: "success" });
+            break;
+        case "create_fitbit_subscription":
             break;
         default:
             break;

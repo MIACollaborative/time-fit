@@ -47,8 +47,9 @@ model users {
   refreshToken String?
 
   // for Fitbit subscription
-  fitbitUpdateList fitbit_update[]
   fitbitSubscriptionList fitbit_subscription[]
+  fitbitUpdateList fitbit_update[]
+  
 
   // for survey response
   responseList response[]

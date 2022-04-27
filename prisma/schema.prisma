@@ -47,7 +47,8 @@ model users {
   refreshToken String?
 
   // for Fitbit subscription
-  fitbitUpdateList fitbit_subscription[]
+  fitbitUpdateList fitbit_update[]
+  fitbitSubscriptionList fitbit_subscription[]
 
   // for survey response
   responseList response[]
@@ -86,7 +87,7 @@ model response {
   updatedAt DateTime? @updatedAt
 }
 
-model fitbit_subscription {
+model fitbit_update {
 
   id  String  @id @default(auto()) @map("_id") @db.ObjectId
 
@@ -96,11 +97,14 @@ model fitbit_subscription {
   date String
   ownerId String
   ownerType String
-  subscriptionId String
+  subscriptionId String  @unique
 
 
   // connect to users collection
   owner    users    @relation(fields: [ownerId], references: [fitbitId])
+
+  // connect to fibit_stream collection
+  stream    fitbit_subscription    @relation(fields: [subscriptionId], references: [subscriptionId])
 
   // for query data: notification -> processed
   status String @default("notification")
@@ -110,6 +114,30 @@ model fitbit_subscription {
   validity Boolean?
 
   
+
+  // for time
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model fitbit_subscription {
+
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+
+  
+  // for subscription notification from Fitbit
+  collectionType String
+  ownerId String
+  ownerType String
+  subscriberId String
+  subscriptionId String @unique
+
+
+  // connect to users collection
+  owner    users    @relation(fields: [ownerId], references: [fitbitId])
+
+  // connect to fitbit_update collection
+  updateList fitbit_update[]
 
   // for time
   createdAt DateTime? @default(now())

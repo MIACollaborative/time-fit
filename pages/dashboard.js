@@ -84,7 +84,7 @@ export async function getServerSideProps(ctx) {
   }
 
   if (adminUsernameList.includes(userName)) {
-    fitbitNotificationList = await prisma.fitbit_subscription.findMany({
+    fitbitNotificationList = await prisma.fitbit_update.findMany({
       orderBy: [
         {
           updatedAt: "desc",
@@ -97,7 +97,7 @@ export async function getServerSideProps(ctx) {
 
 
   if (adminUsernameList.includes(userName)) {
-    fitbitNotificationList = await prisma.fitbit_subscription.findMany({
+    fitbitNotificationList = await prisma.fitbit_update.findMany({
       orderBy: [
         {
           updatedAt: "desc",

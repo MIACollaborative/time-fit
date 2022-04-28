@@ -15,7 +15,7 @@ const users = await prisma.users.findMany();
 // try only one
 let userInfo = users[0];
 
-let introspectTokenResult = FitbitHelper.introspectToken(userInfo.accessToken, userInfo.accessToken);
+let introspectTokenResult = await FitbitHelper.introspectToken(userInfo.accessToken, userInfo.accessToken);
 
 console.log(`introspectTokenResult: ${JSON.stringify(introspectTokenResult, null, 2)}`);
 

@@ -12,12 +12,21 @@ if (process.env.NODE_ENV !== "production") {
 
 const users = await prisma.users.findMany();
 
+// try only one
+let userInfo = users[0];
+
+let introspectTokenResult = FitbitHelper.introspectToken(userInfo.accessToken, userInfo.accessToken);
+
+console.log(`introspectTokenResult: ${JSON.stringify(introspectTokenResult, null, 2)}`);
+
+/*
 let introspectTokenResultList = users.map((userInfo) => {
     return FitbitHelper.introspectToken(userInfo.accessToken, userInfo.accessToken);
 });
 
 console.log(`introspectTokenResultList: ${JSON.stringify(introspectTokenResultList, null, 2)}`);
 
+*/
 // test token introspect first
 
 

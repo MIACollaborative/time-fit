@@ -24,7 +24,7 @@ console.log(`introspectTokenResult: ${JSON.stringify(introspectTokenResult, null
 
 
 
-let introspectTokenResultList = users.map((userInfo) => {
+let introspectTokenResultList = await users.map(async(userInfo) => {
     return await FitbitHelper.myIntrospectToken(userInfo.accessToken, userInfo.accessToken);
 });
 

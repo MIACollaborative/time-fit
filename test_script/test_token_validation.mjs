@@ -15,7 +15,7 @@ const users = await prisma.users.findMany();
 // try only one
 let userInfo = users[1];
 
-let introspectResult = await FitbitHelper.myIntrospectToken(userInfo.accessToken, userInfo.accessToken);
+let introspectTokenResult = await FitbitHelper.myIntrospectToken(userInfo.accessToken, userInfo.accessToken);
 
 // 401	The request requires user authentication.
 

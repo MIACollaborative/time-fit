@@ -22,11 +22,13 @@ let introspectTokenResult = await FitbitHelper.myIntrospectToken(userInfo.access
 console.log(`introspectTokenResult: ${JSON.stringify(introspectTokenResult, null, 2)}`);
 */
 
+for(let i = 0; i < users.length; i++){
+    let result = await FitbitHelper.myIntrospectToken(userInfo.accessToken, userInfo.accessToken);
+    introspectTokenResultList.push(result);
+}
 
 
-let introspectTokenResultList = await users.map(async(userInfo) => {
-    return await FitbitHelper.myIntrospectToken(userInfo.accessToken, userInfo.accessToken);
-});
+//let introspectTokenResultList = await users.map(async);
 
 console.log(`introspectTokenResultList: ${JSON.stringify(introspectTokenResultList, null, 2)}`);
 

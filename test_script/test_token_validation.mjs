@@ -21,6 +21,7 @@ let userInfo = users[1];
 let introspectTokenResult = await FitbitHelper.myIntrospectToken(userInfo.accessToken, userInfo.accessToken);
 console.log(`introspectTokenResult: ${JSON.stringify(introspectTokenResult, null, 2)}`);
 */
+let introspectTokenResultList = [];
 
 for(let i = 0; i < users.length; i++){
     let userInfo = users[i];

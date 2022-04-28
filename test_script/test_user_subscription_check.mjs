@@ -44,4 +44,6 @@ const fakeSubscriptions = await prisma.fitbit_subscription.createMany({
 let userList = await DatabaseUtility.getUsersWithLessThanCertainSubscritions(2);
 
 
+
+
 console.log(`usersWithIncopmleteSubscription: ${JSON.stringify(userList)}`);

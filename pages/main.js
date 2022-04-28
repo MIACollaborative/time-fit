@@ -60,7 +60,7 @@ export async function getServerSideProps(ctx) {
       console.log(
         `main.FitbitHelper.introspectToken: ${JSON.stringify(responseData)}`
       );
-      //isAccessTokenActive = responseData.active;
+      isAccessTokenActive = responseData.active == true;
       return responseData;
     })
     .catch((error) => {

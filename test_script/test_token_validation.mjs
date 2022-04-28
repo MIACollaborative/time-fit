@@ -21,24 +21,34 @@ let userInfo = users[1];
 let introspectTokenResult = await FitbitHelper.myIntrospectToken(userInfo.accessToken, userInfo.accessToken);
 console.log(`introspectTokenResult: ${JSON.stringify(introspectTokenResult, null, 2)}`);
 */
-let introspectTokenResultList = [];
 
+let introspectTokenResultList = [];
+let userInfo;
+
+
+
+//  try all
+/*
 for(let i = 0; i < users.length; i++){
-    let userInfo = users[i];
+    userInfo = users[i];
     let result = await FitbitHelper.myIntrospectToken(userInfo.accessToken, userInfo.accessToken);
     introspectTokenResultList.push(result);
 }
 
-
-//let introspectTokenResultList = await users.map(async);
-
 console.log(`introspectTokenResultList: ${JSON.stringify(introspectTokenResultList, null, 2)}`);
-
-
+*/
 
 
 
 // test toekn refresh second
+// try refresh the second one
+userInfo = users[1];
+
+let refreshUpdateResult = await DatabaseUtility.refreshAndUpdateTokenForUser(userInfo);
+console.log(`refreshUpdateResult: ${JSON.stringify(refreshUpdateResult, null, 2)}`);
+
+
+
 
 // test ensure token valid third
 

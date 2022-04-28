@@ -13,13 +13,18 @@ if (process.env.NODE_ENV !== "production") {
 const users = await prisma.users.findMany();
 
 // try only one
-let userInfo = users[0];
+let userInfo = users[1];
+
+// Active Response
+// {"active":true,"scope":"{PROFILE=READ, ACTIVITY=READ, SETTINGS=READ}","client_id":"23829X","user_id":"4SW9W9","token_type":"access_token","exp":1651145502000,"iat":1651116702000}
+
+//
 
 let introspectTokenResult = await FitbitHelper.introspectToken(userInfo.accessToken, userInfo.accessToken)
 .then((responseData) => {
     console.log(`Access token active?: ${responseData.active}`);
-    return;
-    
+    return responseData;
+
     if(responseData.active == false){
       
       return FitbitHelper.refreshToken(refreshToken)

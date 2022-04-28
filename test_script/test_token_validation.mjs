@@ -23,6 +23,7 @@ console.log(`introspectTokenResult: ${JSON.stringify(introspectTokenResult, null
 */
 
 for(let i = 0; i < users.length; i++){
+    let userInfo = users[i];
     let result = await FitbitHelper.myIntrospectToken(userInfo.accessToken, userInfo.accessToken);
     introspectTokenResultList.push(result);
 }

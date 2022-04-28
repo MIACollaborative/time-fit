@@ -198,7 +198,7 @@ export default function Main({
           </div>
           <br />
           <div>
-            Access Token (not working yet):{" "}
+            Access Token:{" "}
             {isAccessTokenActive ? "active" : "inactive"}
           </div>
           <br />

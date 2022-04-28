@@ -31,6 +31,7 @@ import prisma from "../lib/prisma.mjs";
 import SurveyResponseTable from "../component/SurveyResponseTable";
 import FitbitSubscriptionTable from "../component/FitbitSubscriptionTable";
 import TaskLogTable from "../component/TaskLogTable";
+import MessageTable from "../component/MessageTable";
 
 function replacer(key, value) {
   if (typeof value === "Date") {
@@ -53,6 +54,13 @@ export async function getServerSideProps(ctx) {
 
   let userName = session.user.name;
 
+
+  const aUser = await prisma.users.findFirst({
+    where: { username: userName },
+  });
+
+  let userInfo = JSON.parse(JSON.stringify(aUser, replacer));
+
   let responseList = [];
   let responseInfoList = [];
   
@@ -62,6 +70,9 @@ export async function getServerSideProps(ctx) {
 
   let taskLogList = [];
   let taskLogInfoList = [];
+
+  let messageList = [];
+  let messageInfoList = [];
 
   if (adminUsernameList.includes(userName)) {
     responseList = await prisma.response.findMany({
@@ -120,12 +131,24 @@ export async function getServerSideProps(ctx) {
     taskLogInfoList = JSON.parse(JSON.stringify(taskLogList, replacer));
   }
 
+  if (adminUsernameList.includes(userName)) {
+    messageList = await prisma.message.findMany({
+      orderBy: [
+        {
+          updatedAt: "desc",
+        },
+      ],
+    });
+
+    messageInfoList = JSON.parse(JSON.stringify(messageList, replacer));
+  }
+
   return {
-    props: { responseInfoList, fitbitNotificationInfoList, taskLogInfoList },
+    props: { responseInfoList, fitbitNotificationInfoList, taskLogInfoList, messageInfoList, userInfo},
   };
 }
 
-export default function Dashboard({ responseInfoList, fitbitNotificationInfoList, taskLogInfoList }) {
+export default function Dashboard({ responseInfoList, fitbitNotificationInfoList, taskLogInfoList, messageInfoList, userInfo}) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [tabName, setTabName] = useState("Survey Response");
@@ -177,6 +200,12 @@ export default function Dashboard({ responseInfoList, fitbitNotificationInfoList
         >
           Task Log
         </ToggleButton>
+        <ToggleButton
+          value="Message"
+          aria-label="centered"
+        >
+          Message
+        </ToggleButton>
       </ToggleButtonGroup>
 
       {tabName == "Survey Response" ? (
@@ -189,6 +218,10 @@ export default function Dashboard({ responseInfoList, fitbitNotificationInfoList
 
       {tabName == "Task Log" ? (
         <TaskLogTable infoList={taskLogInfoList} />
+      ) : null}
+
+      {tabName == "Message" ? (
+        <MessageTable infoList={messageInfoList} userInfo={userInfo} />
       ) : null}
 
       <main className={styles.main}></main>

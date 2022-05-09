@@ -17,7 +17,7 @@ import React, { useState } from "react";
 import Divider from "@mui/material/Divider";
 import md5 from "md5";
 import FitbitHelper from "../lib/FitbitHelper";
-
+import GeneralUtility from "../lib/GeneralUtility";
 import prisma from "../lib/prisma.mjs";
 
 function replacer(key, value) {
@@ -153,6 +153,8 @@ export default function Main({
     redirectURL
   )}&state=${state}&scope=${scope}&expires_in=604800`;
 
+  // move it to GeneralUtility
+  /*
   async function sendTwilioMessage(phone, messageBody) {
     console.log(`Main.sendTwilioMessage: ${phone} - ${messageBody}`);
 
@@ -171,6 +173,7 @@ export default function Main({
 
     return result;
   }
+  */
 
   return (
     <div className={styles.container}>
@@ -245,7 +248,7 @@ export default function Main({
             variant="contained"
             style={{ width: "100%" }}
             onClick={(event) => {
-              sendTwilioMessage(
+              GeneralUtility.sendTwilioMessage(
                 userInfo.phone,
                 `Hello ${userInfo.preferredName}`
               );

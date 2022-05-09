@@ -1,6 +1,5 @@
 import TwilioHelper from "../../lib/TwilioHelper.mjs";
 
-
 export default async function handler(req, res) {
     const { function_name } = req.query;
     

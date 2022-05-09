@@ -14,7 +14,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import GeneralUtility from '../lib/GeneralUtility.mjs';
 import { Button } from '@mui/material';
-import TwilioHelper from '../lib/TwilioHelper.mjs';
 
 function replacer(key, value) {
   if (typeof value === "Date") {
@@ -76,13 +75,15 @@ export default function MessageTable({ infoList, userInfo }) {
 
                 let messageBody = GeneralUtility.composeUserMessageForTwilio(userInfo, messageInfo, "");
 
-                let gifURL;
+                let gifURL="";
 
                 if (messageInfo.gif != undefined){
                     gifURL = `https://walktojoy.net/image/gif/${messageInfo.gif}.gif`;
                 }
 
-                return TwilioHelper.sendMessage(userInfo.phone, messageBody, gifURL.length > 0? [gifURL]:[]);
+                return GeneralUtility.sendTwilioMessage(userInfo.phone, messageBody, gifURL.length > 0? [gifURL]:[]);
+
+                //return TwilioHelper.sendMessage(userInfo.phone, messageBody, gifURL.length > 0? [gifURL]:[]);
 
                 }} >Send</Button></TableCell>
               <TableCell align="right">{row.label}</TableCell>

@@ -1,0 +1,57 @@
+import md5 from "md5";
+import { timer } from "rxjs";
+import { map, takeWhile} from "rxjs/operators";
+import prisma from "../lib/prisma.mjs";
+//import cryptoRandomString from 'crypto-random-string';
+
+let initialDelay = 1000;
+let interval = 1000;
+let startIndex = 1;
+let endIndex = 5;
+
+async function insertUser(newStudyCodeObj){
+    await prisma.users.create({
+        data: newStudyCodeObj
+    });
+}
+
+timer(initialDelay, interval).pipe(
+  takeWhile(x => {
+    return startIndex + x < endIndex;
+  }),
+  map(x => {
+    // pilot
+    //let studyCode = `pilotB${startIndex + x}`;
+    
+    // for testing account
+    let username = `test${startIndex + x}`;
+    let password = username;
+
+    let hash = md5(password);
+
+    console.log(`[${username}]:[${password}] - ${hash}`);
+    let newStudyCodeObj = {
+      username,
+      password, 
+      hash
+    };
+
+    return newStudyCodeObj;
+  })
+).subscribe(newStudyCodeObj => {
+  console.log(newStudyCodeObj);
+
+  insertUser(newStudyCodeObj);
+
+
+  /*
+  ServerService.submitOrReplaceInTable("study_code", newStudyCodeObj, false)
+  .then(response => {
+    console.log(`Successfully insert [${newStudyCodeObj.note}]: ${newStudyCodeObj.code}`);
+  })
+  .catch(error => console.error(error))
+  .finally();
+  */
+
+
+});

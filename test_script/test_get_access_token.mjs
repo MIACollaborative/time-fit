@@ -34,7 +34,7 @@ axios({
   params: {
     clientId: '23829X',
     grant_type: 'authorization_code',
-    redirect_uri: 'https://walktojoy.net/signin',
+    redirect_uri: `${process.env.NEXTAUTH_URL}/signin`,
     code: authCode
   }
 })

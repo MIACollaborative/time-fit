@@ -102,12 +102,15 @@ export async function getServerSideProps(ctx) {
 
   //isAccessTokenActive = introspectResult.active;
 
+  let hostURL = `${process.env.NEXTAUTH_URL}`;
+
   return {
     props: {
       userInfo,
       hasFitbitConnection,
       isAccessTokenActive,
       introspectResult,
+      hostURL
     },
   };
 }
@@ -138,7 +141,7 @@ export default function Main({
 
   console.log(`introspectResult: ${JSON.stringify(introspectResult)}`);
   // username=${session.user.username}
-  let redirectURL = `https://walktojoy.net/fitbit-signin`;
+  let redirectURL = `${hostURL}/fitbit-signin`;
 
   let state = `auth-walktojoy-${md5(session.user.name)}`;
 

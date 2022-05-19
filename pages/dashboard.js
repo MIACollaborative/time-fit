@@ -150,7 +150,7 @@ export async function getServerSideProps(ctx) {
   };
 }
 
-export default function Dashboard({ responseInfoList, fitbitNotificationInfoList, taskLogInfoList, messageInfoList, userInfo}) {
+export default function Dashboard({ responseInfoList, fitbitNotificationInfoList, taskLogInfoList, messageInfoList, userInfo, hostURL}) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [tabName, setTabName] = useState("Survey Response");
@@ -223,7 +223,7 @@ export default function Dashboard({ responseInfoList, fitbitNotificationInfoList
       ) : null}
 
       {tabName == "Message" ? (
-        <MessageTable infoList={messageInfoList} userInfo={userInfo} hostURL={} />
+        <MessageTable infoList={messageInfoList} userInfo={userInfo} hostURL={hostURL} />
       ) : null}
 
       <main className={styles.main}></main>

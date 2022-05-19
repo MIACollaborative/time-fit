@@ -10,7 +10,7 @@ export default async function handler(req, res) {
         case "send_message":
             const {phone,  messageBody, mediaUrlList} = req.body;
             console.log(`send_message: phone: ${phone}, messageBody: ${messageBody}, mediaUrlList: ${mediaUrlList} `);
-            TwilioHelper.sendMessage(phone, messageBody, mediaUrlList);
+            TwilioHelper.sendMessage(phone, messageBody, mediaUrlList == null? []: mediaUrlList);
             res.status(200).json({ result: "success" });
             return;
         default:

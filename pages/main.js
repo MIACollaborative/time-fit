@@ -120,6 +120,7 @@ export default function Main({
   hasFitbitConnection,
   isAccessTokenActive,
   introspectResult,
+  hostURL
 }) {
   const { data: session, status } = useSession();
   const router = useRouter();

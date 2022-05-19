@@ -143,8 +143,10 @@ export async function getServerSideProps(ctx) {
     messageInfoList = JSON.parse(JSON.stringify(messageList, replacer));
   }
 
+  let hostURL = `${process.env.NEXTAUTH_URL}`;
+
   return {
-    props: { responseInfoList, fitbitNotificationInfoList, taskLogInfoList, messageInfoList, userInfo},
+    props: { responseInfoList, fitbitNotificationInfoList, taskLogInfoList, messageInfoList, userInfo, hostURL},
   };
 }
 
@@ -221,7 +223,7 @@ export default function Dashboard({ responseInfoList, fitbitNotificationInfoList
       ) : null}
 
       {tabName == "Message" ? (
-        <MessageTable infoList={messageInfoList} userInfo={userInfo} />
+        <MessageTable infoList={messageInfoList} userInfo={userInfo} hostURL={} />
       ) : null}
 
       <main className={styles.main}></main>

@@ -78,7 +78,7 @@ export default function MessageTable({ infoList, userInfo }) {
                 let gifURL="";
 
                 if (messageInfo.gif != undefined){
-                    gifURL = `https://walktojoy.net/image/gif/${messageInfo.gif}.gif`;
+                    gifURL = `${process.env.NEXTAUTH_URL}/image/gif/${messageInfo.gif}.gif`;
                 }
 
                 return GeneralUtility.sendTwilioMessage(userInfo.phone, messageBody, gifURL.length > 0? [gifURL]:[]);

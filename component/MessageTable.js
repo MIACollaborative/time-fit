@@ -14,6 +14,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import GeneralUtility from '../lib/GeneralUtility.mjs';
 import { Button } from '@mui/material';
+import { toast } from 'react-toastify';
 
 function replacer(key, value) {
   if (typeof value === "Date") {
@@ -81,7 +82,20 @@ export default function MessageTable({ infoList, userInfo, hostURL }) {
                     gifURL = `${hostURL}/image/gif/${messageInfo.gif}.gif`;
                 }
 
-                return GeneralUtility.sendTwilioMessage(userInfo.phone, messageBody, gifURL.length > 0? [gifURL]:[]);
+                let msgPromise =  GeneralUtility.sendTwilioMessage(userInfo.phone, messageBody, gifURL.length > 0? [gifURL]:[]);
+
+                toast(`Sending: ${messageBody}`);
+                
+                /*
+                toast.promise(
+                    msgPromise,
+                    {
+                      pending: `Sending a message: ${messageBody}`,
+                      success: 'Sending the message successfully 👌',
+                      error: 'Failure to send the message 🤯'
+                    }
+                )
+                */
 
                 //return TwilioHelper.sendMessage(userInfo.phone, messageBody, gifURL.length > 0? [gifURL]:[]);
 

@@ -6,6 +6,8 @@ import logger from "../lib/logger";
 
 */
 
+import { toast } from 'react-toastify';
+
 import { Button } from "@mui/material";
 
 import { inspect } from "util";
@@ -256,6 +258,7 @@ export default function Main({
                 userInfo.phone,
                 `Hello ${userInfo.preferredName}`
               );
+              toast(`Hello ${userInfo.preferredName}`);
             }}
           >
             Send myself hello SMS

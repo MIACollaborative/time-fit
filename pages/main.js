@@ -6,7 +6,7 @@ import logger from "../lib/logger";
 
 */
 
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 import { Button } from "@mui/material";
 
@@ -15,12 +15,15 @@ import { inspect } from "util";
 import Link from "next/link";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import Divider from "@mui/material/Divider";
 import md5 from "md5";
 import FitbitHelper from "../lib/FitbitHelper";
 import GeneralUtility from "../lib/GeneralUtility";
 import prisma from "../lib/prisma.mjs";
+
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 function replacer(key, value) {
   if (typeof value === "Date") {
@@ -57,7 +60,10 @@ export async function getServerSideProps(ctx) {
 
   let isAccessTokenActive = false;
 
-  const introspectResult = await FitbitHelper.introspectToken(user.accessToken, user.accessToken)
+  const introspectResult = await FitbitHelper.introspectToken(
+    user.accessToken,
+    user.accessToken
+  )
     .then((responseData) => {
       console.log(
         `main.FitbitHelper.introspectToken: ${JSON.stringify(responseData)}`
@@ -112,7 +118,7 @@ export async function getServerSideProps(ctx) {
       hasFitbitConnection,
       isAccessTokenActive,
       introspectResult,
-      hostURL
+      hostURL,
     },
   };
 }
@@ -122,10 +128,11 @@ export default function Main({
   hasFitbitConnection,
   isAccessTokenActive,
   introspectResult,
-  hostURL
+  hostURL,
 }) {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [displaySetting, setDisplaySetting] = useState("all");
 
   //logger.logToDB("main", {message: "test"});
 
@@ -181,6 +188,16 @@ export default function Main({
   }
   */
 
+  const handleChange = (event, newSetting) => {
+    setDisplaySetting(newSetting);
+  };
+
+  const control = {
+    value: displaySetting,
+    onChange: handleChange,
+    exclusive: true,
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -191,96 +208,151 @@ export default function Main({
 
       <main className={styles.main}>
         <div>
-          <Image
-            //loader={myLoader}
-            src="/image/gif/happy-dog-1.gif"
-            alt="Picture of the author"
-            width={250}
-            height={250}
-          />
+          <ToggleButtonGroup {...control}>
+            <ToggleButton value="incomplete" key="incomplete">
+              Incomplete
+            </ToggleButton>
+            <ToggleButton value="all" key="all">
+              All
+            </ToggleButton>
+          </ToggleButtonGroup>
+          <br />
+          <br />
           <Divider />
           <br />
           <div>Signed in as {session.user.name} </div>
           <br />
           <div>
-            Fitbit: {hasFitbitConnection ? "connected" : "not connected"}
+            Fitbit:{" "}
+            {GeneralUtility.doesFitbitInfoExist(userInfo)
+              ? "connected"
+              : "not connected"}
           </div>
           <br />
-          <div>
-            Access Token:{" "}
-            {isAccessTokenActive ? "active" : "inactive"}
-          </div>
+          <div>Access Token: {isAccessTokenActive ? "active" : "inactive"}</div>
           <br />
           <Divider />
           <br />
-          <Link href={fitbitSignInLink}>
-            <Button variant="contained" style={{ width: "100%" }}>
-              Connect your Fitbit
-            </Button>
-          </Link>
-          <br />
-          <br />
-          <Link href={"/activity-summary"}>
-            <Button variant="contained" style={{ width: "100%" }}>
-              Get Activity Summary
-            </Button>
-          </Link>
-          <br />
-          <br />
-          <Link href={"/time-setting"}>
-            <Button variant="contained" style={{ width: "100%" }}>
-              Set Time Preference
-            </Button>
-          </Link>
-          <br />
-          <br />
+          {displaySetting == "all" ||
+          !GeneralUtility.isPreferredNameSet(userInfo) ? (
+            <Fragment>
+              <Link href={"/info-edit"}>
+                <Button variant="contained" style={{ width: "100%" }}>
+                  Personalize your Experience
+                </Button>
+              </Link>
+              <br />
+              <br />
+            </Fragment>
+          ) : null}
+          {displaySetting == "all" ||
+          !GeneralUtility.doesFitbitInfoExist(userInfo) ? (
+            <Fragment>
+              <Link href={fitbitSignInLink}>
+                <Button variant="contained" style={{ width: "100%" }}>
+                  Authorize your Fitbit
+                </Button>
+              </Link>
+              <br />
+              <br />
+            </Fragment>
+          ) : null}
+          
+          {displaySetting == "all" ? (
+            <Fragment>
+              <Link href={"https://umich.qualtrics.com/jfe/form/SV_81aWO5sJPDhGZNA"}>
+                <Button variant="contained" style={{ width: "100%" }}>
+                  Complete the baseline survey
+                </Button>
+              </Link>
+              <br />
+              <br />
+            </Fragment>
+          ) : null}
 
-          <Link href={"/info-edit"}>
-            <Button variant="contained" style={{ width: "100%" }}>
-              Edit Preferred Name and Phone
-            </Button>
-          </Link>
-          <br />
-          <br />
-          <Link href={"/group-setting"}>
-            <Button variant="contained" style={{ width: "100%" }}>
-              Set Group Assignment
-            </Button>
-          </Link>
-          <br />
-          <br />
+          {displaySetting == "all" ||
+          !GeneralUtility.isWakeBedTimeSet(userInfo) ? (
+            <Fragment>
+              <Link href={"/time-setting"}>
+                <Button variant="contained" style={{ width: "100%" }}>
+                  Set Time Preference
+                </Button>
+              </Link>
+              <br />
+              <br />
+            </Fragment>
+          ) : null}
+          
+          {displaySetting == "all" ? (
+            <Fragment>
+              <Link href={"/group-setting"}>
+                <Button variant="contained" style={{ width: "100%" }}>
+                  Set Group Assignment
+                </Button>
+              </Link>
+              <br />
+              <br />
+            </Fragment>
+          ) : null}
+          {displaySetting == "all" ? (
+            <Fragment>
+              <Link href={"/"}>
+                <Button variant="contained" style={{ width: "100%" }}>
+                  Turn off Fitbit reminders to move
+                </Button>
+              </Link>
+              <br />
+              <br />
+            </Fragment>
+          ) : null}
+          {displaySetting == "all" ? (
+            <Fragment>
+              <Link href={"/"}>
+                <Button variant="contained" style={{ width: "100%" }}>
+                  Save WalkToJoy to your contacts
+                </Button>
+              </Link>
+              <br />
+              <br />
+            </Fragment>
+          ) : null}
 
-          <Button
-            variant="contained"
-            style={{ width: "100%" }}
-            onClick={(event) => {
-              GeneralUtility.sendTwilioMessage(
-                userInfo.phone,
-                `Hello ${userInfo.preferredName}`
-              );
-              toast(`Hello ${userInfo.preferredName}`);
-            }}
-          >
-            Send myself hello SMS
-          </Button>
-          <br />
-          <br />
 
-          <Link href="/home">
-            <a>Personalize your Experience</a>
-          </Link>
-          <br />
-          <br />
-          <Link href="/home">
-            <a>Complete the Baseline Survey</a>
-          </Link>
-          <br />
-          <br />
-          <Link href="/home">
-            <a>Disable Sedentary Notification on your Fitbit application</a>
-          </Link>
-          <br />
-          <br />
+            <br />
+            <br />
+            <Divider />
+
+{displaySetting == "all" ? (
+            <Fragment>
+              <Link href={"/activity-summary"}>
+                <Button variant="contained" style={{ width: "100%" }}>
+                  Get Activity Summary
+                </Button>
+              </Link>
+              <br />
+              <br />
+            </Fragment>
+          ) : null}
+
+          {displaySetting == "all" ? (
+            <Fragment>
+              <Button
+                variant="contained"
+                style={{ width: "100%" }}
+                onClick={(event) => {
+                  GeneralUtility.sendTwilioMessage(
+                    userInfo.phone,
+                    `Hello ${userInfo.preferredName}`
+                  );
+                  toast(`Hello ${userInfo.preferredName}`);
+                }}
+              >
+                Send myself hello SMS
+              </Button>
+              <br />
+              <br />
+            </Fragment>
+          ) : null}
           <Divider />
           <br />
         </div>

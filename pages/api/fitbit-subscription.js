@@ -25,6 +25,8 @@ export default async function handler(req, res) {
         const aNotification = await prisma.fitbit_update.create({
             data: notificationList
         });
+
+        console.log(`fitbit-subscription: insert notifications: ${JSON.stringify(notificationList)}`);
     }
 
     if (validity) {

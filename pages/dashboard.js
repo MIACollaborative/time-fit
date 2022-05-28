@@ -29,9 +29,10 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import prisma from "../lib/prisma.mjs";
 
 import SurveyResponseTable from "../component/SurveyResponseTable";
-import FitbitSubscriptionTable from "../component/FitbitSubscriptionTable";
+import FitbitNotificationTable from "../component/FitbitNotificationTable";
 import TaskLogTable from "../component/TaskLogTable";
 import MessageTable from "../component/MessageTable";
+import FitbitSubscriptionTable from "../component/FitbitSubscriptionTable";
 
 function replacer(key, value) {
   if (typeof value === "Date") {
@@ -64,6 +65,8 @@ export async function getServerSideProps(ctx) {
   let responseList = [];
   let responseInfoList = [];
   
+  let fitbitSubscriptionList = [];
+  let fitbitSubscriptionInfoList = [];
 
   let fitbitNotificationList = [];
   let fitbitNotificationInfoList = [];
@@ -95,7 +98,7 @@ export async function getServerSideProps(ctx) {
   }
 
   if (adminUsernameList.includes(userName)) {
-    fitbitNotificationList = await prisma.fitbit_update.findMany({
+    fitbitSubscriptionList = await prisma.fitbit_subscription.findMany({
       orderBy: [
         {
           updatedAt: "desc",
@@ -103,7 +106,7 @@ export async function getServerSideProps(ctx) {
       ],
     });
 
-    fitbitNotificationInfoList = JSON.parse(JSON.stringify(fitbitNotificationList, replacer));
+    fitbitSubscriptionInfoList = JSON.parse(JSON.stringify(fitbitSubscriptionList, replacer));
   }
 
 
@@ -146,11 +149,11 @@ export async function getServerSideProps(ctx) {
   let hostURL = `${process.env.NEXTAUTH_URL}`;
 
   return {
-    props: { responseInfoList, fitbitNotificationInfoList, taskLogInfoList, messageInfoList, userInfo, hostURL},
+    props: { responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, taskLogInfoList, messageInfoList, userInfo, hostURL},
   };
 }
 
-export default function Dashboard({ responseInfoList, fitbitNotificationInfoList, taskLogInfoList, messageInfoList, userInfo, hostURL}) {
+export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, taskLogInfoList, messageInfoList, userInfo, hostURL}) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [tabName, setTabName] = useState("Survey Response");
@@ -197,6 +200,12 @@ export default function Dashboard({ responseInfoList, fitbitNotificationInfoList
           Fitbit Subscription
         </ToggleButton>
         <ToggleButton
+          value="Fitbit Notification"
+          aria-label="centered"
+        >
+          Fitbit Notification
+        </ToggleButton>
+        <ToggleButton
           value="Task Log"
           aria-label="centered"
         >
@@ -213,9 +222,13 @@ export default function Dashboard({ responseInfoList, fitbitNotificationInfoList
       {tabName == "Survey Response" ? (
         <SurveyResponseTable infoList={responseInfoList} />
       ) : null}
-      
+
       {tabName == "Fitbit Subscription" ? (
-        <FitbitSubscriptionTable infoList={fitbitNotificationInfoList} />
+        <FitbitSubscriptionTable infoList={fitbitSubscriptionInfoList} />
+      ) : null}
+      
+      {tabName == "Fitbit Notification" ? (
+        <FitbitNotificationTable infoList={fitbitNotificationInfoList} />
       ) : null}
 
       {tabName == "Task Log" ? (

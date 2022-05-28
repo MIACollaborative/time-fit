@@ -18,7 +18,9 @@ export default async function handler(req, res) {
 
     console.log(`fitbit-subscription validity: ${validity}`);
 
-    if (validity == undefined && req.body.length > 0) {
+    console.log(`fitbit-subscription typeof req.body: ${typeof req.body}`);
+
+    if (verify == undefined && req.body.length > 0) {
         let notificationList = req.body.map((item) => {
             return { ...item, ip, status: "notification"};
         });

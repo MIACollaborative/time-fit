@@ -8,8 +8,8 @@ export default async function handler(req, res) {
       res.status(401).json({});
       res.end();
       return
-    }
-    
+  }
+
   const { function_name } = req.query;
   const { type, content } = req.body;
 

@@ -30,6 +30,9 @@ model users {
   phone String?
   timezone String?
 
+  // for study management
+  phase String @default("baseline") // baseline vs. intervention
+
   // for group assignment
   gif Boolean? @default(false)
   salience Boolean? @default(false)

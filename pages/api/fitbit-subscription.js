@@ -20,7 +20,7 @@ export default async function handler(req, res) {
 
     if (validity == undefined && req.body.length > 0) {
         let notificationList = req.body.map((item) => {
-            return { ...item, ip, status: "notification", validity };
+            return { ...item, ip, status: "notification"};
         });
         const aNotification = await prisma.fitbit_update.create({
             data: notificationList

@@ -31,7 +31,7 @@ model users {
   timezone String?
 
   // for study management
-  phase String @default("baseline")
+  phase String @default("baseline") // baseline vs. intervention
 
   // for group assignment
   gif Boolean? @default(false)

@@ -20,7 +20,7 @@ function replacer(key, value) {
   return value;
 }
 
-export default function FitbitSubscriptionTable({ infoList}) {
+export default function FitbitNotificationTable({ infoList}) {
 
     // example
 
@@ -47,12 +47,13 @@ export default function FitbitSubscriptionTable({ infoList}) {
         <TableHead>
           <TableRow>
             <TableCell>Id</TableCell>
+            <TableCell align="right">Status</TableCell>
             <TableCell align="right">Collection Type</TableCell>
+            <TableCell align="right">Date</TableCell>
             <TableCell align="right">Owner Id</TableCell>
             <TableCell align="right">Owner Type</TableCell>
-            <TableCell align="right">Subscriber Id</TableCell>
             <TableCell align="right">Subscription Id</TableCell>
-            <TableCell align="right">Owner Username</TableCell>
+            <TableCell align="right">IP</TableCell>
             <TableCell align="right">Created At</TableCell>
             <TableCell align="right">Updated At</TableCell>
           </TableRow>
@@ -66,13 +67,14 @@ export default function FitbitSubscriptionTable({ infoList}) {
               <TableCell component="th" scope="row">
                 {row.id}
               </TableCell>
+              <TableCell align="right">{row.status}</TableCell>
               <TableCell align="right">{row.collectionType}</TableCell>
+              <TableCell align="right">{row.date}</TableCell>
               <TableCell align="right">{row.ownerId}</TableCell>
               <TableCell align="right">{row.ownerType}</TableCell>
-              <TableCell align="right">{row.subscriberId}</TableCell>
               <TableCell align="right">{row.subscriptionId}</TableCell>
               
-              <TableCell align="right">{row.owner.username}</TableCell>
+              <TableCell align="right">{row.ip}</TableCell>
               <TableCell align="right">{row.createdAt}</TableCell>
               <TableCell align="right">{row.updatedAt}</TableCell>
             </TableRow>

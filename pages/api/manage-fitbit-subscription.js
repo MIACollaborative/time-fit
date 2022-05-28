@@ -1,5 +1,6 @@
 import DatabaseUtility from "../../lib/DatabaseUtility.mjs";
 import prisma from "../../lib/prisma.mjs";
+import { getSession } from "next-auth/react";
 
 export default async function handler(req, res) {
     const session = await getSession({ req })

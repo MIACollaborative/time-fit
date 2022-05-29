@@ -324,11 +324,11 @@ export default function Main({
             <br />
             <Divider />
 
-{displaySetting == "all" ? (
+          {displaySetting == "all" ? (
             <Fragment>
               <Link href={"/activity-summary"}>
                 <Button variant="contained" style={{ width: "100%" }}>
-                  Get Activity Summary
+                  Activity Summary (2 step process)
                 </Button>
               </Link>
               <br />

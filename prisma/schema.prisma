@@ -49,9 +49,10 @@ model users {
   accessToken String?
   refreshToken String?
 
-  // for Fitbit subscription
+  // for Fitbit data and subscription
   fitbitSubscriptionList fitbit_subscription[]
   fitbitUpdateList fitbit_update[]
+  fitbitDataList fitbit_data[]
   
 
   // for survey response
@@ -87,6 +88,25 @@ model response {
 
 
   // for time
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model fitbit_data {
+
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+
+  // for easy categorization
+  dataType String
+  ownerId String
+  startDate String
+  lastModified String
+  content Json
+
+  // connect to users collection
+  owner    users    @relation(fields: [ownerId], references: [fitbitId])
+
+  // for standard time
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
 }

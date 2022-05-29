@@ -247,6 +247,18 @@ export default function Main({
             </Fragment>
           ) : null}
           {displaySetting == "all" ||
+          !GeneralUtility.isWakeBedTimeSet(userInfo) ? (
+            <Fragment>
+              <Link href={"/time-setting"}>
+                <Button variant="contained" style={{ width: "100%" }}>
+                  Set Time Preference
+                </Button>
+              </Link>
+              <br />
+              <br />
+            </Fragment>
+          ) : null}
+          {displaySetting == "all" ||
           !GeneralUtility.doesFitbitInfoExist(userInfo) ? (
             <Fragment>
               <Link href={fitbitSignInLink}>
@@ -271,18 +283,7 @@ export default function Main({
             </Fragment>
           ) : null}
 
-          {displaySetting == "all" ||
-          !GeneralUtility.isWakeBedTimeSet(userInfo) ? (
-            <Fragment>
-              <Link href={"/time-setting"}>
-                <Button variant="contained" style={{ width: "100%" }}>
-                  Set Time Preference
-                </Button>
-              </Link>
-              <br />
-              <br />
-            </Fragment>
-          ) : null}
+          
           
           {displaySetting == "all" ? (
             <Fragment>

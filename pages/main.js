@@ -247,6 +247,18 @@ export default function Main({
             </Fragment>
           ) : null}
           {displaySetting == "all" ||
+          !GeneralUtility.isWakeBedTimeSet(userInfo) ? (
+            <Fragment>
+              <Link href={"/time-setting"}>
+                <Button variant="contained" style={{ width: "100%" }}>
+                  Set Time Preference
+                </Button>
+              </Link>
+              <br />
+              <br />
+            </Fragment>
+          ) : null}
+          {displaySetting == "all" ||
           !GeneralUtility.doesFitbitInfoExist(userInfo) ? (
             <Fragment>
               <Link href={fitbitSignInLink}>
@@ -271,18 +283,7 @@ export default function Main({
             </Fragment>
           ) : null}
 
-          {displaySetting == "all" ||
-          !GeneralUtility.isWakeBedTimeSet(userInfo) ? (
-            <Fragment>
-              <Link href={"/time-setting"}>
-                <Button variant="contained" style={{ width: "100%" }}>
-                  Set Time Preference
-                </Button>
-              </Link>
-              <br />
-              <br />
-            </Fragment>
-          ) : null}
+          
           
           {displaySetting == "all" ? (
             <Fragment>
@@ -323,11 +324,11 @@ export default function Main({
             <br />
             <Divider />
 
-{displaySetting == "all" ? (
+          {displaySetting == "all" ? (
             <Fragment>
               <Link href={"/activity-summary"}>
                 <Button variant="contained" style={{ width: "100%" }}>
-                  Get Activity Summary
+                  Activity Summary (2 step process)
                 </Button>
               </Link>
               <br />

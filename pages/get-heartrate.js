@@ -72,7 +72,7 @@ export async function getServerSideProps(ctx) {
 
   let targetDate = DateTime.fromISO("2022-03-10");
 
-  console.log(`usr: ${JSON.stringify(user, null, 2)}`);
+  //console.log(`user: ${JSON.stringify(user, null, 2)}`);
 
   const queryResult = await DatabaseUtility.queryAndStoreFitbitHeartRateAtTargetDateForUser(user, targetDate, false);
 
@@ -137,7 +137,7 @@ export default function GetHeartRate({result, dateString}) {
       <main className={styles.main}>
       <h1 className={styles.title}>{message}</h1>
         <div>
-            {result.value == "success"? <h2>Steps: {resultData.summary.steps}</h2>:null}
+            {result.value == "success"? <h2>Resting HeartRate: {resultData["activities-heart"][0].value.restingHeartRate}</h2>:null}
         </div>
         <div>
             {

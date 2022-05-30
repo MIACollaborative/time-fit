@@ -323,6 +323,17 @@ export default function Main({
             <br />
             <br />
             <Divider />
+            {displaySetting == "all" ? (
+            <Fragment>
+              <Link href={"/get-activity-summary"}>
+                <Button variant="contained" style={{ width: "100%" }}>
+                  Get Activity Summary (1 step process)
+                </Button>
+              </Link>
+              <br />
+              <br />
+            </Fragment>
+          ) : null}
 
           {displaySetting == "all" ? (
             <Fragment>

@@ -76,7 +76,6 @@ export async function getServerSideProps(ctx) {
 
   const activityResult = await DatabaseUtility.queryAndStoreFitbitActivitySummaryAtTargetDateForUser(user, targetDate, false);
 
-
   return {
     props: { result: activityResult, dateString: targetDate.toISO()},
   };
@@ -97,7 +96,7 @@ export default function GetActivitySummary({result, dateString}) {
 
   let message = "";
 
-  let briefDateString = DateTime.fromISO(dateString).toISODate();
+  let briefDateString = dateString; //DateTime.fromISO(dateString).toISODate();
 
   if(result.value == "failed"){
     message = `Fail to get activity summary for ${briefDateString}!\n`;

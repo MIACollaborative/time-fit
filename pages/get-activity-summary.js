@@ -13,7 +13,8 @@ import React from "react";
 import Button from '@mui/material/Button';
 import FitbitHelper from "../lib/FitbitHelper.mjs";
 import { inspect } from 'util';
-
+import GeneralUtility from "../lib/GeneralUtility.mjs";
+import DatabaseUtility from "../lib/DatabaseUtility.mjs";
 const { DateTime } = require("luxon");
 //import pkg from 'luxon';
 //const {DataTime} = pkg;
@@ -71,62 +72,9 @@ export async function getServerSideProps(ctx) {
 
   let targetDate = DateTime.fromISO("2022-03-10");
 
-  const activityResult = await FitbitHelper.getActvitySummaryForFitbitId(user.fitbitId, user.accessToken, targetDate)
-    .then((responseData) => {
-      console.log(
-        `FitbitHelper.getActvitySummaryForFitbitId: ${JSON.stringify(
-          responseData
-        )}`
-      );
+  //const activityResult = await FitbitHelper.getActvitySummaryForFitbitId(user.fitbitId, user.accessToken, targetDate);
 
-      /*
-      if(responseData.status == 400){
-          // cannot auth: Bad Request
-          // I supposed this mean we need to authenticate again
-      }
-      */
-
-      //accessToken = responseData.access_token;
-
-      // If you followed the Authorization Code Flow, you were issued a refresh token. You can use your refresh token to get a new access token in case the one that you currently have has expired. Enter or paste your refresh token below. Also make sure you enteryour data in section 1 and 3 since it's used to refresh your access token.
-      //refreshToken = responseData.refresh_token;
-
-      // To Do: ideally, store both
-      //updateToken(hashCode, accessToken, refreshToken);
-
-      return {value: "success", data: responseData};
-
-      //res.status(200).json({ message: "authentication success" });
-    })
-    .catch((error) => {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.log(`Data: ${error.response.data}`);
-        console.log(`Status: ${error.response.status}`);
-        console.log(`StatusText: ${error.response.statusText}`);
-        console.log(`Headers: ${error.response.headers}`);
-
-        console.log(`Error response`);
-        // which means, authentication falil
-      } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        console.log(error.request);
-
-        console.log(`Error request`);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        // console.log('Error', error.message);
-
-        console.log("Error else");
-      }
-      //res.status(error.response.status).json({ response: inspect(error.response.data) });
-
-      let resultObj = eval(`(${inspect(error.response.data)})`);
-      return {value: "failed", data: resultObj};
-    });
+  const activityResult = await DatabaseUtility.queryAndStoreFitbitActivitySummaryAtTargetDateForUser(user.fitbitId, targetDate, insertToDB=false);
 
 
   return {
@@ -134,7 +82,7 @@ export async function getServerSideProps(ctx) {
   };
 }
 
-export default function ActivitySummary({result, dateString}) {
+export default function GetActivitySummary({result, dateString}) {
   const { data: session, status } = useSession();
   const router = useRouter();
 

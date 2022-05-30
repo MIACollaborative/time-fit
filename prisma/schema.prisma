@@ -99,7 +99,7 @@ model fitbit_data {
   // for easy categorization
   dataType String
   ownerId String
-  startDate String
+  dateTime String
   compositeId String @unique // as a unique identifier for query
   lastModified String
   content Json

@@ -133,6 +133,8 @@ export default async function handler(req, res) {
     let ip = GeneralUtility.getIPFromRequest(req);
     console.log(`cron.handler ip: ${ip}, function_name: ${function_name}`);
 
+    console.log(`cron.handler isRequestFromLocalhost: ${GeneralUtility.isRequestFromLocalhost(req)}`);
+
     let now = DateTime.now(); //.plus({day: 2}); // DateTime.now();
 
 

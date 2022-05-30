@@ -74,7 +74,7 @@ export async function getServerSideProps(ctx) {
 
   //const activityResult = await FitbitHelper.getActvitySummaryForFitbitId(user.fitbitId, user.accessToken, targetDate);
 
-  const activityResult = await DatabaseUtility.queryAndStoreFitbitActivitySummaryAtTargetDateForUser(user.fitbitId, targetDate, insertToDB=false);
+  const activityResult = await DatabaseUtility.queryAndStoreFitbitActivitySummaryAtTargetDateForUser(user.fitbitId, targetDate, false);
 
 
   return {

@@ -149,7 +149,7 @@ export default function ActivitySummary({result, dateString}) {
 
   let message = "";
 
-  let briefDateString = dateString; //DateTime.fromISO(dateString).toISODate();
+  let briefDateString = DateTime.fromISO(dateString).toISODate();
 
   if(result.value == "failed"){
     message = `Fail to get activity summary for ${briefDateString}!\n`;

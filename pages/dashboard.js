@@ -33,6 +33,7 @@ import FitbitNotificationTable from "../component/FitbitNotificationTable";
 import TaskLogTable from "../component/TaskLogTable";
 import MessageTable from "../component/MessageTable";
 import FitbitSubscriptionTable from "../component/FitbitSubscriptionTable";
+import FitbitDataTable from "../component/FitbitDataTable";
 
 function replacer(key, value) {
   if (typeof value === "Date") {
@@ -70,6 +71,9 @@ export async function getServerSideProps(ctx) {
 
   let fitbitNotificationList = [];
   let fitbitNotificationInfoList = [];
+
+  let fitbitDataList = [];
+  let fitbitDataInfoList = [];
 
   let taskLogList = [];
   let taskLogInfoList = [];
@@ -126,6 +130,18 @@ export async function getServerSideProps(ctx) {
   }
 
   if (adminUsernameList.includes(userName)) {
+    fitbitDataList = await prisma.fitbit_data.findMany({
+      orderBy: [
+        {
+          updatedAt: "desc",
+        },
+      ],
+    });
+
+    fitbitDataInfoList = JSON.parse(JSON.stringify(fitbitDataList, replacer));
+  }
+
+  if (adminUsernameList.includes(userName)) {
     taskLogList = await prisma.taskLog.findMany({
       orderBy: [
         {
@@ -152,11 +168,11 @@ export async function getServerSideProps(ctx) {
   let hostURL = `${process.env.NEXTAUTH_URL}`;
 
   return {
-    props: { responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, taskLogInfoList, messageInfoList, userInfo, hostURL},
+    props: { responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, taskLogInfoList, messageInfoList, userInfo, hostURL},
   };
 }
 
-export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, taskLogInfoList, messageInfoList, userInfo, hostURL}) {
+export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, taskLogInfoList, messageInfoList, userInfo, hostURL}) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [tabName, setTabName] = useState("Survey Response");
@@ -179,6 +195,8 @@ export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList
   }
 
   console.log(`session: ${JSON.stringify(session)}`);
+
+  console.log(`fitbitDataInfoList: ${JSON.stringify(fitbitDataInfoList)}`);
 
   return (
     <div className={styles.container}>
@@ -209,6 +227,12 @@ export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList
           Fitbit Notification
         </ToggleButton>
         <ToggleButton
+          value="Fitbit Data"
+          aria-label="centered"
+        >
+          Fitbit Data
+        </ToggleButton>
+        <ToggleButton
           value="Task Log"
           aria-label="centered"
         >
@@ -232,6 +256,9 @@ export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList
       
       {tabName == "Fitbit Notification" ? (
         <FitbitNotificationTable infoList={fitbitNotificationInfoList} />
+      ) : null}
+      {tabName == "Fitbit Data" ? (
+        <FitbitDataTable infoList={fitbitDataInfoList} />
       ) : null}
 
       {tabName == "Task Log" ? (

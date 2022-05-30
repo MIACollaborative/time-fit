@@ -72,7 +72,7 @@ export async function getServerSideProps(ctx) {
 
   let targetDate = DateTime.fromISO("2022-03-10");
 
-  console.log(`usr: ${JSON.stringify(user, null, 2)}`);
+  //console.log(`usr: ${JSON.stringify(user, null, 2)}`);
 
   const activityResult = await DatabaseUtility.queryAndStoreFitbitActivitySummaryAtTargetDateForUser(user, targetDate, false);
 

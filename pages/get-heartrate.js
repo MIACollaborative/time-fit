@@ -74,7 +74,7 @@ export async function getServerSideProps(ctx) {
 
   console.log(`usr: ${JSON.stringify(user, null, 2)}`);
 
-  const queryResult = await DatabaseUtility.queryAndStoreHeartRateAtTargetDateForUser(user, targetDate, false);
+  const queryResult = await DatabaseUtility.queryAndStoreFitbitHeartRateAtTargetDateForUser(user, targetDate, false);
 
 
   return {

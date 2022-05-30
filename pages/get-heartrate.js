@@ -100,10 +100,10 @@ export default function GetHeartRate({result, dateString}) {
   let briefDateString = DateTime.fromISO(dateString).toISODate();
 
   if(result.value == "failed"){
-    message = `Fail to get activity summary for ${briefDateString}!\n`;
+    message = `Fail to get heart rate for ${briefDateString}!\n`;
   }
   else{
-    message = `Succeed to get activity summary ${briefDateString}!\n`;
+    message = `Succeed to get heartrate for ${briefDateString}!\n`;
   }
 
 

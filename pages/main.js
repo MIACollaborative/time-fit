@@ -335,6 +335,18 @@ export default function Main({
             </Fragment>
           ) : null}
 
+{displaySetting == "all" ? (
+            <Fragment>
+              <Link href={"/get-heartrate"}>
+                <Button variant="contained" style={{ width: "100%" }}>
+                  Get HeartRate (1 step process)
+                </Button>
+              </Link>
+              <br />
+              <br />
+            </Fragment>
+          ) : null}
+
           {displaySetting == "all" ? (
             <Fragment>
               <Link href={"/activity-summary"}>

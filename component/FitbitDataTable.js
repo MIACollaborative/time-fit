@@ -50,6 +50,8 @@ export default function FitbitDataTable({ infoList}) {
           <TableRow>
             <TableCell>Id</TableCell>
             <TableCell align="right">Data Type</TableCell>
+            <TableCell align="right">Username</TableCell>
+            <TableCell align="right">Owner Id</TableCell>
             <TableCell align="right">Owner Id</TableCell>
             <TableCell align="right">Date Time</TableCell>
             <TableCell align="right">Content</TableCell>
@@ -68,6 +70,7 @@ export default function FitbitDataTable({ infoList}) {
                 {row.id}
               </TableCell>
               <TableCell align="right">{row.dataType}</TableCell>
+              <TableCell align="right">{row.owner.username}</TableCell>
               <TableCell align="right">{row.ownerId}</TableCell>
               <TableCell align="right">{row.dateTime}</TableCell>
               <TableCell align="right">{JSON.stringify(row.content, null, 2)}</TableCell>

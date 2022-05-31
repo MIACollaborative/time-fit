@@ -131,6 +131,9 @@ export async function getServerSideProps(ctx) {
 
   if (adminUsernameList.includes(userName)) {
     fitbitDataList = await prisma.fitbit_data.findMany({
+      include: {
+        owner: true,
+      },
       orderBy: [
         {
           updatedAt: "desc",

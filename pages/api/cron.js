@@ -25,6 +25,10 @@ function getWeekdayOrWeekend(datetime) {
 }
 
 async function executeTask(now) {
+    let users = await prisma.users.findMany();
+
+    // old
+    /*
     let users = await prisma.users.findMany({
         select: {
             username: true,
@@ -40,6 +44,7 @@ async function executeTask(now) {
             timezone: true
         },
     });
+    */
 
     let userList = JSON.parse(JSON.stringify(users, replacer));
 

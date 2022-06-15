@@ -109,3 +109,22 @@ let olderList = await prisma.fitbit_update.findMany({
 });
 
 console.log(`olderList (${selectedFitbitUpdate.createdAt}): ${JSON.stringify(olderList, null, 2)}`);
+
+// next, try updating them to "processed"
+
+const updateOrderList = await prisma.fitbit_update.updateMany({
+    where: {
+        status: "notification",
+        ownerId: selectedFitbitUpdate.ownerId,
+        collectionType: selectedFitbitUpdate.collectionType,
+        date: selectedFitbitUpdate.date,
+        createdAt: {
+            lte: selectedFitbitUpdate.createdAt
+        },
+    },
+    data: {
+        status: 'processed',
+    },
+});
+
+console.log(`updateOrderList (${selectedFitbitUpdate.createdAt}): ${JSON.stringify(updateOrderList, null, 2)}`);

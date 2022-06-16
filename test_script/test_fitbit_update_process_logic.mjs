@@ -3,26 +3,29 @@ import { DateTime } from "luxon";
 import prisma from "../lib/prisma.mjs";
 import TaskExecutor from "../lib/TaskExecutor.mjs";
 import DatabaseUtility from "../lib/DatabaseUtility.mjs";
-import { DateTime } from "luxon";
+import GeneralUtility from "../lib/GeneralUtility.mjs";
+
 
 
 if (process.env.NODE_ENV !== "production") {
     dotenv.config();
 }
 
-let recentUpdateList = DatabaseUtility.getFitbitUpdateByStatusWithLimit("notification", 50);
+let recentUpdateList = await DatabaseUtility.getFitbitUpdateByStatusWithLimit("notification", 50);
 
 
 console.log(`recentUpdateList: ${JSON.stringify(recentUpdateList, null, 2)}`);
 console.log(`recentUpdateList.length: ${recentUpdateList.length}`);
 
-let filteredUpdateList = GeneralUtility.removeFitbitUpdateDuplicate(recentUpdateList);
+
+let filteredUpdateList = await GeneralUtility.removeFitbitUpdateDuplicate(recentUpdateList);
 
 console.log(`filteredUpdateList: ${JSON.stringify(filteredUpdateList, null, 2)}`);
 console.log(`filteredUpdateList.length: ${filteredUpdateList.length}`);
 
 // now, for each update, retrieve accordingly
 
+/*
 let resultList = filteredUpdateList.map((fitbitUpdate) => {
     // false: avoid storing the data
     return DatabaseUtility.queryAndStoreFitbitDataByFitbitUpdate(fitbitUpdate, false);
@@ -53,6 +56,7 @@ let successResultList = resultList.filter((result) => {
 
 console.log(`successResultList: ${JSON.stringify(successResultList, null, 2)}`);
 console.log(`successResultList.length: ${successResultList.length}`);
+*/
 
 /*
 for (let i = 0; i < successResultList.length; i++) {
@@ -80,3 +84,47 @@ record.executionResult = {
 
 console.log(`executeActionForUser record.executionResult: ${JSON.stringify(record.executionResult)}`);
 */
+
+
+// now, test the update query timestamp comparison
+let selectedFitbitUpdate = recentUpdateList[3];
+let compositeId = GeneralUtility.generateCompositeIDForFitbitUpdate([selectedFitbitUpdate.ownerId, selectedFitbitUpdate.collectionType, selectedFitbitUpdate.date]);
+console.log(`compositeId: ${compositeId}`);
+
+
+let olderList = await prisma.fitbit_update.findMany({
+    where:{
+        status: "notification",
+        ownerId: selectedFitbitUpdate.ownerId,
+        collectionType: selectedFitbitUpdate.collectionType,
+        date: selectedFitbitUpdate.date,
+        createdAt: {
+            lte: selectedFitbitUpdate.createdAt
+        },
+    },
+    //take: limit,
+    orderBy: {
+        createdAt: 'desc',
+    },
+});
+
+console.log(`olderList (${selectedFitbitUpdate.createdAt}): ${JSON.stringify(olderList, null, 2)}`);
+
+// next, try updating them to "processed"
+
+const updateOrderList = await prisma.fitbit_update.updateMany({
+    where: {
+        status: "notification",
+        ownerId: selectedFitbitUpdate.ownerId,
+        collectionType: selectedFitbitUpdate.collectionType,
+        date: selectedFitbitUpdate.date,
+        createdAt: {
+            lte: selectedFitbitUpdate.createdAt
+        },
+    },
+    data: {
+        status: 'processed',
+    },
+});
+
+console.log(`updateOrderList (${selectedFitbitUpdate.createdAt}): ${JSON.stringify(updateOrderList, null, 2)}`);

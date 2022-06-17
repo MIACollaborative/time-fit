@@ -49,7 +49,12 @@ async function executeTask(now) {
     let userList = JSON.parse(JSON.stringify(users, replacer));
 
     let tasks = await prisma.task.findMany({
-        where: { enabled: true}
+        where: { enabled: true},
+        orderBy: [
+            {
+              priority: "asc",
+            },
+        ],
     });
 
     let taskList = JSON.parse(JSON.stringify(tasks, replacer));

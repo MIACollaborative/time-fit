@@ -200,6 +200,7 @@ model task {
   label String @unique
   index Int?
   enabled Boolean? @default(false)
+  groupIndex Int? @default(1)
   ignoreTimezone Boolean? @default(false)
   checkPoint Json
   group Json

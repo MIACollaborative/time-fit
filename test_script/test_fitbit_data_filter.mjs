@@ -11,7 +11,7 @@ if (process.env.NODE_ENV !== "production") {
     dotenv.config();
 }
 
-let fitbitRecordList = await DatabaseUtility.getUserFitbitActivityDataDuringPeriodById("4SW9W9", "2022-05-25", "2022-06-15");
+let fitbitRecordList = await DatabaseUtility.getUserFitbitActivityDataDuringPeriodById("4SW9W9", "2022-06-06", "2022-06-12");
 
 
 console.log(`fitbitRecordList: ${JSON.stringify(fitbitRecordList, null, 2)}`);

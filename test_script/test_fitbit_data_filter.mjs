@@ -32,4 +32,11 @@ console.log(`walkList.length: ${walkList.length}`);
 
 
 
+let filteredWalkList = GeneralUtility.filterFitbitWalkActivityListByDuration(walkList, 10 * 60)
+
+console.log(`filteredWalkList: ${JSON.stringify(filteredWalkList, null, 2)}`);
+console.log(`filteredWalkList.length: ${filteredWalkList.length}`);
+
+
+
 

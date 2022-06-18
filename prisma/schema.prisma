@@ -201,6 +201,7 @@ model task {
   index Int?
   enabled Boolean? @default(false)
   priority Int? @default(1)
+  participantIndependent Boolean? @default(false)
   ignoreTimezone Boolean? @default(false)
   checkPoint Json
   group Json

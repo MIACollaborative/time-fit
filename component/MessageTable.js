@@ -72,34 +72,46 @@ export default function MessageTable({ infoList, userInfo, hostURL }) {
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell align="right"><Button variant="contained" onClick={(event) => {
-                  let messageInfo = row;
+                let messageInfo = row;
 
-                let messageBody = GeneralUtility.composeUserMessageForTwilio(userInfo, messageInfo, "");
 
-                let gifURL="";
+                //let messageBody = GeneralUtility.composeUserMessageForTwilio(userInfo, messageInfo, "");
 
-                if (messageInfo.gif != undefined){
-                    gifURL = `${hostURL}/image/gif/${messageInfo.gif}.gif`;
-                }
+                let composePromise = fetch("/api/message-composer?function_name=compose_message", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    userInfo: userInfo,
+                    messageInfo: messageInfo,
+                    surveyURL: ""
+                  }),
+                })
 
-                let msgPromise =  GeneralUtility.sendTwilioMessage(userInfo.phone, messageBody, gifURL.length > 0? [gifURL]:[]);
+                composePromise
+                .then((res) => res.json())
+                .then((response) => {
+                  console.log(`MessageTable - response: ${JSON.stringify(response, null, 2)}`);
+                  // r.json();
+                  return response.result;
+                })
+                .then((messageBody) => {
 
-                toast(`Sending: ${messageBody}`);
-                
-                /*
-                toast.promise(
-                    msgPromise,
-                    {
-                      pending: `Sending a message: ${messageBody}`,
-                      success: 'Sending the message successfully 👌',
-                      error: 'Failure to send the message 🤯'
+                    let gifURL = "";
+
+                    if (messageInfo.gif != undefined) {
+                      gifURL = `${hostURL}/image/gif/${messageInfo.gif}.gif`;
                     }
-                )
-                */
 
-                //return TwilioHelper.sendMessage(userInfo.phone, messageBody, gifURL.length > 0? [gifURL]:[]);
+                    let msgPromise = GeneralUtility.sendTwilioMessage(userInfo.phone, messageBody, gifURL.length > 0 ? [gifURL] : []);
 
-                }} >Send</Button></TableCell>
+                    toast(`Sending: ${messageBody}`);
+
+
+                });
+
+              }} >Send</Button></TableCell>
               <TableCell align="right">{row.label}</TableCell>
               <TableCell align="right">{row.group}</TableCell>
               <TableCell align="right">{row.groupIndex}</TableCell>

@@ -2,18 +2,18 @@ id,group,interventionMessage,topic,note
 1,prompt,Welcome to the WalkToJoy study! We greatly appreciate your contribution. Please take a moment to complete the Baseline survey to start your intervention.,Onboarding/Baseline survey ,
 2,prompt-re,"Hi [name], we havn't heard from you for a while. Please complete the Baseline survey to start your intervention.",Onboarding/Baseline survey ,After 24hours
 3,,,,
-4,prompt,Great job completing your walks this past week! Please take a moment to complete your Weekly check-in survey: <link to survey>,Weekly check-in survey,
-5,prompt,Pat yourself on the back for completing your walks this past week! Please take a moment to complete your first Weekly check-in survey: <link to survey>,FIRST Weekly check-in survey,
-6,prompt-re,"Knock knock. Hi [name], please take a moment to complete your Weekly check-in survey.",Weekly check-in survey,After 24hours
+4,prompt,Great job completing your walks this past week! Please take a moment to complete your Weekly check-in survey: <link> .,Weekly check-in survey,
+5,prompt,Pat yourself on the back for completing your walks this past week! Please take a moment to complete your first Weekly check-in survey: <link> .,FIRST Weekly check-in survey,
+6,prompt-re,"Knock knock. Hi [name], please take a moment to complete your Weekly check-in survey: <link> .",Weekly check-in survey,After 24hours
 7,prompt-re,Uh-oh. We have lost connection with your Fitbit. Please open your Fitbit app to reconnect.,Fitbit connection,
 8,,,,
 9,,,Walk Modification,
 10,prompt,Remember to enhance your walking experience on your upcoming walks. Here is what you said you would try this week: “<participant's response>”.,Walk Modification Reminder,Tuesday/Thursday
-11,prompt,"[name], it's time to reflect on today's walk(s). Please take a moment to complete this survey: <link>",Salience Follow-up,
+11,prompt,"[name], it's time to reflect on today's walk(s). Please take a moment to complete this survey: <link> .",Salience Follow-up,
 12,,,,
-13,prompt,"[name], please take a moment to report on today's overall walking experience: <link>",End-of-day,
+13,prompt,"[name], please take a moment to report on today's overall walking experience: <link> .",End-of-day,
 14,,,,
-15,,,,
+15,prompt,"[name], here is your weekly summary for this past week: You have walked [7-day-average-steps] steps on average each day, and went for a total of [7-day-walks-over-10mins] sustained walks for over 10 minutes this past week. Keep up the good work!",Data Summary,
 16,,,,
 17,,,,
 18,,,,

@@ -36,6 +36,7 @@ export default function SurveyResponseTable({ infoList }) {
           <TableRow>
             <TableCell align="right">Participant Id</TableCell>
             <TableCell align="right">Survey Id</TableCell>
+            <TableCell align="right">Date Time</TableCell>
             <TableCell align="right">Content</TableCell>
             <TableCell align="right">Survey Link</TableCell>
             <TableCell align="right">Survey Params String</TableCell>
@@ -51,6 +52,7 @@ export default function SurveyResponseTable({ infoList }) {
             >
               <TableCell align="right">{row.participantId}</TableCell>
               <TableCell align="right">{row.surveyId}</TableCell>
+              <TableCell align="right">{row.dateTime}</TableCell>
               <TableCell align="right">{JSON.stringify(row.content)}</TableCell>
               <TableCell align="right">{row.surveyLink}</TableCell>
               <TableCell align="right">{row.surveyParamsString}</TableCell>

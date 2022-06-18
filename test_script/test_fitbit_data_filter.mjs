@@ -24,7 +24,7 @@ let average = await DatabaseUtility.getUserFitbitAverageDailyStepsDuringPeriodBy
 console.log(`average: ${average}`);
 
 
-let walkList = await DatabaseUtility.getUserFitbitWalkActivityListDuringPeriodById("4SW9W9", "2022-06-06", "2022-06-12");
+let walkList = await DatabaseUtility.getUserFitbitWalkActivityListDuringPeriodById("4SW9W9", "2022-05-23", "2022-05-29");
 
 
 console.log(`walkList: ${JSON.stringify(walkList, null, 2)}`);

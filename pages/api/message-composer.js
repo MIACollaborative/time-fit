@@ -12,14 +12,14 @@ export default async function handler(req, res) {
     console.log(`message-composer - isLocal: ${isLocal}`);
     console.log(`message-composer - session: ${session}`);
 
-    /*
+    
     if (!isLocal && !session) {
       // Not local and not login either
       res.status(401).json({});
       res.end();
       return
     }
-    */
+    
 
     const { function_name } = req.query;
     console.log(`message-composer - function: ${function_name}`);

@@ -75,7 +75,13 @@ async function executeTask(now) {
 
     
     let resultPromiseList = taskList.map((task) => {
-        return TaskExecutor.executeTaskForUserListForDatetime(task, userList, now);
+        if( task.participantIndependent == false){
+            return TaskExecutor.executeTaskForUserListForDatetime(task, userList, now);
+        }
+        else{
+            return TaskExecutor.executeTaskForUserListForDatetime(task, [GeneralUtility.systemUser], now);
+        }
+
         /*
         let aTaskResultList = await TaskExecutor.executeTaskForUserListForDatetime(task, userList, now);
         taskCompositeResultList = taskCompositeResultList.concat(aTaskResultList);

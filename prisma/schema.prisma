@@ -77,6 +77,7 @@ model response {
   // for survey response
   participantId String
   responseId String? // optional mostly for baackward compatibility
+  dateTime: DateTime?
   surveyId String?
   surveyLink String
   surveyParamsString String?

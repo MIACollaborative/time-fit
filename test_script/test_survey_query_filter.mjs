@@ -12,8 +12,8 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 let surveyId = "SV_cACIS909SMXMUp8";
-let startDate = DateTime.fromISO("2022-05-20T00:00:00.000Z");
-let endDate = DateTime.fromISO("2022-06-20T00:00:00.000Z");
+let startDate = DateTime.fromISO("2022-06-20T00:00:00.000Z");
+let endDate = DateTime.fromISO("2022-06-27T00:00:00.000Z");
 
 let surveyRecordList = await DatabaseUtility.findSurveyResponoseDuringPeriod(surveyId, startDate, endDate);
 

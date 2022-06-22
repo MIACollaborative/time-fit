@@ -32,6 +32,8 @@ model users {
 
   // for study management
   phase String @default("baseline") // baseline vs. intervention
+  joinAt DateTime?
+  activateAt DateTime?
 
   // for group assignment
   gif Boolean? @default(false)

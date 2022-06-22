@@ -222,14 +222,15 @@ export default function Main({
           <Divider />
           <br />
           <div>Signed in as {session.user.name} </div>
-          <br />
+          <div>Phase: {userInfo.phase} </div>
+          <div>joinAt: {userInfo.joinAt} </div>
+          <div>activateAt: {userInfo.activateAt} </div>
           <div>
             Fitbit:{" "}
             {GeneralUtility.doesFitbitInfoExist(userInfo)
               ? "connected"
               : "not connected"}
           </div>
-          <br />
           <div>Access Token: {isAccessTokenActive ? "active" : "inactive"}</div>
           <br />
           <Divider />

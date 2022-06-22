@@ -18,6 +18,7 @@ import React, { useState } from "react";
 import Button from '@mui/material/Button';
 import Divider from "@mui/material/Divider";
 import prisma from "../lib/prisma.mjs";
+import { DateTime } from "luxon";
 
 function replacer(key, value) {
   if (typeof value === "Date") {
@@ -71,6 +72,7 @@ export default function InfoEdit({ userInfo }) {
   }
 
   console.log(`session: ${JSON.stringify(session)}`);
+  console.log(`InfoEdit userInfo.joinAt: ${userInfo.joinAt}`);
 
   async function updateInfo(
     username,
@@ -98,13 +100,27 @@ export default function InfoEdit({ userInfo }) {
   }
 
   function onSaveClick(event) {
+    let preparationInfo = undefined;
+    console.log(`onSaveClick: userInfo.joinAt ${userInfo.joinAt}`);
+    if(userInfo.joinAt == null){
+      preparationInfo = {
+        preferredName,
+        phone,
+        joinAt: userInfo.joinAt == null? DateTime.utc().toISO(): null
+      }
+    }
+    else{
+      preparationInfo = {
+        preferredName,
+        phone
+      }
+    }
+
+    console.log(`onSaveClick: updatedInfo preparation ${JSON.stringify(preparationInfo, null, 2)}`);
 
     updateInfo(
       userInfo.username,
-      {
-          preferredName,
-          phone
-      }
+      preparationInfo
     ).then((response) => {
       router.push("/main");
       return response;

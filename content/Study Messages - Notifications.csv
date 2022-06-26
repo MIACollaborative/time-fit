@@ -8,7 +8,7 @@ id,group,interventionMessage,topic,note
 7,prompt-re,Uh-oh. We have lost connection with your Fitbit. Please open your Fitbit app to reconnect.,Fitbit connection,
 8,,,,
 9,,,Walk Modification,
-10,prompt,Remember to enhance your walking experience on your upcoming walks. Here is what you said you would try this week: “<participant's response>”.,Walk Modification Reminder,Tuesday/Thursday
+10,prompt,"Remember to enhance your walking experience on your upcoming walks. Here is what you said you would try this week: ""[response|SV_81aWO5sJPDhGZNA|last]"".",Walk Modification Reminder,Tuesday/Thursday
 11,prompt,"[name], it's time to reflect on today's walk(s). Please take a moment to complete this survey: <link> .",Salience Follow-up,
 12,,,,
 13,prompt,"[name], please take a moment to report on today's overall walking experience: <link> .",End-of-day,

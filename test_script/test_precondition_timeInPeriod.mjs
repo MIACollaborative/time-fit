@@ -20,18 +20,17 @@ let sampleCondition = {
 			
             reference: "activateAtDate",
             // Need to make sure that the minute and seconds do not get in the way of calculatioon
-            offset: {type: "plus", value: {days: 7}}
+            offset: {type: "plus", value: {days: 0}}
             
-        }
-        /*
+        },
         end:{
-        
-            reference: "joinAt",
-            
-            offset: {type: "plus", value: {hours: 0}}
+			
+            reference: "activateAtDate",
+            // Need to make sure that the minute and seconds do not get in the way of calculatioon
+            offset: {type: "plus", value: {days: 7}},
+            inclusive: false
             
         }
-        */
 	
 	}
 

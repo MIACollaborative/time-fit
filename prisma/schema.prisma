@@ -34,6 +34,8 @@ model users {
   phase String @default("baseline") // baseline vs. intervention
   joinAt DateTime?
   activateAt DateTime?
+  fitbitReminderTurnOff Boolean? @default(false)
+  saveWalkToJoyToContacts Boolean? @default(false)
 
   // for group assignment
   gif Boolean? @default(false)

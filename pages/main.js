@@ -258,68 +258,37 @@ export default function Main({
           <p>Please complete all assigned tasks below:</p>
           <br />
 
-          {displaySetting == "all" ||
-          !GeneralUtility.isWakeBedTimeSet(userInfo) ? (
-            <Fragment>
+          <Fragment>
               <Link href={"/time-setting"}>
-                <Button variant="contained" style={{ width: "100%" }}>
+                <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.isWakeBedTimeSet(userInfo)? "success":"primary"}>
                   Personalize your Experience
                 </Button>
               </Link>
               <br />
               <br />
-            </Fragment>
-          ) : null}
-          {displaySetting == "all" ||
-          !isBaselineSurveyCompleted ? (
-            <Fragment>
+          </Fragment>
+          <Fragment>
               <Link href={baselineSurveyLink}>
-                <Button variant="contained" style={{ width: "100%" }}>
+                <Button variant="contained" style={{ width: "100%" }} color={isBaselineSurveyCompleted? "success":"primary"}>
                   Complete the Baseline Survey
                 </Button>
               </Link>
               <br />
               <br />
-            </Fragment>
-          ) : null}
-          {displaySetting == "all" ||
-          !GeneralUtility.doesFitbitInfoExist(userInfo) ? (
-            <Fragment>
+          </Fragment>
+          <Fragment>
               <Link href={fitbitSignInLink}>
-                <Button variant="contained" style={{ width: "100%" }}>
+                <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.doesFitbitInfoExist(userInfo)? "success":"primary"}>
                   Authorize your Fitbit
                 </Button>
               </Link>
               <br />
               <br />
             </Fragment>
-          ) : null}
-          
-          {displaySetting == "all" ? (
-            <Fragment>
-              <Link href={"https://umich.qualtrics.com/jfe/form/SV_81aWO5sJPDhGZNA"}>
-                <Button variant="contained" style={{ width: "100%" }}>
-                  Complete the baseline survey
-                </Button>
-              </Link>
-              <br />
-              <br />
-            </Fragment>
-          ) : null}
+          <br />
+          <br />
+          <Divider />
 
-          
-          
-          {displaySetting == "all" ? (
-            <Fragment>
-              <Link href={"/group-setting"}>
-                <Button variant="contained" style={{ width: "100%" }}>
-                  Set Group Assignment
-                </Button>
-              </Link>
-              <br />
-              <br />
-            </Fragment>
-          ) : null}
           {displaySetting == "all" ? (
             <Fragment>
               <Link href={"/"}>
@@ -342,6 +311,19 @@ export default function Main({
               <br />
             </Fragment>
           ) : null}
+          
+          {displaySetting == "all" ? (
+            <Fragment>
+              <Link href={"/group-setting"}>
+                <Button variant="contained" style={{ width: "100%" }}>
+                  Set Group Assignment
+                </Button>
+              </Link>
+              <br />
+              <br />
+            </Fragment>
+          ) : null}
+
 
 
             <br />

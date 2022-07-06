@@ -277,41 +277,41 @@ export default function Main({
               <br />
           </Fragment>
           <Fragment>
-              <Link href={fitbitSignInLink}>
-                <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.doesFitbitInfoExist(userInfo)? "success":"primary"}>
-                  Authorize your Fitbit
-                </Button>
-              </Link>
-              <br />
-              <br />
-            </Fragment>
+            <Link href={fitbitSignInLink}>
+              <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.doesFitbitInfoExist(userInfo)? "success":"primary"}>
+                Authorize your Fitbit
+              </Button>
+            </Link>
+            <br />
+            <br />
+          </Fragment>
+          <Fragment>
+            <Link href={'/turn-off-fitbit-reminder'}>
+              <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.isFitbitReminderTurnOff(userInfo)? "success":"primary"}>
+                Turn off Fitbit reminders to move
+              </Button>
+            </Link>
+            <br />
+            <br />
+          </Fragment>
+          <Fragment>
+            <Link href={'/turn-off-fitbit-reminder'}>
+              <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.isWalkToJoySaveToContacts(userInfo)? "success":"primary"}>
+                Save WalkToJoy to your Contacts
+              </Button>
+            </Link>
+            <br />
+            <br />
+          </Fragment>
+          <br />
+          <br />
           <br />
           <br />
           <Divider />
+          <br />
+          <div>For testing:</div>
+          <br />
 
-          {displaySetting == "all" ? (
-            <Fragment>
-              <Link href={"/"}>
-                <Button variant="contained" style={{ width: "100%" }}>
-                  Turn off Fitbit reminders to move
-                </Button>
-              </Link>
-              <br />
-              <br />
-            </Fragment>
-          ) : null}
-          {displaySetting == "all" ? (
-            <Fragment>
-              <Link href={"/"}>
-                <Button variant="contained" style={{ width: "100%" }}>
-                  Save WalkToJoy to your contacts
-                </Button>
-              </Link>
-              <br />
-              <br />
-            </Fragment>
-          ) : null}
-          
           {displaySetting == "all" ? (
             <Fragment>
               <Link href={"/group-setting"}>

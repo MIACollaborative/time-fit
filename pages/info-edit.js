@@ -14,7 +14,7 @@ import { inspect } from "util";
 import Link from "next/link";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import Button from '@mui/material/Button';
 import Divider from "@mui/material/Divider";
 import prisma from "../lib/prisma.mjs";
@@ -153,16 +153,19 @@ export default function InfoEdit({ userInfo }) {
           <br />
           <Divider />
           <br />
-          <TextField
+          <Fragment>{
+            false? <TextField
             fullWidth
             label="Phone Number"
             id="fullWidth"
             value={phone}
+            
             onChange={(event) => {
                 console.log(`setPhone: ${event.currentTarget.value}`);
               setPhone(event.currentTarget.value);
             }}
-          />
+          />: null }</Fragment>
+          
           <br />
           <br />
           <Button variant="contained" style={{ width: "100%" }} onClick={onSaveClick} >Save</Button>

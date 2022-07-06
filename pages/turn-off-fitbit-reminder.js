@@ -28,9 +28,10 @@ function replacer(key, value) {
   return value;
 }
 
+
 export async function getServerSideProps(ctx) {
   const session = await getSession(ctx);
-  console.log(`main.getServerSideProps: session: ${JSON.stringify(session)}`);
+  console.log(`turn-off-fitbit-reminder.getServerSideProps: session: ${JSON.stringify(session)}`);
 
   if (!session) {
     return {
@@ -57,12 +58,14 @@ export default function TurnOffFitbitReminder({ userInfo }) {
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  /*
   const [preferredName, setPreferredName] = useState(
     userInfo.preferredName != undefined ? userInfo.preferredName : ""
   );
   const [phone, setPhone] = useState(
     userInfo.phone != undefined ? userInfo.phone : ""
   );
+  */
 
   // status: enum mapping to three possible session states: "loading" | "authenticated" | "unauthenticated"
   if (status == "loading") return <div>loading...</div>;
@@ -73,7 +76,6 @@ export default function TurnOffFitbitReminder({ userInfo }) {
   }
 
   console.log(`session: ${JSON.stringify(session)}`);
-  console.log(`TurnOffFitbitReminder userInfo.joinAt: ${userInfo.joinAt}`);
 
   async function updateInfo(
     username,
@@ -131,11 +133,7 @@ export default function TurnOffFitbitReminder({ userInfo }) {
         <h1>Turn off Fitbit reminders to move</h1>
         <img src='/image/svg/turn-off-fitbit-reminders.svg' alt="Reminder"/>
 
-        <div style="display:none;">
-          <div>1. Open your Fitbit app on your phone.</div>
-          <div>2. Open the Today tab, (icon) tap the hourly activity tile.</div>
-          <div>3. Tap the gear icon, (icon) turn Reminders to move off.</div>
-        </div>
+
         <br />
         <br />
         <Button variant="contained" style={{ width: "100%" }}
@@ -181,5 +179,13 @@ export default function TurnOffFitbitReminder({ userInfo }) {
 /*
 <div style="width: 100%; display: block;">
 <Image src={'/image/svg/turn-off-fitbit-reminders.svg'} alt="Reminder note" layout="responsive" />
+</div>
+*/
+
+/*
+<div style="display:none;">
+<div>1. Open your Fitbit app on your phone.</div>
+<div>2. Open the Today tab, (icon) tap the hourly activity tile.</div>
+<div>3. Tap the gear icon, (icon) turn Reminders to move off.</div>
 </div>
 */

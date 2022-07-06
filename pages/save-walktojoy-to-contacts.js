@@ -56,12 +56,14 @@ export default function TurnOffFitbitReminder({ userInfo }) {
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  /*
   const [preferredName, setPreferredName] = useState(
     userInfo.preferredName != undefined ? userInfo.preferredName : ""
   );
   const [phone, setPhone] = useState(
     userInfo.phone != undefined ? userInfo.phone : ""
   );
+  */
 
   // status: enum mapping to three possible session states: "loading" | "authenticated" | "unauthenticated"
   if (status == "loading") return <div>loading...</div>;
@@ -72,7 +74,6 @@ export default function TurnOffFitbitReminder({ userInfo }) {
   }
 
   console.log(`session: ${JSON.stringify(session)}`);
-  console.log(`TurnOffFitbitReminder userInfo.joinAt: ${userInfo.joinAt}`);
 
   async function updateInfo(
     username,
@@ -127,15 +128,10 @@ export default function TurnOffFitbitReminder({ userInfo }) {
 
       <main className={styles.main}>
         <h1>Save WalkToJoy to your Contacts</h1>
-        <img src='/image/svg/save-to-contacts.svg' alt="Reminder"/>
-        
-        <div style="display: none;">
-            <div>1. Create a new contact on your phone foor the phoone number your received from teh WalkToJoy study.</div>
-            <div>2. Save the number as "WalkToJoy."</div>
-            <br />
-            <br />
-        </div>
-        
+        <img src='/image/svg/save-to-contacts.svg' alt="Save to contacts"/>
+
+        <br />
+        <br />
         <Button variant="contained" style={{ width: "100%" }}
 
           onClick={(event) => {
@@ -175,3 +171,12 @@ export default function TurnOffFitbitReminder({ userInfo }) {
     </div>
   );
 }
+
+/* 
+<div style="display: none;">
+<div>1. Create a new contact on your phone foor the phoone number your received from teh WalkToJoy study.</div>
+<div>2. Save the number as "WalkToJoy."</div>
+<br />
+<br />
+</div>
+*/

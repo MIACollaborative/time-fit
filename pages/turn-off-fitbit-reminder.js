@@ -101,19 +101,9 @@ export default function TurnOffFitbitReminder({ userInfo }) {
 
   function onSaveClick(event) {
     let preparationInfo = undefined;
-    console.log(`onSaveClick: userInfo.joinAt ${userInfo.joinAt}`);
-    if(userInfo.joinAt == null){
-      preparationInfo = {
-        preferredName,
-        phone,
-        joinAt: userInfo.joinAt == null? DateTime.utc().toISO(): null
-      }
-    }
-    else{
-      preparationInfo = {
-        preferredName,
-        phone
-      }
+    console.log(`onSaveClick: userInfo.fitbitReminderTurnOff ${userInfo.fitbitReminderTurnOff}`);
+    preparationInfo = {
+      fitbitReminderTurnOff: true
     }
 
     console.log(`onSaveClick: updatedInfo preparation ${JSON.stringify(preparationInfo, null, 2)}`);
@@ -140,11 +130,27 @@ export default function TurnOffFitbitReminder({ userInfo }) {
         <div>1. Open your Fitbit app on your phone.</div>
         <div>2. Open the Today tab, (icon) tap the hourly activity tile.</div>
         <div>3. Tap the gear icon, (icon) turn Reminders to move off.</div>
+        <br />
+        <br />
+        <Button variant="contained" style={{ width: "100%" }}
 
-        <Button variant="contained" style={{ width: "100%" }}>
+          onClick={(event) => {
+            onSaveClick(event);
+            return;
+          }}
+        >
           Reminder is turned off
         </Button>
-        <Button variant="contained" style={{ width: "100%" }}>
+        <br />
+        <br />
+        <Button variant="contained" style={{ width: "100%" }}
+
+          onClick={(event) => {
+            router.push("/main");
+            return;
+          }}
+        
+        >
           Cancel
         </Button>
         

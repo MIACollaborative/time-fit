@@ -136,6 +136,8 @@ export default function InfoEdit({ userInfo }) {
       </Head>
 
       <main className={styles.main}>
+        <h1>Welcome to WalkToJoy Study!</h1>
+        <h2>How should we call you?</h2>
         <div>
           <TextField
             fullWidth
@@ -159,7 +161,6 @@ export default function InfoEdit({ userInfo }) {
             onChange={(event) => {
                 console.log(`setPhone: ${event.currentTarget.value}`);
               setPhone(event.currentTarget.value);
-              
             }}
           />
           <br />

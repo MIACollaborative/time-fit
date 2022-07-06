@@ -295,7 +295,7 @@ export default function Main({
             <br />
           </Fragment>
           <Fragment>
-            <Link href={'/turn-off-fitbit-reminder'}>
+            <Link href={'/save-walktojoy-to-contacts'}>
               <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.isWalkToJoySaveToContacts(userInfo)? "success":"primary"}>
                 Save WalkToJoy to your Contacts
               </Button>
@@ -308,9 +308,14 @@ export default function Main({
           <br />
           <br />
           <Divider />
-          <br />
-          <div>For testing:</div>
-          <br />
+          {
+            displaySetting == "all" ?
+            <Fragment>
+              <br />
+              <div>For testing:</div>
+              <br />
+            </Fragment>: null
+          }
 
           {displaySetting == "all" ? (
             <Fragment>
@@ -323,12 +328,6 @@ export default function Main({
               <br />
             </Fragment>
           ) : null}
-
-
-
-            <br />
-            <br />
-            <Divider />
             {displaySetting == "all" ? (
             <Fragment>
               <Link href={"/get-activity-summary"}>

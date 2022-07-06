@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-//import turnPic from '../public/image/svg/turn-off-fitbit-reminders.svg';
 
 
 import TextField from "@mui/material/TextField";
@@ -104,7 +103,7 @@ export default function TurnOffFitbitReminder({ userInfo }) {
     let preparationInfo = undefined;
     console.log(`onSaveClick: userInfo.fitbitReminderTurnOff ${userInfo.fitbitReminderTurnOff}`);
     preparationInfo = {
-      fitbitReminderTurnOff: true
+        saveWalkToJoyToContacts: true
     }
 
     console.log(`onSaveClick: updatedInfo preparation ${JSON.stringify(preparationInfo, null, 2)}`);
@@ -127,17 +126,16 @@ export default function TurnOffFitbitReminder({ userInfo }) {
       </Head>
 
       <main className={styles.main}>
-
-        <h1>Turn off Fitbit reminders to move</h1>
-        <img src='/image/svg/turn-off-fitbit-reminders.svg' alt="Reminder"/>
-
-        <div style="display:none;">
-          <div>1. Open your Fitbit app on your phone.</div>
-          <div>2. Open the Today tab, (icon) tap the hourly activity tile.</div>
-          <div>3. Tap the gear icon, (icon) turn Reminders to move off.</div>
+        <h1>Save WalkToJoy to your Contacts</h1>
+        <img src='/image/svg/save-to-contacts.svg' alt="Reminder"/>
+        
+        <div style="display: none;">
+            <div>1. Create a new contact on your phone foor the phoone number your received from teh WalkToJoy study.</div>
+            <div>2. Save the number as "WalkToJoy."</div>
+            <br />
+            <br />
         </div>
-        <br />
-        <br />
+        
         <Button variant="contained" style={{ width: "100%" }}
 
           onClick={(event) => {
@@ -145,7 +143,7 @@ export default function TurnOffFitbitReminder({ userInfo }) {
             return;
           }}
         >
-          Reminder is turned off
+          Added to my Contacts
         </Button>
         <br />
         <br />
@@ -177,9 +175,3 @@ export default function TurnOffFitbitReminder({ userInfo }) {
     </div>
   );
 }
-
-/*
-<div style="width: 100%; display: block;">
-<Image src={'/image/svg/turn-off-fitbit-reminders.svg'} alt="Reminder note" layout="responsive" />
-</div>
-*/

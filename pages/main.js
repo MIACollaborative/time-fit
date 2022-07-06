@@ -148,6 +148,15 @@ export default function Main({
     return null;
   }
 
+  if(!GeneralUtility.isPreferredNameSet(userInfo)){
+    // likely the first time signing in
+    router.push("/info-edit");
+    return null;
+  }
+
+
+
+
   console.log(`session: ${JSON.stringify(session)}`);
 
   console.log(`introspectResult: ${JSON.stringify(introspectResult)}`);

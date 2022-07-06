@@ -22,6 +22,7 @@ import md5 from "md5";
 import FitbitHelper from "../lib/FitbitHelper";
 import GeneralUtility from "../lib/GeneralUtility";
 import prisma from "../lib/prisma.mjs";
+import DatabaseUtility from "../lib/DatabaseUtility.mjs";
 
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
@@ -109,6 +110,10 @@ export async function getServerSideProps(ctx) {
     )}`
   );
 
+  // baseline survey completed
+  let isBaselineSurveyCompleted = await DatabaseUtility.isSurveyCompleted("SV_81aWO5sJPDhGZNA");
+
+  console.log(`main.getServerSideProps: isBaselineSurveyCompleted: ${isBaselineSurveyCompleted}`);
   //isAccessTokenActive = introspectResult.active;
 
   let hostURL = `${process.env.NEXTAUTH_URL}`;
@@ -118,6 +123,7 @@ export async function getServerSideProps(ctx) {
       userInfo,
       hasFitbitConnection,
       isAccessTokenActive,
+      isBaselineSurveyCompleted,
       introspectResult,
       hostURL,
     },
@@ -128,6 +134,7 @@ export default function Main({
   userInfo,
   hasFitbitConnection,
   isAccessTokenActive,
+  isBaselineSurveyCompleted,
   introspectResult,
   hostURL,
 }) {
@@ -175,6 +182,8 @@ export default function Main({
   let fitbitSignInLink = `https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=23829X&redirect_uri=${encodeURIComponent(
     redirectURL
   )}&state=${state}&scope=${scope}&expires_in=604800`;
+
+  let baselineSurveyLink = `https://umich.qualtrics.com/jfe/form/SV_81aWO5sJPDhGZNA`;
 
   // move it to GeneralUtility
   /*
@@ -234,6 +243,7 @@ export default function Main({
           <div>Phase: {userInfo.phase} </div>
           <div>joinAt: {userInfo.joinAt} </div>
           <div>activateAt: {userInfo.activateAt} </div>
+          <div>Baseline survey completed: {JSON.stringify(isBaselineSurveyCompleted)} </div>
           <div>
             Fitbit:{" "}
             {GeneralUtility.doesFitbitInfoExist(userInfo)
@@ -243,11 +253,15 @@ export default function Main({
           <div>Access Token: {isAccessTokenActive ? "active" : "inactive"}</div>
           <br />
           <Divider />
+          <h1>Hi {userInfo.preferredName},</h1>
+          <p>You are currently in {userInfo.phase == "baseline"? `a ${userInfo.phase} week.`: `an ${userInfo.phase} week.`}</p>
+          <p>Please complete all assigned tasks below:</p>
           <br />
+
           {displaySetting == "all" ||
-          !GeneralUtility.isPreferredNameSet(userInfo) ? (
+          !GeneralUtility.isWakeBedTimeSet(userInfo) ? (
             <Fragment>
-              <Link href={"/info-edit"}>
+              <Link href={"/time-setting"}>
                 <Button variant="contained" style={{ width: "100%" }}>
                   Personalize your Experience
                 </Button>
@@ -257,11 +271,11 @@ export default function Main({
             </Fragment>
           ) : null}
           {displaySetting == "all" ||
-          !GeneralUtility.isWakeBedTimeSet(userInfo) ? (
+          !isBaselineSurveyCompleted ? (
             <Fragment>
-              <Link href={"/time-setting"}>
+              <Link href={baselineSurveyLink}>
                 <Button variant="contained" style={{ width: "100%" }}>
-                  Set Time Preference
+                  Complete the Baseline Survey
                 </Button>
               </Link>
               <br />
@@ -424,3 +438,19 @@ export default function Main({
     </div>
   );
 }
+
+
+/*
+{displaySetting == "all" ||
+!GeneralUtility.isPreferredNameSet(userInfo) ? (
+  <Fragment>
+    <Link href={"/info-edit"}>
+      <Button variant="contained" style={{ width: "100%" }}>
+        Personalize your Experience
+      </Button>
+    </Link>
+    <br />
+    <br />
+  </Fragment>
+) : null}
+*/

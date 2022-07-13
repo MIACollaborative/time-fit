@@ -147,7 +147,7 @@ export default function TurnOffFitbitReminder({ userInfo }) {
         </Button>
         <br />
         <br />
-        <Button variant="contained" style={{ width: "100%" }}
+        <Button variant="contained" style={{ width: "100%", display: "none" }}
 
           onClick={(event) => {
             router.push("/main");

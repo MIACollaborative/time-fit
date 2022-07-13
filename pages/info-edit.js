@@ -33,7 +33,7 @@ export async function getServerSideProps(ctx) {
 
   if (!session) {
     return {
-      props: {},
+      props: {userInfo:{}},
     };
   }
 
@@ -56,11 +56,13 @@ export default function InfoEdit({ userInfo }) {
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  console.log(`InfoEdit.userInfo: ${JSON.stringify(userInfo)}`);
+
   const [preferredName, setPreferredName] = useState(
-    userInfo.preferredName != undefined ? userInfo.preferredName : ""
+    userInfo != undefined && userInfo.preferredName != undefined ? userInfo.preferredName : ""
   );
   const [phone, setPhone] = useState(
-    userInfo.phone != undefined ? userInfo.phone : ""
+    userInfo != undefined && userInfo.phone != undefined ? userInfo.phone : ""
   );
 
   // status: enum mapping to three possible session states: "loading" | "authenticated" | "unauthenticated"
@@ -72,7 +74,7 @@ export default function InfoEdit({ userInfo }) {
   }
 
   console.log(`session: ${JSON.stringify(session)}`);
-  console.log(`InfoEdit userInfo.joinAt: ${userInfo.joinAt}`);
+  //console.log(`InfoEdit userInfo.joinAt: ${userInfo.joinAt}`);
 
   async function updateInfo(
     username,

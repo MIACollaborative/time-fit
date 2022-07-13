@@ -38,11 +38,13 @@ export async function getServerSideProps(ctx) {
   const session = await getSession(ctx);
   console.log(`main.getServerSideProps: session: ${JSON.stringify(session)}`);
 
+  /*
   if (!session) {
     return {
       props: {},
     };
   }
+  */
 
   let userName = session.user.name;
 
@@ -142,6 +144,9 @@ export default function Main({
   const router = useRouter();
   const [displaySetting, setDisplaySetting] = useState("all");
 
+
+  console.log(`Main.userInfo: ${JSON.stringify(userInfo)}`);
+
   //logger.logToDB("main", {message: "test"});
 
   //const [value1, setValue1] = useState('');
@@ -153,6 +158,29 @@ export default function Main({
   if (!session) {
     router.push("/");
     return null;
+  }
+
+  async function getInfo(
+    username
+  ) {
+    console.log(`Main.getInfo: ${username}`);
+
+    const result = await fetch(
+      "/api/user?function_name=get_info",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          username: username
+        }),
+      }
+    ).then((r) => {
+      return r.json();
+    });
+
+    return result;
   }
 
   /*
@@ -181,8 +209,7 @@ export default function Main({
   // GeneralUtility.doesFitbitInfoExist(userInfo)
   else if(!GeneralUtility.doesFitbitInfoExist(userInfo)){
     // likely the first time signing in
-    //router.push("/time-setting");
-    // fitbitSignInLink
+    router.push("/fitbit-authorize");
     return null;
   }
   else if(!GeneralUtility.isFitbitReminderTurnOff(userInfo)){
@@ -193,6 +220,14 @@ export default function Main({
     router.push("/save-walktojoy-to-contacts");
     return null;
   }
+  else if(!isBaselineSurveyCompleted){
+    // baselineSurveyLink
+    return <div>Baseline survey is not completed</div>;
+    return null;
+  }
+
+
+
 
   console.log(`session: ${JSON.stringify(session)}`);
 
@@ -215,27 +250,6 @@ export default function Main({
 
   let baselineSurveyLink = `https://umich.qualtrics.com/jfe/form/SV_81aWO5sJPDhGZNA`;
 
-  // move it to GeneralUtility
-  /*
-  async function sendTwilioMessage(phone, messageBody) {
-    console.log(`Main.sendTwilioMessage: ${phone} - ${messageBody}`);
-
-    const result = await fetch("/api/twilio?function_name=send_message", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        phone,
-        messageBody,
-      }),
-    }).then((r) => {
-      return r.json();
-    });
-
-    return result;
-  }
-  */
 
   const handleChange = (event, newSetting) => {
     setDisplaySetting(newSetting);
@@ -287,16 +301,7 @@ export default function Main({
           <p>You are currently in {userInfo.phase == "baseline"? `a ${userInfo.phase} week.`: `an ${userInfo.phase} week.`}</p>
           <p>Please complete all assigned tasks below:</p>
           <br />
-
-          <Fragment>
-              <Link href={"/time-setting"}>
-                <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.isWakeBedTimeSet(userInfo)? "success":"primary"}>
-                  Personalize your Experience
-                </Button>
-              </Link>
-              <br />
-              <br />
-          </Fragment>
+          <br />
           <Fragment>
               <Link href={baselineSurveyLink}>
                 <Button variant="contained" style={{ width: "100%" }} color={isBaselineSurveyCompleted? "success":"primary"}>
@@ -306,37 +311,6 @@ export default function Main({
               <br />
               <br />
           </Fragment>
-          <Fragment>
-            <Link href={fitbitSignInLink}>
-              <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.doesFitbitInfoExist(userInfo)? "success":"primary"}>
-                Authorize your Fitbit
-              </Button>
-            </Link>
-            <br />
-            <br />
-          </Fragment>
-          <Fragment>
-            <Link href={'/turn-off-fitbit-reminder'}>
-              <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.isFitbitReminderTurnOff(userInfo)? "success":"primary"}>
-                Turn off Fitbit reminders to move
-              </Button>
-            </Link>
-            <br />
-            <br />
-          </Fragment>
-          <Fragment>
-            <Link href={'/save-walktojoy-to-contacts'}>
-              <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.isWalkToJoySaveToContacts(userInfo)? "success":"primary"}>
-                Save WalkToJoy to your Contacts
-              </Button>
-            </Link>
-            <br />
-            <br />
-          </Fragment>
-          <br />
-          <br />
-          <br />
-          <br />
           <Divider />
           {
             displaySetting == "all" ?
@@ -370,7 +344,7 @@ export default function Main({
             </Fragment>
           ) : null}
 
-{displaySetting == "all" ? (
+          {displaySetting == "all" ? (
             <Fragment>
               <Link href={"/get-heartrate"}>
                 <Button variant="contained" style={{ width: "100%" }}>
@@ -464,4 +438,53 @@ export default function Main({
     <br />
   </Fragment>
 ) : null}
+
+*/
+
+/*
+          <Fragment>
+              <Link href={"/time-setting"}>
+                <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.isWakeBedTimeSet(userInfo)? "success":"primary"}>
+                  Personalize your Experience
+                </Button>
+              </Link>
+              <br />
+              <br />
+          </Fragment>
+          <Fragment>
+              <Link href={baselineSurveyLink}>
+                <Button variant="contained" style={{ width: "100%" }} color={isBaselineSurveyCompleted? "success":"primary"}>
+                  Complete the Baseline Survey
+                </Button>
+              </Link>
+              <br />
+              <br />
+          </Fragment>
+          <Fragment>
+            <Link href={fitbitSignInLink}>
+              <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.doesFitbitInfoExist(userInfo)? "success":"primary"}>
+                Authorize your Fitbit
+              </Button>
+            </Link>
+            <br />
+            <br />
+          </Fragment>
+          <Fragment>
+            <Link href={'/turn-off-fitbit-reminder'}>
+              <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.isFitbitReminderTurnOff(userInfo)? "success":"primary"}>
+                Turn off Fitbit reminders to move
+              </Button>
+            </Link>
+            <br />
+            <br />
+          </Fragment>
+          <Fragment>
+            <Link href={'/save-walktojoy-to-contacts'}>
+              <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.isWalkToJoySaveToContacts(userInfo)? "success":"primary"}>
+                Save WalkToJoy to your Contacts
+              </Button>
+            </Link>
+            <br />
+            <br />
+          </Fragment>
 */

@@ -155,14 +155,44 @@ export default function Main({
     return null;
   }
 
+  /*
+  name
+  time preference
+  fitbit
+  turn off fitbit
+  add contacts
+
+  Baseline UI
+  - Baseline survey
+  - Fibit Authorized
+
+  Intervention UI
+  - Re-authorize Fitbit
+  */
+
   if(!GeneralUtility.isPreferredNameSet(userInfo)){
-    // likely the first time signing in
     router.push("/info-edit");
     return null;
   }
-
-
-
+  else if(!GeneralUtility.isWakeBedTimeSet(userInfo)){
+    router.push("/time-setting");
+    return null;
+  }
+  // GeneralUtility.doesFitbitInfoExist(userInfo)
+  else if(!GeneralUtility.doesFitbitInfoExist(userInfo)){
+    // likely the first time signing in
+    //router.push("/time-setting");
+    // fitbitSignInLink
+    return null;
+  }
+  else if(!GeneralUtility.isFitbitReminderTurnOff(userInfo)){
+    router.push("/turn-off-fitbit-reminder");
+    return null;
+  }
+  else if(!GeneralUtility.isWalkToJoySaveToContacts(userInfo)){
+    router.push("/save-walktojoy-to-contacts");
+    return null;
+  }
 
   console.log(`session: ${JSON.stringify(session)}`);
 

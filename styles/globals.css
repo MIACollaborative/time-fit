@@ -15,11 +15,11 @@ a {
   box-sizing: border-box;
 }
 
-.project-color {
+.project-text {
   color: #E87667
 }
 
 .project-button {
   background-color: #E87667 !important;
-  width: "100%";
+  width: 100%;
 }

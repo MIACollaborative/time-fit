@@ -198,11 +198,11 @@ export default function Main({
   - Re-authorize Fitbit
   */
 
-  if(!GeneralUtility.isPreferredNameSet(userInfo)){
+  if(GeneralUtility.isPreferredNameSet(userInfo)){
     router.push("/info-edit");
     return null;
   }
-  else if(!GeneralUtility.isWakeBedTimeSet(userInfo)){
+  else if(true || !GeneralUtility.isWakeBedTimeSet(userInfo)){
     router.push("/time-setting");
     return null;
   }

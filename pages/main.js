@@ -207,7 +207,7 @@ export default function Main({
     return null;
   }
   // GeneralUtility.doesFitbitInfoExist(userInfo)
-  else if(!GeneralUtility.doesFitbitInfoExist(userInfo)){
+  else if(false && !GeneralUtility.doesFitbitInfoExist(userInfo)){
     // likely the first time signing in
     router.push("/fitbit-authorize");
     return null;
@@ -220,11 +220,13 @@ export default function Main({
     router.push("/save-walktojoy-to-contacts");
     return null;
   }
+  /*
   else if(!isBaselineSurveyCompleted){
     // baselineSurveyLink
     return <div>Baseline survey is not completed</div>;
     return null;
   }
+  */
 
 
 
@@ -233,22 +235,19 @@ export default function Main({
 
   console.log(`introspectResult: ${JSON.stringify(introspectResult)}`);
   // username=${session.user.username}
-  let redirectURL = `${hostURL}/fitbit-signin`;
+  //let redirectURL = `${hostURL}/fitbit-signin`;
 
-  let state = `auth-walktojoy-${md5(session.user.name)}`;
+  //let state = `auth-walktojoy-${md5(session.user.name)}`;
 
   // Tutorial example: https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=23829X&redirect_uri=https%3A%2F%2Fwalktojoy.info%2Ffitbit-signin&scope=activity%20heartrate%20profile%20settings&expires_in=604800
 
   // long: activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight
   // short: activity%20profile%20settings%20
 
-  let scope = "activity%20heartrate%20profile%20settings";
 
-  let fitbitSignInLink = `https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=23829X&redirect_uri=${encodeURIComponent(
-    redirectURL
-  )}&state=${state}&scope=${scope}&expires_in=604800`;
+  const fitbitAuthorizeLink = "/fitbit-authorize";
 
-  let baselineSurveyLink = `https://umich.qualtrics.com/jfe/form/SV_81aWO5sJPDhGZNA`;
+  const baselineSurveyLink = `https://umich.qualtrics.com/jfe/form/SV_81aWO5sJPDhGZNA`;
 
 
   const handleChange = (event, newSetting) => {
@@ -271,7 +270,7 @@ export default function Main({
 
       <main className={styles.main}>
         <div>
-          <ToggleButtonGroup {...control}>
+          <ToggleButtonGroup {...control} style={{display: "none"}}>
             <ToggleButton value="incomplete" key="incomplete">
               Incomplete
             </ToggleButton>
@@ -283,6 +282,7 @@ export default function Main({
           <br />
           <Divider />
           <br />
+          <div>[Debug]</div>
           <div>Signed in as {session.user.name} </div>
           <div>Phase: {userInfo.phase} </div>
           <div>joinAt: {userInfo.joinAt} </div>
@@ -298,8 +298,33 @@ export default function Main({
           <br />
           <Divider />
           <h1>Hi {userInfo.preferredName},</h1>
-          <p>You are currently in {userInfo.phase == "baseline"? `a ${userInfo.phase} week.`: `an ${userInfo.phase} week.`}</p>
-          <p>Please complete all assigned tasks below:</p>
+          <p>
+          {
+            userInfo.phase == "baseline"? `You are now in a baseline week for 7 days.`: `The study is currently active.` 
+          }
+          </p>
+          <p>
+          {
+            userInfo.phase == "baseline"? `During the 7 days, we ask that you:`: `During the 6 weeks, we ask that you:` 
+          }
+          </p>
+          <p></p>
+          <ol>
+            <li>Keep your Fitbit authorized, and continue to wear your Fitbit device for at least 8 hoours each day.</li>
+
+            {
+              userInfo.phase == "baseline"? <li>Complete the Baseline Survey</li>: null 
+            }
+
+            {
+              userInfo.phase == "intervention"? <li>Continue to wear your Fitbit device for at least 8 hours each day.</li>: null 
+            }
+
+            {
+              userInfo.phase == "intervention"? <li>Complete all surveys your receive.</li>: null 
+            }
+            
+          </ol>
           <br />
           <br />
           <Fragment>
@@ -311,6 +336,18 @@ export default function Main({
               <br />
               <br />
           </Fragment>
+          <Fragment>
+              <Link href={GeneralUtility.doesFitbitInfoExist(userInfo)? "/": fitbitAuthorizeLink}>
+                <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.doesFitbitInfoExist(userInfo)? "success":"primary"}>
+                  {GeneralUtility.doesFitbitInfoExist(userInfo)? "Fitbit Authorized": "Authorize your Fitbit"}
+                </Button>
+              </Link>
+              <br />
+              <br />
+          </Fragment>
+
+          <br />
+          <br />
           <Divider />
           {
             displaySetting == "all" ?

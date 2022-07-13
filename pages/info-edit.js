@@ -138,8 +138,8 @@ export default function InfoEdit({ userInfo }) {
       </Head>
 
       <main className={styles.main}>
-        <h1>Welcome to WalkToJoy Study!</h1>
-        <h2>How should we call you?</h2>
+        <h1 className="project-text">Welcome to WalkToJoy Study!</h1>
+        <h2 className="project-text">How should we call you?</h2>
         <div>
           <TextField
             fullWidth
@@ -170,7 +170,9 @@ export default function InfoEdit({ userInfo }) {
           
           <br />
           <br />
-          <Button variant="contained" style={{ width: "100%" }} onClick={onSaveClick} >Save</Button>
+          <Button variant="contained" 
+          className="project-button"
+          onClick={onSaveClick} >Continue</Button>
         </div>
       </main>
 

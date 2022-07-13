@@ -145,10 +145,10 @@ export default function TimeSetting({ userInfo}) {
       </Head>
 
       <main className={styles.main}>
-
+        <h1 className="project-text">Waking Hours</h1>
 
         <div>
-            <div>On weekdays, when do you typically wakeup?</div><br />
+            <div>On <b>weekdays</b>, when do you typically <b>wakeup</b>?</div><br />
             <MobileTimePicker
               label="Weekday Wake Up Time"
               value={weekdayWakeup}
@@ -161,7 +161,7 @@ export default function TimeSetting({ userInfo}) {
             <br /><br />
             <Divider />
             <br />
-            <div>On weekdays, when do you typically go to bed?</div><br />
+            <div>On <b>weekdays</b>, when do you typically <b>go to bed</b>?</div><br />
             <MobileTimePicker
               label="Weekday Bed Time"
               value={weekdayBed}
@@ -174,7 +174,7 @@ export default function TimeSetting({ userInfo}) {
             <br /><br />
             <Divider />
             <br />
-            <div>On weekends, when do you typically wakeup?</div><br />
+            <div>On <b>weekends</b>, when do you typically <b>wakeup</b>?</div><br />
             <MobileTimePicker
               label="Weekend Wake Up Time"
               value={weekendWakeup}
@@ -187,7 +187,7 @@ export default function TimeSetting({ userInfo}) {
             <br /><br />
             <Divider />
             <br />
-            <div>On weekends, when do you typically go to bed?</div><br />
+            <div>On <b>weekends</b>, when do you typically <b>go to bed</b>?</div><br />
             <MobileTimePicker
               label="Weekend Bed Time"
               value={weekendBed}
@@ -204,7 +204,10 @@ export default function TimeSetting({ userInfo}) {
             <br />
             <Divider />
             <br />
-            <Button variant="contained" style={{ width: "100%" }} onClick={onSaveClick} >Save</Button>
+            <Button 
+              variant="contained" 
+                className="project-button"
+                onClick={onSaveClick} >Save</Button>
         </div>
       </main>
 

@@ -297,7 +297,7 @@ export default function Main({
           <div>Access Token: {isAccessTokenActive ? "active" : "inactive"}</div>
           <br />
           <Divider />
-          <h1>Hi {userInfo.preferredName},</h1>
+          <h1 className="project-text">Hi {userInfo.preferredName},</h1>
           <p>
           {
             userInfo.phase == "baseline"? `You are now in a baseline week for 7 days.`: `The study is currently active.` 
@@ -331,9 +331,10 @@ export default function Main({
               <Link href={baselineSurveyLink}>
                 <Button 
                 variant="contained" 
-                  className={isBaselineSurveyCompleted? "product-button-complete": "product-button"}
+                  className={isBaselineSurveyCompleted? "project-button-complete": "project-button-incomplete"}
                 >
-                  Complete the Baseline Survey
+                  {isBaselineSurveyCompleted? `Baseline Survey Completed`:"Complete the Baseline Survey"}
+                  
                 </Button>
               </Link>
               <br />
@@ -343,7 +344,7 @@ export default function Main({
               <Link href={GeneralUtility.doesFitbitInfoExist(userInfo)? "/": fitbitAuthorizeLink}>
                 <Button 
                 variant="contained" 
-                className={GeneralUtility.doesFitbitInfoExist(userInfo)? "product-button-complete": "product-button"}
+                className={GeneralUtility.doesFitbitInfoExist(userInfo)? "project-button-complete": "project-button-incomplete"}
                   >
                   {GeneralUtility.doesFitbitInfoExist(userInfo)? "Fitbit Authorized": "Authorize your Fitbit"}
                 </Button>
@@ -351,6 +352,17 @@ export default function Main({
               <br />
               <br />
           </Fragment>
+
+          <p>
+          {
+            userInfo.phase == "baseline"? `Following the 7 days, the study will be activated for the duration of 6 weeks.`: null
+          }
+          </p>
+          <p>
+          {
+            userInfo.phase == "baseline"? `Thank you for your contribution.`: null
+          }
+          </p>
 
           <br />
           <br />
@@ -442,13 +454,6 @@ export default function Main({
           >
             Sign out
           </Button>
-        </div>
-        <div>
-          <p>1/4 complete</p>
-          <p>
-            Once all tasks are completed, your study will be activiated the
-            upcoming Monday for the duration of 6 weeks.
-          </p>
         </div>
       </main>
 

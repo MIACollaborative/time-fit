@@ -81,9 +81,10 @@ export default function Home({}) {
       </Head>
 
       <main className={styles.main}>
-        <h1 className="project-color">
+        <h1 className="project-text">
         Walk To Joy
         </h1>
+        <br />
 
         <Button 
         variant="contained" 

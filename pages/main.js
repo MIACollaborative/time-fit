@@ -329,7 +329,10 @@ export default function Main({
           <br />
           <Fragment>
               <Link href={baselineSurveyLink}>
-                <Button variant="contained" style={{ width: "100%" }} color={isBaselineSurveyCompleted? "success":"primary"}>
+                <Button 
+                variant="contained" 
+                  className={isBaselineSurveyCompleted? "product-button-complete": "product-button"}
+                >
                   Complete the Baseline Survey
                 </Button>
               </Link>
@@ -338,7 +341,10 @@ export default function Main({
           </Fragment>
           <Fragment>
               <Link href={GeneralUtility.doesFitbitInfoExist(userInfo)? "/": fitbitAuthorizeLink}>
-                <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.doesFitbitInfoExist(userInfo)? "success":"primary"}>
+                <Button 
+                variant="contained" 
+                className={GeneralUtility.doesFitbitInfoExist(userInfo)? "product-button-complete": "product-button"}
+                  >
                   {GeneralUtility.doesFitbitInfoExist(userInfo)? "Fitbit Authorized": "Authorize your Fitbit"}
                 </Button>
               </Link>
@@ -461,6 +467,9 @@ export default function Main({
   );
 }
 
+// style={{ width: "100%" }} color={GeneralUtility.doesFitbitInfoExist(userInfo)? "success":"primary"}
+
+// style={{ width: "100%" }} color={isBaselineSurveyCompleted? "success":"primary"}
 
 /*
 {displaySetting == "all" ||

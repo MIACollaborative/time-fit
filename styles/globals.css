@@ -14,3 +14,23 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.project-text {
+  color: #E87667
+}
+
+.project-button {
+  background-color: #E87667 !important;
+  width: 100%;
+}
+
+.project-button-complete {
+  background-color: #21B98A !important;
+  width: 100%;
+}
+
+.project-button-incomplete {
+  color: #4A4A4A !important;
+  background-color: #E2E2E2 !important;
+  width: 100%;
+}

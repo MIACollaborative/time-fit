@@ -81,11 +81,15 @@ export default function Home({}) {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
+        <h1 className="project-text">
         Walk To Joy
         </h1>
+        <br />
 
-        <Button variant="contained" onClick={(event) => {
+        <Button 
+        variant="contained" 
+        className="project-button"
+        onClick={(event) => {
             signIn();
           }} >Sign in</Button>
 

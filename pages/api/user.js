@@ -55,7 +55,7 @@ export default async function handler(req, res) {
                 res.status(200).json({ result: "success" });
                 return;
         case "update_info":
-                
+
                 const { username,  ...rest } = req.body;
                 console.log(`rest: ${JSON.stringify(rest)}`);
                 const aUser = await prisma.users.update({
@@ -65,6 +65,16 @@ export default async function handler(req, res) {
     
                 res.status(200).json({ result: "success" });
                 return;
+        case "get_info":
+
+            const user = await prisma.users.findFirst({
+                where: { username: userName },
+            });
+
+            const userInfo = JSON.parse(JSON.stringify(user, replacer));
+
+            res.status(200).json({ result: userInfo });
+            return;
         default:
             return;
     }

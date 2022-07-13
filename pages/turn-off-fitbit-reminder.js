@@ -130,14 +130,16 @@ export default function TurnOffFitbitReminder({ userInfo }) {
 
       <main className={styles.main}>
 
-        <h1>Turn off Fitbit reminders to move</h1>
+        <h1 className="project-text">Turn off Fitbit reminders to move</h1>
         <img src='/image/svg/turn-off-fitbit-reminders.svg' alt="Reminder"/>
 
 
         <br />
         <br />
-        <Button variant="contained" style={{ width: "100%" }}
-
+        <Button 
+        
+          variant="contained"
+          className="project-button"
           onClick={(event) => {
             onSaveClick(event);
             return;

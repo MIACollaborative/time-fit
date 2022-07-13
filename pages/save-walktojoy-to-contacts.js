@@ -127,12 +127,14 @@ export default function TurnOffFitbitReminder({ userInfo }) {
       </Head>
 
       <main className={styles.main}>
-        <h1>Save WalkToJoy to your Contacts</h1>
+        <h1 className="project-text">Save WalkToJoy to your Contacts</h1>
         <img src='/image/svg/save-to-contacts.svg' alt="Save to contacts"/>
 
         <br />
         <br />
-        <Button variant="contained" style={{ width: "100%" }}
+        <Button 
+          className="project-button"
+          variant="contained"
 
           onClick={(event) => {
             onSaveClick(event);

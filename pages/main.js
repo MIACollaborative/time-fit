@@ -36,13 +36,13 @@ export async function getServerSideProps(ctx) {
   const session = await getSession(ctx);
   console.log(`main.getServerSideProps: session: ${JSON.stringify(session)}`);
 
-  /*
+  
   if (!session) {
     return {
       props: {},
     };
   }
-  */
+  
 
   let userName = session.user.name;
 

@@ -269,25 +269,7 @@ export default function Main({
               All
             </ToggleButton>
           </ToggleButtonGroup>
-          <br />
-          <br />
-          <Divider />
-          <br />
-          <div>[Debug]</div>
-          <div>Signed in as {session.user.name} </div>
-          <div>Phase: {userInfo.phase} </div>
-          <div>joinAt: {userInfo.joinAt} </div>
-          <div>activateAt: {userInfo.activateAt} </div>
-          <div>Baseline survey completed: {JSON.stringify(isBaselineSurveyCompleted)} </div>
-          <div>
-            Fitbit:{" "}
-            {GeneralUtility.doesFitbitInfoExist(userInfo)
-              ? "connected"
-              : "not connected"}
-          </div>
-          <div>Access Token: {isAccessTokenActive ? "active" : "inactive"}</div>
-          <br />
-          <Divider />
+          
           <h1 className="project-text">Hi {userInfo.preferredName},</h1>
           <p>
           {
@@ -354,8 +336,21 @@ export default function Main({
             userInfo.phase == "baseline"? `Thank you for your contribution.`: null
           }
           </p>
-
+          <Divider />
           <br />
+          <div>[Debug]</div>
+          <div>Signed in as {session.user.name} </div>
+          <div>Phase: {userInfo.phase} </div>
+          <div>joinAt: {userInfo.joinAt} </div>
+          <div>activateAt: {userInfo.activateAt} </div>
+          <div>Baseline survey completed: {JSON.stringify(isBaselineSurveyCompleted)} </div>
+          <div>
+            Fitbit:{" "}
+            {GeneralUtility.doesFitbitInfoExist(userInfo)
+              ? "connected"
+              : "not connected"}
+          </div>
+          <div>Access Token: {isAccessTokenActive ? "active" : "inactive"}</div>
           <br />
           <Divider />
           {

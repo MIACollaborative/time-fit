@@ -84,7 +84,7 @@ export default function Home({}) {
         className="project-button"
         onClick={(event) => {
             signIn();
-          }} >Sign in</Button>
+          }} >Continue</Button>
 
 
       </Fragment>

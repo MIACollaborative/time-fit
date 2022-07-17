@@ -1,6 +1,3 @@
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
 import Layout from "../component/Layout";
 import md5 from "md5";
 
@@ -11,7 +8,6 @@ import logger from "../lib/logger";
 */
 
 import GeneralUtility from "../lib/GeneralUtility.mjs";
-import { inspect } from "util";
 
 import Link from "next/link";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";

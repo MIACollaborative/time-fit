@@ -1,7 +1,4 @@
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
-import Layout from '../component/Layout'
+import Layout from '../component/Layout';
 /*
 import logger from "../lib/logger";
 
@@ -263,7 +260,6 @@ export default function Main({
 
   return (
     <Layout title={"Walk To Joy"} description={""}>
-    <Fragment>
     <div>
           <ToggleButtonGroup {...control} style={{display: "none"}}>
             <ToggleButton value="incomplete" key="incomplete">
@@ -450,8 +446,6 @@ export default function Main({
             Sign out
           </Button>
         </div>
-
-    </Fragment>
     </Layout>
 
   );

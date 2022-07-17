@@ -60,6 +60,8 @@ export default NextAuth({
           // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
         }
       },
+
+      
       /*
       callbacks: {
         async session({ session, token }) {
@@ -78,6 +80,12 @@ export default NextAuth({
       */
     }),
   ],
+  theme: {
+    colorScheme: "light", // "auto" | "dark" | "light"
+    brandColor: "#E87667", // Hex color code
+    logo: "/image/svg/login-icon.svg", // Absolute URL to image
+    buttonText: ""  // Hex color code
+  }
   /*
   session: {
     jwt: true,

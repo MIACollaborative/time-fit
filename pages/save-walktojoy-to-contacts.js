@@ -119,7 +119,7 @@ export default function TurnOffFitbitReminder({ userInfo }) {
   }
 
   return (
-    <Layout title={"Turn Off Fitbit Reminder"} description={""}>
+    <Layout title={"Save WalkToJoy to your Contacts"} description={""}>
         <h1 className="project-text">Save WalkToJoy to your Contacts</h1>
         <img src='/image/svg/save-to-contacts.svg' alt="Save to contacts"/>
 

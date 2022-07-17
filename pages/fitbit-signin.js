@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
+import Layout from "../component/Layout";
 //import logger from "../lib/logger";
 
 import prisma from "../lib/prisma";
@@ -229,15 +230,7 @@ export default function FitbitSignin({result, fitbitId}) {
 
 
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Walk To Joy</title>
-        <meta name="description" content=">Walk To Joy" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        
+    <Layout title={"Walk To Joy"} description={""}>
         
         <div>
         {
@@ -261,24 +254,15 @@ export default function FitbitSignin({result, fitbitId}) {
 
         </div>
 
-        <Button variant="contained" style={{ width: "100%" }} disabled={isFitbitLoading} onClick={(event) => {
+        <Button variant="contained" 
+        className="project-button"
+        disabled={isFitbitLoading} onClick={(event) => {
             router.push("/main");
             return;
           }} >Done</Button>
-      </main>
 
-      <footer className={styles.main}>
-        <div>WalkToJoy Study</div>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <div>School of Information</div>
-          <div>University of Michigan</div>
-        </a>
-      </footer>
-    </div>
+
+    </Layout>
   );
 }
 

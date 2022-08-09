@@ -36,6 +36,7 @@ yarn-error.log*
 
 # Keep environment variables out of version control
 .env
+.nvmrc
 
 # local env files
 .env.local

@@ -2,7 +2,21 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+First, run MongoDB
+
+```bash
+
+# Mac: create ~/data/mdata folder first, and then run the following command in the terminal:
+mongod --port 27017 --dbpath ~/data/mdata --replSet rs0 --bind_ip localhost
+
+
+
+# Windows: create C:\datea\db  folder first, and then run the following command in the terminal:
+mongod  --port 27017 --dbpath "c:\data\db" --replSet rs0 --bind_ip localhost
+
+```
+
+Second, run the development server:
 
 ```bash
 npm run dev

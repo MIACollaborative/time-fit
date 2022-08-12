@@ -25,7 +25,9 @@ export async function getServerSideProps(ctx) {
     where: { username: session.user.name },
   });
 
-  let targetDateStart = DateTime.fromISO("2022-03-10");
+  // "2022-03-10"
+  // change to
+  let targetDateStart = DateTime.fromISO("2022-07-22");
   let numOfDays = 1;
 
 

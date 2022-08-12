@@ -26,7 +26,7 @@ export async function getServerSideProps(ctx) {
   });
 
   let targetDateStart = DateTime.fromISO("2022-03-10");
-  let targetDateEnd = DateTime.fromISO("2022-03-10");
+  let targetDateEnd = DateTime.fromISO("2022-03-14");
 
   //console.log(`usr: ${JSON.stringify(user, null, 2)}`);
 

@@ -26,14 +26,13 @@ export async function getServerSideProps(ctx) {
   });
 
   let targetDateStart = DateTime.fromISO("2022-03-10");
-  let targetDateEnd = DateTime.fromISO("2022-03-14");
+  let numOfDays = 1;
 
-  //console.log(`usr: ${JSON.stringify(user, null, 2)}`);
 
-  const activityResult = await DatabaseUtility.queryAndStoreFitbitIntradayHeartRateAtTargetDateRangeForUser(user, targetDateStart, targetDateEnd, false);
+  const activityResult = await DatabaseUtility.queryAndStoreFitbitIntradayHeartRateAtTargetDateForUser(user, targetDateStart, false, numOfDays);
 
   return {
-    props: { result: activityResult, dateString: `${targetDateStart.toISO()} - ${targetDateEnd.toISO()}`},
+    props: { result: activityResult, dateString: `${targetDateStart.toISO()} with ${numOfDays} day(s)`},
   };
 }
 

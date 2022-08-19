@@ -31,7 +31,7 @@ export async function getServerSideProps(ctx) {
   let numOfDays = 1;
 
 
-  const activityResult = await DatabaseUtility.queryAndStoreFitbitIntradayHeartRateAtTargetDateForUser(user, targetDateStart, false, numOfDays);
+  const activityResult = await DatabaseUtility.queryAndStoreFitbitIntradayDataAtTargetDateForUser(user, targetDateStart, false, numOfDays);
 
   return {
     props: { result: activityResult, dateString: `${targetDateStart.toISO()} with ${numOfDays} day(s)`},

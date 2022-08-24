@@ -1,7 +1,7 @@
 //import md5 from "md5";
 //import ServerService from "./utilities/ServerService";
 import { timer } from "rxjs";
-import { map, takeWhile} from "rxjs/operators";
+import { map, takeWhile } from "rxjs/operators";
 import prisma from "../lib/prisma.mjs";
 import cryptoRandomString from 'crypto-random-string';
 import csvWriter from "csv-write-stream";
@@ -9,25 +9,48 @@ import fs from "fs";
 import md5 from "md5";
 import { DateTime } from "luxon";
 
-async function insertUser(newStudyCodeObj){
-  const {username, ...rest} = newStudyCodeObj;
 
-  let queryObj = {
-      where: {
-        username: newStudyCodeObj.username
+async function deleteAccountWithPrefix(prefix){
+  const deleteUsers = await prisma.users.deleteMany({
+    where: {
+      username: {
+        contains: prefix,
       },
-      update: {
-          ...rest
-      },
-      create: newStudyCodeObj,
-  };
-
-  console.log(`queryObj: ${JSON.stringify(queryObj,null, 2)}`);
-
-  await prisma.users.upsert(queryObj);
+    },
+  })
 }
 
-async function writeToCSV(resultList, outputFileName){
+async function insertUser(newStudyCodeObj) {
+  const { username, ...rest } = newStudyCodeObj;
+
+
+  let existRecord = await prisma.users.findFirst({
+    where: {
+      username: username
+    }
+  });
+
+  console.log(`existRecord: ${existRecord}`);
+
+  if (existRecord == null) {
+    const user = await prisma.users.create({
+      data: newStudyCodeObj
+    })
+  }
+  else {
+
+    const updateUser = await prisma.users.update({
+      where: {
+        username: username
+      },
+      data: {
+        ...rest
+      },
+    })
+  }
+}
+
+async function writeToCSV(resultList, outputFileName) {
   var writer = csvWriter({ sendHeaders: true });
   writer.pipe(fs.createWriteStream(outputFileName));
   resultList.forEach((result) => {
@@ -57,18 +80,19 @@ for(let i = 17; i < 18; i++){
 }
 */
 
-function generateGroupAssignmentList(populationSize){
+function generateGroupAssignmentList(populationSize) {
+  console.log(`generateGroupAssignmentList for ${populationSize} participants`);
   let gList = [];
 
-  for(let i = 0; i < populationSize; i++){
-      let groupAssignment = {
-          gif: Math.floor(i/4),
-          salience: Math.floor(i%4/2),
-          modification: i%2
-      };
-      console.log(`${i}: [${groupAssignment.gif}, ${groupAssignment.salience}, ${groupAssignment.modification}]`);
+  for (let i = 0; i < populationSize; i++) {
+    let groupAssignment = {
+      gif: Math.floor(i / 4)%2,
+      salience: Math.floor(i / 2)%2,
+      modification: i % 2
+    };
+    console.log(`${i}: [${groupAssignment.gif}, ${groupAssignment.salience}, ${groupAssignment.modification}]`);
 
-      gList.push(groupAssignment);
+    gList.push(groupAssignment);
   }
 
   return gList;
@@ -80,39 +104,37 @@ function generateGroupAssignmentList(populationSize){
 let initialDelay = 1000;
 let interval = 1000;
 let startIndex = 1;
-let endIndex = 5;
+let endIndex = 51
 
-let prefix = `alpha`;
+let prefix = `participant`;
+
 
 
 let groupAssignmnetList = generateGroupAssignmentList(endIndex - startIndex);
 
-console.log();
 
 let resultList = [];
 
-for(let i = startIndex; i < endIndex; i++){
+for (let i = startIndex; i < endIndex; i++) {
   let username = `${prefix}${i}`;
-    
+
   //let hashStudyCode = md5(studyCode);
   // cryptoRandomString({length: 10, type: 'alphanumeric'});
   // let hashStudyCode = cryptoRandomString({length: 8, characters: 'ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789'});
-  let password = cryptoRandomString({length: 8, characters: 'abcdefghijkmnpqrstuvwxyz023456789'});
+  let password = cryptoRandomString({ length: 8, characters: 'abcdefghijkmnpqrstuvwxyz023456789' });
 
   let hash = md5(password);
 
   let gAssignment = groupAssignmnetList[i - startIndex];
 
-  console.log(`[${username}]: ${password}`);
+  console.log(`[${username}]: ${password}: ${gAssignment}`);
   let newStudyCodeObj = {
     username,
     password,
-    hash
-    /*
-    gif: gAssignment[0] ==1? true: false,
-    salience: gAssignment[1] ==1? true: false,
-    modification: gAssignment[2] ==1? true: false,
-    */
+    hash,
+    gif: gAssignment.gif ==1? true: false,
+    salience: gAssignment.salience ==1? true: false,
+    modification: gAssignment.modification ==1? true: false,
   };
 
   resultList.push(newStudyCodeObj);
@@ -158,7 +180,10 @@ timer(initialDelay, interval).pipe(
   console.log(newStudyCodeObj);
 
   insertUser(newStudyCodeObj);
-
+  
+  
+  
+  //deleteAccountWithPrefix(prefix);
 
 
   /*
@@ -172,3 +197,5 @@ timer(initialDelay, interval).pipe(
 
 
 });
+
+

@@ -29,7 +29,9 @@ for(let i = 17; i < 18; i++){
 let initialDelay = 1000;
 let interval = 1000;
 let startIndex = 1;
-let endIndex = 5;
+let endIndex = 51;
+
+let prefix = `participant`;
 
 timer(initialDelay, interval).pipe(
   takeWhile(x => {
@@ -39,7 +41,7 @@ timer(initialDelay, interval).pipe(
     // pilot
     //let studyCode = `pilotB${startIndex + x}`;
     // study
-    let studyCode = `participant${startIndex + x}`;
+    let studyCode = `${prefix}${startIndex + x}`;
     
     //let hashStudyCode = md5(studyCode);
     // cryptoRandomString({length: 10, type: 'alphanumeric'});

@@ -10,9 +10,9 @@ import md5 from "md5";
 import { DateTime } from "luxon";
 
 async function insertUser(newStudyCodeObj){
-  const {studyId, ...rest} = newStudyCodeObj;
+  const {username, ...rest} = newStudyCodeObj;
 
-  await prisma.users.upsert({
+  let queryObj = {
       where: {
         username: newStudyCodeObj.username
       },
@@ -20,7 +20,11 @@ async function insertUser(newStudyCodeObj){
           ...rest
       },
       create: newStudyCodeObj,
-  })
+  };
+
+  console.log(`queryObj: ${JSON.stringify(queryObj,null, 2)}`);
+
+  await prisma.users.upsert(queryObj);
 }
 
 async function writeToCSV(resultList, outputFileName){

@@ -28,7 +28,7 @@ console.log(`filteredUpdateList.length: ${filteredUpdateList.length}`);
 /*
 let resultList = filteredUpdateList.map((fitbitUpdate) => {
     // false: avoid storing the data
-    return DatabaseUtility.queryAndStoreFitbitDataByFitbitUpdate(fitbitUpdate, false);
+    return DatabaseUtility.queryAndStoreFitbitSummaryByFitbitUpdate(fitbitUpdate, false, false);
 });
 console.log(`resultList: ${JSON.stringify(resultList, null, 2)}`);
 console.log(`resultList.length: ${resultList.length}`);

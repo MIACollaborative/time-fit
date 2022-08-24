@@ -171,8 +171,7 @@ export async function getServerSideProps(ctx) {
         {
           updatedAt: "desc",
         },
-      ],
-      take: queryLimit
+      ]
     });
 
     messageInfoList = JSON.parse(JSON.stringify(messageList, replacer));

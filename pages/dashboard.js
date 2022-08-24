@@ -82,6 +82,8 @@ export async function getServerSideProps(ctx) {
   let messageList = [];
   let messageInfoList = [];
 
+  let queryLimit = 150;
+
   if (adminUsernameList.includes(userName)) {
     responseList = await prisma.response.findMany({
       /*
@@ -96,7 +98,9 @@ export async function getServerSideProps(ctx) {
         {
           updatedAt: "desc",
         },
+        
       ],
+      take: queryLimit
     });
 
     responseInfoList = JSON.parse(JSON.stringify(responseList, replacer));
@@ -112,6 +116,7 @@ export async function getServerSideProps(ctx) {
           updatedAt: "desc",
         },
       ],
+      take: queryLimit
     });
 
     fitbitSubscriptionInfoList = JSON.parse(JSON.stringify(fitbitSubscriptionList, replacer));
@@ -125,6 +130,7 @@ export async function getServerSideProps(ctx) {
           updatedAt: "desc",
         },
       ],
+      take: queryLimit
     });
 
     fitbitNotificationInfoList = JSON.parse(JSON.stringify(fitbitNotificationList, replacer));
@@ -140,6 +146,7 @@ export async function getServerSideProps(ctx) {
           updatedAt: "desc",
         },
       ],
+      take: queryLimit
     });
 
     fitbitDataInfoList = JSON.parse(JSON.stringify(fitbitDataList, replacer));
@@ -152,6 +159,7 @@ export async function getServerSideProps(ctx) {
           updatedAt: "desc",
         },
       ],
+      take: queryLimit
     });
 
     taskLogInfoList = JSON.parse(JSON.stringify(taskLogList, replacer));
@@ -164,6 +172,7 @@ export async function getServerSideProps(ctx) {
           updatedAt: "desc",
         },
       ],
+      take: queryLimit
     });
 
     messageInfoList = JSON.parse(JSON.stringify(messageList, replacer));

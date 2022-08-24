@@ -53,6 +53,25 @@ for(let i = 17; i < 18; i++){
 }
 */
 
+function generateGroupAssignmentList(populationSize){
+  let gList = [];
+
+  for(let i = 0; i < populationSize; i++){
+      let groupAssignment = {
+          gif: Math.floor(i/4),
+          salience: Math.floor(i%4/2),
+          modification: i%2
+      };
+      console.log(`${i}: [${groupAssignment.gif}, ${groupAssignment.salience}, ${groupAssignment.modification}]`);
+
+      gList.push(groupAssignment);
+  }
+
+  return gList;
+}
+
+
+
 
 let initialDelay = 1000;
 let interval = 1000;
@@ -60,6 +79,11 @@ let startIndex = 1;
 let endIndex = 5;
 
 let prefix = `alpha`;
+
+
+let groupAssignmnetList = generateGroupAssignmentList(endIndex - startIndex);
+
+console.log();
 
 let resultList = [];
 
@@ -73,11 +97,18 @@ for(let i = startIndex; i < endIndex; i++){
 
   let hash = md5(password);
 
+  let gAssignment = groupAssignmnetList[i - startIndex];
+
   console.log(`[${username}]: ${password}`);
   let newStudyCodeObj = {
     username,
     password,
     hash
+    /*
+    gif: gAssignment[0] ==1? true: false,
+    salience: gAssignment[1] ==1? true: false,
+    modification: gAssignment[2] ==1? true: false,
+    */
   };
 
   resultList.push(newStudyCodeObj);

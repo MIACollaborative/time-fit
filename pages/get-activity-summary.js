@@ -74,7 +74,7 @@ export async function getServerSideProps(ctx) {
 
   //console.log(`usr: ${JSON.stringify(user, null, 2)}`);
 
-  const activityResult = await DatabaseUtility.queryAndStoreFitbitActivitySummaryAtTargetDateForUser(user, targetDate, false);
+  const activityResult = await DatabaseUtility.queryAndStoreFitbitActivitySummaryAtTargetDateForUser(user, targetDate, false, 1, false);
 
   return {
     props: { result: activityResult, dateString: targetDate.toISO()},

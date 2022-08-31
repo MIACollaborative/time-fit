@@ -340,7 +340,7 @@ export default function Main({
           <br />
           <div>[Debug]</div>
           <div>Signed in as {session.user.name} </div>
-          <div>Phone: {session.user.phone} </div>
+          <div>Phone: {userInfo.phone} </div>
           <div>Phase: {userInfo.phase} </div>
           <div>joinAt: {userInfo.joinAt} </div>
           <div>activateAt: {userInfo.activateAt} </div>

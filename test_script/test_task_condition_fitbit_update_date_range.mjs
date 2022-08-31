@@ -29,22 +29,22 @@ let condition = {
             // Start: the start of the day for that day (e.g., 00:00 am on 08/31)
             // Removing it means we are consider a time window starting from the very beginning of time (year 200 for impelementation)
             start:{
-                // reference: currently only support "now" as the basis
+                // reference: currently only support "today" as the basis
                 reference: "today", 
 
                 // offset, the time that will be added ("plus") or substracted ("minus") from the reference
-                // Plus 0 hours basically means using the reference point directly
+                // Plus 0 days basically means using the reference point directly
                 offset: {type: "minus", value: {days: 0}}
             },
 
             // End: the start of the day for that day (e.g., 23:59 pm on 08/31)
             // Removing it means we are consider the end of today
             end:{
-                // reference: currently only support "now" as the basis
+                // reference: currently only support "today" as the basis
                 reference: "today", 
 
                 // offset, the time that will be added ("plus") or substracted ("minus") from the reference
-                // Plus 0 hours basically means using the reference point directly
+                // Plus 0 days basically means using the reference point directly
                 offset: {type: "minus", value: {days: 0}}
             }
         }

@@ -374,6 +374,17 @@ export default function Main({
               <br />
             </Fragment>
           ) : null}
+          {displaySetting == "all" ? (
+            <Fragment>
+              <Link href={"/phone-edit"}>
+                <Button variant="contained" style={{ width: "100%" }}>
+                  Add/Update phone number
+                </Button>
+              </Link>
+              <br />
+              <br />
+            </Fragment>
+          ) : null}
             {displaySetting == "all" ? (
             <Fragment>
               <Link href={"/get-activity-summary"}>

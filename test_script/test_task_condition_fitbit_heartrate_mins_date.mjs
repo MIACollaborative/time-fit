@@ -25,10 +25,10 @@ let condition = {
     // surveyFilledByThisPerson -> check whether a survey response is received within a time window
     type: "hasHeartRateIntradayMinutesAboveThresholdForPersonByDate",
     criteria: {
+        // check whether minutes >= wearingLowerBoundMinutes
         wearingLowerBoundMinutes: 60 * 7,
         period: {
-            // Start: the start of the day for that day (e.g., 00:00 am on 08/31)
-            // Removing it means we are consider a time window starting from the very beginning of time (year 200 for impelementation)
+            // Start: the date: 2022-08-31
             start:{
                 // reference: currently only support "today" as the basis
                 reference: "today", 
@@ -38,8 +38,7 @@ let condition = {
                 offset: {type: "minus", value: {days: 0}}
             },
 
-            // End: the start of the day for that day (e.g., 23:59 pm on 08/31)
-            // Removing it means we are consider the end of today
+            // not using end date
             /*
             end:{
                 // reference: currently only support "today" as the basis

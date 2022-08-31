@@ -22,13 +22,12 @@ const user = await prisma.users.findFirst({
 let dateTime = DateTime.fromJSDate(new Date(2022, 7, 31, 14, 0, 0));
 
 let condition = {
-    // surveyFilledByThisPerson -> check whether a survey response is received within a time window
     type: "hasHeartRateIntradayMinutesAboveThresholdForPersonByDate",
     criteria: {
         // check whether minutes >= wearingLowerBoundMinutes
         wearingLowerBoundMinutes: 60 * 7,
         period: {
-            // Start: the date: 2022-08-31
+            // Start: the date, 2022-08-31
             start:{
                 // reference: currently only support "today" as the basis
                 reference: "today", 

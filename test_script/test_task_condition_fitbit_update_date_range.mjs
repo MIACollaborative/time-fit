@@ -18,6 +18,7 @@ const user = await prisma.users.findFirst({
 })
 
 
+// 2022.08.31 02:00 PM (EDT)
 let dateTime = DateTime.fromJSDate(new Date(2022, 7, 31, 14, 0, 0));
 
 let condition = {
@@ -25,7 +26,7 @@ let condition = {
     type: "hasFitbitUpdateForPersonByDateRange",
     criteria: {
         period: {
-            // Start: the starting piont of the time window to consider
+            // Start: the start of the day for that day (e.g., 00:00 am on 08/31)
             // Removing it means we are consider a time window starting from the very beginning of time (year 200 for impelementation)
             start:{
                 // reference: currently only support "now" as the basis
@@ -33,18 +34,18 @@ let condition = {
 
                 // offset, the time that will be added ("plus") or substracted ("minus") from the reference
                 // Plus 0 hours basically means using the reference point directly
-                offset: {type: "minus", value: {days: 6}}
+                offset: {type: "minus", value: {days: 0}}
             },
 
-            // End: the end point of the time window to consider
-            // Removing it means we are consider a time window up to this point
+            // End: the start of the day for that day (e.g., 23:59 pm on 08/31)
+            // Removing it means we are consider the end of today
             end:{
                 // reference: currently only support "now" as the basis
                 reference: "today", 
 
                 // offset, the time that will be added ("plus") or substracted ("minus") from the reference
                 // Plus 0 hours basically means using the reference point directly
-                offset: {type: "minus", value: {days: 6}}
+                offset: {type: "minus", value: {days: 0}}
             }
         }
     }

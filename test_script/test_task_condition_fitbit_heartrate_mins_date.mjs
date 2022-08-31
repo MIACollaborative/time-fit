@@ -23,8 +23,9 @@ let dateTime = DateTime.fromJSDate(new Date(2022, 7, 31, 14, 0, 0));
 
 let condition = {
     // surveyFilledByThisPerson -> check whether a survey response is received within a time window
-    type: "hasHeartRateIntradayForPersonByDate",
+    type: "hasHeartRateIntradayMinutesAboveThresholdForPersonByDate",
     criteria: {
+        wearingLowerBoundMinutes: 60 * 7,
         period: {
             // Start: the start of the day for that day (e.g., 00:00 am on 08/31)
             // Removing it means we are consider a time window starting from the very beginning of time (year 200 for impelementation)

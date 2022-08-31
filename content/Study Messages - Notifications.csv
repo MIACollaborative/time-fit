@@ -1,22 +1,22 @@
 id,group,interventionMessage,topic,note
-1,prompt,Welcome to the WalkToJoy study! We greatly appreciate your contribution. Please take a moment to complete the Baseline survey to start your intervention.,Onboarding/Baseline survey ,
-2,prompt-re,"Hi [name], we havn't heard from you for a while. Please complete the Baseline survey to start your intervention.",Onboarding/Baseline survey ,After 24hours
+1,prompt,Welcome to the WalkToJoy study [name]! We greatly appreciate your contribution. Please take a moment to complete the Baseline survey on the WalkToJoy app.,Onboarding/Baseline survey ,"adherence reminder after 24hours, 48hours"
+2,,,,
 3,,,,
-4,prompt,Great job completing your walks this past week! Please take a moment to complete your Weekly check-in survey: <link> .,Weekly check-in survey,
-5,prompt,Pat yourself on the back for completing your walks this past week! Please take a moment to complete your first Weekly check-in survey: <link> .,FIRST Weekly check-in survey,
-6,prompt-re,"Knock knock. Hi [name], please take a moment to complete your Weekly check-in survey: <link> .",Weekly check-in survey,After 24hours
-7,prompt-re,Uh-oh. We have lost connection with your Fitbit. Please open your Fitbit app to reconnect.,Fitbit connection,
-8,,,,
-9,,,Walk Modification,
-10,prompt,"Remember to enhance your walking experience on your upcoming walks. Here is what you said you would try this week: ""[response|SV_81aWO5sJPDhGZNA|last]"".",Walk Modification Reminder,Tuesday/Thursday
+4,prompt,Great job completing your walks this past week! Please take a moment to complete your Weekly check-in survey: <link> .,Weekly check-in survey,For intervention week 2-6
+5,prompt,Pat yourself on the back for completing your walks this past week! Please take a moment to complete your first Weekly check-in survey: <link> .,FIRST Weekly check-in survey,For intervention week 1
+6,prompt-re,"Knock knock. Hi [name], please complete your Weekly check-in survey (See previous message for the link).",Weekly check-in survey,"After 24hours, 48 hours"
+7,prompt-re,Uh-oh. We have lost connection with your Fitbit. Please open your Fitbit app to reconnect.,Fitbit update,No new data received from Fitbit app for 2 consecutive days: x3 days at wakeup+2hr
+8,prompt-re,Knock knock. We havn't been detecting much activity on your Fitbit device. Please make sure to wear your Fitbit for atleast 8 hours each day. :),Fitbit wearing,Non-worn days for 2 consecutive days: x3 days at wakeup+1hour
+9,,,,
+10,prompt,"Remember to enhance your walking experience on your upcoming walks. Here is what you said you would try this week: ""[response|SV_81aWO5sJPDhGZNA|last]"".",Planned Walk reminder,Tuesday/Thursday
 11,prompt,"[name], it's time to reflect on today's walk(s). Please take a moment to complete this survey: <link> .",Salience Follow-up,
 12,,,,
 13,prompt,"[name], please take a moment to report on today's overall walking experience: <link> .",End-of-day,
-14,,,,
+14,prompt-re,"[name], this is a friendly reminder to complete your End-of-day survey this evening. Happy walking!",End-of-day,Didn't fill out survey for 2 consecutive days: x2 days at 12PM
 15,prompt,"[name], here is your weekly summary for this past week: You have walked [7-day-average-steps] steps on average each day, and went for a total of [7-day-walks-over-10mins] sustained walks for over 10 minutes this past week. Keep up the good work!",Data Summary,
-16,,,,
-17,,,,
+16,prompt,"[name], it's time to plan for your walks for this week: <link> .",Planning survey,
+17,prompt-re,"Hey [name], this is a friendly reminder to plan for your walks for this week (See previous message for the link).",Planning survey,After 8 hours
 18,,,,
-19,,,,
-20,,,,
+19,investigator,[PID] has accumulated 6 consecutive days of Fitbit non-worn days. Give this person a call.,Phone call reminder to investigator,IF non-worn days for 6 consecutive days
+20,investigator,[PID] has missed for 5 consecutive days of End-of-day survey. Give this person a call.,Phone call reminder to investigator,IF missed end-of-day survey for 5 consecutive days
 21,,,,

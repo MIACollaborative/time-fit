@@ -23,6 +23,10 @@ let dateTime = DateTime.fromJSDate(new Date(2022, 7, 31, 14, 0, 0));
 
 let condition = {
     type: "hasHeartRateIntradayMinutesAboveThresholdForPersonByDate",
+
+    // if we want the opposite outcome -> basically negate the outcome: true -> false, false -> true
+    opposite: true,
+
     criteria: {
         // check whether minutes >= wearingLowerBoundMinutes
         wearingLowerBoundMinutes: 60 * 7,

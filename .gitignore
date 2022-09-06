@@ -14,7 +14,7 @@
 /out/
 
 # yearn
-# /.yarn/
+/.yarn/
 
 # production
 /build

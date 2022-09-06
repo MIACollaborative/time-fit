@@ -13,6 +13,9 @@
 /.next/
 /out/
 
+# yearn
+# /.yarn/
+
 # production
 /build
 

@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run MongoDB
+### Run MongoDB
 
 ```bash
 
@@ -16,7 +16,38 @@ mongod  --port 27017 --dbpath "c:\data\db" --replSet rs0 --bind_ip localhost
 
 ```
 
-Second, run the development server:
+### Configure environment settings
+
+.env 
+
+```bash
+
+# Environment variables declared in this file are automatically made available to Prisma.
+# See the documentation for more detail: https://pris.ly/d/prisma-schema#accessing-environment-variables-from-the-schema
+
+# Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server, MongoDB (Preview) and CockroachDB (Preview).
+# See the documentation for all the connection string options: https://pris.ly/d/connection-strings
+
+DATABASE_URL="mongodb://localhost:27017/walk_to_joy?readPreference=primary&appname=MongoDB%20Compass&ssl=false&retryWrites=false"
+
+TWILIO_ACCOUNT_SID=[twilio account id]
+TWILIO_AUTH_TOKEN=[twilio authentication token]
+FITBIT_SUBSCRIPTION_VERIFICATION_CODE=[fitbit subscription verification code]
+RESEARCH_INVESTIGATOR_PHONE=[research investigator phone number for SMS]
+
+```
+
+
+.env.local
+
+```bash
+
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=[the secret]
+
+```
+
+### Run the development server:
 
 ```bash
 npm run dev

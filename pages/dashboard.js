@@ -204,7 +204,7 @@ export async function getServerSideProps(ctx) {
   let hostURL = `${process.env.NEXTAUTH_URL}`;
 
   return {
-    props: { responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, taskLogInfoList, messageInfoList, userInfo, hostURL},
+    props: { responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, taskLogInfoList, taskLogInvestigatorInfoList,  messageInfoList, userInfo, hostURL},
   };
 }
 

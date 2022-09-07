@@ -258,6 +258,8 @@ export default function Main({
     exclusive: true,
   };
 
+  // GeneralUtility.doesFitbitInfoExist(userInfo)? "/": fitbitAuthorizeLink
+
   return (
     <Layout title={"Walk To Joy"} description={""}>
     <div>
@@ -314,7 +316,7 @@ export default function Main({
               <br />
           </Fragment>
           <Fragment>
-              <Link href={GeneralUtility.doesFitbitInfoExist(userInfo)? "/": fitbitAuthorizeLink}>
+              <Link href={fitbitAuthorizeLink}>
                 <Button 
                 variant="contained" 
                 className={GeneralUtility.doesFitbitInfoExist(userInfo)? "project-button-complete": "project-button-incomplete"}

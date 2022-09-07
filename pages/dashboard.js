@@ -157,8 +157,10 @@ export async function getServerSideProps(ctx) {
 
   if (adminUsernameList.includes(userName)) {
     taskLogList = await prisma.taskLog.findMany({
-      NOT: {
-        label: {contains: "investigator"}
+      where: {
+        NOT: {
+          label: {contains: "investigator"}
+        },
       },
       orderBy: [
         {

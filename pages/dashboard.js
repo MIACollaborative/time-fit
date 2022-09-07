@@ -79,6 +79,9 @@ export async function getServerSideProps(ctx) {
   let taskLogList = [];
   let taskLogInfoList = [];
 
+  let taskLogInvestigatorList = [];
+  let taskLogInvestigatorInfoList = [];
+
   let messageList = [];
   let messageInfoList = [];
 
@@ -154,6 +157,9 @@ export async function getServerSideProps(ctx) {
 
   if (adminUsernameList.includes(userName)) {
     taskLogList = await prisma.taskLog.findMany({
+      NOT: {
+        label: {contains: "investigator"}
+      },
       orderBy: [
         {
           updatedAt: "desc",
@@ -163,6 +169,22 @@ export async function getServerSideProps(ctx) {
     });
 
     taskLogInfoList = JSON.parse(JSON.stringify(taskLogList, replacer));
+  }
+
+  if (adminUsernameList.includes(userName)) {
+    taskLogInvestigatorList = await prisma.taskLog.findMany({
+      where:{
+        label: {contains: "investigator"}
+      },
+      orderBy: [
+        {
+          updatedAt: "desc",
+        },
+      ],
+      //take: queryLimit
+    });
+
+    taskLogInvestigatorInfoList = JSON.parse(JSON.stringify(taskLogInvestigatorList, replacer));
   }
 
   if (adminUsernameList.includes(userName)) {
@@ -184,7 +206,7 @@ export async function getServerSideProps(ctx) {
   };
 }
 
-export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, taskLogInfoList, messageInfoList, userInfo, hostURL}) {
+export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, taskLogInfoList, taskLogInvestigatorInfoList, messageInfoList, userInfo, hostURL}) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [tabName, setTabName] = useState("Survey Response");
@@ -266,6 +288,10 @@ export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList
       ) : null}
       {tabName == "Fitbit Data" ? (
         <FitbitDataTable infoList={fitbitDataInfoList} />
+      ) : null}
+
+      {tabName == "Investigator Task Log" ? (
+        <TaskLogTable infoList={taskLogInvestigatorInfoList} />
       ) : null}
 
       {tabName == "Task Log" ? (

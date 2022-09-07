@@ -264,7 +264,7 @@ export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList
           Fitbit Data
         </ToggleButton>
         <ToggleButton
-          value="Invetigator Task Log"
+          value="Investigator Task Log"
           aria-label="centered"
         >
           Investigator Task Log

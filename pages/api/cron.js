@@ -86,9 +86,12 @@ async function executeTask(now) {
         let aTaskResultList = await TaskExecutor.executeTaskForUserListForDatetime(task, userList, now);
         taskCompositeResultList = taskCompositeResultList.concat(aTaskResultList);
         */
-    }).filter((resultList) => {
+    });
+    /*
+    .filter((resultList) => {
         return resultList.length > 0;
     });
+    */
 
     await Promise.all(resultPromiseList)
     .then((resultListList) => {

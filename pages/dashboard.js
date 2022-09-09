@@ -157,11 +157,13 @@ export async function getServerSideProps(ctx) {
 
   if (adminUsernameList.includes(userName)) {
     taskLogList = await prisma.taskLog.findMany({
+      /*
       where: {
         NOT: {
           taskLabel: {contains: "investigator"}
         },
       },
+      */
       orderBy: [
         {
           updatedAt: "desc",
@@ -273,7 +275,7 @@ export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList
           value="Task Log"
           aria-label="centered"
         >
-          Task Log
+          All Task Log
         </ToggleButton>
         <ToggleButton
           value="Message"

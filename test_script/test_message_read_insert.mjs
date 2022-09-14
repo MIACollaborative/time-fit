@@ -16,11 +16,16 @@ async function insertMessages(results) {
 }
 
 function readCSVAndInsert(fileName) {
+  console.log(`readCSVAndInsert.fileName: ${fileName}`);
   let results = [];
   fs.createReadStream(fileName)
     .pipe(csv())
-    .on("data", (data) => results.push(data))
+    .on("data", (data) => {
+      results.push(data);
+      console.log(`readCSVAndInsert.data(): ${data}`);
+    })
     .on("end", () => {
+      console.log(`readCSVAndInsert.end()`);
       results = results
         .filter((obj) => {
           return obj.group != "";
@@ -44,12 +49,15 @@ function readAndInsertMessage() {
     if (err) {
       return console.log("Unable to scan directory: " + err);
     }
+    console.log(`files: ${files}`);
     //listing all files using forEach
     files.forEach(function (file) {
       // Do whatever you want to do with the file
       let fileName = `./content/${file}`;
-      console.log();
-      readCSVAndInsert(fileName, "message");
+      console.log(`fileName: ${fileName}`);
+      if(fs.lstatSync(fileName).isFile() ){
+        readCSVAndInsert(fileName, "message");
+      }
     });
   });
 }

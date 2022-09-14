@@ -10,6 +10,9 @@ let userInfo = await prisma.users.findFirst({
 });
 
 
+let referenceDateStr = "joinAtDate";
+
+
 let sampleCondition = {
 	
 	type: "timeInPeriod",
@@ -18,16 +21,16 @@ let sampleCondition = {
 		
         start:{
 			
-            reference: "activateAtDate",
+            reference: referenceDateStr,
             // Need to make sure that the minute and seconds do not get in the way of calculatioon
-            offset: {type: "plus", value: {days: 8}}
+            offset: {type: "plus", value: {days: 0}}
             
         },
         end:{
 			
-            reference: "activateAtDate",
+            reference: referenceDateStr,
             // Need to make sure that the minute and seconds do not get in the way of calculatioon
-            offset: {type: "plus", value: {days: 10}},
+            offset: {type: "plus", value: {days: 0}},
             inclusive: false
             
         }
@@ -39,7 +42,11 @@ let sampleCondition = {
 // checkOneConditionForUser(condition, userInfo, dateTime)
 
 
-let result = await TaskExecutor.checkOneConditionForUser(sampleCondition, userInfo, DateTime.utc());
+let testDate = DateTime.fromFormat("5/10/2022, 1:07:04 PM", "F");
+
+//let result = await TaskExecutor.checkOneConditionForUser(sampleCondition, userInfo, DateTime.utc());
+
+let result = await TaskExecutor.checkOneConditionForUser(sampleCondition, userInfo, testDate.toUTC());
 
 
 console.log(`checkOneConditionForUser: ${result}`);

@@ -363,7 +363,7 @@ export default function Main({
             displaySetting == "all" ?
             <Fragment>
               <br />
-              <div>For testing:</div>
+              <div>For testing (admin only):</div>
               <br />
             </Fragment>: null
           }
@@ -380,7 +380,7 @@ export default function Main({
             </Fragment>
           ) : null}
 
-          {displaySetting == "all" ? (
+          {adminUsernameList.includes(userInfo.username) ? (
             <Fragment>
               <Link href={"/group-setting"}>
                 <Button variant="contained" style={{ width: "100%" }}>
@@ -391,7 +391,7 @@ export default function Main({
               <br />
             </Fragment>
           ) : null}
-          {displaySetting == "all" ? (
+          {adminUsernameList.includes(userInfo.username) ? (
             <Fragment>
               <Link href={"/phone-edit"}>
                 <Button variant="contained" style={{ width: "100%" }}>
@@ -402,7 +402,7 @@ export default function Main({
               <br />
             </Fragment>
           ) : null}
-            {displaySetting == "all" ? (
+            {adminUsernameList.includes(userInfo.username) ? (
             <Fragment>
               <Link href={"/get-activity-summary"}>
                 <Button variant="contained" style={{ width: "100%" }}>
@@ -414,7 +414,7 @@ export default function Main({
             </Fragment>
           ) : null}
 
-          {displaySetting == "all" ? (
+          {adminUsernameList.includes(userInfo.username) ? (
             <Fragment>
               <Link href={"/get-heartrate"}>
                 <Button variant="contained" style={{ width: "100%" }}>
@@ -426,7 +426,7 @@ export default function Main({
             </Fragment>
           ) : null}
 
-          {displaySetting == "all" ? (
+          {adminUsernameList.includes(userInfo.username) ? (
             <Fragment>
               <Link href={"/activity-summary"}>
                 <Button variant="contained" style={{ width: "100%" }}>
@@ -438,7 +438,7 @@ export default function Main({
             </Fragment>
           ) : null}
 
-          {displaySetting == "all" ? (
+          {adminUsernameList.includes(userInfo.username) ? (
             <Fragment>
               <Button
                 variant="contained"

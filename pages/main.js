@@ -25,6 +25,9 @@ import DatabaseUtility from "../lib/DatabaseUtility.mjs";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
+
+const adminUsernameList = ["test1", "test2", "test3", "test4"];
+
 function replacer(key, value) {
   if (typeof value === "Date") {
     return value.toString();
@@ -360,12 +363,24 @@ export default function Main({
             displaySetting == "all" ?
             <Fragment>
               <br />
-              <div>For testing:</div>
+              <div>For testing (admin only):</div>
               <br />
             </Fragment>: null
           }
 
-          {displaySetting == "all" ? (
+          {adminUsernameList.includes(userInfo.username) ? (
+            <Fragment>
+              <Link href={"/dashboard"}>
+                <Button variant="contained" style={{ width: "100%" }}>
+                  Dashboard
+                </Button>
+              </Link>
+              <br />
+              <br />
+            </Fragment>
+          ) : null}
+
+          {adminUsernameList.includes(userInfo.username) ? (
             <Fragment>
               <Link href={"/group-setting"}>
                 <Button variant="contained" style={{ width: "100%" }}>
@@ -376,7 +391,7 @@ export default function Main({
               <br />
             </Fragment>
           ) : null}
-          {displaySetting == "all" ? (
+          {adminUsernameList.includes(userInfo.username) ? (
             <Fragment>
               <Link href={"/phone-edit"}>
                 <Button variant="contained" style={{ width: "100%" }}>
@@ -387,7 +402,7 @@ export default function Main({
               <br />
             </Fragment>
           ) : null}
-            {displaySetting == "all" ? (
+            {adminUsernameList.includes(userInfo.username) ? (
             <Fragment>
               <Link href={"/get-activity-summary"}>
                 <Button variant="contained" style={{ width: "100%" }}>
@@ -399,7 +414,7 @@ export default function Main({
             </Fragment>
           ) : null}
 
-          {displaySetting == "all" ? (
+          {adminUsernameList.includes(userInfo.username) ? (
             <Fragment>
               <Link href={"/get-heartrate"}>
                 <Button variant="contained" style={{ width: "100%" }}>
@@ -411,7 +426,7 @@ export default function Main({
             </Fragment>
           ) : null}
 
-          {displaySetting == "all" ? (
+          {adminUsernameList.includes(userInfo.username) ? (
             <Fragment>
               <Link href={"/activity-summary"}>
                 <Button variant="contained" style={{ width: "100%" }}>
@@ -423,7 +438,7 @@ export default function Main({
             </Fragment>
           ) : null}
 
-          {displaySetting == "all" ? (
+          {adminUsernameList.includes(userInfo.username) ? (
             <Fragment>
               <Button
                 variant="contained"

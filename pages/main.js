@@ -25,6 +25,9 @@ import DatabaseUtility from "../lib/DatabaseUtility.mjs";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
+
+const adminUsernameList = ["test1", "test2", "test3", "test4"];
+
 function replacer(key, value) {
   if (typeof value === "Date") {
     return value.toString();
@@ -364,6 +367,18 @@ export default function Main({
               <br />
             </Fragment>: null
           }
+
+          {adminUsernameList.includes(userInfo.username) ? (
+            <Fragment>
+              <Link href={"/dashboard"}>
+                <Button variant="contained" style={{ width: "100%" }}>
+                  Dashboard
+                </Button>
+              </Link>
+              <br />
+              <br />
+            </Fragment>
+          ) : null}
 
           {displaySetting == "all" ? (
             <Fragment>

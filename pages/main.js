@@ -262,6 +262,7 @@ export default function Main({
   };
 
   // GeneralUtility.doesFitbitInfoExist(userInfo)? "/": fitbitAuthorizeLink
+  let contactUsFormLink = "https://airtable.com/shr5NOZlCG0uBbe2w";
 
   return (
     <Layout title={"Walk To Joy"} description={""}>

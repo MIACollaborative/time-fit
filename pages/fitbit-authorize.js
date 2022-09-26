@@ -99,6 +99,8 @@ export default function FitbitAuthorize({ userInfo, hostURL }) {
             </Link>
           <br />
           <br />
+
+          <p>Please do not change your Fitbit device or account during the study.</p>
         </div>
     </Layout>
   );

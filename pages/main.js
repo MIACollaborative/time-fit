@@ -262,6 +262,7 @@ export default function Main({
   };
 
   // GeneralUtility.doesFitbitInfoExist(userInfo)? "/": fitbitAuthorizeLink
+  let contactUsFormLink = "https://airtable.com/shr5NOZlCG0uBbe2w";
 
   return (
     <Layout title={"Walk To Joy"} description={""}>
@@ -275,6 +276,8 @@ export default function Main({
             </ToggleButton>
           </ToggleButtonGroup>
           
+          <a href={contactUsFormLink} target="_blank"><img src='/image/svg/circle-question-walktojoy.svg' alt="link to contact us form"/></a>
+
           <h1 className="project-text">Hi {userInfo.preferredName},</h1>
           <p>
           {

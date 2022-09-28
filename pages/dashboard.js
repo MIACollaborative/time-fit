@@ -48,7 +48,7 @@ const adminUsernameList = ["test1", "test2", "test3", "test4"];
 
 export async function getServerSideProps(ctx) {
   const session = await getSession(ctx);
-  console.log(`main.getServerSideProps: session: ${JSON.stringify(session)}`);
+  console.log(`dashboard.getServerSideProps: session: ${JSON.stringify(session)}`);
 
   if (!session) {
     return {
@@ -59,6 +59,7 @@ export async function getServerSideProps(ctx) {
   let userName = session.user.name;
 
 
+  console.log(`dashboard.getServerSideProps: find user`);
   const aUser = await prisma.users.findFirst({
     where: { username: userName },
   });
@@ -91,6 +92,7 @@ export async function getServerSideProps(ctx) {
 
   let queryLimit = 150;
 
+  console.log(`dashboard.getServerSideProps: find userList`);
   if (adminUsernameList.includes(userName)) {
     userList = await prisma.users.findMany({
       orderBy: [
@@ -104,6 +106,7 @@ export async function getServerSideProps(ctx) {
     userInfoList = JSON.parse(JSON.stringify(userList, replacer));
   }
 
+  console.log(`dashboard.getServerSideProps: find responseList`);
   if (adminUsernameList.includes(userName)) {
     responseList = await prisma.response.findMany({
       /*
@@ -126,6 +129,7 @@ export async function getServerSideProps(ctx) {
     responseInfoList = JSON.parse(JSON.stringify(responseList, replacer));
   }
 
+  console.log(`dashboard.getServerSideProps: find fitbitSubscriptionList`);
   if (adminUsernameList.includes(userName)) {
     fitbitSubscriptionList = await prisma.fitbit_subscription.findMany({
       include: {
@@ -143,6 +147,7 @@ export async function getServerSideProps(ctx) {
   }
 
 
+  console.log(`dashboard.getServerSideProps: find fitbitNotificationList`);
   if (adminUsernameList.includes(userName)) {
     fitbitNotificationList = await prisma.fitbit_update.findMany({
       orderBy: [
@@ -156,6 +161,7 @@ export async function getServerSideProps(ctx) {
     fitbitNotificationInfoList = JSON.parse(JSON.stringify(fitbitNotificationList, replacer));
   }
 
+  console.log(`dashboard.getServerSideProps: find fitbitDataList`);
   if (adminUsernameList.includes(userName)) {
     fitbitDataList = await prisma.fitbit_data.findMany({
       include: {
@@ -172,6 +178,7 @@ export async function getServerSideProps(ctx) {
     fitbitDataInfoList = JSON.parse(JSON.stringify(fitbitDataList, replacer));
   }
 
+  console.log(`dashboard.getServerSideProps: find taskLogList`);
   if (adminUsernameList.includes(userName)) {
     taskLogList = await prisma.taskLog.findMany({
       /*
@@ -192,6 +199,7 @@ export async function getServerSideProps(ctx) {
     taskLogInfoList = JSON.parse(JSON.stringify(taskLogList, replacer));
   }
 
+  console.log(`dashboard.getServerSideProps: find taskLogInvestigatorList`);
   if (adminUsernameList.includes(userName)) {
     taskLogInvestigatorList = await prisma.taskLog.findMany({
       where:{
@@ -208,6 +216,7 @@ export async function getServerSideProps(ctx) {
     taskLogInvestigatorInfoList = JSON.parse(JSON.stringify(taskLogInvestigatorList, replacer));
   }
 
+  console.log(`dashboard.getServerSideProps: find messageList`);
   if (adminUsernameList.includes(userName)) {
     messageList = await prisma.message.findMany({
       orderBy: [

@@ -276,7 +276,7 @@ export default function Main({
             </ToggleButton>
           </ToggleButtonGroup>
           
-          <a href={contactUsFormLink} target="_blank"><img src='/image/svg/circle-question-walktojoy.svg' alt="link to contact us form"/></a>
+          <a href={contactUsFormLink} target="_blank" rel="noreferrer"><img src='/image/svg/circle-question-walktojoy.svg' alt="link to contact us form"/></a>
 
           <h1 className="project-text">Hi {userInfo.preferredName},</h1>
           <p>

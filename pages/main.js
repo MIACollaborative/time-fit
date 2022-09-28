@@ -449,7 +449,8 @@ export default function Main({
                 onClick={(event) => {
                   GeneralUtility.sendTwilioMessage(
                     userInfo.phone,
-                    `Hello ${userInfo.preferredName}`
+                    ``, //`Hello ${userInfo.preferredName}`,
+                    ["https://walktojoy.info/image/gif/dancing-bear-7.gif"]
                   );
                   toast(`Hello ${userInfo.preferredName}`);
                 }}

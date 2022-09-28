@@ -9,11 +9,24 @@ let interval = 1000;
 let startIndex = 1;
 let endIndex = 5;
 
+async function deleteAccountWithPrefix(prefix){
+  const deleteUsers = await prisma.users.deleteMany({
+    where: {
+      username: {
+        contains: prefix,
+      },
+    },
+  })
+}
+
 async function insertUser(newStudyCodeObj){
     await prisma.users.create({
         data: newStudyCodeObj
     });
 }
+
+
+await deleteAccountWithPrefix("test");
 
 timer(initialDelay, interval).pipe(
   takeWhile(x => {
@@ -40,6 +53,7 @@ timer(initialDelay, interval).pipe(
   })
 ).subscribe(newStudyCodeObj => {
   console.log(newStudyCodeObj);
+
 
   insertUser(newStudyCodeObj);
 

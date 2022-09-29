@@ -4,8 +4,8 @@ import styles from '../styles/Home.module.css'
 import Layout from '../component/Layout';
 
 import TextField from '@mui/material/TextField';
-import TimePicker from '@mui/lab/TimePicker';
-import MobileTimePicker from "@mui/lab/MobileTimePicker";
+
+import {MobileTimePicker} from '@mui/x-date-pickers/MobileTimePicker';
 /*
 import logger from "../lib/logger";
 

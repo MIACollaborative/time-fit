@@ -262,6 +262,7 @@ export default function Main({
   };
 
   // GeneralUtility.doesFitbitInfoExist(userInfo)? "/": fitbitAuthorizeLink
+  let contactUsFormLink = "https://airtable.com/shr5NOZlCG0uBbe2w";
 
   return (
     <Layout title={"Walk To Joy"} description={""}>
@@ -275,6 +276,8 @@ export default function Main({
             </ToggleButton>
           </ToggleButtonGroup>
           
+          <a href={contactUsFormLink} target="_blank" rel="noreferrer"><img src='/image/svg/circle-question-walktojoy.svg' alt="link to contact us form"/></a>
+
           <h1 className="project-text">Hi {userInfo.preferredName},</h1>
           <p>
           {
@@ -446,7 +449,8 @@ export default function Main({
                 onClick={(event) => {
                   GeneralUtility.sendTwilioMessage(
                     userInfo.phone,
-                    `Hello ${userInfo.preferredName}`
+                    "https://walktojoy.info/image/gif/dancing-bear-7.gif", //`Hello ${userInfo.preferredName}`,
+                    //["https://walktojoy.info/image/gif/dancing-bear-7.gif"]
                   );
                   toast(`Hello ${userInfo.preferredName}`);
                 }}

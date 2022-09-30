@@ -5,6 +5,7 @@ import logger from "../lib/logger";
 */
 
 import React, { useState } from 'react';
+import { DateTime, Interval } from "luxon";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -16,6 +17,7 @@ import GeneralUtility from '../lib/GeneralUtility.mjs';
 import { Button } from '@mui/material';
 import { toast } from 'react-toastify';
 import Link from "next/link";
+import { Fragment } from 'react';
 function replacer(key, value) {
   if (typeof value === "Date") {
     return value.toString();
@@ -81,59 +83,121 @@ export default function UserTable({ infoList, userInfo, hostURL }) {
   */
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="right">Action</TableCell>
-            <TableCell align="right">User Name</TableCell>
-            <TableCell align="right">Phone</TableCell>
-            <TableCell align="right">Timezone</TableCell>
-            <TableCell align="right">Phase</TableCell>
-            <TableCell align="right">Join At</TableCell>
-            <TableCell align="right">Activate At</TableCell>
-            <TableCell align="right">Gif</TableCell>
-            <TableCell align="right">Salience</TableCell>
-            <TableCell align="right">Modification</TableCell>
-            <TableCell align="right">Fitbit Id</TableCell>
-            <TableCell align="right">Weekday Wakeup</TableCell>
-            <TableCell align="right">Weekday Bed</TableCell>
-            <TableCell align="right">Weekend Wakeup</TableCell>
-            <TableCell align="right">Weekend Bed</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {infoList.map((row, index) => (
-            <TableRow
-              key={index}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell align="right">
-                <Link href={`/user-edit?user=${row.username}`}>
-                    <Button variant="contained">
-                    Edit
-                    </Button>
-                </Link>
-              </TableCell>
-              <TableCell align="right">{row.username}</TableCell>
-              <TableCell align="right">{row.phone}</TableCell>
-              <TableCell align="right">{row.timezone}</TableCell>
-              <TableCell align="right">{row.phase}</TableCell>
-              <TableCell align="right">{row.joinAt}</TableCell>
-              <TableCell align="right">{row.activateAt}</TableCell>
-              <TableCell align="right">{row.gif}</TableCell>
-              <TableCell align="right">{row.salience}</TableCell>
-              <TableCell align="right">{row.modification}</TableCell>
-              <TableCell align="right">{row.fitbitId}</TableCell>
-              <TableCell align="right">{row.weekdayWakeup}</TableCell>
-              <TableCell align="right">{row.weekdayBed}</TableCell>
-              <TableCell align="right">{row.weekendWakeup}</TableCell>
-              <TableCell align="right">{row.weekendBed}</TableCell>
+    <Fragment>
+      <br/>
+      <div>
+        <Button variant="contained" onClick={(event) => {
+        // infoList
+        const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
+          JSON.stringify(infoList)
+        )}`;
+        const link = document.createElement("a");
+        link.href = jsonString;
+
+        let timeString = DateTime.now().toISO();
+        let tableName = "User";
+
+        link.download = `${tableName}_for_${userInfo.username}_${timeString}.json`;
+    
+        link.click();
+
+      }} >Export JSON</Button>&nbsp;&nbsp;
+      <Button variant="contained" onClick={(event) => {
+
+        let csvString = GeneralUtility.getCSVStringFromObjectList(infoList);
+
+        /*
+        let csvString = "";
+        // prepare the csv string
+        let headerList = Object.keys(infoList[0]);
+        let headerString = headerList.join(",");
+        csvString += headerString + "\n";
+
+        // now the content
+        infoList.forEach((info) => {
+          let contentList =  headerList.map((columnName) => {
+            return info[columnName];
+          });
+
+          let contentString = contentList.join(",");
+          csvString += contentString + "\n";
+        });
+        */
+
+
+        // infoList
+        const jsonString = `data:	text/csv;chatset=utf-8,${encodeURIComponent(
+          csvString
+        )}`;
+        const link = document.createElement("a");
+        link.href = jsonString;
+
+        let timeString = DateTime.now().toISO();
+        let tableName = "User";
+
+        link.download = `${tableName}_for_${userInfo.username}_${timeString}.csv`;
+    
+        link.click();
+
+      }} >Export CSV</Button>
+      
+      </div>
+      <br/>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="right">Action</TableCell>
+              <TableCell align="right">User Name</TableCell>
+              <TableCell align="right">Phone</TableCell>
+              <TableCell align="right">Timezone</TableCell>
+              <TableCell align="right">Phase</TableCell>
+              <TableCell align="right">Join At</TableCell>
+              <TableCell align="right">Activate At</TableCell>
+              <TableCell align="right">Gif</TableCell>
+              <TableCell align="right">Salience</TableCell>
+              <TableCell align="right">Modification</TableCell>
+              <TableCell align="right">Fitbit Id</TableCell>
+              <TableCell align="right">Weekday Wakeup</TableCell>
+              <TableCell align="right">Weekday Bed</TableCell>
+              <TableCell align="right">Weekend Wakeup</TableCell>
+              <TableCell align="right">Weekend Bed</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {infoList.map((row, index) => (
+              <TableRow
+                key={index}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell align="right">
+                  <Link href={`/user-edit?user=${row.username}`}>
+                    <Button variant="contained">
+                      Edit
+                    </Button>
+                  </Link>
+                </TableCell>
+                <TableCell align="right">{row.username}</TableCell>
+                <TableCell align="right">{row.phone}</TableCell>
+                <TableCell align="right">{row.timezone}</TableCell>
+                <TableCell align="right">{row.phase}</TableCell>
+                <TableCell align="right">{row.joinAt}</TableCell>
+                <TableCell align="right">{row.activateAt}</TableCell>
+                <TableCell align="right">{row.gif}</TableCell>
+                <TableCell align="right">{row.salience}</TableCell>
+                <TableCell align="right">{row.modification}</TableCell>
+                <TableCell align="right">{row.fitbitId}</TableCell>
+                <TableCell align="right">{row.weekdayWakeup}</TableCell>
+                <TableCell align="right">{row.weekdayBed}</TableCell>
+                <TableCell align="right">{row.weekendWakeup}</TableCell>
+                <TableCell align="right">{row.weekendBed}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+    </Fragment>
   )
 }
 

@@ -317,7 +317,7 @@ export default function Dashboard({ userInfoList, responseInfoList, fitbitSubscr
       </ToggleButtonGroup>
 
       {tabName == "Users" ? (
-        <UserTable infoList={userInfoList} />
+        <UserTable infoList={userInfoList} userInfo={userInfo} />
       ) : null}
 
       {tabName == "Survey Response" ? (

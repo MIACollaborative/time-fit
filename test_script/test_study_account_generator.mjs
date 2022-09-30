@@ -145,12 +145,13 @@ for (let i = startIndex; i < endIndex; i++) {
 
 }
 
+/*
 let dateString = DateTime.now().toISO({ format: 'basic', includeOffset: false });
 
 let exportFileName = `./test_output/${prefix}_${dateString}.csv`;
 
 await writeToCSV(resultList, exportFileName);
-
+*/
 
 
 timer(initialDelay, interval).pipe(

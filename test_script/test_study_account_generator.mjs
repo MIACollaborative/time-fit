@@ -104,12 +104,12 @@ function generateGroupAssignmentList(populationSize) {
 let initialDelay = 1000;
 let interval = 1000;
 let startIndex = 1;
-let endIndex = 51;
+let endIndex = 65;
 
 let prefix = `participant`;
 
 
-//deleteAccountWithPrefix(prefix);
+deleteAccountWithPrefix(prefix);
 
 
 let groupAssignmnetList = generateGroupAssignmentList(endIndex - startIndex);

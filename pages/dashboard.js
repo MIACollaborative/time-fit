@@ -97,7 +97,7 @@ export async function getServerSideProps(ctx) {
     userList = await prisma.users.findMany({
       orderBy: [
         {
-          username: "asc",
+          createdAt: "asc",
         },
       ],
       //take: queryLimit

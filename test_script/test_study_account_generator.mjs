@@ -104,16 +104,20 @@ function generateGroupAssignmentList(populationSize) {
 let initialDelay = 1000;
 let interval = 1000;
 let startIndex = 1;
-let endIndex = 51
+let endIndex = 51;
 
-let prefix = `alpha`;
+let prefix = `participant`;
 
+
+//deleteAccountWithPrefix(prefix);
 
 
 let groupAssignmnetList = generateGroupAssignmentList(endIndex - startIndex);
 
 
 let resultList = [];
+
+
 
 for (let i = startIndex; i < endIndex; i++) {
   let username = `${prefix}${i}`;
@@ -183,7 +187,7 @@ timer(initialDelay, interval).pipe(
   
   
   
-  //deleteAccountWithPrefix(prefix);
+  
 
 
   /*

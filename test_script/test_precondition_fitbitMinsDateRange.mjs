@@ -19,17 +19,23 @@ let sampleCondition = {
 
 	criteria: {
         wearingLowerBoundMinutes: 30,
-        idRelationship: "and",
+
+        // should probably rename it, 
+        // "and" means, every day passes the threshold
+        // "or" means, at least one day passes the threshold
+        // "not any" means, none passes the threshold
+
+        idRelationship: "and", 
+
+
         period:{
             start:{
-                reference: referenceDateStr,
-                // Need to make sure that the minute and seconds do not get in the way of calculatioon
+                reference: referenceDateStr, // "today"
                 offset: {type: "minus", value: {days: 15}}
                 
             },
             end:{			
-                reference: referenceDateStr,
-                // Need to make sure that the minute and seconds do not get in the way of calculatioon
+                reference: referenceDateStr, // "today"
                 offset: {type: "minus", value: {days: 0}},
                 
             }

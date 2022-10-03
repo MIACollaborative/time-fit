@@ -24,7 +24,7 @@ let sampleCondition = {
             start:{
                 reference: referenceDateStr,
                 // Need to make sure that the minute and seconds do not get in the way of calculatioon
-                offset: {type: "minus", value: {days: 5}}
+                offset: {type: "minus", value: {days: 15}}
                 
             },
             end:{			

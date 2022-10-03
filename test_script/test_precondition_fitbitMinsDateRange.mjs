@@ -18,19 +18,22 @@ let sampleCondition = {
 	type: "hasHeartRateIntradayMinutesAboveThresholdForPersonByDateRange",
 
 	criteria: {
-        start:{
-            reference: referenceDateStr,
-            // Need to make sure that the minute and seconds do not get in the way of calculatioon
-            offset: {type: "minus", value: {days: 5}}
-            
-        },
-        end:{			
-            reference: referenceDateStr,
-            // Need to make sure that the minute and seconds do not get in the way of calculatioon
-            offset: {type: "minus", value: {days: 0}},
-            
+        wearingLowerBoundMinutes: 30,
+        idRelationship: "and",
+        period:{
+            start:{
+                reference: referenceDateStr,
+                // Need to make sure that the minute and seconds do not get in the way of calculatioon
+                offset: {type: "minus", value: {days: 5}}
+                
+            },
+            end:{			
+                reference: referenceDateStr,
+                // Need to make sure that the minute and seconds do not get in the way of calculatioon
+                offset: {type: "minus", value: {days: 0}},
+                
+            }
         }
-	
 	}
 
 };

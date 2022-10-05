@@ -62,8 +62,6 @@ export default function TaskTable({ infoList }) {
             <TableCell align="right">Task Label</TableCell>
             <TableCell align="right">Enabled</TableCell>
             <TableCell align="right">Priority</TableCell>
-            <TableCell align="right">Participant Independent</TableCell>
-            <TableCell align="right">Ignore Timezone</TableCell>
             <TableCell align="right">Check Point</TableCell>
             <TableCell align="right">Group</TableCell>
             <TableCell align="right">Randomization</TableCell>
@@ -78,11 +76,9 @@ export default function TaskTable({ infoList }) {
               key={index}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell align="right">{row.taskLabel}</TableCell>
-              <TableCell align="right">{row.enabled}</TableCell>
+              <TableCell align="right">{row.label}</TableCell>
+              <TableCell align="right">{row.enabled == true? "true":"false"}</TableCell>
               <TableCell align="right">{row.priority}</TableCell>
-              <TableCell align="right">{row.participantIndependent}</TableCell>
-              <TableCell align="right">{row.ignoreTimezone}</TableCell>
               <TableCell align="right">{JSON.stringify(row.checkPoint)}</TableCell>
               <TableCell align="right">{JSON.stringify(row.group)}</TableCell>
               <TableCell align="right">{JSON.stringify(row.randomization)}</TableCell>

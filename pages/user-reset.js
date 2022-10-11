@@ -46,13 +46,13 @@ export async function getServerSideProps(ctx) {
     let userName = ctx.query.user; // session.user.name;
 
     let uniqueUser = undefined;
-    
+
     if (adminUsernameList.includes(session.user.name)) {
-        uniqueUser =  await prisma.users.findFirst({
+        uniqueUser = await prisma.users.findFirst({
             where: { username: userName },
         });
     }
-    
+
 
     console.log(`main.getServerSideProps: user: ${JSON.stringify(uniqueUser)}`);
 
@@ -63,7 +63,7 @@ export async function getServerSideProps(ctx) {
     };
 }
 
-export default function UserEdit({ userInfo }) {
+export default function UserReset({ userInfo }) {
     const { data: session, status } = useSession();
     const router = useRouter();
 
@@ -101,10 +101,7 @@ export default function UserEdit({ userInfo }) {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                    ...info,
-                    username: username
-                }),
+                body: JSON.stringify(info),
             }
         ).then((r) => {
             return r.json();
@@ -113,8 +110,21 @@ export default function UserEdit({ userInfo }) {
         return result;
     }
 
-    function onSaveClick(event) {
-        let preparationInfo = undefined;
+    function onResetClick(event) {
+        let preparationInfo = {
+            username: userInfo.username, 
+            preferredName: null,
+            phone: null,
+            timezone: null,
+            phase: "baseline", 
+            fitbitReminderTurnOff: false, 
+            saveWalkToJoyToContacts: false, 
+            gif: null,
+            salience: null,
+            modification: null,
+            fitbitId: null,
+
+        };
         console.log(`onSaveClick: userInfo.joinAt ${userInfo.joinAt}`);
         preparationInfo = {
             phone
@@ -134,43 +144,44 @@ export default function UserEdit({ userInfo }) {
     return (
         <Layout title={"Preferred Name"} description={""}>
             <h1 className="project-text">Welcome to WalkToJoy Study!</h1>
-            <h2 className="project-text">You are editing user info for: {userInfo.username}</h2>
+            <h2 className="project-text">You are about to reset user info for: {userInfo.username}</h2>
+            <h2 className="project-text">Please click "leave" if you did not intend to reset a user's data.</h2>
             <div>
-                <Fragment>{
-                    true ? <TextField
-                        fullWidth
-                        label="Preferred Name"
-                        id="fullWidth"
-                        value={preferredName}
-                        onChange={(event) => {
-                            console.log(`setPreferredName: ${event.currentTarget.value}`);
-                            setPreferredName(event.currentTarget.value);
-
-                        }}
-                    /> : null
-                }</Fragment>
-
+                <div>Signed in as {session.user.name} </div>
+                <div>Phone: {userInfo.phone} </div>
+                <div>Phase: {userInfo.phase} </div>
+                <div>Timezone: {userInfo.timezone} </div>
+                <div>joinAt: {userInfo.joinAt} </div>
+                <div>activateAt: {userInfo.activateAt} </div>
                 <br />
-                <Divider />
                 <br />
-                <Fragment>{
-                    true ? <TextField
-                        fullWidth
-                        label="Phone Number"
-                        id="fullWidth"
-                        value={phone}
-
-                        onChange={(event) => {
-                            console.log(`setPhone: ${event.currentTarget.value}`);
-                            setPhone(event.currentTarget.value);
-                        }}
-                    /> : null}</Fragment>
+                <Fragment>
+                    <Link href={"/main"}>
+                        <Button
+                            variant="contained"
+                            className={"project-button-complete"}
+                        >
+                            Lave
+                        </Button>
+                    </Link>
+                </Fragment>
 
                 <br />
                 <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+
                 <Button variant="contained"
                     className="project-button"
-                    onClick={onSaveClick} >Save</Button>
+                    onClick={onResetClick} >Reset Study Info</Button>
             </div>
 
         </Layout>

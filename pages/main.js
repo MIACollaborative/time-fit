@@ -333,6 +333,18 @@ export default function Main({
               <br />
               <br />
           </Fragment>
+          <Fragment>
+              <Link href={"time-zone"}>
+                <Button 
+                variant="contained" 
+                className={"project-button-complete"}
+                  >
+                  Update timezone
+                </Button>
+              </Link>
+              <br />
+              <br />
+          </Fragment>
 
           <p>
           {
@@ -350,6 +362,7 @@ export default function Main({
           <div>Signed in as {session.user.name} </div>
           <div>Phone: {userInfo.phone} </div>
           <div>Phase: {userInfo.phase} </div>
+          <div>Timezone: {userInfo.timezone} </div>
           <div>joinAt: {userInfo.joinAt} </div>
           <div>activateAt: {userInfo.activateAt} </div>
           <div>Baseline survey completed: {JSON.stringify(isBaselineSurveyCompleted)} </div>

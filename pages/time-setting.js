@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Layout from '../component/Layout';
-
+import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 
 import {MobileTimePicker} from '@mui/x-date-pickers/MobileTimePicker';
@@ -12,7 +12,7 @@ import logger from "../lib/logger";
 */
 
 import { inspect } from 'util';
-
+import GeneralUtility from "../lib/GeneralUtility.mjs";
 import Link from 'next/link';
 import { useSession, signIn, signOut, getSession } from "next-auth/react"
 import { useRouter } from 'next/router'
@@ -22,6 +22,9 @@ import Divider from "@mui/material/Divider";
 import prisma from '../lib/prisma.mjs';
 
 const { DateTime } = require("luxon");
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { getListItemSecondaryActionClassesUtilityClass } from '@mui/material';
+
 
 function replacer(key, value) {
   if (typeof value === "Date") {
@@ -74,6 +77,9 @@ export default function TimeSetting({ userInfo}) {
   const [weekendWakeup, setWeekendWakeup] = useState(userInfo.weekendWakeup != undefined? userInfo.weekendWakeup: "");
   const [weekendBed, setWeekendBed] = useState(userInfo.weekendBed != undefined? userInfo.weekendBed: "");
 
+  let nowDateTime = DateTime.now();
+
+  const [zoneName, setZoneName] = useState(userInfo.timezone != undefined? userInfo.timezone: nowDateTime.zoneName);
   //logger.logToDB("main", {message: "test"});
 
   //const [value1, setValue1] = useState('');
@@ -121,10 +127,14 @@ export default function TimeSetting({ userInfo}) {
     return result;
   }
 
-  let nowDateTime = DateTime.now();
+  const handleTimeZoneChange = (event) => {
+    setZoneName(event.target.value);
+  };
+
+  
 
   function onSaveClick(event){
-    updateTimePreference( userInfo.username, weekdayWakeup, weekdayBed, weekendWakeup, weekendBed, nowDateTime.zoneName)
+    updateTimePreference( userInfo.username, weekdayWakeup, weekdayBed, weekendWakeup, weekendBed, zoneName)
       .then((response) => {
         router.push("/main");
         return response;
@@ -192,7 +202,23 @@ export default function TimeSetting({ userInfo}) {
             <br /><br />
             <Divider />
             <br />
-            <div>Timzone (estimated): {nowDateTime.zoneName} </div>
+            <div>Timzone: {zoneName} </div>
+            <br />
+            <Select
+              labelId="demo-simple-select-label"
+              id="timezone-select"
+              value={zoneName}
+              label="Iime zone"
+              onChange={handleTimeZoneChange}
+            >
+              {
+                GeneralUtility.usTimeZoneOffetInfoList.map((zoneInfo, index) => {
+                  console.log(`zoneInfo.name: ${zoneInfo.name}`);
+                  return <MenuItem value={zoneInfo.name} key={index}>{zoneInfo.name} ({zoneInfo.offsetLabel})</MenuItem>;
+                })
+              }
+            </Select>
+            <br />
             <br />
             <Divider />
             <br />

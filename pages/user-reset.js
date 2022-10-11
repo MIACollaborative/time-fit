@@ -113,24 +113,27 @@ export default function UserReset({ userInfo }) {
     function onResetClick(event) {
         let preparationInfo = {
             username: userInfo.username, 
-            preferredName: null,
-            phone: null,
-            timezone: null,
+            preferredName: undefined,
+            phone: undefined,
+            timezone: undefined,
             phase: "baseline", 
+            joinAt: undefined,
+            activateAt: undefined,
             fitbitReminderTurnOff: false, 
             saveWalkToJoyToContacts: false, 
-            gif: null,
-            salience: null,
-            modification: null,
-            fitbitId: null,
-
+            gif: false,
+            salience: false,
+            modification: false,
+            fitbitId: undefined,
+            fitbitDisplayName: undefined,
+            fitbitFullName: undefined,
+            accessToken: undefined,
+            refreshToken: undefined,
+            weekdayWakeup: undefined,
+            weekdayBed: undefined,
+            weekendWakeup: undefined,
         };
         console.log(`onSaveClick: userInfo.joinAt ${userInfo.joinAt}`);
-        preparationInfo = {
-            phone
-        }
-
-        console.log(`onSaveClick: updatedInfo preparation ${JSON.stringify(preparationInfo, null, 2)}`);
 
         updateInfo(
             userInfo.username,
@@ -161,7 +164,7 @@ export default function UserReset({ userInfo }) {
                             variant="contained"
                             className={"project-button-complete"}
                         >
-                            Lave
+                            Leave
                         </Button>
                     </Link>
                 </Fragment>

@@ -8,10 +8,12 @@ export default function Signout() {
 
     const router = useRouter();
 
+    /*
     if (!session) {
         router.push("/");
         return null;
     }
+    */
 
 
     return (
@@ -20,8 +22,7 @@ export default function Signout() {
                 variant="contained" 
                 className={"project-button-complete"}
                 onClick={(event) => {
-                    signOut();
-                    router.push("/");
+                    signOut({ callbackUrl: '/' });
                     return null;
                 }}
               >

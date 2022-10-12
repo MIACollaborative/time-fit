@@ -43,7 +43,7 @@ timer(initialDelay, interval).pipe(
     // let password = username;
 
     // for security
-    let password = cryptoRandomString({ length: 8, characters: 'abcdefghijkmnpqrstuvwxyz023456789' });
+    let password = cryptoRandomString({ length: 16, characters: 'abcdefghijkmnpqrstuvwxyz023456789' });
 
 
     let hash = md5(password);

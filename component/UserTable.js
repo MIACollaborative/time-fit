@@ -183,9 +183,9 @@ export default function UserTable({ infoList, userInfo, hostURL }) {
                 <TableCell align="right">{row.phase}</TableCell>
                 <TableCell align="right">{row.joinAt}</TableCell>
                 <TableCell align="right">{row.activateAt}</TableCell>
-                <TableCell align="right">{row.gif}</TableCell>
-                <TableCell align="right">{row.salience}</TableCell>
-                <TableCell align="right">{row.modification}</TableCell>
+                <TableCell align="right">{JSON.stringify(row.gif)}</TableCell>
+                <TableCell align="right">{JSON.stringify(row.salience)}</TableCell>
+                <TableCell align="right">{JSON.stringify(row.modification)}</TableCell>
                 <TableCell align="right">{row.fitbitId}</TableCell>
                 <TableCell align="right">{row.weekdayWakeup}</TableCell>
                 <TableCell align="right">{row.weekdayBed}</TableCell>

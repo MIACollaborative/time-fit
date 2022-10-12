@@ -197,7 +197,7 @@ export default function Main({
 
   Intervention UI
   - Re-authorize Fitbit
-  */
+  */    
 
   if(!GeneralUtility.isPreferredNameSet(userInfo)){
     router.push("/info-edit");

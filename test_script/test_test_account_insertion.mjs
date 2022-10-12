@@ -2,7 +2,7 @@ import md5 from "md5";
 import { timer } from "rxjs";
 import { map, takeWhile} from "rxjs/operators";
 import prisma from "../lib/prisma.mjs";
-//import cryptoRandomString from 'crypto-random-string';
+import cryptoRandomString from 'crypto-random-string';
 
 let initialDelay = 1000;
 let interval = 1000;
@@ -38,7 +38,13 @@ timer(initialDelay, interval).pipe(
     
     // for testing account
     let username = `test${startIndex + x}`;
-    let password = username;
+
+    // for simplicity
+    // let password = username;
+
+    // for security
+    let password = cryptoRandomString({ length: 8, characters: 'abcdefghijkmnpqrstuvwxyz023456789' });
+
 
     let hash = md5(password);
 

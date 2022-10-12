@@ -46,7 +46,7 @@ timer(initialDelay, interval).pipe(
     let password = cryptoRandomString({ length: 16, characters: 'abcdefghijkmnpqrstuvwxyz023456789' });
 
 
-    let hash = md5(password);
+    let hash = md5(username); // password
 
     console.log(`[${username}]:[${password}] - ${hash}`);
     let newStudyCodeObj = {

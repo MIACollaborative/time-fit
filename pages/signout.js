@@ -1,10 +1,19 @@
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Layout from '../component/Layout';
 import { Button } from "@mui/material";
 
 export default function Signout() {
+    const { data: session, status } = useSession();
+
     const router = useRouter();
+
+    if (!session) {
+        router.push("/");
+        return null;
+    }
+
+
     return (
         <Layout title={"Walk To Joy"} description={""}>
             <Button 
@@ -12,7 +21,8 @@ export default function Signout() {
                 className={"project-button-complete"}
                 onClick={(event) => {
                     signOut();
-                    //router.push("/");
+                    router.push("/");
+                    return null;
                 }}
               >
                 Sign out

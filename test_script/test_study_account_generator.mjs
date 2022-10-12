@@ -127,7 +127,7 @@ for (let i = startIndex; i < endIndex; i++) {
   // let hashStudyCode = cryptoRandomString({length: 8, characters: 'ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789'});
   let password = cryptoRandomString({ length: 8, characters: 'abcdefghijkmnpqrstuvwxyz023456789' });
 
-  let hash = md5(password);
+  let hash = md5(username); // password
 
   let gAssignment = groupAssignmnetList[i - startIndex];
 

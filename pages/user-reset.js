@@ -148,7 +148,7 @@ export default function UserReset({ userInfo }) {
         <Layout title={"Preferred Name"} description={""}>
             <h1 className="project-text">Welcome to WalkToJoy Study!</h1>
             <h2 className="project-text">You are about to reset user info for: {userInfo.username}</h2>
-            <h2 className="project-text">Please click "leave" if you did not intend to reset a user's data.</h2>
+            <h2 className="project-text">Please click &quot;leave&quot; if you did not intend to reset a user&apos;s data.</h2>
             <div>
                 <div>Signed in as {session.user.name} </div>
                 <div>Phone: {userInfo.phone} </div>

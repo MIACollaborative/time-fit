@@ -114,9 +114,9 @@ export async function getServerSideProps(ctx) {
   );
 
   // baseline survey completed
-  let isBaselineSurveyCompleted = await DatabaseUtility.isSurveyCompleted("SV_81aWO5sJPDhGZNA");
+  let isBaselineSurveyCompleted = await DatabaseUtility.isSurveyCompletedByPerson("SV_81aWO5sJPDhGZNA", userInfo.username);
 
-  console.log(`main.getServerSideProps: isBaselineSurveyCompleted: ${isBaselineSurveyCompleted}`);
+  console.log(`main.getServerSideProps: isSurveyCompletedByPerson: ${isBaselineSurveyCompleted}`);
   //isAccessTokenActive = introspectResult.active;
 
   let hostURL = `${process.env.NEXTAUTH_URL}`;

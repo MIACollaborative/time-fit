@@ -248,7 +248,9 @@ export default function Main({
 
   const fitbitAuthorizeLink = "/fitbit-authorize";
 
-  const baselineSurveyLink = `https://umich.qualtrics.com/jfe/form/SV_81aWO5sJPDhGZNA`;
+
+  // https://umich.qualtrics.com/jfe/form/SV_81aWO5sJPDhGZNA?study_code=test4
+  const baselineSurveyLink = `https://umich.qualtrics.com/jfe/form/SV_81aWO5sJPDhGZNA?study_code=${userInfo.username}`;
 
 
   const handleChange = (event, newSetting) => {

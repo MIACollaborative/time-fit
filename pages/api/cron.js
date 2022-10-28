@@ -24,16 +24,29 @@ function getWeekdayOrWeekend(datetime) {
     }
 }
 
+function exclude(item, keyList) {
+    for (let key of keyList) {
+      delete item[key]
+    }
+    return item
+  }
+
 async function executeTask(now) {
     let users = await prisma.users.findMany();
 
     // old
     /*
-    let users = await prisma.users.findMany({
+    let userList = await prisma.users.findMany({
         select: {
             username: true,
-            phone: true,
             preferredName: true,
+            phone: true,
+            timezone: true,
+            phase: true,
+            joinAt: true,
+            activateAt: true,
+            fitbitReminderTurnOff: true,
+            saveWalkToJoyToContacts: true,
             gif: true,
             salience: true,
             modification: true,
@@ -41,12 +54,17 @@ async function executeTask(now) {
             weekdayBed: true,
             weekendWakeup: true,
             weekendBed: true,
-            timezone: true
+            
         },
     });
     */
 
-    let userList = JSON.parse(JSON.stringify(users, replacer));
+    let userList = users.map((userInfo) => {
+        return exclude(userInfo, ["password", "hash", "accessToken", "refreshToken"]);
+    });
+
+
+    //let userList = JSON.parse(JSON.stringify(users, replacer));
 
     let tasks = await prisma.task.findMany({
         where: { enabled: true},

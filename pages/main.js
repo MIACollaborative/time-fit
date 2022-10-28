@@ -473,9 +473,9 @@ export default function Main({
               </Button>
               <br />
               <br />
+              <Divider />
             </Fragment>
           ) : null}
-          <Divider />
           <br />
         </div>
         <div>

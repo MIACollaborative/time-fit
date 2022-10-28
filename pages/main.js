@@ -360,7 +360,9 @@ export default function Main({
           </p>
           <Divider />
           <br />
-          <div>[Debug]</div>
+          {adminUsernameList.includes(userInfo.username) ? (
+            <Fragment>
+          <div>[Debug] (admine only)</div>
           <div>Signed in as {session.user.name} </div>
           <div>Phone: {userInfo.phone} </div>
           <div>Phase: {userInfo.phase} </div>
@@ -377,17 +379,14 @@ export default function Main({
           <div>Access Token: {isAccessTokenActive ? "active" : "inactive"}</div>
           <br />
           <Divider />
-          {
-            displaySetting == "all" ?
+            </Fragment>
+          ) : null}
+
+          {adminUsernameList.includes(userInfo.username) ? (
             <Fragment>
               <br />
               <div>For testing (admin only):</div>
               <br />
-            </Fragment>: null
-          }
-
-          {adminUsernameList.includes(userInfo.username) ? (
-            <Fragment>
               <Link href={"/dashboard"}>
                 <Button variant="contained" style={{ width: "100%" }}>
                   Dashboard
@@ -474,9 +473,9 @@ export default function Main({
               </Button>
               <br />
               <br />
+              <Divider />
             </Fragment>
           ) : null}
-          <Divider />
           <br />
         </div>
         <div>

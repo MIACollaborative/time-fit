@@ -283,17 +283,17 @@ export default function Main({
           <h1 className="project-text">Hi {userInfo.preferredName},</h1>
           <p>
           {
-            userInfo.phase == "baseline"? `You are now in a baseline week for 7 days.`: `The study is currently active.` 
+            userInfo.phase == "baseline"? `You are currently in the baseline phase.`: `The study is currently active.` 
           }
           </p>
           <p>
           {
-            userInfo.phase == "baseline"? `During the 7 days, we ask that you:`: `During the 6 weeks, we ask that you:` 
+            userInfo.phase == "baseline"? `During this phase, we ask that you:`: `During the 6 weeks of intervention, we ask that you:` 
           }
           </p>
           <p></p>
           <ol>
-            <li>Keep your Fitbit authorized, and continue to wear your Fitbit device for at least 8 hoours each day.</li>
+            <li>Keep your Fitbit authorized, and continue to wear your Fitbit device for at least 8 hours each day.</li>
 
             {
               userInfo.phase == "baseline"? <li>Complete the Baseline Survey</li>: null 
@@ -350,7 +350,7 @@ export default function Main({
 
           <p>
           {
-            userInfo.phase == "baseline"? `Following the 7 days, the study will be activated for the duration of 6 weeks.`: null
+            userInfo.phase == "baseline"? `If all the above tasks are completed, you will begin your intervention phase the upcoming Monday.`: null
           }
           </p>
           <p>

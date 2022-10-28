@@ -10,7 +10,8 @@ let userInfo = await prisma.users.findFirst({
 });
 
 
-let referenceDateStr = "joinAtDate";
+let referenceDateStr1 = "joinAtDate";
+let referenceDateStr2 = "now";
 
 
 let sampleCondition = {
@@ -19,19 +20,21 @@ let sampleCondition = {
 	
 	criteria: {
 		
+        
         start:{
 			
-            reference: referenceDateStr,
+            reference: referenceDateStr1,
             // Need to make sure that the minute and seconds do not get in the way of calculatioon
-            offset: {type: "plus", value: {days: 0}}
+            offset: { type: "plus", value: { days: 1 } }
             
         },
+        
         end:{
 			
-            reference: referenceDateStr,
+            reference: referenceDateStr2,
             // Need to make sure that the minute and seconds do not get in the way of calculatioon
             offset: {type: "plus", value: {days: 0}},
-            inclusive: false
+            //inclusive: false
             
         }
 	
@@ -42,9 +45,13 @@ let sampleCondition = {
 // checkOneConditionForUser(condition, userInfo, dateTime)
 
 
-let testDate = DateTime.fromFormat("5/10/2022, 1:07:04 PM", "F");
+//let testDate = DateTime.fromFormat("5/10/2022, 1:07:04 PM", "F");
+
+let testDate = DateTime.now();
 
 //let result = await TaskExecutor.checkOneConditionForUser(sampleCondition, userInfo, DateTime.utc());
+
+
 
 let result = await TaskExecutor.checkOneConditionForUser(sampleCondition, userInfo, testDate.toUTC());
 

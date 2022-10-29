@@ -22,42 +22,42 @@ userInfo = JSON.parse(JSON.stringify(userInfo, replacer));
 let referenceDateStr = "today";
 
 
-let sampleCondition = {
-    type: "hasHeartRateIntradayMinutesAboveThresholdForPersonByDate", // This type can only check the specified date inside the start: {}
-    opposite: false, // participant did adhere to wearing fitbit for +8 hours
+let sampleCondition =                     {
+    // Check if participant's Fitbit isn't detecting activity
+    type: "hasHeartRateIntradayMinutesAboveThresholdForPersonByDateRange", // This type can only check the specified date inside the start: {}
+    opposite: false, // participant has been wearing = False
     criteria: {
+        // Id list: list of Qualtrics survey Ids to check
         idList: [""],
 
-        // Whehter we want all ("and") surveys to be filled or at least one ("or") survey to be filled.
+        // Whehter we want all ("and") surveys to be filled, at least one ("or") survey to be filled, or ("not any").
         // Use ("not any") for checking survey NOT filled, etc.
-        idRelationship: "and",
+        idRelationship: "not any",
 
         // check whether minutes >= wearingLowerBoundMinutes
-        wearingLowerBoundMinutes: 60 * 8,
+        wearingLowerBoundMinutes: 60 * 8, // Day of checking for adherence (wakeup+1hr) will always return adherent, thus won't be counted towards Fitbit non-worn day.
 
         period: {
             // Start: the starting piont of the time window to consider
             // Removing it means we are consider a time window starting from the very beginning of time (year 200 for impelementation)
-            start: {
-                reference: "today",
-                offset: { type: "minus", value: { days: 1 } } // checks for wearing adherence 1 days ago (only that day)
-            },
             // reference:
             // now: current time
             // today: start of today (00:00:00 am)
-
+            start: {
+                reference: "today",
+                offset: { type: "minus", value: { days: 2 } } // check today since 00:00:00 am
+            },
             // End doesn't matter for Fitbit wearing
             // Removing it means we are consider a time window up to this point
-            // end:{
-            //     // reference:
-            //     // now: current time
-            //     // today: end of today (23:59:59 pm)
-            //     reference: "today",
-
-            //     // offset, the time that will be added ("plus") or substracted ("minus") from the reference
-            //     // Plus 0 hours basically means using the reference point directly
-            //     offset: {type: "minus", value: {days: 6}}
-            // }
+            end: {
+                // reference:
+                // now: current time
+                // today: end of today (23:59:59 pm)
+                reference: "today",
+                // offset, the time that will be added ("plus") or substracted ("minus") from the reference
+                // Plus 0 hours basically means using the reference point directly
+                offset: { type: "minus", value: { days: 1 } }
+            }
         }
     }
 };

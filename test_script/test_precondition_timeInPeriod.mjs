@@ -47,13 +47,22 @@ let sampleCondition = {
 
 //let testDate = DateTime.fromFormat("5/10/2022, 1:07:04 PM", "F");
 
-let testDate = DateTime.now();
+//let testDate = DateTime.now();
+let testDate = DateTime.fromFormat("10/24/2022, 08:00:00 AM", "F", { zone: userInfo.timezone });
 
 //let result = await TaskExecutor.checkOneConditionForUser(sampleCondition, userInfo, DateTime.utc());
 
 
 
-let result = await TaskExecutor.checkOneConditionForUser(sampleCondition, userInfo, testDate.toUTC());
+let result = await TaskExecutor.checkOneConditionForUser(sampleCondition, userInfo, testDate);
 
 
-console.log(`checkOneConditionForUser: ${result}`);
+console.log(`checkOneConditionForUser[${testDate}]: ${result}`);
+
+
+
+testDate = DateTime.fromFormat("10/29/2022, 08:00:00 AM", "F", { zone: userInfo.timezone });
+result = await TaskExecutor.checkOneConditionForUser(sampleCondition, userInfo, testDate);
+
+
+console.log(`checkOneConditionForUser[${testDate}]: ${result}`);

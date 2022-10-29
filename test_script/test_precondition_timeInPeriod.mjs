@@ -3,6 +3,14 @@ import prisma from "../lib/prisma.mjs";
 import TaskExecutor from "../lib/TaskExecutor.mjs";
 import {DateTime} from "luxon";
 
+function replacer(key, value) {
+    if (typeof value === "Date") {
+        return value.toString();
+    }
+    return value;
+}
+
+
 let userInfo = await prisma.users.findFirst({
     where: {
         username: "test1"

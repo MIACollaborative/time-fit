@@ -21,7 +21,7 @@ userInfo = JSON.parse(JSON.stringify(userInfo, replacer));
 
 
 let referenceDateStr1 = "joinAtDate";
-let referenceDateStr2 = "now";
+let referenceDateStr2 = "joinAtDate";
 
 
 let sampleCondition = {
@@ -43,7 +43,7 @@ let sampleCondition = {
 			
             reference: referenceDateStr2,
             // Need to make sure that the minute and seconds do not get in the way of calculatioon
-            offset: {type: "plus", value: {days: 0}},
+            offset: {type: "plus", value: {days: 14}},
             inclusive: true
             
         }

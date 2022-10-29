@@ -65,7 +65,7 @@ let sampleCondition = {
 // checkOneConditionForUser(condition, userInfo, dateTime)
 
 
-let testDate = DateTime.fromFormat("10/25/2022, 1:07:04 PM", "F");
+let testDate = DateTime.fromFormat("10/23/2022, 1:07:04 PM", "F");
 
 //let result = await TaskExecutor.checkOneConditionForUser(sampleCondition, userInfo, DateTime.utc());
 

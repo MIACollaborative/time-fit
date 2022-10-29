@@ -9,6 +9,7 @@ let userInfo = await prisma.users.findFirst({
     }
 });
 
+userInfo = JSON.parse(JSON.stringify(userInfo, replacer));
 
 let referenceDateStr1 = "joinAtDate";
 let referenceDateStr2 = "now";
@@ -58,7 +59,7 @@ let testDate = DateTime.now();
 
 
 
-let result = await TaskExecutor.checkOneConditionForUser(sampleCondition, userInfo, testDate.toUTC());
+let result = await TaskExecutor.checkOneConditionForUser(sampleCondition, userInfo, testDate);
 
 
 console.log(`checkOneConditionForUser: ${result}`);

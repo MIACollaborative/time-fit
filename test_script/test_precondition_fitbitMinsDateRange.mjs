@@ -65,7 +65,7 @@ let sampleCondition = {
 // checkOneConditionForUser(condition, userInfo, dateTime)
 
 
-let testDate = DateTime.fromFormat("10/29/2022, 08:00:00 AM", "F", { zone: userInfo.timezone });
+let testDate = DateTime.fromFormat("10/25/2022, 08:00:00 AM", "F", { zone: userInfo.timezone });
 
 //let result = await TaskExecutor.checkOneConditionForUser(sampleCondition, userInfo, DateTime.utc());
 

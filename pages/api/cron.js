@@ -59,12 +59,12 @@ async function executeTask(now) {
     });
     */
 
-    let userList = users.map((userInfo) => {
+    users = users.map((userInfo) => {
         return exclude(userInfo, ["password", "hash", "accessToken", "refreshToken"]);
     });
 
 
-    //let userList = JSON.parse(JSON.stringify(users, replacer));
+    let userList = JSON.parse(JSON.stringify(users, replacer));
 
     let tasks = await prisma.task.findMany({
         where: { enabled: true},

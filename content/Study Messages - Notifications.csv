@@ -23,4 +23,4 @@ id,group,interventionMessage,topic,note
 22,prompt,Thank you [name] for completing the WalkToJoy study. We greatly appreciate your contribution to our research. Your compensation will be communicated via email as well as information on an optional interview. Happy walking!,End of study,Send message once participant completes the post-study survey
 23,investigator,[PID] has completed their study. Follow up with this person with compensation and interview information.,End of study notification to investigator,Send message once participant completes the post-study survey
 24,prompt,You have remaining tasks to complete before Monday to be activated into the intervention phase. Please visit https://walktojoy.info/ to check your remaining tasks.,Baseline remaining task reminder,
-25,prompt,FOR TESTING: Atleast 3 days of Fitbit wearing is completed in the past 7 days. :),,
+25,prompt,FOR TESTING: At least 3 days of Fitbit wearing over 8 hours have been completed in the past 7 days. :),,

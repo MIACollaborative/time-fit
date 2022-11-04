@@ -63,7 +63,46 @@ let sampleCondition = {
     }
 };
 
-let sampleCondition2 = {};
+let sampleCondition2 = {
+    // Check if participant's Fitbit has detected activity two days ago - should return False (not any)
+    type: "hasHeartRateIntradayMinutesAboveThresholdForPersonByDateRange",
+    opposite: false,
+    criteria: {
+        // Id list: list of Qualtrics survey Ids to check
+        idList: [""],
+
+        // Whehter we want all ("and") surveys to be filled or at least one ("or") survey to be filled.
+        // Use ("not any") for checking survey NOT filled, etc.
+        idRelationship: "or",
+
+        // check whether minutes >= wearingLowerBoundMinutes
+        wearingLowerBoundMinutes: 60 * 8,
+
+        period: { // check between: the start of the day of two days ago - today
+            // Start: the starting piont of the time window to consider
+            // Removing it means we are consider a time window starting from the very beginning of time (year 200 for impelementation)
+            // reference:
+            // now: current time
+            // today: start of today (00:00:00 am)
+            start: {
+                reference: "today",
+                offset: { type: "minus", value: { days: 5 } }
+            },
+            // End doesn't matter for Fitbit wearing
+            // Removing it means we are consider a time window up to this point
+            end: {
+                // reference:
+                // now: current time
+                // today: end of today (23:59:59 pm)
+                reference: "today",
+
+                // offset, the time that will be added ("plus") or substracted ("minus") from the reference
+                // Plus 0 hours basically means using the reference point directly
+                offset: { type: "minus", value: { days: 3 } }
+            }
+        }
+    }
+};
 // checkOneConditionForUser(condition, userInfo, dateTime)
 
 

@@ -12,7 +12,7 @@ function replacer(key, value) {
 
 let userInfo = await prisma.users.findFirst({
     where: {
-        username: "test2"
+        username: "test1"
     }
 });
 
@@ -22,7 +22,7 @@ userInfo = JSON.parse(JSON.stringify(userInfo, replacer));
 let referenceDateStr = "today";
 
 
-let sampleCondition =                     {
+let sampleCondition = {
     // Check if participant's Fitbit isn't detecting activity
     type: "hasHeartRateIntradayMinutesAboveThresholdForPersonByDateRange", // This type can only check the specified date inside the start: {}
     opposite: false, // participant has been wearing = False
@@ -32,10 +32,11 @@ let sampleCondition =                     {
 
         // Whehter we want all ("and") surveys to be filled, at least one ("or") survey to be filled, or ("not any").
         // Use ("not any") for checking survey NOT filled, etc.
-        idRelationship: "not any",
+        idRelationship: "and",
 
         // check whether minutes >= wearingLowerBoundMinutes
         wearingLowerBoundMinutes: 60 * 8, // Day of checking for adherence (wakeup+1hr) will always return adherent, thus won't be counted towards Fitbit non-worn day.
+        wearingDayLowerBoundCount: 3, // if specified, idRelationshi ignored; don't make it 0
 
         period: {
             // Start: the starting piont of the time window to consider
@@ -45,7 +46,7 @@ let sampleCondition =                     {
             // today: start of today (00:00:00 am)
             start: {
                 reference: "today",
-                offset: { type: "minus", value: { days: 2 } } // check today since 00:00:00 am
+                offset: { type: "minus", value: { days: 8 } } // check today since 00:00:00 am
             },
             // End doesn't matter for Fitbit wearing
             // Removing it means we are consider a time window up to this point
@@ -60,12 +61,12 @@ let sampleCondition =                     {
             }
         }
     }
-};
+},;
 
 // checkOneConditionForUser(condition, userInfo, dateTime)
 
 
-let testDate = DateTime.fromFormat("10/24/2022, 08:00:00 AM", "F", { zone: userInfo.timezone });
+let testDate = DateTime.fromFormat("11/04/2022, 08:00:00 AM", "F", { zone: userInfo.timezone });
 
 //let result = await TaskExecutor.checkOneConditionForUser(sampleCondition, userInfo, DateTime.utc());
 

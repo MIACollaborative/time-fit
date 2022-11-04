@@ -61,7 +61,7 @@ let sampleCondition = {
             }
         }
     }
-},;
+};
 
 // checkOneConditionForUser(condition, userInfo, dateTime)
 

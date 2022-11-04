@@ -36,7 +36,7 @@ let sampleCondition = {
 
         // check whether minutes >= wearingLowerBoundMinutes
         wearingLowerBoundMinutes: 60 * 8, // Day of checking for adherence (wakeup+1hr) will always return adherent, thus won't be counted towards Fitbit non-worn day.
-        wearingDayLowerBoundCount: 3, // if specified, idRelationshi ignored; don't make it 0
+        wearingDayLowerBoundCount: 1, // if specified, idRelationshi ignored; don't make it 0
 
         period: {
             // Start: the starting piont of the time window to consider

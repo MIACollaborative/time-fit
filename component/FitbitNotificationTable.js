@@ -12,6 +12,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import GeneralUtility from '../lib/GeneralUtility.mjs';
 
 function replacer(key, value) {
   if (typeof value === "Date") {
@@ -39,6 +40,8 @@ export default function FitbitNotificationTable({ infoList}) {
   // for security logging
   ip String?
   */
+
+  infoList = GeneralUtility.removeFitbitUpdateDuplicate(infoList, true);
 
 
   return (

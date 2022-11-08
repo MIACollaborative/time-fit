@@ -159,7 +159,7 @@ export async function getServerSideProps(ctx) {
           updatedAt: "desc",
         },
       ],
-      take: queryLimit
+      take: queryLimit * 2
     });
 
     fitbitNotificationInfoList = JSON.parse(JSON.stringify(fitbitNotificationList, replacer));

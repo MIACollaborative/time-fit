@@ -61,8 +61,9 @@ export default function TaskLogTable({ infoList }) {
           <TableRow>
             <TableCell align="right">Task Label</TableCell>
             <TableCell align="right">Username</TableCell>
-            <TableCell align="right">Message Label</TableCell>
-            <TableCell align="right">Randomization Result</TableCell>
+            
+            <TableCell align="right">Randomization</TableCell>
+            <TableCell align="right">Action</TableCell>
             <TableCell align="right">Execution Result</TableCell>
             <TableCell align="right">User Info Cache</TableCell>
             <TableCell align="right">Created At</TableCell>
@@ -77,8 +78,8 @@ export default function TaskLogTable({ infoList }) {
             >
               <TableCell align="right">{row.taskLabel}</TableCell>
               <TableCell align="right">{row.username}</TableCell>
-              <TableCell align="right">{row.messageLabel}</TableCell>
               <TableCell align="right">{GeneralUtility.convertRandomizationResultToString(row.randomizationResult)}</TableCell>
+              <TableCell align="right">{GeneralUtility.extractActionToString(row.randomizationResult.theChoice)}</TableCell>
               <TableCell align="right" style={row.executionResult.value.errorMessage == null? {}:{background: "lightcoral"}}>{GeneralUtility.convertExecutionResultToString(row.executionResult)}</TableCell>
               <TableCell align="right">{GeneralUtility.extractUserKeyAttributesToString(row.userInfoCache)}</TableCell>
               <TableCell align="right">{row.createdAt}</TableCell>

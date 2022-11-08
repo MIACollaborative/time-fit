@@ -153,6 +153,20 @@ export async function getServerSideProps(ctx) {
 
   console.log(`dashboard.getServerSideProps: find fitbitNotificationList`);
   if (adminUsernameList.includes(userName)) {
+    // v2: try filter
+    fitbitNotificationList = await prisma.fitbit_update.findMany({
+      orderBy: [
+        {
+          updatedAt: "desc",
+        },
+      ],
+      //take: queryLimit * 2
+    });
+    fitbitNotificationList = GeneralUtility.removeFitbitUpdateDuplicate( fitbitNotificationList, true).slice(0, queryLimit);
+
+
+    // v1: typical
+    /*
     fitbitNotificationList = await prisma.fitbit_update.findMany({
       orderBy: [
         {
@@ -161,6 +175,7 @@ export async function getServerSideProps(ctx) {
       ],
       take: queryLimit * 2
     });
+    */
 
     fitbitNotificationInfoList = JSON.parse(JSON.stringify(fitbitNotificationList, replacer));
   }

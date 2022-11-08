@@ -11,7 +11,8 @@ if (process.env.NODE_ENV !== "production") {
     dotenv.config();
 }
 
-let updateList = await prisma.fitbit_update.findMany({
+
+let sampleList = await prisma.fitbit_update.findMany({
     where:{
         status: "notification"
     },
@@ -19,10 +20,28 @@ let updateList = await prisma.fitbit_update.findMany({
     orderBy: {
         createdAt: 'desc',
     },
-})
+});
 
 
-console.log(`updateList: ${JSON.stringify(updateList)}`);
+let fUpdate = sampleList[0];
+console.log(`fUpdate: ${fUpdate}`);
 
-console.log(`updateList[0].createdAt: ${updateList[0].createdAt}`);
-console.log(`typeof updateList[0].createdAt: ${typeof updateList[0].createdAt}`);
+let timeString = "2022-11-08T17:01:56.214Z";
+console.log(`timeString: ${timeString}`);
+let timestamp = DateTime.fromISO(timeString).toJSDate();
+console.log(`timestamp: ${timestamp}`);
+
+const updateList = await prisma.fitbit_update.findMany({
+    where: {
+        //status: "notification",
+        ownerId: fUpdate.ownerId,
+        collectionType: fUpdate.collectionType,
+        date: fUpdate.date,
+        createdAt: {
+            lte: timestamp //fUpdate.createdAt
+        },
+    },
+});
+
+console.log(`updateList: ${JSON.stringify(updateList.map((update) => {return update.createdAt;}))}`);
+

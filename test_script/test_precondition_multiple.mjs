@@ -133,7 +133,7 @@ let sampleConditionObj = {
 // checkOneConditionForUser(condition, userInfo, dateTime)
 
 
-let testDate = DateTime.fromFormat("11/04/2022, 08:00:00 AM", "F", { zone: userInfo.timezone });
+
 
 //let result = await TaskExecutor.checkOneConditionForUser(sampleCondition, userInfo, DateTime.utc());
 
@@ -141,6 +141,7 @@ let checkResultList = [];
 
 for (let i = 0; i < userInfoList.length; i++) {
     let userInfo = userInfoList[i];
+    let testDate = DateTime.fromFormat("11/04/2022, 08:00:00 AM", "F", { zone: userInfo.timezone });
     let checkResult = await TaskExecutor.isPreConditionMetForUser(sampleConditionObj, userInfo, testDate);
 
     checkResultList.push(checkResult);

@@ -21,7 +21,7 @@ function replacer(key, value) {
   return value;
 }
 
-export default function FitbitNotificationTable({ infoList}) {
+export default function FitbitNotificationTable({infoList}) {
 
     // example
 
@@ -41,7 +41,11 @@ export default function FitbitNotificationTable({ infoList}) {
   ip String?
   */
 
-  infoList = GeneralUtility.removeFitbitUpdateDuplicate(infoList, true);
+  console.log(`infoList: ${infoList}`);
+  console.log(`typeof infoList: ${typeof infoList}`);
+  let filteredInfoList = GeneralUtility.removeFitbitUpdateDuplicate( infoList, true);
+  console.log(`filteredInfoList: ${filteredInfoList}`);
+  console.log(`typeof filteredInfoList: ${typeof filteredInfoList}`);
 
 
   return (
@@ -62,7 +66,7 @@ export default function FitbitNotificationTable({ infoList}) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {infoList.map((row, index) => (
+          {filteredInfoList.map((row, index) => (
             <TableRow
               key={index}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

@@ -80,7 +80,7 @@ export default function TaskLogTable({ infoList }) {
               <TableCell align="right">{row.username}</TableCell>
               <TableCell align="right">{GeneralUtility.convertRandomizationResultToString(row.randomizationResult)}</TableCell>
               <TableCell align="right">{GeneralUtility.extractOutcomeToString(row.randomizationResult.theChoice)}</TableCell>
-              <TableCell align="right" style={row.executionResult.value.errorMessage == null? {}:{background: "lightcoral"}}>{GeneralUtility.convertExecutionResultToString(row.executionResult)}</TableCell>
+              <TableCell align="right" style={row.executionResult.value.errorMessage == null || row.executionResult.value.errorMessage == ""? {}:{background: "lightcoral"}}>{GeneralUtility.convertExecutionResultToString(row.executionResult)}</TableCell>
               <TableCell align="right">{GeneralUtility.extractUserKeyAttributesToString(row.userInfoCache)}</TableCell>
               <TableCell align="right">{row.createdAt}</TableCell>
               <TableCell align="right">{row.updatedAt}</TableCell>

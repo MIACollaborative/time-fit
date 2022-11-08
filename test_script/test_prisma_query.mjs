@@ -23,3 +23,6 @@ let updateList = await prisma.fitbit_update.findMany({
 
 
 console.log(`updateList: ${JSON.stringify(updateList)}`);
+
+console.log(`updateList[0].createdAt: ${updateList[0].createdAt}`);
+console.log(`typeof updateList[0].createdAt: ${typeof updateList[0].createdAt}`);

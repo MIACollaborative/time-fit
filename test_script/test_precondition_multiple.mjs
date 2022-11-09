@@ -48,7 +48,7 @@ let sampleConditionObj = {
         {
             // Check if participant's Fitbit has detected activity the past 2 days - should return False
             type: "hasHeartRateIntradayMinutesAboveThresholdForPersonByDateRange", // This type can only check the specified date inside the start: {}
-            opposite: true, // participant has been wearing = True -> False
+            opposite: false, // participant has been wearing = True -> False
             criteria: {
                 // Id list: list of Qualtrics survey Ids to check
                 idList: [""],
@@ -87,7 +87,7 @@ let sampleConditionObj = {
         {
             // Check if participant's Fitbit has detected activity the past 5 days - should return False
             type: "hasHeartRateIntradayMinutesAboveThresholdForPersonByDateRange",
-            opposite: true, // participant has been wearing = True -> False
+            opposite: false, // participant has been wearing = True -> False
             criteria: {
                 // Id list: list of Qualtrics survey Ids to check
                 idList: [""],

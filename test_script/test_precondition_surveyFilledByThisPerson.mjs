@@ -31,7 +31,7 @@ let sampleCondition =                     {
 
         // Whehter we want all ("and") surveys to be filled or at least one ("or") survey to be filled.
         // Use ("not any") for checking survey NOT filled, etc.
-        idRelationship: "not any",
+        idRelationship: "and",
         period: {
             // Start: the starting piont of the time window to consider
             // Removing it means we are consider a time window starting from the very beginning of time (year 200 for impelementation)

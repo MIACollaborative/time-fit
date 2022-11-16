@@ -25,29 +25,25 @@ let referenceDateStr2 = "joinAtDate";
 
 
 let sampleCondition = {
-	
 	type: "timeInPeriod",
-	
 	criteria: {
-		
-        
-        start:{
+        period: {
+            start:{
 			
-            reference: referenceDateStr1,
-            // Need to make sure that the minute and seconds do not get in the way of calculatioon
-            offset: { type: "plus", value: { days: 1 } }
-            
-        },
-        
-        end:{
-			
-            reference: referenceDateStr2,
-            // Need to make sure that the minute and seconds do not get in the way of calculatioon
-            offset: {type: "plus", value: {days: 14}},
-            inclusive: true
-            
+                reference: referenceDateStr1,
+                // Need to make sure that the minute and seconds do not get in the way of calculatioon
+                offset: { type: "plus", value: { days: 1 } }
+                
+            },
+            end:{
+                
+                reference: referenceDateStr2,
+                // Need to make sure that the minute and seconds do not get in the way of calculatioon
+                offset: {type: "plus", value: {days: 14}},
+                inclusive: true
+                
+            }
         }
-	
 	}
 
 };

@@ -90,6 +90,9 @@ export async function getServerSideProps(ctx) {
   let taskLogList = [];
   let taskLogInfoList = [];
 
+  let taskLogGroupByList = [];
+  let taskLogGroupByInfoList = [];
+
   let taskLogInvestigatorList = [];
   let taskLogInvestigatorInfoList = [];
 
@@ -257,6 +260,26 @@ export async function getServerSideProps(ctx) {
 
     taskLogInvestigatorInfoList = JSON.parse(JSON.stringify(taskLogInvestigatorList, replacer));
   }
+
+  console.log(`dashboard.getServerSideProps: find taskLogList`);
+  // wil enable once I test the groupby feature
+  /*
+  if (adminUsernameList.includes(userName)) {
+    taskLogGroupByList = await prisma.taskLog.groupBy({
+      by: ["username", "messageLabel"],
+      _count: {
+        messageLabel: true,
+      },
+      orderBy: [
+        {
+          username: "asc",
+        },
+      ],
+      //take: queryLimit
+    });
+    taskLogGroupByInfoList = JSON.parse(JSON.stringify(taskLogGroupByList, replacer));
+  }
+  */
 
   console.log(`dashboard.getServerSideProps: find messageList`);
   if (adminUsernameList.includes(userName)) {

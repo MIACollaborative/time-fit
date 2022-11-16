@@ -39,6 +39,7 @@ import MessageTable from "../component/MessageTable";
 import FitbitSubscriptionTable from "../component/FitbitSubscriptionTable";
 import FitbitDataTable from "../component/FitbitDataTable";
 import UserTable from "../component/UserTable";
+import TaskLogGroupByTable from "../component/TaskLogGroupByTable";
 
 function replacer(key, value) {
   if (typeof value === "Date") {
@@ -74,7 +75,7 @@ export async function getServerSideProps(ctx) {
 
   let responseList = [];
   let responseInfoList = [];
-  
+
   let fitbitSubscriptionList = [];
   let fitbitSubscriptionInfoList = [];
 
@@ -130,7 +131,7 @@ export async function getServerSideProps(ctx) {
         {
           updatedAt: "desc",
         },
-        
+
       ],
       take: queryLimit
     });
@@ -167,7 +168,7 @@ export async function getServerSideProps(ctx) {
       ],
       //take: queryLimit * 2
     });
-    fitbitNotificationList = GeneralUtility.removeFitbitUpdateDuplicate( fitbitNotificationList, true).slice(0, queryLimit);
+    fitbitNotificationList = GeneralUtility.removeFitbitUpdateDuplicate(fitbitNotificationList, true).slice(0, queryLimit);
 
 
     // v1: typical
@@ -247,8 +248,8 @@ export async function getServerSideProps(ctx) {
   console.log(`dashboard.getServerSideProps: find taskLogInvestigatorList`);
   if (adminUsernameList.includes(userName)) {
     taskLogInvestigatorList = await prisma.taskLog.findMany({
-      where:{
-        taskLabel: {contains: "investigator"}
+      where: {
+        taskLabel: { contains: "investigator" }
       },
       orderBy: [
         {
@@ -263,7 +264,7 @@ export async function getServerSideProps(ctx) {
 
   console.log(`dashboard.getServerSideProps: find taskLogList`);
   // wil enable once I test the groupby feature
-  /*
+
   if (adminUsernameList.includes(userName)) {
     taskLogGroupByList = await prisma.taskLog.groupBy({
       by: ["username", "messageLabel"],
@@ -279,7 +280,7 @@ export async function getServerSideProps(ctx) {
     });
     taskLogGroupByInfoList = JSON.parse(JSON.stringify(taskLogGroupByList, replacer));
   }
-  */
+
 
   console.log(`dashboard.getServerSideProps: find messageList`);
   if (adminUsernameList.includes(userName)) {
@@ -297,11 +298,11 @@ export async function getServerSideProps(ctx) {
   let hostURL = `${process.env.NEXTAUTH_URL}`;
 
   return {
-    props: { userInfoList, responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, taskInfoList, taskLogInfoList, taskLogInvestigatorInfoList,  messageInfoList, userInfo, hostURL},
+    props: { userInfoList, responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, taskInfoList, taskLogInfoList, taskLogGroupByList, taskLogInvestigatorInfoList, messageInfoList, userInfo, hostURL },
   };
 }
 
-export default function Dashboard({ userInfoList, responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, taskInfoList, taskLogInfoList, taskLogInvestigatorInfoList, messageInfoList, userInfo, hostURL}) {
+export default function Dashboard({ userInfoList, responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, taskInfoList, taskLogInfoList, taskLogGroupByList, taskLogInvestigatorInfoList, messageInfoList, userInfo, hostURL }) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [tabName, setTabName] = useState("Users");
@@ -374,6 +375,12 @@ export default function Dashboard({ userInfoList, responseInfoList, fitbitSubscr
           Investigator Task Log
         </ToggleButton>
         <ToggleButton
+          value="Task Log By User"
+          aria-label="centered"
+        >
+          Task Log By User
+        </ToggleButton>
+        <ToggleButton
           value="Task Log"
           aria-label="centered"
         >
@@ -398,7 +405,7 @@ export default function Dashboard({ userInfoList, responseInfoList, fitbitSubscr
       {tabName == "Fitbit Subscription" ? (
         <FitbitSubscriptionTable infoList={fitbitSubscriptionInfoList} />
       ) : null}
-      
+
       {tabName == "Fitbit Notification" ? (
         <FitbitNotificationTable infoList={fitbitNotificationInfoList} />
       ) : null}
@@ -412,6 +419,10 @@ export default function Dashboard({ userInfoList, responseInfoList, fitbitSubscr
 
       {tabName == "Investigator Task Log" ? (
         <TaskLogTable infoList={taskLogInvestigatorInfoList} />
+      ) : null}
+
+      {tabName == "Task Log By User" ? (
+        <TaskLogGroupByTable infoList={taskLogGroupByInfoList} />
       ) : null}
 
       {tabName == "Task Log" ? (

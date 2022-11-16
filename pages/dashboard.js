@@ -302,7 +302,7 @@ export async function getServerSideProps(ctx) {
   };
 }
 
-export default function Dashboard({ userInfoList, responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, taskInfoList, taskLogInfoList, taskLogGroupByList, taskLogInvestigatorInfoList, messageInfoList, userInfo, hostURL }) {
+export default function Dashboard({ userInfoList, responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, taskInfoList, taskLogInfoList, taskLogGroupByInfoList, taskLogInvestigatorInfoList, messageInfoList, userInfo, hostURL }) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [tabName, setTabName] = useState("Users");

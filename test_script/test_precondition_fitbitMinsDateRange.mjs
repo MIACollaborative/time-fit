@@ -111,6 +111,6 @@ let testDate = DateTime.fromFormat("11/04/2022, 08:00:00 AM", "F", { zone: userI
 //let result = await TaskExecutor.checkOneConditionForUser(sampleCondition, userInfo, DateTime.utc());
 
 let result = await TaskExecutor.checkOneConditionForUser(sampleCondition, userInfo, testDate);
-let result2 = await TaskExecutor.checkOneConditionForUser(sampleCondition2, userInfo, testDate);
+let result2 = await TaskExecutor.checkOneConditionForUser(sampleCondition2, userInfo, DateTime.now());
 
 console.log(`checkOneConditionForUser: ${result}, ${result2}`);

@@ -34,7 +34,7 @@ let condition = {
 
                 // offset, the time that will be added ("plus") or substracted ("minus") from the reference
                 // Plus 0 days basically means using the reference point directly
-                offset: {type: "minus", value: {days: 0}}
+                offset: {type: "minus", value: {days: 2}}
             },
 
             // End: the start of the day for that day (e.g., 23:59 pm on 08/31)

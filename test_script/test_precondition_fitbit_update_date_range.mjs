@@ -19,7 +19,7 @@ const user = await prisma.users.findFirst({
 
 
 // 2022.08.31 02:00 PM (EDT)
-let dateTime = DateTime.fromJSDate(new Date(2022, 7, 31, 14, 0, 0));
+let dateTime = DateTime.now();// DateTime.fromJSDate(new Date(2022, 7, 31, 14, 0, 0));
 
 let condition = {
     // surveyFilledByThisPerson -> check whether a survey response is received within a time window

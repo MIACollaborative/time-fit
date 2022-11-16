@@ -98,7 +98,7 @@ let sampleCondition2 = {
 
                 // offset, the time that will be added ("plus") or substracted ("minus") from the reference
                 // Plus 0 hours basically means using the reference point directly
-                offset: { type: "minus", value: { days: 3 } }
+                offset: { type: "minus", value: { days: 0 } }
             }
         }
     }

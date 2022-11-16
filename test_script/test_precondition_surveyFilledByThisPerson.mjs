@@ -39,6 +39,15 @@ let sampleCondition =                     {
             // reference:
             // now: current time
             // today: start of today (00:00:00 am)
+            start: {
+                // reference:
+                // now: current time
+                // today: end of today (23:59:59 pm)                                    
+                reference: "now",
+                // offset, the time that will be added ("plus") or substracted ("minus") from the reference
+                // Plus 0 hours basically means using the reference point directly
+                offset: { type: "minus", value: { hours: 7 * 24} }
+            },
 
             // End: the end point of the time window to consider
             // Removing it means we are consider a time window up to this point

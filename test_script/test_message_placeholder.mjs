@@ -1,14 +1,22 @@
 import DatabaseUtility from "../lib/DatabaseUtility.mjs";
 import prisma from "../lib/prisma.mjs";
 
+function replacer(key, value) {
+    if (typeof value === "Date") {
+        return value.toString();
+    }
+    return value;
+}
 
-let userInfo = await prisma.users.findFirst({
+let aUser = await prisma.users.findFirst({
     where: {
         username: "test1"
     }
 });
 
-let sampleMesssageTemplate = `Remember to enhance your walking experience on your upcoming walks. Here is what you said you would try this week: "[response|SV_cACIS909SMXMUp8|last]". `;
+let userInfo = JSON.parse(JSON.stringify(aUser, replacer));
+
+let sampleMesssageTemplate = `You wear Fitbit over 8 hours for [fitbit_wearing_days_since_join|480|3]/3 days sincing joining the study.`;
 
 
 let resultMsg = await DatabaseUtility.replacePlaceholderFromMessage(sampleMesssageTemplate, userInfo, "");

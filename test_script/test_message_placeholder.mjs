@@ -8,7 +8,7 @@ let userInfo = await prisma.users.findFirst({
     }
 });
 
-let sampleMesssageTemplate = `Remember to enhance your walking experience on your upcoming walks. Here is what you said you would try this week: "[response|SV_cACIS909SMXMUp8|last]". `;
+let sampleMesssageTemplate = `You wear Fitbit over 8 hours for [fitbit_wearing_days_since_join|480|3] days.`;
 
 
 let resultMsg = await DatabaseUtility.replacePlaceholderFromMessage(sampleMesssageTemplate, userInfo, "");

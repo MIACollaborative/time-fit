@@ -41,91 +41,68 @@ let sampleConditionObj = {
 
     // Condition list: list of conditions to be checked
     conditionList: [
-        // Condition type: person, surveyFilledByThisPerson, timeInPeriod, hasFitbitUpdateForPersonByDateRange, hasHeartRateIntradayMinutesAboveThresholdForPersonByDate
+        // Condition type: person, surveyFilledByThisPerson, timeInPeriod
         //See the checkOneConditionForUser() function in TaskExecutor.mjs for all the available condition type
-
-        // Participants can be on either baseline or intervention to receive fitbit wearing reminders
+        /*
         {
-            // Check if participant's Fitbit has detected activity the past 2 days - should return False
-            type: "hasHeartRateIntradayMinutesAboveThresholdForPersonByDateRange", // This type can only check the specified date inside the start: {}
-            opposite: false, // participant has been wearing = False
+            // person -> check a participant's property
+            // For instance, the following example check whehter a person is in its baseline phase (with the "phase" property set to "baseline")
+            type: "person",
             criteria: {
-                // Id list: list of Qualtrics survey Ids to check
-                idList: [""],
-
-                // Whehter we want all ("and") surveys to be filled, at least one ("or") survey to be filled, or ("not any").
-                // Use ("not any") for checking survey NOT filled, etc.
-                idRelationship: "not any", //is used for hasHeartRateIntradayMinutesAboveThresholdForPersonByDateRange
-
-                // check whether minutes >= wearingLowerBoundMinutes
-                wearingLowerBoundMinutes: 60 * 8, // Day of checking for adherence (wakeup+1hr) will always return adherent, thus won't be counted towards Fitbit non-worn day.
-
-                period: {
-                    // Start: the starting piont of the time window to consider
-                    // Removing it means we are consider a time window starting from the very beginning of time (year 200 for impelementation)
-                    // reference:
-                    // now: current time
-                    // today: start of today (00:00:00 am)
-                    start: {
-                        reference: "today",
-                        offset: { type: "minus", value: { days: 2 } } // check today since 00:00:00 am
-                    },
-                    // End doesn't matter for Fitbit wearing
-                    // Removing it means we are consider a time window up to this point
-                    end: {
-                        // reference:
-                        // now: current time
-                        // today: end of today (23:59:59 pm)
-                        reference: "today",
-                        // offset, the time that will be added ("plus") or substracted ("minus") from the reference
-                        // Plus 0 hours basically means using the reference point directly
-                        offset: { type: "minus", value: { days: 1 } }
-                    }
-                }
+                phase: "baseline" // intervention +2days
             }
         },
+        */
         {
-            // Check if participant's Fitbit has detected activity the past 5 days - should return False
-            type: "hasHeartRateIntradayMinutesAboveThresholdForPersonByDateRange",
-            opposite: false, // participant has been wearing = True -> False
+            type: "hasHeartRateIntradayMinutesAboveThresholdForPersonByDateRange", // This type can only check the specified date inside the start: {}
+            opposite: false, // participant did NOT adhere to wearing fitbit for +8 hours for 3 days = true
             criteria: {
-                // Id list: list of Qualtrics survey Ids to check
                 idList: [""],
 
                 // Whehter we want all ("and") surveys to be filled or at least one ("or") survey to be filled.
                 // Use ("not any") for checking survey NOT filled, etc.
-                idRelationship: "and", //is used for hasHeartRateIntradayMinutesAboveThresholdForPersonByDateRange
+                idRelationship: "not any", // used for hasHeartRateIntradayMinutesAboveThresholdForPersonByDateRange
 
                 // check whether minutes >= wearingLowerBoundMinutes
-                wearingLowerBoundMinutes: 60 * 8,                            
+                wearingLowerBoundMinutes: 60 * 8,
+                // REACTIVATE AFTER TESTING
+                // wearingDayLowerBoundCount: 3, // if specified, idRelationshi ignored; don't make it 0
 
-                period: { // check between: the start of the day of two days ago - today
+                // DELETE AFTER TESTING
+                wearingDayLowerBoundCount: 3,
+
+                period: {
                     // Start: the starting piont of the time window to consider
                     // Removing it means we are consider a time window starting from the very beginning of time (year 200 for impelementation)
+                    start: {
+                        // REACTIVATE AFTER TESTING
+                        // reference: "joinAtDate",
+                        // offset: { type: "minus", value: { days: 0 } } // checks for wearing adherence the last 6 days
+
+                        // DELETE AFTER TESTING
+                        reference: "today",
+                        offset: { type: "minus", value: { days: 3 } }
+                    },
                     // reference:
                     // now: current time
                     // today: start of today (00:00:00 am)
-                    start: {
-                        reference: "today",
-                        offset: { type: "minus", value: { days: 5 } }
-                    },
+
                     // End doesn't matter for Fitbit wearing
                     // Removing it means we are consider a time window up to this point
-                    end: {
-                        // reference:
-                        // now: current time
-                        // today: end of today (23:59:59 pm)
-                        reference: "today",
+                    // end:{
+                    //     // reference:
+                    //     // now: current time
+                    //     // today: end of today (23:59:59 pm)
+                    //     reference: "today",
 
-                        // offset, the time that will be added ("plus") or substracted ("minus") from the reference
-                        // Plus 0 hours basically means using the reference point directly
-                        offset: { type: "minus", value: { days: 3 } }
-                    }
+                    //     // offset, the time that will be added ("plus") or substracted ("minus") from the reference
+                    //     // Plus 0 hours basically means using the reference point directly
+                    //     offset: {type: "minus", value: {days: 6}}
+                    // }
                 }
             }
         },
-        // timeInPeriod -> check time constraint based on a time window
-        // Note: have a draft implemention, but might not be used or well tested.
+        
     ]
 };
 

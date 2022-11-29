@@ -46,11 +46,20 @@ let sampleConditionObj = {
 
         // Participants can be on either baseline or intervention to receive fitbit wearing reminders
         {
-            // Check if participant's Fitbit isn't detecting activity
-            type: "messageSentDuringPeriod", // This type can only check the specified date inside the start: {}
-            opposite: false, // message sent = True
+            // Check if participant's Fitbit has detected activity the past 2 days - should return False
+            type: "hasHeartRateIntradayMinutesAboveThresholdForPersonByDateRange", // This type can only check the specified date inside the start: {}
+            opposite: false, // participant has been wearing = False
             criteria: {
-                messageLabel: "investigator_19",
+                // Id list: list of Qualtrics survey Ids to check
+                idList: [""],
+
+                // Whehter we want all ("and") surveys to be filled, at least one ("or") survey to be filled, or ("not any").
+                // Use ("not any") for checking survey NOT filled, etc.
+                idRelationship: "not any", //is used for hasHeartRateIntradayMinutesAboveThresholdForPersonByDateRange
+
+                // check whether minutes >= wearingLowerBoundMinutes
+                wearingLowerBoundMinutes: 60 * 8, // Day of checking for adherence (wakeup+1hr) will always return adherent, thus won't be counted towards Fitbit non-worn day.
+
                 period: {
                     // Start: the starting piont of the time window to consider
                     // Removing it means we are consider a time window starting from the very beginning of time (year 200 for impelementation)
@@ -59,7 +68,7 @@ let sampleConditionObj = {
                     // today: start of today (00:00:00 am)
                     start: {
                         reference: "today",
-                        offset: { type: "minus", value: { days: 7 } } // check today since 00:00:00 am
+                        offset: { type: "minus", value: { days: 2 } } // check today since 00:00:00 am
                     },
                     // End doesn't matter for Fitbit wearing
                     // Removing it means we are consider a time window up to this point
@@ -67,31 +76,28 @@ let sampleConditionObj = {
                         // reference:
                         // now: current time
                         // today: end of today (23:59:59 pm)
-                        reference: "now",
+                        reference: "today",
                         // offset, the time that will be added ("plus") or substracted ("minus") from the reference
                         // Plus 0 hours basically means using the reference point directly
-                        offset: { type: "plus", value: { days: 0 } }
+                        offset: { type: "minus", value: { days: 1 } }
                     }
                 }
             }
         },
-
-        // disable because we are just testing
-        /*
         {
-            // Check if participant's Fitbit has detected activity two days ago - should return False (not any)
+            // Check if participant's Fitbit has detected activity the past 5 days - should return False
             type: "hasHeartRateIntradayMinutesAboveThresholdForPersonByDateRange",
-            opposite: false,
+            opposite: false, // participant has been wearing = True -> False
             criteria: {
                 // Id list: list of Qualtrics survey Ids to check
                 idList: [""],
 
                 // Whehter we want all ("and") surveys to be filled or at least one ("or") survey to be filled.
                 // Use ("not any") for checking survey NOT filled, etc.
-                idRelationship: "or",
+                idRelationship: "and", //is used for hasHeartRateIntradayMinutesAboveThresholdForPersonByDateRange
 
                 // check whether minutes >= wearingLowerBoundMinutes
-                wearingLowerBoundMinutes: 60 * 8,
+                wearingLowerBoundMinutes: 60 * 8,                            
 
                 period: { // check between: the start of the day of two days ago - today
                     // Start: the starting piont of the time window to consider
@@ -118,7 +124,6 @@ let sampleConditionObj = {
                 }
             }
         },
-        */
         // timeInPeriod -> check time constraint based on a time window
         // Note: have a draft implemention, but might not be used or well tested.
     ]
@@ -135,7 +140,7 @@ let checkResultList = [];
 
 for (let i = 0; i < userInfoList.length; i++) {
     let userInfo = userInfoList[i];
-    let testDate = DateTime.now();// DateTime.fromFormat("11/09/2022, 12:00:00 PM", "F", { zone: userInfo.timezone });
+    let testDate = DateTime.fromFormat("11/24/2022, 12:00:00 PM", "F", { zone: userInfo.timezone });
     let checkResult = await TaskExecutor.isPreConditionMetForUser(sampleConditionObj, userInfo, testDate);
 
     checkResultList.push(checkResult);

@@ -22,7 +22,7 @@ function replacer(key, value) {
   return value;
 }
 
-export default function FitbitDataTable({ infoList}) {
+export default function FitbitDataTable({ infoList, userInfo}) {
 
     // example
 

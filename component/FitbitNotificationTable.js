@@ -23,7 +23,7 @@ function replacer(key, value) {
   return value;
 }
 
-export default function FitbitNotificationTable({infoList}) {
+export default function FitbitNotificationTable({infoList, userInfo}) {
 
     // example
 

@@ -20,25 +20,30 @@ export default async function handler(req, res) {
 
     console.log(`fitbit-subscription typeof req.body: ${typeof req.body}`);
 
-    if (verify == undefined && req.body.length > 0) {
-        let notificationList = req.body.map((item) => {
-            return { ...item, ip, status: "notification"};
-        });
-        const aNotification = await prisma.fitbit_update.createMany({
-            data: notificationList
-        });
-
-        console.log(`fitbit-subscription: insert notifications: ${JSON.stringify(notificationList)}`);
+    if (verify != undefined ) {
+        // should be treated as a verify request
+        if(validity){
+            res.status(204).end();
+        }
+        else {
+            // now a valid verification request
+            res.status(404).end();
+        }
     }
+    else{
+        // is not a verify request
+        // verify == undefined && 
 
-    if (validity) {
-        res.status(204).end();
+        if (req.body.length > 0) {
+            let notificationList = req.body.map((item) => {
+                return { ...item, ip, status: "notification"};
+            });
+            const aNotification = await prisma.fitbit_update.createMany({
+                data: notificationList
+            });
+            console.log(`fitbit-subscription: insert notifications: ${JSON.stringify(notificationList)}`);
+        }
     }
-    else {
-        res.status(404).end();
-    }
-
-
 }
 
 

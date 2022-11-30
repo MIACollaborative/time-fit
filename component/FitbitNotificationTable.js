@@ -4,7 +4,7 @@ import logger from "../lib/logger";
 
 */
 
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -47,7 +47,6 @@ export default function FitbitNotificationTable({infoList}) {
   let filteredInfoList = infoList; //GeneralUtility.removeFitbitUpdateDuplicate( infoList, true);
   console.log(`filteredInfoList: ${filteredInfoList}`);
   console.log(`typeof filteredInfoList: ${typeof filteredInfoList}`);
-
 
   return (
     <Fragment>

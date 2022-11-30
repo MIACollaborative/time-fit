@@ -42,6 +42,7 @@ export default async function handler(req, res) {
                 data: notificationList
             });
             console.log(`fitbit-subscription: insert notifications: ${JSON.stringify(notificationList)}`);
+            res.status(204).end();
         }
     }
 }

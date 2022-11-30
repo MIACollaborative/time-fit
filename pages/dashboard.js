@@ -163,7 +163,8 @@ export async function getServerSideProps(ctx) {
     fitbitNotificationList = await prisma.fitbit_update.findMany({
       orderBy: [
         {
-          updatedAt: "desc",
+          date: "desc",
+          //updatedAt: "desc",
         },
       ],
       //take: queryLimit * 2

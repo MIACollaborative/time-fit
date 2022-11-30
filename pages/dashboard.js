@@ -168,7 +168,7 @@ export async function getServerSideProps(ctx) {
       ],
       //take: queryLimit * 2
     });
-    fitbitNotificationList = GeneralUtility.removeFitbitUpdateDuplicate(fitbitNotificationList, true).slice(0, queryLimit);
+    //fitbitNotificationList = GeneralUtility.removeFitbitUpdateDuplicate(fitbitNotificationList, true).slice(0, queryLimit);
 
 
     // v1: typical

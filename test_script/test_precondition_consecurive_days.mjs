@@ -146,9 +146,9 @@ for (let i = 0; i < userInfoList.length; i++) {
 
     // now, do it 10 days
     for(let j =0; j < numOfDays; j++ ){
-        testDate = testDate.plus({days: 1});
-        let checkResult = await TaskExecutor.isPreConditionMetForUser(sampleConditionObj, userInfo, testDate);
-        checkResultList.push([userInfo.username, testDate, checkResult]);
+        let curDate = testDate.plus({days: j});
+        let checkResult = await TaskExecutor.isPreConditionMetForUser(sampleConditionObj, userInfo, curDate);
+        checkResultList.push([userInfo.username, curDate, checkResult]);
         console.log(`[${userInfo.username}][${testDate}] - ${checkResult}`);
     }
    

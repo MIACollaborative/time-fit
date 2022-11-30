@@ -149,7 +149,7 @@ for (let i = 0; i < userInfoList.length; i++) {
         let curDate = testDate.plus({days: j});
         let checkResult = await TaskExecutor.isPreConditionMetForUser(sampleConditionObj, userInfo, curDate);
         checkResultList.push([userInfo.username, curDate, checkResult]);
-        console.log(`[${userInfo.username}][${testDate}] - ${checkResult}`);
+        console.log(`[${userInfo.username}][${curDate}] - ${checkResult}`);
     }
    
 }

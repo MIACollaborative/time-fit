@@ -1638,6 +1638,11 @@ js-yaml@^4.1.0:
   dependencies:
     argparse "^2.0.1"
 
+json-difference@^1.8.2:
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/json-difference/-/json-difference-1.8.2.tgz#263871cb7dff36b93bd5b95c7f5f1dcf51445edc"
+  integrity sha512-EVCoworuSNgs59YXcveEvejgfJrOYHrF5M2dpQflGhix41OkPDA6yNXiBKQtP3fpOorWqnFxWi8wbjXQmPECDA==
+
 json-parse-even-better-errors@^2.3.0:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/json-parse-even-better-errors/-/json-parse-even-better-errors-2.3.1.tgz#7c47805a94319928e05777405dc12e1f7a4ee02d"

@@ -148,7 +148,7 @@ for (let i = 0; i < userInfoList.length; i++) {
     for(let j =0; j < numOfDays; j++ ){
         testDate = testDate.plus({days: 1});
         let checkResult = await TaskExecutor.isPreConditionMetForUser(sampleConditionObj, userInfo, testDate);
-        checkResultList.push(checkResult);
+        checkResultList.push([userInfo.username, testDate, checkResult]);
         console.log(`[${userInfo.username}][${testDate}] - ${checkResult}`);
     }
 
@@ -160,6 +160,6 @@ for (let i = 0; i < userInfoList.length; i++) {
     let userInfo = userInfoList[i];
     let checkResult = checkResultList[i];
 
-    console.log(`[Test] for ${userInfo.username}: result: ${checkResult}`);
+    console.log(`${checkResult}`);
 
 }

@@ -151,13 +151,11 @@ for (let i = 0; i < userInfoList.length; i++) {
         checkResultList.push([userInfo.username, testDate, checkResult]);
         console.log(`[${userInfo.username}][${testDate}] - ${checkResult}`);
     }
-
-
-    
+   
 }
 
-for (let i = 0; i < userInfoList.length; i++) {
-    let userInfo = userInfoList[i];
+
+for (let i = 0; i < checkResultList.length; i++) {
     let checkResult = checkResultList[i];
 
     console.log(`${checkResult}`);

@@ -40,6 +40,7 @@ import FitbitSubscriptionTable from "../component/FitbitSubscriptionTable";
 import FitbitDataTable from "../component/FitbitDataTable";
 import UserTable from "../component/UserTable";
 import TaskLogGroupByTable from "../component/TaskLogGroupByTable";
+import UpdateDiffTable from "../component/UpdateDiffTable";
 
 function replacer(key, value) {
   if (typeof value === "Date") {
@@ -84,6 +85,9 @@ export async function getServerSideProps(ctx) {
 
   let fitbitDataList = [];
   let fitbitDataInfoList = [];
+
+  let updateDiffList = [];
+  let updateDiffInfoList = [];
 
   let taskList = [];
   let taskInfoList = [];
@@ -204,6 +208,20 @@ export async function getServerSideProps(ctx) {
     fitbitDataInfoList = JSON.parse(JSON.stringify(fitbitDataList, replacer));
   }
 
+  console.log(`dashboard.getServerSideProps: find updateDiffList`);
+  if (adminUsernameList.includes(userName)) {
+    updateDiffList = await prisma.update_diff.findMany({
+      orderBy: [
+        {
+          createdAt: "desc",
+        },
+      ],
+      //take: queryLimit
+    });
+
+    updateDiffInfoList = JSON.parse(JSON.stringify(updateDiffList, replacer));
+  }
+
   console.log(`dashboard.getServerSideProps: find taskList`);
   if (adminUsernameList.includes(userName)) {
     taskList = await prisma.task.findMany({
@@ -299,11 +317,11 @@ export async function getServerSideProps(ctx) {
   let hostURL = `${process.env.NEXTAUTH_URL}`;
 
   return {
-    props: { userInfoList, responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, taskInfoList, taskLogInfoList, taskLogGroupByInfoList, taskLogInvestigatorInfoList, messageInfoList, userInfo, hostURL },
+    props: { userInfoList, responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, updateDiffInfoList, taskInfoList, taskLogInfoList, taskLogGroupByInfoList, taskLogInvestigatorInfoList, messageInfoList, userInfo, hostURL },
   };
 }
 
-export default function Dashboard({ userInfoList, responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, taskInfoList, taskLogInfoList, taskLogGroupByInfoList, taskLogInvestigatorInfoList, messageInfoList, userInfo, hostURL }) {
+export default function Dashboard({ userInfoList, responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, updateDiffInfoList, taskInfoList, taskLogInfoList, taskLogGroupByInfoList, taskLogInvestigatorInfoList, messageInfoList, userInfo, hostURL }) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [tabName, setTabName] = useState("Users");
@@ -364,6 +382,12 @@ export default function Dashboard({ userInfoList, responseInfoList, fitbitSubscr
           Fitbit Data
         </ToggleButton>
         <ToggleButton
+          value="Update Diff"
+          aria-label="centered"
+        >
+          Update Diff
+        </ToggleButton>
+        <ToggleButton
           value="Task"
           aria-label="centered"
         >
@@ -412,6 +436,10 @@ export default function Dashboard({ userInfoList, responseInfoList, fitbitSubscr
       ) : null}
       {tabName == "Fitbit Data" ? (
         <FitbitDataTable infoList={fitbitDataInfoList}  userInfo={userInfo}/>
+      ) : null}
+
+      {tabName == "Update Diff" ? (
+        <UpdateDiffTable infoList={updateDiffInfoList}  userInfo={userInfo}/>
       ) : null}
 
       {tabName == "Task" ? (

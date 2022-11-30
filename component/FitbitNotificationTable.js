@@ -44,7 +44,7 @@ export default function FitbitNotificationTable({infoList}) {
   console.log(`infoList: ${infoList}`);
   console.log(`typeof infoList: ${typeof infoList}`);
   //let filteredInfoList = GeneralUtility.removeFitbitUpdateDuplicate( infoList, true);
-  let filteredInfoList = filteredInfoList; //GeneralUtility.removeFitbitUpdateDuplicate( infoList, true);
+  let filteredInfoList = infoList; //GeneralUtility.removeFitbitUpdateDuplicate( infoList, true);
   console.log(`filteredInfoList: ${filteredInfoList}`);
   console.log(`typeof filteredInfoList: ${typeof filteredInfoList}`);
 

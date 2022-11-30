@@ -408,10 +408,10 @@ export default function Dashboard({ userInfoList, responseInfoList, fitbitSubscr
       ) : null}
 
       {tabName == "Fitbit Notification" ? (
-        <FitbitNotificationTable infoList={fitbitNotificationInfoList} />
+        <FitbitNotificationTable infoList={fitbitNotificationInfoList}  userInfo={userInfo}/>
       ) : null}
       {tabName == "Fitbit Data" ? (
-        <FitbitDataTable infoList={fitbitDataInfoList} />
+        <FitbitDataTable infoList={fitbitDataInfoList}  userInfo={userInfo}/>
       ) : null}
 
       {tabName == "Task" ? (

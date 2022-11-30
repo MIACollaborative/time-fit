@@ -249,6 +249,9 @@ model taskLog {
   // caching user info
   userInfoCache Json?
 
+  // for pre condition records
+  preConditionResult Json?
+
   // for action
   randomizationResult Json
 

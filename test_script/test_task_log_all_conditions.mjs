@@ -22,7 +22,7 @@ function replacer(key, value) {
 let userList = await prisma.users.findMany({
     where: {
         username: {
-          contains: "test",
+          contains: "test1",
         },
       },
 });
@@ -56,8 +56,8 @@ let oneTask = {
         reference: {
             weekIndexList: [1, 2, 3, 4, 5, 6, 7],
             
-            type: "fixed", // fixed or preference
-            value: "12:00 PM" // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
+            type: "preference", // fixed or preference
+            value: "wakeupTime" // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
         
         },
         offset: {
@@ -102,7 +102,7 @@ let oneTask = {
     // preCondition: { enabled: false }
     preCondition: {
         // whether a task has precondition to consider.
-        enabled: true,
+        enabled: false,
 
         // Condition Relationship: deciding whether we need all conditions to be satisfied ("and"), or we need one of the condition to be satisfied ("or"), or we need none of the conditions to be satisfied ("not any").
         conditionRelationship: "and",
@@ -222,6 +222,6 @@ let oneTask = {
     }
 };
 
-let testDate = DateTime.fromFormat("11/27/2022, 12:00:00 PM", "F", { zone: "America/Detroit" });
+let testDate = DateTime.fromFormat("11/30/2022, 09:00:00 AM", "F", { zone: "America/Detroit" });
 let result = await TaskExecutor.executeTaskForUserListForDatetime(oneTask, userInfoList, testDate);
 console.log(`result: ${JSON.stringify(result, null, 2)}`);

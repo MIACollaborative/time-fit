@@ -46,7 +46,7 @@ let userInfo = JSON.parse(JSON.stringify(user, replacer));
 // let's create one task that has all the conditions
 
 let oneTask = {
-    label: "Testing: all conditions with logs",// we need to manually make sure that it is unique
+    label: "Testing: all conditions with no action but logs",// we need to manually make sure that it is unique
     enabled: true,
     priority: 1, // 1 (highest) ~ 100 (lowest)
     participantIndependent: false,
@@ -56,13 +56,31 @@ let oneTask = {
         reference: {
             weekIndexList: [1, 2, 3, 4, 5, 6, 7],
             
-            type: "preference", // fixed or preference
-            value: "wakeupTime" // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
+            type: "fixed", // fixed or preference
+            value: "00:00 AM" // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
         
         },
         offset: {
             type: "plus",
             value: { hours: 0 } // {hours: 0}
+        },
+        repeat: {
+            interval: { minutes: 60 }, // every x (5) minutes
+            range: {
+                // after: starting from that reference, before, strating befoore that reference
+                /*
+                before: {
+                    // will execute within distance (100 mins) prior to the reference point
+                    // set it to 24 * 60 means everything up to the start of the day (and even earlier, but irrelevant)
+                    distance: { minutes: 24 * 60 },
+                },
+                */
+                after: {
+                    // will execute within distance (100 mins) after the reference point
+                    // set it to 24 * 60 means everything til the end of the day (and even later, but irrelevant)
+                    distance: { minutes: 24 * 60 },
+                }
+            }
         }
     },
     group: {
@@ -79,8 +97,15 @@ let oneTask = {
         enabled: true, // true or false
         outcome: [
             {
-                value: true, // not sure what to make out of it yet
+                value: false,
                 chance: 1.0,
+                action: {
+                    type: "noAction", // no action
+                }
+            },
+            {
+                value: true, // not sure what to make out of it yet
+                chance: 0.0,
                 action: {
                     type: "messageLabel", // messageLabel, or messageGroup
                     messageLabel: "prompt_25", //messageLabel, only matter if the type is messageLabel
@@ -89,23 +114,16 @@ let oneTask = {
                     surveyType: "", //surveyLabel or surveyLink
                     surveyLink: ""
                 }
-            },
-            {
-                value: false,
-                chance: 0.0,
-                action: {
-                    type: "noAction", // no action
-                }
             }
         ]
     },
     // preCondition: { enabled: false }
     preCondition: {
         // whether a task has precondition to consider.
-        enabled: false,
+        enabled: true,
 
         // Condition Relationship: deciding whether we need all conditions to be satisfied ("and"), or we need one of the condition to be satisfied ("or"), or we need none of the conditions to be satisfied ("not any").
-        conditionRelationship: "and",
+        conditionRelationship: "or",
 
         // Condition list: list of conditions to be checked
         conditionList: [
@@ -118,7 +136,7 @@ let oneTask = {
                 type: "person", // This type can only check the specified date inside the start: {}
                 opposite: false, // message sent = True
                 criteria: {
-                    phase: "baseline"
+                    phase: "intervention"
                 }
             },
             {
@@ -222,6 +240,6 @@ let oneTask = {
     }
 };
 
-let testDate = DateTime.fromFormat("11/30/2022, 09:00:00 AM", "F", { zone: "America/Detroit" });
+let testDate = DateTime.fromFormat("11/30/2022, 09:01:00 AM", "F", { zone: "America/Detroit" });
 let result = await TaskExecutor.executeTaskForUserListForDatetime(oneTask, userInfoList, testDate);
 console.log(`result: ${JSON.stringify(result, null, 2)}`);

@@ -61,7 +61,7 @@ export default function TaskLogTable({ infoList }) {
           <TableRow>
             <TableCell align="right">Task Label</TableCell>
             <TableCell align="right">Username</TableCell>
-            
+            <TableCell align="right">Pre Condition</TableCell>
             <TableCell align="right">Randomization</TableCell>
             <TableCell align="right">Action</TableCell>
             <TableCell align="right">Execution Result</TableCell>
@@ -78,6 +78,7 @@ export default function TaskLogTable({ infoList }) {
             >
               <TableCell align="right">{row.taskLabel}</TableCell>
               <TableCell align="right">{row.username}</TableCell>
+              <TableCell align="right">{JSON.stringify(row.preConditionResult)}</TableCell>
               <TableCell align="right">{GeneralUtility.convertRandomizationResultToString(row.randomizationResult)}</TableCell>
               <TableCell align="right">{GeneralUtility.extractOutcomeToString(row.randomizationResult.theChoice)}</TableCell>
               <TableCell align="right" style={row.executionResult.value.errorMessage == null || row.executionResult.value.errorMessage == ""? {}:{background: "lightcoral"}}>{GeneralUtility.convertExecutionResultToString(row.executionResult)}</TableCell>

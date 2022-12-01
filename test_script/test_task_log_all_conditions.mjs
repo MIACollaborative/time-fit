@@ -18,18 +18,19 @@ function replacer(key, value) {
     return value;
 }
 
-/*
+
 let userList = await prisma.users.findMany({
     where: {
         username: {
-          contains: "test1",
+          contains: "test",
         },
       },
 });
 
 let userInfoList = JSON.parse(JSON.stringify(userList, replacer));
-*/
 
+
+/*
 const user = await prisma.users.findFirst({
     where:{
         username: "test1"
@@ -37,10 +38,10 @@ const user = await prisma.users.findFirst({
 })
 
 let userInfo = JSON.parse(JSON.stringify(user, replacer));
-
+*/
 
 // 2022.08.31 02:00 PM (EDT)
-let dateTime = DateTime.fromJSDate(new Date(2022, 7, 31, 14, 0, 0));
+//let dateTime = DateTime.fromJSDate(new Date(2022, 7, 31, 14, 0, 0));
 
 // let's create one task that has all the conditions
 
@@ -56,7 +57,7 @@ let oneTask = {
             weekIndexList: [1, 2, 3, 4, 5, 6, 7],
             
             type: "fixed", // fixed or preference
-            value: "12:40 PM" // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
+            value: "12:00 PM" // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
         
         },
         offset: {
@@ -121,9 +122,8 @@ let oneTask = {
                 }
             },
             {
-                // surveyFilledByThisPerson -> check whether a survey response is received within a time window
                 type: "surveyFilledByThisPerson",
-                // opposite: true, //Use opposite for conditions that are not to be met                        
+                opposite: false,                     
                 criteria: {
                     // Id list: list of Qualtrics survey Ids to check
                     idList: ["SV_81aWO5sJPDhGZNA"], // baseline: SV_81aWO5sJPDhGZNA
@@ -146,7 +146,6 @@ let oneTask = {
                 }
             },
             {
-                // Check if participant's Fitbit isn't detecting activity
                 type: "messageSentDuringPeriod", // This type can only check the specified date inside the start: {}
                 opposite: true, // message sent = True
                 criteria: {
@@ -164,8 +163,6 @@ let oneTask = {
                 }
             },
             {
-                // type: "hasFitbitUpdateForPersonByDateRange" checks for fitbit update for the specified date
-                // Check if participant's Fitbit IS updating/syncing - should return False
                 type: "hasFitbitUpdateForPersonByDateRange",
                 opposite: true,
                 criteria: {
@@ -183,11 +180,48 @@ let oneTask = {
                     }
                 }
             },
+            {
+                type: "hasHeartRateIntradayMinutesAboveThresholdForPersonByDateRange", // This type can only check the specified date inside the start: {}
+                opposite: true, // participant did adhere to wearing fitbit for +8 hours for 3 days
+                criteria: {
+                    idList: [""],
+
+                    // Whehter we want all ("and") surveys to be filled or at least one ("or") survey to be filled.
+                    // Use ("not any") for checking survey NOT filled, etc.
+                    idRelationship: "or",
+
+                    // check whether minutes >= wearingLowerBoundMinutes
+                    wearingLowerBoundMinutes: 60 * 8,
+                    wearingDayLowerBoundCount: 3, // if specified, idRelationshi ignored; don't make it 0
+
+                    period: {
+                        start: {
+                            reference: "today",
+                            offset: { type: "minus", value: { days: 7 } } // There was an update detected since 2 days ago - must return False
+                        },
+                        end: {
+                            reference: "now",
+                            offset: { type: "minus", value: { days: 0 } } // checks for wearing adherence the last 6 days
+                        },
+                    }
+                }
+            },
+            {
+                type: "timeInPeriod",
+                opposite: false,
+                criteria: {
+                    period: {
+                        end: {
+                            reference: "now",
+                            offset: { type: "plus", value: { days: 1} }
+                        }
+                    }
+                }
+            }
         ]
     }
 };
 
-
-let result = await TaskExecutor.executeActionForUser(action, userInfo, dateTime);
-
+let testDate = DateTime.fromFormat("11/27/2022, 12:00:00 PM", "F", { zone: "America/Detroit" });
+let result = await TaskExecutor.executeTaskForUserListForDatetime(oneTask, userInfoList, testDate);
 console.log(`result: ${JSON.stringify(result, null, 2)}`);

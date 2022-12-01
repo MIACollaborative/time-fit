@@ -136,7 +136,7 @@ let oneTask = {
                 type: "person", // This type can only check the specified date inside the start: {}
                 opposite: false, // message sent = True
                 criteria: {
-                    phase: "intervention"
+                    phase: "baseline"
                 }
             },
             {
@@ -240,6 +240,6 @@ let oneTask = {
     }
 };
 
-let testDate = DateTime.fromFormat("11/30/2022, 09:01:00 AM", "F", { zone: "America/Detroit" });
+let testDate = DateTime.fromFormat("11/30/2022, 09:00:00 AM", "F", { zone: "America/Detroit" });
 let result = await TaskExecutor.executeTaskForUserListForDatetime(oneTask, userInfoList, testDate);
 console.log(`result: ${JSON.stringify(result, null, 2)}`);

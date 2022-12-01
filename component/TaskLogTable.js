@@ -54,20 +54,7 @@ export default function TaskLogTable({ infoList }) {
   updatedAt DateTime? @updatedAt
   */
 
-  let highlightExecutionResult = false;
-
-  if(row.executionResult.value == undefined){
-    // this is the old one, likely for noAction
-    ;
-  }
-  else{
-    if(row.executionResult.value.errorMessage == null || row.executionResult.value.errorMessage == ""){
-      ;
-    }
-    else{
-      highlightExecutionResult = true;
-    }
-  }
+  
 
   // row.executionResult.value != undefined && ()
 
@@ -91,7 +78,23 @@ export default function TaskLogTable({ infoList }) {
         </TableHead>
         <TableBody>
           {infoList.map((row, index) => (
-            <TableRow
+            let highlightExecutionResult = false;
+
+            if(row.executionResult.value == undefined){
+              // this is the old one, likely for noAction
+              ;
+            }
+            else{
+              if(row.executionResult.value.errorMessage == null || row.executionResult.value.errorMessage == ""){
+                ;
+              }
+              else{
+                highlightExecutionResult = true;
+              }
+            }
+
+
+            return <TableRow
               key={index}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >

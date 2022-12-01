@@ -54,6 +54,25 @@ export default function TaskLogTable({ infoList }) {
   updatedAt DateTime? @updatedAt
   */
 
+  let highlightExecutionResult = false;
+
+  if(row.executionResult.value == undefined){
+    // this is the old one, likely for noAction
+    ;
+  }
+  else{
+    if(row.executionResult.value.errorMessage == null || row.executionResult.value.errorMessage == ""){
+      ;
+    }
+    else{
+      highlightExecutionResult = true;
+    }
+  }
+
+  // row.executionResult.value != undefined && ()
+
+
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -81,7 +100,7 @@ export default function TaskLogTable({ infoList }) {
               <TableCell align="right">{JSON.stringify(row.preConditionResult)}</TableCell>
               <TableCell align="right">{GeneralUtility.convertRandomizationResultToString(row.randomizationResult)}</TableCell>
               <TableCell align="right">{GeneralUtility.extractOutcomeToString(row.randomizationResult.theChoice)}</TableCell>
-              <TableCell align="right" style={row.executionResult.value != undefined && (row.executionResult.value.errorMessage == null || row.executionResult.value.errorMessage == "")? {}:{background: "lightcoral"}}>{GeneralUtility.convertExecutionResultToString(row.executionResult)}</TableCell>
+              <TableCell align="right" style={ highlightExecutionResult? {background: "lightcoral"}:{} }>{GeneralUtility.convertExecutionResultToString(row.executionResult)}</TableCell>
               <TableCell align="right">{GeneralUtility.extractUserKeyAttributesToString(row.userInfoCache)}</TableCell>
               <TableCell align="right">{row.createdAt}</TableCell>
               <TableCell align="right">{row.updatedAt}</TableCell>

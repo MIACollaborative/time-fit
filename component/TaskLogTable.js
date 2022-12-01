@@ -77,7 +77,8 @@ export default function TaskLogTable({ infoList }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {infoList.map((row, index) => (
+          {infoList.map((row, index) => {
+            
             let highlightExecutionResult = false;
 
             if(row.executionResult.value == undefined){
@@ -108,7 +109,7 @@ export default function TaskLogTable({ infoList }) {
               <TableCell align="right">{row.createdAt}</TableCell>
               <TableCell align="right">{row.updatedAt}</TableCell>
             </TableRow>
-          ))}
+          })}
         </TableBody>
       </Table>
     </TableContainer>

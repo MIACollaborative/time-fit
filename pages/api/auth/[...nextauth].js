@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-
+import bcrypt from "bcrypt";
 import prisma from "../../../lib/prisma.mjs";
 
 export default NextAuth({
@@ -44,24 +44,32 @@ export default NextAuth({
           console.log(`No such user`);
           return null;
         }
-        else if (user.username == credentials.username && user.password == credentials.password) {
-          // Any object returned will be saved in `user` property of the JWT
-          console.log(`Found this user: ${JSON.stringify(user)}`);
-          return {
-            name: credentials.username
-          };
-          // return username
-          //return { email: user.username };
-        } else {
-          // If you return null then an error will be displayed advising the user to check their details.
-          console.log(`Credentials issue`);
-          return null;
+        else {
+          let compareResult = await bcrypt.compare(credentials.password, user.password).then((result) => {
+            return result;
+          });
 
-          // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
+          if (compareResult) {
+            // Any object returned will be saved in `user` property of the JWT
+
+            console.log(`Found this user: ${JSON.stringify(user)}`);
+            return {
+              name: credentials.username
+            };
+            // return username
+            //return { email: user.username };
+          }
+          else {
+            // If you return null then an error will be displayed advising the user to check their details.
+            console.log(`Credentials issue`);
+            return null;
+
+            // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
+          }
         }
       },
 
-      
+
       /*
       callbacks: {
         async session({ session, token }) {

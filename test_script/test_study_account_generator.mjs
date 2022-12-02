@@ -106,9 +106,9 @@ function generateGroupAssignmentList(populationSize) {
 let initialDelay = 1000;
 let interval = 1000;
 let startIndex = 1;
-let endIndex = 5;
+let endIndex = 65;
 
-let prefix = `test`;
+let prefix = `participant`;
 
 
 //deleteAccountWithPrefix(prefix);

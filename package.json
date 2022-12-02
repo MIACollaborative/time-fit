@@ -16,6 +16,7 @@
     "@mui/x-date-pickers": "^5.0.3",
     "@prisma/client": "^3.10.0",
     "axios": "^0.26.1",
+    "bcrypt": "^5.1.0",
     "crypto-random-string": "^5.0.0",
     "csv-parser": "^3.0.0",
     "csv-write-stream": "^2.0.0",

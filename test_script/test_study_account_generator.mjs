@@ -8,6 +8,7 @@ import csvWriter from "csv-write-stream";
 import fs from "fs";
 import md5 from "md5";
 import { DateTime } from "luxon";
+import bcrypt from "bcrypt";
 
 
 async function deleteAccountWithPrefix(prefix){
@@ -23,6 +24,7 @@ async function deleteAccountWithPrefix(prefix){
 async function insertUser(newStudyCodeObj) {
   const { username, ...rest } = newStudyCodeObj;
 
+  console.log(`username: ${username}`);
 
   let existRecord = await prisma.users.findFirst({
     where: {
@@ -104,12 +106,12 @@ function generateGroupAssignmentList(populationSize) {
 let initialDelay = 1000;
 let interval = 1000;
 let startIndex = 1;
-let endIndex = 65;
+let endIndex = 5;
 
-let prefix = `participant`;
+let prefix = `test`;
 
 
-deleteAccountWithPrefix(prefix);
+//deleteAccountWithPrefix(prefix);
 
 
 let groupAssignmnetList = generateGroupAssignmentList(endIndex - startIndex);
@@ -118,6 +120,7 @@ let groupAssignmnetList = generateGroupAssignmentList(endIndex - startIndex);
 let resultList = [];
 
 
+const saltRounds = 10;
 
 for (let i = startIndex; i < endIndex; i++) {
   let username = `${prefix}${i}`;
@@ -127,6 +130,11 @@ for (let i = startIndex; i < endIndex; i++) {
   // let hashStudyCode = cryptoRandomString({length: 8, characters: 'ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789'});
   let password = cryptoRandomString({ length: 8, characters: 'abcdefghijkmnpqrstuvwxyz023456789' });
 
+  let passwordHash = await bcrypt.hash(password, saltRounds).then((hashPassword) => {
+    // Store hash in your password DB.
+    return hashPassword;
+  });
+
   let hash = md5(username); // password
 
   let gAssignment = groupAssignmnetList[i - startIndex];
@@ -134,7 +142,8 @@ for (let i = startIndex; i < endIndex; i++) {
   console.log(`[${username}]: ${password}: ${gAssignment}`);
   let newStudyCodeObj = {
     username,
-    password,
+    password: passwordHash,
+    passwordRaw: password,
     hash,
     gif: gAssignment.gif ==1? true: false,
     salience: gAssignment.salience ==1? true: false,
@@ -145,13 +154,20 @@ for (let i = startIndex; i < endIndex; i++) {
 
 }
 
-/*
+
 let dateString = DateTime.now().toISO({ format: 'basic', includeOffset: false });
 
 let exportFileName = `./test_output/${prefix}_${dateString}.csv`;
 
-await writeToCSV(resultList, exportFileName);
-*/
+let fileResultList = resultList.map((result) => {
+  let copy = JSON.parse(JSON.stringify(result));
+  delete copy.password;
+
+  return copy;
+});
+
+await writeToCSV(fileResultList, exportFileName);
+
 
 
 timer(initialDelay, interval).pipe(
@@ -184,13 +200,12 @@ timer(initialDelay, interval).pipe(
 ).subscribe(newStudyCodeObj => {
   console.log(newStudyCodeObj);
 
+  delete newStudyCodeObj.passwordRaw;
+
+  console.log(newStudyCodeObj);
+
   insertUser(newStudyCodeObj);
   
-  
-  
-  
-
-
   /*
   ServerService.submitOrReplaceInTable("study_code", newStudyCodeObj, false)
   .then(response => {

@@ -360,7 +360,7 @@ export default function Main({
           </p>
           <Divider />
           <br />
-          {adminUsernameList.includes(userInfo.username) ? (
+          {false  ? (
             <Fragment>
           <div>[Debug] (admine only)</div>
           <div>Signed in as {session.user.name} </div>
@@ -382,7 +382,7 @@ export default function Main({
             </Fragment>
           ) : null}
 
-          {adminUsernameList.includes(userInfo.username) ? (
+          {false && adminUsernameList.includes(userInfo.username) ? (
             <Fragment>
               <br />
               <div>For testing (admin only):</div>
@@ -394,11 +394,6 @@ export default function Main({
               </Link>
               <br />
               <br />
-            </Fragment>
-          ) : null}
-
-          {adminUsernameList.includes(userInfo.username) ? (
-            <Fragment>
               <Link href={"/group-setting"}>
                 <Button variant="contained" style={{ width: "100%" }}>
                   Set Group Assignment
@@ -406,10 +401,6 @@ export default function Main({
               </Link>
               <br />
               <br />
-            </Fragment>
-          ) : null}
-          {adminUsernameList.includes(userInfo.username) ? (
-            <Fragment>
               <Link href={"/phone-edit"}>
                 <Button variant="contained" style={{ width: "100%" }}>
                   Add/Update phone number
@@ -417,10 +408,6 @@ export default function Main({
               </Link>
               <br />
               <br />
-            </Fragment>
-          ) : null}
-            {adminUsernameList.includes(userInfo.username) ? (
-            <Fragment>
               <Link href={"/get-activity-summary"}>
                 <Button variant="contained" style={{ width: "100%" }}>
                   Get Activity Summary (1 step process)
@@ -428,11 +415,6 @@ export default function Main({
               </Link>
               <br />
               <br />
-            </Fragment>
-          ) : null}
-
-          {adminUsernameList.includes(userInfo.username) ? (
-            <Fragment>
               <Link href={"/get-heartrate"}>
                 <Button variant="contained" style={{ width: "100%" }}>
                   Get HeartRate (1 step process)
@@ -440,11 +422,6 @@ export default function Main({
               </Link>
               <br />
               <br />
-            </Fragment>
-          ) : null}
-
-          {adminUsernameList.includes(userInfo.username) ? (
-            <Fragment>
               <Link href={"/activity-summary"}>
                 <Button variant="contained" style={{ width: "100%" }}>
                   Activity Summary (2 step process)
@@ -452,11 +429,6 @@ export default function Main({
               </Link>
               <br />
               <br />
-            </Fragment>
-          ) : null}
-
-          {adminUsernameList.includes(userInfo.username) ? (
-            <Fragment>
               <Button
                 variant="contained"
                 style={{ width: "100%" }}

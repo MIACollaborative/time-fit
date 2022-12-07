@@ -12,7 +12,7 @@ function replacer(key, value) {
 
 let userInfo = await prisma.users.findFirst({
     where: {
-        username: "test1"
+        username: "test2"
     }
 });
 

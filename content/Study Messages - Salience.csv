@@ -1,7 +1,7 @@
 id,group,interventionMessage,topic,note
 1,salience,"On your walks, try to be aware of your surroundings. How does the breeze or the sound of birds make you feel? Do you notice anything new or interesting?",Environment,
-2,salience,"Throughout your walks, enjoy the colors of nature. What color is the sky, trees or birds? How does it make you feel?",Environment,
-3,salience,"For your walk today, observe the animals and/or people you pass by. What kind of thoughts or emotion do you notice or feel?",Environment/Emotion,
+2,salience,"Throughout your walks, enjoy the colors of any nature you see. What color is the sky, trees or birds? How does it make you feel?",Environment,
+3,salience,"For your walk today, feel the weather. What kind of thoughts or emotion do you notice or feel?",Environment/Emotion,
 4,salience,"On your walks, try to be aware of whatever your eyes take in as they focus on the world in front of you. What kind of thoughts go through your mind as you stay aware?",Environment,
 5,salience,"During your walks, try to reflect on how your day is going. What is the highlight of your day? How does that make you feel?",Present day,
 6,salience,"Throughout your walks today, think about one recent achievement you feel proud of. Use the walking time to reflect on your achievement and pat yourself on the back!",Present day,

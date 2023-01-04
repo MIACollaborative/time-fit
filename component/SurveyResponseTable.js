@@ -23,7 +23,7 @@ function replacer(key, value) {
   return value;
 }
 
-export default function SurveyResponseTable({ infoList }) {
+export default function SurveyResponseTable({ infoList, userInfo }) {
 
   /*
   <TableCell>Id</TableCell>

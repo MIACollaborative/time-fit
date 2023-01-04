@@ -23,7 +23,7 @@ function replacer(key, value) {
   return value;
 }
 
-export default function TaskLogTable({ infoList }) {
+export default function TaskLogTable({ infoList, userInfo }) {
 
   /*
   id  String  @id @default(auto()) @map("_id") @db.ObjectId

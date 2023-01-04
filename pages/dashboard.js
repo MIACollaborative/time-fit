@@ -424,7 +424,7 @@ export default function Dashboard({ userInfoList, responseInfoList, fitbitSubscr
       ) : null}
 
       {tabName == "Survey Response" ? (
-        <SurveyResponseTable infoList={responseInfoList} />
+        <SurveyResponseTable infoList={responseInfoList} userInfo={userInfo} />
       ) : null}
 
       {tabName == "Fitbit Subscription" ? (
@@ -447,7 +447,7 @@ export default function Dashboard({ userInfoList, responseInfoList, fitbitSubscr
       ) : null}
 
       {tabName == "Investigator Task Log" ? (
-        <TaskLogTable infoList={taskLogInvestigatorInfoList} />
+        <TaskLogTable infoList={taskLogInvestigatorInfoList} userInfo={userInfo} />
       ) : null}
 
       {tabName == "Task Log By User" ? (
@@ -455,7 +455,7 @@ export default function Dashboard({ userInfoList, responseInfoList, fitbitSubscr
       ) : null}
 
       {tabName == "Task Log" ? (
-        <TaskLogTable infoList={taskLogInfoList} />
+        <TaskLogTable infoList={taskLogInfoList} userInfo={userInfo} />
       ) : null}
 
       {tabName == "Message" ? (

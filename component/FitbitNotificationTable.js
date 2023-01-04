@@ -126,7 +126,7 @@ export default function FitbitNotificationTable({infoList, userInfo}) {
               <TableCell align="right">{row.subscriptionId}</TableCell>
               
               <TableCell align="right">{row.ip}</TableCell>
-              <TableCell align="right">{DateTime.fromISO(row.dateTime).toLocaleString(DateTime.DATETIME_FULL)}</TableCell>
+              <TableCell align="right">{DateTime.fromISO(row.createdAt).toLocaleString(DateTime.DATETIME_FULL)}</TableCell>
               <TableCell align="right">{row.createdAt}</TableCell>
               <TableCell align="right">{row.updatedAt}</TableCell>
             </TableRow>

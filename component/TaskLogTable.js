@@ -4,7 +4,8 @@ import logger from "../lib/logger";
 
 */
 
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
+import { Button } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -61,7 +62,48 @@ export default function TaskLogTable({ infoList }) {
 
 
   return (
-    <TableContainer component={Paper}>
+    <Fragment>
+            <br/>
+      <div>
+        <Button variant="contained" onClick={(event) => {
+        // infoList
+        const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
+          JSON.stringify(infoList)
+        )}`;
+        const link = document.createElement("a");
+        link.href = jsonString;
+
+        let timeString = DateTime.now().toISO();
+        let tableName = "TaskLog";
+
+        link.download = `${tableName}_downloaded_by_${userInfo.username}_${timeString}.json`;
+    
+        link.click();
+
+      }} >Export JSON</Button>&nbsp;&nbsp;
+      <Button variant="contained" onClick={(event) => {
+
+        let csvString = GeneralUtility.getCSVStringFromObjectList(infoList);
+
+        // infoList
+        const jsonString = `data:	text/csv;chatset=utf-8,${encodeURIComponent(
+          csvString
+        )}`;
+        const link = document.createElement("a");
+        link.href = jsonString;
+
+        let timeString = DateTime.now().toISO();
+        let tableName = "TaskLog";
+
+        link.download = `${tableName}_downloaded_by_${userInfo.username}_${timeString}.csv`;
+    
+        link.click();
+
+      }} >Export CSV</Button>
+      
+      </div>
+      <br/>
+      <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -115,6 +157,8 @@ export default function TaskLogTable({ infoList }) {
         </TableBody>
       </Table>
     </TableContainer>
+    </Fragment>
+
   )
 }
 

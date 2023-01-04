@@ -97,6 +97,7 @@ export default function UpdateDiffTable({ infoList, userInfo}) {
             <TableCell align="right">Collection Name</TableCell>
             <TableCell align="right">Document Id</TableCell>
             <TableCell align="right">Document Diff</TableCell>
+            <TableCell align="right">Created At (your time)</TableCell>
             <TableCell align="right">Created At</TableCell>
             <TableCell align="right">Updated At</TableCell>
           </TableRow>
@@ -113,6 +114,7 @@ export default function UpdateDiffTable({ infoList, userInfo}) {
               <TableCell align="right">{row.collectionName}</TableCell>
               <TableCell align="right">{row.documentId}</TableCell>
               <TableCell align="right">{JSON.stringify(row.documentDiff, null, 2)}</TableCell>
+              <TableCell align="right">{DateTime.fromISO(row.createdAt).toLocaleString(DateTime.DATETIME_FULL)}</TableCell>
               <TableCell align="right">{row.createdAt}</TableCell>
               <TableCell align="right">{row.updatedAt}</TableCell>
             </TableRow>

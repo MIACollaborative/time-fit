@@ -72,6 +72,7 @@ export default function TaskLogTable({ infoList }) {
             <TableCell align="right">Action</TableCell>
             <TableCell align="right">Execution Result</TableCell>
             <TableCell align="right">User Info Cache</TableCell>
+            <TableCell align="right">Created At (your time)</TableCell>
             <TableCell align="right">Created At</TableCell>
             <TableCell align="right">Updated At</TableCell>
           </TableRow>
@@ -106,6 +107,7 @@ export default function TaskLogTable({ infoList }) {
               <TableCell align="right">{GeneralUtility.extractOutcomeToString(row.randomizationResult.theChoice)}</TableCell>
               <TableCell align="right" style={ highlightExecutionResult? {background: "lightcoral"}:{} }>{GeneralUtility.convertExecutionResultToString(row.executionResult)}</TableCell>
               <TableCell align="right">{GeneralUtility.extractUserKeyAttributesToString(row.userInfoCache)}</TableCell>
+              <TableCell align="right">{DateTime.fromISO(row.createdAt).toLocaleString(DateTime.DATETIME_FULL)}</TableCell>
               <TableCell align="right">{row.createdAt}</TableCell>
               <TableCell align="right">{row.updatedAt}</TableCell>
             </TableRow>

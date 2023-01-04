@@ -37,6 +37,7 @@ export default function SurveyResponseTable({ infoList }) {
           <TableRow>
             <TableCell align="right">Participant Id</TableCell>
             <TableCell align="right">Survey Id</TableCell>
+            <TableCell align="right">Date Time (your time)</TableCell>
             <TableCell align="right">Date Time</TableCell>
             <TableCell align="right">Content</TableCell>
             <TableCell align="right">Survey Link</TableCell>
@@ -53,6 +54,7 @@ export default function SurveyResponseTable({ infoList }) {
             >
               <TableCell align="right">{row.participantId}</TableCell>
               <TableCell align="right">{row.surveyId}</TableCell>
+              <TableCell align="right">{DateTime.fromISO(row.dateTime).toLocaleString(DateTime.DATETIME_FULL)}</TableCell>
               <TableCell align="right">{row.dateTime}</TableCell>
               <TableCell align="right">{row.content}</TableCell>
               <TableCell align="right">{row.surveyLink}</TableCell>

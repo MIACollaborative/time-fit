@@ -6,7 +6,7 @@ import logger from "../lib/logger";
 
 import React, { useState, Fragment } from 'react';
 import { Button } from '@mui/material';
-import { DateTime, Interval } from "luxon";
+import { DateTime } from "luxon";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';

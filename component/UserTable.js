@@ -18,6 +18,8 @@ import { Button } from '@mui/material';
 import { toast } from 'react-toastify';
 import Link from "next/link";
 import { Fragment } from 'react';
+import ObjectListExortToolbar from './ObjectListExortToolbar.js';
+
 function replacer(key, value) {
   if (typeof value === "Date") {
     return value.toString();
@@ -84,65 +86,9 @@ export default function UserTable({ infoList, userInfo, hostURL }) {
 
   return (
     <Fragment>
-      <br/>
-      <div>
-        <Button variant="contained" onClick={(event) => {
-        // infoList
-        const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
-          JSON.stringify(infoList)
-        )}`;
-        const link = document.createElement("a");
-        link.href = jsonString;
-
-        let timeString = DateTime.now().toISO();
-        let tableName = "User";
-
-        link.download = `${tableName}_for_${userInfo.username}_${timeString}.json`;
-    
-        link.click();
-
-      }} >Export JSON</Button>&nbsp;&nbsp;
-      <Button variant="contained" onClick={(event) => {
-
-        let csvString = GeneralUtility.getCSVStringFromObjectList(infoList);
-
-        /*
-        let csvString = "";
-        // prepare the csv string
-        let headerList = Object.keys(infoList[0]);
-        let headerString = headerList.join(",");
-        csvString += headerString + "\n";
-
-        // now the content
-        infoList.forEach((info) => {
-          let contentList =  headerList.map((columnName) => {
-            return info[columnName];
-          });
-
-          let contentString = contentList.join(",");
-          csvString += contentString + "\n";
-        });
-        */
-
-
-        // infoList
-        const jsonString = `data:	text/csv;chatset=utf-8,${encodeURIComponent(
-          csvString
-        )}`;
-        const link = document.createElement("a");
-        link.href = jsonString;
-
-        let timeString = DateTime.now().toISO();
-        let tableName = "User";
-
-        link.download = `${tableName}_for_${userInfo.username}_${timeString}.csv`;
-    
-        link.click();
-
-      }} >Export CSV</Button>
-      
-      </div>
-      <br/>
+      <br />
+      <ObjectListExortToolbar filePrefix={"User"} infoList={infoList} userInfo={userInfo}></ObjectListExortToolbar>
+      <br />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>

@@ -15,7 +15,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import GeneralUtility from '../lib/GeneralUtility.mjs';
 import { DateTime } from "luxon";
-
+import ObjectListExortToolbar from './ObjectListExortToolbar.js';
 function replacer(key, value) {
   if (typeof value === "Date") {
     return value.toString();
@@ -64,44 +64,8 @@ export default function TaskLogTable({ infoList, userInfo }) {
   return (
     <Fragment>
             <br/>
-      <div>
-        <Button variant="contained" onClick={(event) => {
-        // infoList
-        const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
-          JSON.stringify(infoList)
-        )}`;
-        const link = document.createElement("a");
-        link.href = jsonString;
+            <ObjectListExortToolbar filePrefix={"TaskLog"} infoList={infoList} userInfo={userInfo}></ObjectListExortToolbar>
 
-        let timeString = DateTime.now().toISO();
-        let tableName = "TaskLog";
-
-        link.download = `${tableName}_downloaded_by_${userInfo.username}_${timeString}.json`;
-    
-        link.click();
-
-      }} >Export JSON</Button>&nbsp;&nbsp;
-      <Button variant="contained" onClick={(event) => {
-
-        let csvString = GeneralUtility.getCSVStringFromObjectList(infoList);
-
-        // infoList
-        const jsonString = `data:	text/csv;chatset=utf-8,${encodeURIComponent(
-          csvString
-        )}`;
-        const link = document.createElement("a");
-        link.href = jsonString;
-
-        let timeString = DateTime.now().toISO();
-        let tableName = "TaskLog";
-
-        link.download = `${tableName}_downloaded_by_${userInfo.username}_${timeString}.csv`;
-    
-        link.click();
-
-      }} >Export CSV</Button>
-      
-      </div>
       <br/>
       <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">

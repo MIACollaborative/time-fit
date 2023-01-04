@@ -100,8 +100,10 @@ export default function FitbitDataTable({ infoList, userInfo}) {
             <TableCell align="right">Date Time</TableCell>
             <TableCell align="right">Content</TableCell>
             <TableCell align="right">Last Modified</TableCell>
+            <TableCell align="right">Created At (your time)</TableCell>
             <TableCell align="right">Created At</TableCell>
             <TableCell align="right">Updated At</TableCell>
+            <TableCell align="right">Updated At (your time)</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -119,7 +121,9 @@ export default function FitbitDataTable({ infoList, userInfo}) {
               <TableCell align="right">{row.dateTime}</TableCell>
               <TableCell align="right">{JSON.stringify(row.content, null, 2)}</TableCell>
               <TableCell align="right">{row.lastModified}</TableCell>
+              <TableCell align="right">{DateTime.fromISO(row.createdAt).toLocaleString(DateTime.DATETIME_FULL)}</TableCell>
               <TableCell align="right">{row.createdAt}</TableCell>
+              <TableCell align="right">{DateTime.fromISO(row.updatedAt).toLocaleString(DateTime.DATETIME_FULL)}</TableCell>
               <TableCell align="right">{row.updatedAt}</TableCell>
             </TableRow>
           ))}

@@ -18,6 +18,7 @@ function replacer(key, value) {
     return value;
 }
 
+// advance
 
 let taskLogList = await await prisma.taskLog.groupBy({
     by: ['taskLabel'],
@@ -28,8 +29,8 @@ let taskLogList = await await prisma.taskLog.groupBy({
                 equals: 1.0
             }
         }
-        
     },
+    /*
     _sum: {
       profileViews: true,
     },
@@ -40,7 +41,9 @@ let taskLogList = await await prisma.taskLog.groupBy({
         },
       },
     },
+    */
   })
+
 
 let taskLogInfoList = JSON.parse(JSON.stringify(taskLogList, replacer));
 

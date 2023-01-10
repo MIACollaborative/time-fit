@@ -20,7 +20,7 @@ function replacer(key, value) {
 
 // version 1
 
-const usersWithCount = await prisma.task.findMany({
+const taskWithLogList = await prisma.task.findMany({
     include: {
         taskLogList: true
     },
@@ -54,10 +54,8 @@ let taskLogList = await await prisma.taskLog.groupBy({
   })
 */
 
-let taskLogInfoList = JSON.parse(JSON.stringify(taskLogList, replacer));
+let taskWithLogInfoList = JSON.parse(JSON.stringify(taskWithLogList, replacer));
 
+//let testDate = DateTime.fromFormat("11/30/2022, 09:00:00 AM", "F", { zone: "America/Detroit" });
 
-
-let testDate = DateTime.fromFormat("11/30/2022, 09:00:00 AM", "F", { zone: "America/Detroit" });
-
-console.log(`result: ${JSON.stringify(result, null, 2)}`);
+console.log(`result[0]: ${JSON.stringify(taskWithLogInfoList[0], null, 2)}`);

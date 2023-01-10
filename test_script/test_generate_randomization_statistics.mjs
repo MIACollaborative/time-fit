@@ -23,7 +23,7 @@ function replacer(key, value) {
 let taskLogList = await await prisma.taskLog.groupBy({
     by: ['taskLabel'],
     where: {
-        Not: {
+        NOT: {
             randomizationResult: {
                 path: ['chance'],
                 equals: 1.0

@@ -20,11 +20,26 @@ function replacer(key, value) {
 
 // version 1
 
+const taskList = await prisma.task.findMany({});
+let taskInfoList = JSON.parse(JSON.stringify(taskList, replacer));
+
+console.log(`taskInfoList: ${JSON.stringify(taskInfoList, null, 2)}`);
+
+
+console.log(`taskInfoList[0]: ${JSON.stringify(taskInfoList[0], null, 2)}`);
+
+
+let excludeTaskLabelList = [""];
+
+/*
 const taskWithLogList = await prisma.task.findMany({
     include: {
         taskLogList: true
     },
-})
+});
+*/
+
+
 
 // advance
 // ok, the path feature might not be supported by MongoDB
@@ -54,8 +69,13 @@ let taskLogList = await await prisma.taskLog.groupBy({
   })
 */
 
+
+
 let taskWithLogInfoList = JSON.parse(JSON.stringify(taskWithLogList, replacer));
+
+
+// now, start filtering 
 
 //let testDate = DateTime.fromFormat("11/30/2022, 09:00:00 AM", "F", { zone: "America/Detroit" });
 
-console.log(`result[0]: ${JSON.stringify(taskWithLogInfoList[0], null, 2)}`);
+//console.log(`result[0]: ${JSON.stringify(taskWithLogInfoList[0], null, 2)}`);

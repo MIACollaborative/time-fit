@@ -24,9 +24,16 @@ const taskList = await prisma.task.findMany({});
 let taskInfoList = JSON.parse(JSON.stringify(taskList, replacer));
 
 console.log(`taskInfoList: ${JSON.stringify(taskInfoList, null, 2)}`);
-
-
 console.log(`taskInfoList[0]: ${JSON.stringify(taskInfoList[0], null, 2)}`);
+
+// now, filter by those with randomization
+
+let taskWithRandomizationInfoList = taskInfoList.filter((taskInfo) => {
+    return taskInfo.randomization.enabled && taskInfo.randomization.outcome[0].chance < 1;
+});
+
+console.log(`taskWithRandomizationInfoList: ${JSON.stringify(taskWithRandomizationInfoList, null, 2)}`);
+console.log(`taskWithRandomizationInfoList[0]: ${JSON.stringify(taskWithRandomizationInfoList[0], null, 2)}`);
 
 
 let excludeTaskLabelList = [""];
@@ -71,7 +78,7 @@ let taskLogList = await await prisma.taskLog.groupBy({
 
 
 
-let taskWithLogInfoList = JSON.parse(JSON.stringify(taskWithLogList, replacer));
+//let taskWithLogInfoList = JSON.parse(JSON.stringify(taskWithLogList, replacer));
 
 
 // now, start filtering 

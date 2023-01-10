@@ -18,8 +18,17 @@ function replacer(key, value) {
     return value;
 }
 
-// advance
+// version 1
 
+const usersWithCount = await prisma.task.findMany({
+    include: {
+        taskLogList: true
+    },
+})
+
+// advance
+// ok, the path feature might not be supported by MongoDB
+/*
 let taskLogList = await await prisma.taskLog.groupBy({
     by: ['taskLabel'],
     where: {
@@ -30,7 +39,7 @@ let taskLogList = await await prisma.taskLog.groupBy({
             }
         }
     },
-    /*
+    
     _sum: {
       profileViews: true,
     },
@@ -41,9 +50,9 @@ let taskLogList = await await prisma.taskLog.groupBy({
         },
       },
     },
-    */
+    
   })
-
+*/
 
 let taskLogInfoList = JSON.parse(JSON.stringify(taskLogList, replacer));
 

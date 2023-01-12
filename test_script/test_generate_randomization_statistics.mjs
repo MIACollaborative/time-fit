@@ -23,8 +23,14 @@ function replacer(key, value) {
 const taskList = await prisma.task.findMany({});
 let taskInfoList = JSON.parse(JSON.stringify(taskList, replacer));
 
-console.log(`taskInfoList: ${JSON.stringify(taskInfoList, null, 2)}`);
-console.log(`taskInfoList[0]: ${JSON.stringify(taskInfoList[0], null, 2)}`);
+//console.log(`taskInfoList: ${JSON.stringify(taskInfoList, null, 2)}`);
+//console.log(`taskInfoList[0]: ${JSON.stringify(taskInfoList[0], null, 2)}`);
+
+let tempTaskLabelList = taskInfoList.map((taskInfo) => {
+    return taskInfo.label;
+});
+
+console.log(`taskInfoList (label): ${JSON.stringify(tempTaskLabelList, null, 2)}`);
 
 // now, filter by those with randomization
 
@@ -32,8 +38,8 @@ let taskWithRandomizationInfoList = taskInfoList.filter((taskInfo) => {
     return taskInfo.randomization.enabled && taskInfo.randomization.outcome[0].chance < 1;
 });
 
-console.log(`taskWithRandomizationInfoList: ${JSON.stringify(taskWithRandomizationInfoList, null, 2)}`);
-console.log(`taskWithRandomizationInfoList[0]: ${JSON.stringify(taskWithRandomizationInfoList[0], null, 2)}`);
+//console.log(`taskWithRandomizationInfoList: ${JSON.stringify(taskWithRandomizationInfoList, null, 2)}`);
+//console.log(`taskWithRandomizationInfoList[0]: ${JSON.stringify(taskWithRandomizationInfoList[0], null, 2)}`);
 
 
 let excludeTaskLabelList = ["fitbit process notification"];
@@ -42,11 +48,11 @@ let filteredTaskWithRandomizationInfoList = taskWithRandomizationInfoList.filter
     return !excludeTaskLabelList.includes(taskInfo.label);
 });
 
-let taskLabelList = filteredTaskWithRandomizationInfoList.map((taskInfo) => {
+tempTaskLabelList = filteredTaskWithRandomizationInfoList.map((taskInfo) => {
     return taskInfo.label;
 });
 
-console.log(`taskWithRandomizationInfoList (label): ${JSON.stringify(taskLabelList, null, 2)}`);
+console.log(`taskWithRandomizationInfoList (label): ${JSON.stringify(tempTaskLabelList, null, 2)}`);
 
 
 

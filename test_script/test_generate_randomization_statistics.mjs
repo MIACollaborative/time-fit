@@ -241,7 +241,6 @@ let taskLabelResultListMap = await calculateOutComeProportionByWeekListForTaskLi
 console.log(`----------------------------`);
 
 Object.keys(taskLabelResultListMap).forEach((taskLabel) => {
-    console.log(`\t${JSON.stringify(simpifiedMap)}\n`);
     console.log(`Outcome proportion for task [${taskLabel}]-------------------------------------------`);
 
     //console.log(`taskLabelResultListMap [${taskLabel}]: ${taskLabelResultListMap[taskLabel]}`);

@@ -268,6 +268,13 @@ Object.keys(taskLabelResultListMap).forEach((taskLabel) => {
         actionStringIndexMap[actionString] = sIndex;
     });
 
+    console.log(`ActionList--------------`);
+
+    Object.keys(actionStringIndexMap).forEach((actionString, sIndex) => {
+        console.log(`action[${sIndex}]:${actionString}`);
+    });
+    
+
 
 
 

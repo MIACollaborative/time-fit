@@ -280,7 +280,7 @@ Object.keys(taskLabelResultListMap).forEach((taskLabel) => {
             simpifiedMap[`action[${actionStringIndexMap[jsonString]}]`] = proportionMap[jsonString];
         });
 
-        console.log(`${JSON.stringify(simpifiedMap, null, 2)}`);
+        console.log(`${JSON.stringify(simpifiedMap)}`);
 
     });
 });

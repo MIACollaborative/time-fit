@@ -1,5 +1,5 @@
 import * as dotenv from "dotenv";
-import { DateTime } from "luxon";
+import { DateTime, Interval } from "luxon";
 import prisma from "../lib/prisma.mjs";
 import TaskExecutor from "../lib/TaskExecutor.mjs";
 import DatabaseUtility from "../lib/DatabaseUtility.mjs";
@@ -144,6 +144,9 @@ async function calculateOutcomeProportionByWeekListForTask(taskInfo){
 
     let proportionMapList = [];
 
+    let weekIntervalList = [];
+
+
     if(taskLogInfoList.length > 0){
         // use the first element's date as the starting point
         let startDate = DateTime.fromISO(taskLogInfoList[0].createdAt);
@@ -177,7 +180,12 @@ async function calculateOutcomeProportionByWeekListForTask(taskInfo){
 
             periodOutcomeProportionMap = calculateOutcomeProportionByTaskLog(weeklyTaskLogList);
             proportionMapList.push(periodOutcomeProportionMap);
+            weekIntervalList.push(Interval.fromDateTimes(curWeekStart, curWeekEnd));
+
+            
+
             curWeekEnd = curWeekEnd.plus({"days": 7});            
+            curWeekStart = curWeekEnd.startOf("week");
         }
 
         
@@ -189,7 +197,7 @@ async function calculateOutcomeProportionByWeekListForTask(taskInfo){
     
 
     console.log(`----------------------------------`);
-    return proportionMapList;
+    return [proportionMapList, weekIntervalList];
 
     
 }
@@ -211,8 +219,8 @@ async function calculateOutComeProportionByWeekListForTaskList(taskInfoList){
 
     for(let i = 0; i < taskInfoList.length; i++){
         let taskInfo = taskInfoList[i];
-        let outcomeProportionMapList = await calculateOutcomeProportionByWeekListForTask(taskInfo);
-        taskLabelResultMap[taskInfo.label] = outcomeProportionMapList;
+        let outcomeProportionMapList, weekIntervalList = await calculateOutcomeProportionByWeekListForTask(taskInfo);
+        taskLabelResultMap[taskInfo.label] = [outcomeProportionMapList, weekIntervalList];
     }
 
     return taskLabelResultMap;
@@ -235,7 +243,7 @@ console.log(`----------------------------`);
 Object.keys(taskLabelResultListMap).forEach((taskLabel) => {
     console.log(`Outcome proportion for task [${taskLabel}]`);
 
-    let proportionMapList = taskLabelResultListMap[taskLabel];
+    let proportionMapList, weekIntervalList = taskLabelResultListMap[taskLabel];
 
     // create a action index map first
     
@@ -256,7 +264,7 @@ Object.keys(taskLabelResultListMap).forEach((taskLabel) => {
 
 
     proportionMapList.forEach((proportionMap, index) => {
-        console.log(`\tWeek [${index}]--------------`);
+        console.log(`Week [${index}][${weekIntervalList[index]}]--------------`);
 
         let simpifiedMap = {};
 
@@ -264,7 +272,7 @@ Object.keys(taskLabelResultListMap).forEach((taskLabel) => {
             simpifiedMap[`action[${actionStringIndexMap[jsonString]}]`] = proportionMap[jsonString];
         });
 
-        console.log(`\t\t${JSON.stringify(simpifiedMap, null, 2)}`);
+        console.log(`${JSON.stringify(simpifiedMap, null, 2)}`);
 
     });
 });

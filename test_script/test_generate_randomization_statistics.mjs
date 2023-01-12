@@ -219,8 +219,8 @@ async function calculateOutComeProportionByWeekListForTaskList(taskInfoList){
 
     for(let i = 0; i < taskInfoList.length; i++){
         let taskInfo = taskInfoList[i];
-        let outcomeProportionMapList, weekIntervalList = await calculateOutcomeProportionByWeekListForTask(taskInfo);
-        taskLabelResultMap[taskInfo.label] = [outcomeProportionMapList, weekIntervalList];
+        let result = await calculateOutcomeProportionByWeekListForTask(taskInfo);
+        taskLabelResultMap[taskInfo.label] = result;
     }
 
     return taskLabelResultMap;
@@ -245,7 +245,11 @@ Object.keys(taskLabelResultListMap).forEach((taskLabel) => {
 
     console.log(`taskLabelResultListMap [${taskLabel}]: ${taskLabelResultListMap[taskLabel]}`);
 
-    let proportionMapList, weekIntervalList = taskLabelResultListMap[taskLabel];
+    let result = taskLabelResultListMap[taskLabel]; 
+    let proportionMapList = result[0];
+    let weekIntervalList = result[1];
+
+
 
     // create a action index map first
     

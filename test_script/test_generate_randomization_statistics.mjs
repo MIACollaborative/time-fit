@@ -155,23 +155,34 @@ async function calculateOutcomeProportionByWeekListForTask(taskInfo){
         let curWeekEnd = startDate.startOf("week").endOf("week");
 
 
-        let weeklyTaskLogList = [];
         
+        let unit = ["seconds"];
         let periodOutcomeProportionMap = {};
 
         while(cacahedTaskLogInfoList.length > 0){
-            let curDate = DateTime.fromISO(cacahedTaskLogInfoList[0].createdAt);
-            let unit = ["seconds"];
-            if(GeneralUtility.diffDateTime(curDate, curWeekEnd, unit) >= 0){
-                weeklyTaskLogList.push(cacahedTaskLogInfoList.shift());
+
+            let weeklyTaskLogList = [];
+            
+
+            while(cacahedTaskLogInfoList.length > 0){
+                let curDate = DateTime.fromISO(cacahedTaskLogInfoList[0].createdAt)
+
+                if(GeneralUtility.diffDateTime(curDate, curWeekEnd, unit) >= 0){
+                    weeklyTaskLogList.push(cacahedTaskLogInfoList.shift());
+                }
+                else{
+                    break;
+                }
             }
-            else{
-                break;
-            }
+
+            periodOutcomeProportionMap = calculateOutcomeProportionByTaskLog(weeklyTaskLogList);
+            proportionMapList.push(periodOutcomeProportionMap);
+            curWeekEnd = curWeekEnd.plus({"days": 7});            
         }
 
-        periodOutcomeProportionMap = calculateOutcomeProportionByTaskLog(weeklyTaskLogList);
-        proportionMapList.push(periodOutcomeProportionMap);
+        
+
+        
 
     }
 

@@ -56,17 +56,9 @@ console.log(`taskWithRandomizationInfoList (label): ${JSON.stringify(tempTaskLab
 
 let selectedTaskInfo = filteredTaskWithRandomizationInfoList[0];
 
-// now query the taskLog for this task
-const taskLogList = await prisma.taskLog.findMany({
-    where: {
-        taskLabel: selectedTaskInfo.label
-    }
-});
-let taskLogInfoList = JSON.parse(JSON.stringify(taskLogList, replacer));
 
-console.log(`taskLogInfoList ([0:2]): ${JSON.stringify(taskLogInfoList.slice(0,2), null, 2)}`);
 
-function calculateOutcomeProportion(taskLogInfoList){
+function calculateOutcomeProportionByTaskLog(taskLogInfoList){
     let outcomeCountMap = {};
 
     taskLogInfoList.forEach((taskLogInfo)=>{
@@ -103,10 +95,35 @@ function calculateOutcomeProportion(taskLogInfoList){
     return outcomeProportionMap;
 }
 
+async function calculateOutcomeProportionForTask(taskInfo){
+    // now query the taskLog for this task
+    const taskLogList = await prisma.taskLog.findMany({
+        where: {
+            taskLabel: selectedTaskInfo.label
+        }
+    });
+    let taskLogInfoList = JSON.parse(JSON.stringify(taskLogList, replacer));
 
-let outcomeProportionMap = calculateOutcomeProportion(taskLogInfoList);
+    console.log(`taskLogInfoList ([0:2]): ${JSON.stringify(taskLogInfoList.slice(0,2), null, 2)}`);
 
-console.log(`Outcome proportion for task [${selectedTaskInfo.tabel}]: [${JSON.stringify(outcomeProportionMap)}]`);
+
+    let outcomeProportionMap = calculateOutcomeProportionByTaskLog(taskLogInfoList);
+
+    return outcomeProportionMap;
+
+    
+}
+
+async function calculateOutComeProportionForTaskList(taskInfoList){
+    for(let i = 0; i < taskInfoList.length; i++){
+        let taskInfo = taskInfoList[0];
+        let outcomeProportionMap = await calculateOutcomeProportionForTask(taskInfo);
+        console.log(`Outcome proportion for task [${taskInfo.label}]: [${JSON.stringify(outcomeProportionMap)}]`);
+
+    }
+}
+
+await calculateOutComeProportionForTaskList(taskWithRandomizationInfoList);
 
 /*
 const taskWithLogList = await prisma.task.findMany({

@@ -250,6 +250,8 @@ Object.keys(taskLabelResultListMap).forEach((taskLabel) => {
     let weekIntervalList = result[1];
 
 
+    console.log(`proportionMapList [${taskLabel}]: ${proportionMapList}`);
+    console.log(`weekIntervalList [${taskLabel}]: ${weekIntervalList}`);
 
     // create a action index map first
     

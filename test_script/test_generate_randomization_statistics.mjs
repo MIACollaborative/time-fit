@@ -116,32 +116,120 @@ async function calculateOutcomeProportionForTask(taskInfo){
     
 }
 
+async function calculateOutcomeProportionByWeekListForTask(taskInfo){
+    console.log(`calculateOutcomeProportionByWeekListForTask [${taskInfo.label}]----------------------------------`);
+
+    // now query the taskLog for this task
+    
+    const taskLogList = await prisma.taskLog.findMany({
+        where: {
+            taskLabel: taskInfo.label
+        },
+        // ensure the ordering
+        orderBy: [
+            {
+              createdAt: "asc",
+            },
+        ]
+    });
+    let taskLogInfoList = JSON.parse(JSON.stringify(taskLogList, replacer));
+
+    
+    // Now, I need to do the weekly thing
+    // remember to convert the time back to DateTime?
+    // start with the first day of a week of the first element
+    
+
+    let cacahedTaskLogInfoList = JSON.parse(JSON.stringify(taskLogInfoList));
+
+    let proportionMapList = [];
+
+    if(taskLogInfoList.length > 0){
+        // use the first element's date as the starting point
+        let startDate = DateTime.fromISO(taskLogInfoList[0].createdAt);
+        let endDate = DateTime.fromISO(taskLogInfoList[taskLogInfoList.length - 1].createdAt);
+
+        
+        // now, each week
+        let curWeekStart = startDate.startOf("week");
+        let curWeekEnd = startDate.startOf("week").endOf("week");
+
+
+        let weeklyTaskLogList = [];
+        
+        let periodOutcomeProportionMap = {};
+
+        while(cacahedTaskLogInfoList.length > 0){
+            let curDate = DateTime.fromISO(cacahedTaskLogInfoList[0].createdAt);
+            let unit = ["seconds"];
+            if(GeneralUtility.diffDateTime(curDate, curWeekEnd, unit) >= 0){
+                weeklyTaskLogList.push(cacahedTaskLogInfoList.shift());
+            }
+            else{
+                break;
+            }
+        }
+
+        periodOutcomeProportionMap = calculateOutcomeProportionByTaskLog(weeklyTaskLogList);
+        proportionMapList.push(periodOutcomeProportionMap);
+
+    }
+
+    
+
+    console.log(`----------------------------------`);
+    return proportionMapList;
+
+    
+}
+
 async function calculateOutComeProportionForTaskList(taskInfoList){
     let taskLabelResultMap = {};
 
     for(let i = 0; i < taskInfoList.length; i++){
         let taskInfo = taskInfoList[i];
-        let outcomeProportionMap = await calculateOutcomeProportionForTask(taskInfo);
+        let outcomeProportionMap = await calculateOutcomeProportionByWeekForTask(taskInfo);
         taskLabelResultMap[taskInfo.label] = outcomeProportionMap;
     }
 
     return taskLabelResultMap;
 }
 
-let taskLabelResultMap = await calculateOutComeProportionForTaskList(taskWithRandomizationInfoList);
+async function calculateOutComeProportionByWeekListForTaskList(taskInfoList){
+    let taskLabelResultMap = {};
 
+    for(let i = 0; i < taskInfoList.length; i++){
+        let taskInfo = taskInfoList[i];
+        let outcomeProportionMapList = await calculateOutcomeProportionByWeekListForTask(taskInfo);
+        taskLabelResultMap[taskInfo.label] = outcomeProportionMapList;
+    }
 
+    return taskLabelResultMap;
+}
+
+//let taskLabelResultMap = await calculateOutComeProportionForTaskList(taskWithRandomizationInfoList);
 Object.keys(taskLabelResultMap).forEach((taskLabel) => {
     console.log(`Outcome proportion for task [${taskLabel}]: [${JSON.stringify(taskLabelResultMap[taskLabel], null, 2)}]`);
 });
 
-/*
-const taskWithLogList = await prisma.task.findMany({
-    include: {
-        taskLogList: true
-    },
+
+
+let taskLabelResultListMap = await calculateOutComeProportionByWeekListForTaskList(taskWithRandomizationInfoList);
+
+
+console.log(`----------------------------`);
+
+Object.keys(taskLabelResultListMap).forEach((taskLabel) => {
+    console.log(`Outcome proportion for task [${taskLabel}]`);
+
+    let proportionMapList = taskLabelResultListMap[taskLabel];
+
+    proportionMapList.forEach((proportionMap, index) => {
+        console.log(`Week [${index}]--------------`);
+        console.log(`[${JSON.stringify(proportionMap, null, 2)}]`);
+
+    });
 });
-*/
 
 
 

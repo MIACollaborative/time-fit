@@ -239,7 +239,14 @@ Object.keys(taskLabelResultListMap).forEach((taskLabel) => {
 
     proportionMapList.forEach((proportionMap, index) => {
         console.log(`\tWeek [${index}]--------------`);
-        console.log(`\t\t${JSON.stringify(proportionMap, null, 2)}`);
+
+        let simpifiedMap = {};
+
+        Object.keys(proportionMap).forEach((jsonString, sIndex) => {
+            simpifiedMap[`action[${sIndex}]`] = proportionMap[jsonString];
+        });
+
+        console.log(`\t\t${JSON.stringify(simpifiedMap, null, 2)}`);
 
     });
 });

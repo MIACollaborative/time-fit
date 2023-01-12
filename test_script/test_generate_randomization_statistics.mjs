@@ -89,7 +89,7 @@ function calculateOutcomeProportionByTaskLog(taskLogInfoList){
     Object.keys(outcomeCountMap).forEach((outcomeString, index)=> {
         outcomeProportionMap[outcomeString] = outcomeCountMap[outcomeString]/total;
 
-        console.log(`Outcome proportion: [${outcomeProportionMap[outcomeString]}] for [${outcomeString}]`);
+        //console.log(`Outcome proportion: [${outcomeProportionMap[outcomeString]}] for [${outcomeString}]`);
     })
 
     return outcomeProportionMap;
@@ -104,7 +104,7 @@ async function calculateOutcomeProportionForTask(taskInfo){
     });
     let taskLogInfoList = JSON.parse(JSON.stringify(taskLogList, replacer));
 
-    console.log(`taskLogInfoList ([0:2]): ${JSON.stringify(taskLogInfoList.slice(0,2), null, 2)}`);
+    //console.log(`taskLogInfoList ([0:2]): ${JSON.stringify(taskLogInfoList.slice(0,2), null, 2)}`);
 
 
     let outcomeProportionMap = calculateOutcomeProportionByTaskLog(taskLogInfoList);
@@ -130,7 +130,7 @@ let taskLabelResultMap = await calculateOutComeProportionForTaskList(taskWithRan
 
 
 Object.keys(taskLabelResultMap).forEach((taskLabel) => {
-    console.log(`Outcome proportion for task [${taskLabel}]: [${JSON.stringify(taskLabelResultMap[taskLabel])}]`);
+    console.log(`Outcome proportion for task [${taskLabel}]: [${JSON.stringify(taskLabelResultMap[taskLabel], null, 2)}]`);
 });
 
 /*

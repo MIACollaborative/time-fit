@@ -39,8 +39,17 @@ console.log(`taskWithRandomizationInfoList[0]: ${JSON.stringify(taskWithRandomiz
 let excludeTaskLabelList = ["fitbit process notification"];
 
 let filteredTaskWithRandomizationInfoList = taskWithRandomizationInfoList.filter((taskInfo) => {
-    return !excludeTaskLabelList.includes( taskInfo.taskLabel);
+    return !excludeTaskLabelList.includes(taskInfo.taskLabel);
 });
+
+let taskLabelList = filteredTaskWithRandomizationInfoList.map((taskInfo) => {
+    return taskInfo.taskLabel;
+});
+
+console.log(`taskWithRandomizationInfoList (label): ${JSON.stringify(taskLabelList, null, 2)}`);
+
+
+
 
 /*
 const taskWithLogList = await prisma.task.findMany({

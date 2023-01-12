@@ -243,15 +243,15 @@ console.log(`----------------------------`);
 Object.keys(taskLabelResultListMap).forEach((taskLabel) => {
     console.log(`Outcome proportion for task [${taskLabel}]`);
 
-    console.log(`taskLabelResultListMap [${taskLabel}]: ${taskLabelResultListMap[taskLabel]}`);
+    //console.log(`taskLabelResultListMap [${taskLabel}]: ${taskLabelResultListMap[taskLabel]}`);
 
     let result = taskLabelResultListMap[taskLabel]; 
     let proportionMapList = result[0];
     let weekIntervalList = result[1];
 
 
-    console.log(`proportionMapList [${taskLabel}]: ${proportionMapList}`);
-    console.log(`weekIntervalList [${taskLabel}]: ${weekIntervalList}`);
+    //console.log(`proportionMapList [${taskLabel}]: ${proportionMapList}`);
+    //console.log(`weekIntervalList [${taskLabel}]: ${weekIntervalList}`);
 
     // create a action index map first
     

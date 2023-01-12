@@ -54,7 +54,17 @@ tempTaskLabelList = filteredTaskWithRandomizationInfoList.map((taskInfo) => {
 
 console.log(`taskWithRandomizationInfoList (label): ${JSON.stringify(tempTaskLabelList, null, 2)}`);
 
+let selectedTaskInfo = filteredTaskWithRandomizationInfoList[0];
 
+// now query the taskLog for this task
+const taskLogList = await prisma.taskLog.findMany({
+    where: {
+        taskLabel: selectedTaskInfo.label
+    }
+});
+let taskLogInfoList = JSON.parse(JSON.stringify(taskLogList, replacer));
+
+console.log(`taskLogInfoList ([0:2]): ${JSON.stringify(taskLogInfoList.slice(0,2), null, 2)}`);
 
 
 /*

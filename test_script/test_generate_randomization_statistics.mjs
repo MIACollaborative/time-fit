@@ -275,6 +275,7 @@ Object.keys(taskLabelResultListMap).forEach((taskLabel) => {
     });
     
 
+    console.log(`\n`);
     console.log(`Weekly Stats--------------`);
 
 
@@ -285,9 +286,10 @@ Object.keys(taskLabelResultListMap).forEach((taskLabel) => {
 
         [...Object.keys(proportionMap).sort()].reverse().forEach((jsonString, sIndex) => {
             simpifiedMap[`action[${actionStringIndexMap[jsonString]}]`] = proportionMap[jsonString];
+            console.log(`\taction[${actionStringIndexMap[jsonString]}]: ${proportionMap[jsonString]}`);
         });
 
-        console.log(`\t${JSON.stringify(simpifiedMap)}\n`);
+        //console.log(`\t${JSON.stringify(simpifiedMap)}\n`);
 
     });
 

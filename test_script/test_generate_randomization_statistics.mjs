@@ -54,7 +54,7 @@ tempTaskLabelList = filteredTaskWithRandomizationInfoList.map((taskInfo) => {
 
 console.log(`taskWithRandomizationInfoList (label): ${JSON.stringify(tempTaskLabelList, null, 2)}`);
 
-let selectedTaskInfo = filteredTaskWithRandomizationInfoList[0];
+//let selectedTaskInfo = filteredTaskWithRandomizationInfoList[0];
 
 
 
@@ -99,7 +99,7 @@ async function calculateOutcomeProportionForTask(taskInfo){
     // now query the taskLog for this task
     const taskLogList = await prisma.taskLog.findMany({
         where: {
-            taskLabel: selectedTaskInfo.label
+            taskLabel: taskInfo.label
         }
     });
     let taskLogInfoList = JSON.parse(JSON.stringify(taskLogList, replacer));

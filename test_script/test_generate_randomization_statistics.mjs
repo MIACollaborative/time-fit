@@ -275,7 +275,7 @@ Object.keys(taskLabelResultListMap).forEach((taskLabel) => {
     });
     
 
-
+    console.log(`Weekly Stats--------------`);
 
 
     proportionMapList.forEach((proportionMap, index) => {
@@ -290,6 +290,8 @@ Object.keys(taskLabelResultListMap).forEach((taskLabel) => {
         console.log(`\t${JSON.stringify(simpifiedMap)}\n`);
 
     });
+
+    console.log(`--------------`);
 });
 
 

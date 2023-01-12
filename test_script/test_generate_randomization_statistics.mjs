@@ -285,7 +285,16 @@ Object.keys(taskLabelResultListMap).forEach((taskLabel) => {
 
         let simpifiedMap = {};
 
-        [...Object.keys(proportionMap).sort()].reverse().forEach((jsonString, sIndex) => {
+        let sortedKeys = [...Object.keys(proportionMap).sort()].reverse();
+
+        let total = 0;
+
+        if(sortedKeys.length > 0){
+            total = proportionMap[sortedKeys[0]][2];
+        }
+        console.log(`Total: ${total}`);
+
+        sortedKeys.forEach((jsonString, sIndex) => {
             simpifiedMap[`action[${actionStringIndexMap[jsonString]}]`] = proportionMap[jsonString];
             console.log(`\taction[${actionStringIndexMap[jsonString]}]: ${proportionMap[jsonString]}`);
         });

@@ -12,7 +12,7 @@ console.log(`now: ${now}`);
 let before = now.minus({seconds: 69});
 let after = now.plus({seconds: 69});
 
-let unit = ["minutes", "seconds"];
+let unit = ["seconds"];
 
 console.log(`diffDateTime(before:${before}, ${now}, ${unit}): ${JSON.stringify(GeneralUtility.diffDateTime(before, now, unit).toObject(), null, 2)}`);
 

@@ -43,7 +43,7 @@ let filteredTaskWithRandomizationInfoList = taskWithRandomizationInfoList.filter
 });
 
 let taskLabelList = filteredTaskWithRandomizationInfoList.map((taskInfo) => {
-    return taskInfo.taskLabel;
+    return taskInfo.label;
 });
 
 console.log(`taskWithRandomizationInfoList (label): ${JSON.stringify(taskLabelList, null, 2)}`);

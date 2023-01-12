@@ -260,7 +260,7 @@ Object.keys(taskLabelResultListMap).forEach((taskLabel) => {
 
         let simpifiedMap = {};
 
-        [...Object.keys(proportionMap).sort()].forEach((jsonString, sIndex) => {
+        [...Object.keys(proportionMap).sort()].reverse().forEach((jsonString, sIndex) => {
             simpifiedMap[`action[${actionStringIndexMap[jsonString]}]`] = proportionMap[jsonString];
         });
 

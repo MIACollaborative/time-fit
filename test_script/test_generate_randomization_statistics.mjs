@@ -268,6 +268,7 @@ Object.keys(taskLabelResultListMap).forEach((taskLabel) => {
         actionStringIndexMap[actionString] = sIndex;
     });
 
+    console.log(`\n`);
     console.log(`ActionList--------------`);
 
     Object.keys(actionStringIndexMap).forEach((actionString, sIndex) => {
@@ -288,6 +289,7 @@ Object.keys(taskLabelResultListMap).forEach((taskLabel) => {
             simpifiedMap[`action[${actionStringIndexMap[jsonString]}]`] = proportionMap[jsonString];
             console.log(`\taction[${actionStringIndexMap[jsonString]}]: ${proportionMap[jsonString]}`);
         });
+        console.log(`\n`);
 
         //console.log(`\t${JSON.stringify(simpifiedMap)}\n`);
 

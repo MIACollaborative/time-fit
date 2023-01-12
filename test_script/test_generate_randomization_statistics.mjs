@@ -87,7 +87,7 @@ function calculateOutcomeProportionByTaskLog(taskLogInfoList){
 
     let outcomeProportionMap = {};
     Object.keys(outcomeCountMap).forEach((outcomeString, index)=> {
-        outcomeProportionMap[outcomeString] = outcomeCountMap[outcomeString]/total;
+        outcomeProportionMap[outcomeString] = [outcomeCountMap[outcomeString]/total, outcomeCountMap[outcomeString], total];
 
         //console.log(`Outcome proportion: [${outcomeProportionMap[outcomeString]}] for [${outcomeString}]`);
     })

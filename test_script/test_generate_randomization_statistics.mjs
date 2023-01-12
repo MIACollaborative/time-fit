@@ -96,6 +96,7 @@ function calculateOutcomeProportionByTaskLog(taskLogInfoList){
 }
 
 async function calculateOutcomeProportionForTask(taskInfo){
+    console.log(`calculateOutcomeProportionForTask [${taskInfo.label}]----------------------------------`);
     // now query the taskLog for this task
     const taskLogList = await prisma.taskLog.findMany({
         where: {
@@ -109,6 +110,7 @@ async function calculateOutcomeProportionForTask(taskInfo){
 
     let outcomeProportionMap = calculateOutcomeProportionByTaskLog(taskLogInfoList);
 
+    console.log(`----------------------------------`);
     return outcomeProportionMap;
 
     

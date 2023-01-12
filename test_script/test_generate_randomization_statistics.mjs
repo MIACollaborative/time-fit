@@ -118,12 +118,9 @@ async function calculateOutComeProportionForTaskList(taskInfoList){
     let taskLabelResultMap = {};
 
     for(let i = 0; i < taskInfoList.length; i++){
-        let taskInfo = taskInfoList[0];
+        let taskInfo = taskInfoList[i];
         let outcomeProportionMap = await calculateOutcomeProportionForTask(taskInfo);
         taskLabelResultMap[taskInfo.label] = outcomeProportionMap;
-
-        
-
     }
 
     return taskLabelResultMap;

@@ -66,6 +66,47 @@ let taskLogInfoList = JSON.parse(JSON.stringify(taskLogList, replacer));
 
 console.log(`taskLogInfoList ([0:2]): ${JSON.stringify(taskLogInfoList.slice(0,2), null, 2)}`);
 
+function calculateOutcomeProportion(taskLogInfoList){
+    let outcomeCountMap = {};
+
+    taskLogInfoList.forEach((taskLogInfo)=>{
+        let selectedOutcome = taskLogInfo.randomizationResult.theChoice.action;
+
+        let jsonString = JSON.stringify(selectedOutcome);
+
+        if(outcomeCountMap[jsonString] == undefined){
+            outcomeCountMap[jsonString] = 1;
+        }
+        else{
+            outcomeCountMap[jsonString] += 1;
+        }
+
+    });
+
+    // now, with the map, calculate the proportion of each key
+    let total = 0;
+
+    Object.keys(outcomeCountMap).forEach((outcomeString, index)=> {
+        console.log(`Outcome Count: [${outcomeCountMap[outcomeString]}] for [${outcomeString}]`);
+        total += outcomeCountMap[outcomeString];
+    });
+
+    console.log(`Outcome total: ${total}`);
+
+    let outcomeProportionMap = {};
+    Object.keys(outcomeCountMap).forEach((outcomeString, index)=> {
+        outcomeProportionMap[outcomeString] = outcomeCountMap[outcomeString]/total;
+
+        console.log(`Outcome proportion: [${outcomeProportionMap[outcomeString]}] for [${outcomeString}]`);
+    })
+
+    return outcomeProportionMap;
+}
+
+
+let outcomeProportionMap = calculateOutcomeProportion(taskLogInfoList);
+
+console.log(`Outcome proportion for task [${selectedTaskInfo.tabel}]: [${JSON.stringify(outcomeProportionMap)}]`);
 
 /*
 const taskWithLogList = await prisma.task.findMany({

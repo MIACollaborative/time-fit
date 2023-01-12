@@ -208,9 +208,11 @@ async function calculateOutComeProportionByWeekListForTaskList(taskInfoList){
 }
 
 //let taskLabelResultMap = await calculateOutComeProportionForTaskList(taskWithRandomizationInfoList);
+/*
 Object.keys(taskLabelResultMap).forEach((taskLabel) => {
     console.log(`Outcome proportion for task [${taskLabel}]: [${JSON.stringify(taskLabelResultMap[taskLabel], null, 2)}]`);
 });
+*/
 
 
 

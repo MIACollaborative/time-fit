@@ -115,15 +115,26 @@ async function calculateOutcomeProportionForTask(taskInfo){
 }
 
 async function calculateOutComeProportionForTaskList(taskInfoList){
+    let taskLabelResultMap = {};
+
     for(let i = 0; i < taskInfoList.length; i++){
         let taskInfo = taskInfoList[0];
         let outcomeProportionMap = await calculateOutcomeProportionForTask(taskInfo);
-        console.log(`Outcome proportion for task [${taskInfo.label}]: [${JSON.stringify(outcomeProportionMap)}]`);
+        taskLabelResultMap[taskInfo.label] = outcomeProportionMap;
+
+        
 
     }
+
+    return taskLabelResultMap;
 }
 
-await calculateOutComeProportionForTaskList(taskWithRandomizationInfoList);
+let taskLabelResultMap = await calculateOutComeProportionForTaskList(taskWithRandomizationInfoList);
+
+
+Object.keys(taskLabelResultMap).forEach((taskLabel) => {
+    console.log(`Outcome proportion for task [${taskLabel}]: [${JSON.stringify(taskLabelResultMap[taskLabel])}]`);
+});
 
 /*
 const taskWithLogList = await prisma.task.findMany({

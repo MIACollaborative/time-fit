@@ -2,7 +2,30 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+### Install the basics
+
+Yarn: https://yarnpkg.com/
+
+
+
+
+### Install MongoDB
+Instructions: https://www.mongodb.com/docs/manual/administration/install-community/
+
+Downlaod MongoDB compass for database GUI (or use commandline if you prefer)
+https://www.mongodb.com/products/compass
+
+### Create folder for storing data
+
+On Mac, create /data/mdata under the home folder, or  ~/data/mdata.
+
+On Windows, create \data\db under the c disk, or c:\data\db.
+
+
 ### Run MongoDB
+
+
+In command line/terminal:
 
 ```bash
 
@@ -16,7 +39,18 @@ mongod  --port 27017 --dbpath "c:\data\db" --replSet rs0 --bind_ip localhost
 
 ```
 
+### Create Collections
+
+* create a database named "walk_to_joy" 
+
+Please reference /prisma/schema.prisma for a list of collections (everythign that starts with "model XYZ") to create within the database:
+* log
+* users
+* ...
+
 ### Configure environment settings
+
+Create a file named ".env" in the root of the project folder with the following content:
 
 .env 
 
@@ -37,22 +71,51 @@ RESEARCH_INVESTIGATOR_PHONE=[research investigator phone number for SMS]
 
 ```
 
+Create a file named ".env.local" in the root of the project folder with the following content:
 
 .env.local
 
 ```bash
 
 NEXTAUTH_URL=http://localhost:3000
+
+# might be able to ignore... since we aren't using it specifically anymore?
 NEXTAUTH_SECRET=[the secret]
+
+```
+
+### Install dependency
+
+Run the following command in the project folder.
+
+```bash
+
+yarn install
+
+```
+
+### Configure Prisma (for database query)
+
+In addition to the first time, everytime the database schema, /prisma/schema.prisma, is changed, run this command in the project folder.
+
+In a temrinal:
+
+```bash
+
+npx prisma generate
 
 ```
 
 ### Run the development server:
 
+In a temrinal:
+
 ```bash
 npm run dev
+
 # or
 yarn dev
+
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

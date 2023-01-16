@@ -12,9 +12,6 @@ Yarn: https://yarnpkg.com/
 ### Install MongoDB
 Instructions: https://www.mongodb.com/docs/manual/administration/install-community/
 
-Downlaod MongoDB compass for database GUI (or use commandline if you prefer)
-https://www.mongodb.com/products/compass
-
 ### Create folder for storing data
 
 On Mac, create /data/mdata under the home folder, or  ~/data/mdata.
@@ -38,8 +35,14 @@ mongod --port 27017 --dbpath ~/data/mdata --replSet rs0 --bind_ip localhost
 mongod  --port 27017 --dbpath "c:\data\db" --replSet rs0 --bind_ip localhost
 
 ```
+### Install MongoDB GUI
+
+Downlaod MongoDB compass for database GUI (or use commandline if you prefer)
+https://www.mongodb.com/products/compass
 
 ### Create Collections
+
+You can create collections through MongoDB compass or commandline.
 
 * create a database named "walk_to_joy" 
 

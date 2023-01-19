@@ -84,10 +84,25 @@ console.log(`recentUpdateWithFitbitIdNoteRecentlyProcessedList.length: ${recentU
 
 let filteredUpdateList = [];
 
+
+
 if(recentUpdateWithFitbitIdNotRecentlyProcessedList.length > 0){
     // actually, if there are multiple, I can actually do multiple, LOL
     console.log(`There are some Fitbit Ids that are not recently processed!-------------------------------------------`);
-    filteredUpdateList = await GeneralUtility.removeFitbitUpdateDuplicate(recentUpdateWithFitbitIdNotRecentlyProcessedList, false);
+    let updateForTheseFitbitIdList = await GeneralUtility.removeFitbitUpdateDuplicate(recentUpdateWithFitbitIdNotRecentlyProcessedList, false);
+
+    // ok, one more step, I need to ensure that there is only one update for each Fitbit ID
+    let fitbitIdInThisBatch = [];
+
+    for(let i = 0; i < updateForTheseFitbitIdList.length; i++){
+        let updateInfo = updateForTheseFitbitIdList[i];
+        let fitbitId = updateInfo.ownerId;
+
+        if(!fitbitIdInThisBatch.includes(fitbitId)){
+            fitbitIdInThisBatch.push(fitbitId);
+            filteredUpdateList.push(updateInfo);
+        }
+    }
 }
 else{
     // all have been recently queried, LOL
@@ -96,7 +111,7 @@ else{
 
 }
 
-//console.log(`filteredUpdateList: ${JSON.stringify(filteredUpdateList, null, 2)}`);
+console.log(`filteredUpdateList: ${JSON.stringify(filteredUpdateList, null, 2)}`);
 console.log(`filteredUpdateList.length: ${filteredUpdateList.length}`);
 
 // now, for each update, retrieve accordingly

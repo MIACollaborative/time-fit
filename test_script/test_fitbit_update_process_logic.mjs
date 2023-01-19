@@ -22,9 +22,9 @@ let theAction = {
 
 let updateType = "processed";
 
-let recentUpdateList = await DatabaseUtility.getFitbitUpdateByStatusWithLimit(updateType, 1, theAction.prioritizeSystemUpdate, theAction.favorRecent);
+let recentUpdateList = await DatabaseUtility.getFitbitUpdateByStatusWithLimit(updateType, 0, theAction.prioritizeSystemUpdate, theAction.favorRecent);
 
-console.log(`recentUpdateList: ${JSON.stringify(recentUpdateList, null, 2)}`);
+//console.log(`recentUpdateList: ${JSON.stringify(recentUpdateList, null, 2)}`);
 console.log(`recentUpdateList.length: ${recentUpdateList.length}`);
 
 
@@ -36,7 +36,7 @@ let beforeDateTime = nowDateTime.minus({ minutes: 720 });
 
 let recentTaskLogList = await DatabaseUtility.findTaskLogWithActionTypeDuringPeriod("processFitbitUpdate", beforeDateTime, nowDateTime, 0);
 
-console.log(`recentTaskLogList: ${JSON.stringify(recentTaskLogList, null, 2)}`);
+//console.log(`recentTaskLogList: ${JSON.stringify(recentTaskLogList, null, 2)}`);
 console.log(`recentTaskLogList.length: ${recentTaskLogList.length}`);
 
 
@@ -47,7 +47,7 @@ let recentTagLogWithResultList = recentTaskLogList.filter((taskLog) => {
     return taskLog.executionResult.value.body.length > 0
 });
 
-console.log(`recentTagLogWithResultList: ${JSON.stringify(recentTagLogWithResultList, null, 2)}`);
+//console.log(`recentTagLogWithResultList: ${JSON.stringify(recentTagLogWithResultList, null, 2)}`);
 console.log(`recentTagLogWithResultList.length: ${recentTagLogWithResultList.length}`);
 
 
@@ -69,7 +69,7 @@ recentTagLogWithResultList.forEach((taskLog) => {
     });
 });
 
-console.log(`recentFitbitIdWithUpdateProcessed: ${JSON.stringify(recentFitbitIdWithUpdateProcessed, null, 2)}`);
+//console.log(`recentFitbitIdWithUpdateProcessed: ${JSON.stringify(recentFitbitIdWithUpdateProcessed, null, 2)}`);
 console.log(`recentFitbitIdWithUpdateProcessed.length: ${recentFitbitIdWithUpdateProcessed.length}`);
 
 // now, the list have all the recent updates Fitbit Ids in 4 mins
@@ -79,7 +79,7 @@ let recentUpdateWithFitbitIdNotRecentlyProcessedList = recentUpdateList.filter((
     return !recentFitbitIdWithUpdateProcessed.includes(updateInfo.ownerId);
 });
 
-console.log(`recentUpdateWithFitbitIdNoteRecentlyProcessedList: ${JSON.stringify(recentUpdateWithFitbitIdNotRecentlyProcessedList, null, 2)}`);
+//console.log(`recentUpdateWithFitbitIdNoteRecentlyProcessedList: ${JSON.stringify(recentUpdateWithFitbitIdNotRecentlyProcessedList, null, 2)}`);
 console.log(`recentUpdateWithFitbitIdNoteRecentlyProcessedList.length: ${recentUpdateWithFitbitIdNotRecentlyProcessedList.length}`);
 
 let filteredUpdateList = [];
@@ -94,7 +94,7 @@ else{
 
 }
 
-console.log(`filteredUpdateList: ${JSON.stringify(filteredUpdateList, null, 2)}`);
+//console.log(`filteredUpdateList: ${JSON.stringify(filteredUpdateList, null, 2)}`);
 console.log(`filteredUpdateList.length: ${filteredUpdateList.length}`);
 
 // now, for each update, retrieve accordingly

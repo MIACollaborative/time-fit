@@ -29,13 +29,19 @@ console.log(`recentUpdateList.length: ${recentUpdateList.length}`);
 
 
 // try to find the taskLog for the past 4 mins
-/*
+
 let nowDateTime = DateTime.now();
 let beforeDateTime = nowDateTime.minus({minutes: 4});
 
 
-let recentTaskLogList = await DatabaseUtility.findTaskLogWithActionTypeDuringPeriod("processFitbitUpdate", beforeDateTime, nowDateTime, 1);
+let recentTaskLogList = await DatabaseUtility.findTaskLogWithActionTypeDuringPeriod("processFitbitUpdate", beforeDateTime, nowDateTime, 0);
 
+console.log(`recentTaskLogList: ${JSON.stringify(recentTaskLogList, null, 2)}`);
+console.log(`recentTaskLogList.length: ${recentUpdateList.length}`);
+
+
+
+/*
 // next, filterd by those whose 
 let recentTagLogWithResultList = recentTaskLogList.filter((taskLog) => {
     return taskLog.executionResult.value.body.length > 0

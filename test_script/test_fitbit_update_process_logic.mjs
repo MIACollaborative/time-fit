@@ -11,14 +11,59 @@ if (process.env.NODE_ENV !== "production") {
     dotenv.config();
 }
 
-let recentUpdateList = await DatabaseUtility.getFitbitUpdateByStatusWithLimit("notification", 50);
+let theAction = {
+    type: "processFitbitUpdate",
 
+    prioritizeSystemUpdate: true, 
+
+    favorRecent: true
+    
+};
+
+let recentUpdateList = await DatabaseUtility.getFitbitUpdateByStatusWithLimit("notification", 1, theAction.prioritizeSystemUpdate, theAction.favorRecent);
 
 console.log(`recentUpdateList: ${JSON.stringify(recentUpdateList, null, 2)}`);
 console.log(`recentUpdateList.length: ${recentUpdateList.length}`);
 
 
-let filteredUpdateList = await GeneralUtility.removeFitbitUpdateDuplicate(recentUpdateList);
+// try to find the taskLog for the past 4 mins
+/*
+let nowDateTime = DateTime.now();
+let beforeDateTime = nowDateTime.minus({minutes: 4});
+
+
+let recentTaskLogList = await DatabaseUtility.findTaskLogWithActionTypeDuringPeriod("processFitbitUpdate", beforeDateTime, nowDateTime, 1);
+
+// next, filterd by those whose 
+let recentTagLogWithResultList = recentTaskLogList.filter((taskLog) => {
+    return taskLog.executionResult.value.body.length > 0
+});
+
+
+// now, extract the Fitbit ID
+let recentFitbitIdWithUpdateProcessed = [];
+
+recentTagLogWithResultList.forEach((taskLog) => {
+    taskLog.executionResult.value.body.forEach((fitbitUpdateLog) => {
+        let fitbitId = fitbitUpdateLog["ownerId"];
+        if(!recentFitbitIdWithUpdateProcessed.includes(fitbitId)){
+            recentFitbitIdWithUpdateProcessed.push(fitbitId);
+        }
+    });
+});
+
+// now, the list have all the recent updates Fitbit Ids in 4 mins
+
+// ok, so now, filter the update list if they are about these ID
+recentUpdateList = recentUpdateList.filter((updateInfo)=> {
+    return !recentFitbitIdWithUpdateProcessed.includes(updateInfo.ownerId);
+});
+
+console.log(`recentUpdateList without recent procssing: ${JSON.stringify(recentUpdateList, null, 2)}`);
+console.log(`recentUpdateList without recent procssing.length: ${filteredUpdateList.length}`);
+*/
+
+let filteredUpdateList = await GeneralUtility.removeFitbitUpdateDuplicate(recentUpdateList, false);
 
 console.log(`filteredUpdateList: ${JSON.stringify(filteredUpdateList, null, 2)}`);
 console.log(`filteredUpdateList.length: ${filteredUpdateList.length}`);
@@ -26,105 +71,7 @@ console.log(`filteredUpdateList.length: ${filteredUpdateList.length}`);
 // now, for each update, retrieve accordingly
 
 /*
-let resultList = filteredUpdateList.map((fitbitUpdate) => {
-    // false: avoid storing the data
-    return DatabaseUtility.queryAndStoreFitbitSummaryByFitbitUpdate(fitbitUpdate, false, false);
+let resultList =  filteredUpdateList.map((fitbitUpdate) => {
+    return await 
 });
-console.log(`resultList: ${JSON.stringify(resultList, null, 2)}`);
-console.log(`resultList.length: ${resultList.length}`);
-
-resultStatus = "success";
-resultErrorMessage = "";
-
-for (let i = 0; i < resultList.length; i++) {
-    let curResult = resultList[i];
-    // one failed is failed
-    if (curResult.value == "failed") {
-        resultStatus = "failed";
-        resultErrorMessage += `${curResult.data} - `;
-    }
-}
-
-let resultBody = resultList.map((result) => {
-    return result.body;
-});
-
-
-let successResultList = resultList.filter((result) => {
-    return result.status == "success";
-});
-
-console.log(`successResultList: ${JSON.stringify(successResultList, null, 2)}`);
-console.log(`successResultList.length: ${successResultList.length}`);
 */
-
-/*
-for (let i = 0; i < successResultList.length; i++) {
-    let compositeId = successResultList[i].compositeId;
-    // now, mark records with this composite id to have status: "processed"
-    const updatedFitbitUpdateList = await prisma.fitbit_update.updateMany({
-        where: {
-            compositeId: compositeId
-        },
-        data: {
-            status: 'processed',
-        }
-    })
-}
-
-record.executionResult = {
-    type: "fitbit",
-    value: {
-        status: resultStatus,
-        errorMessage: resultErrorMessage,
-        body: resultBody
-    }
-};
-
-
-console.log(`executeActionForUser record.executionResult: ${JSON.stringify(record.executionResult)}`);
-*/
-
-
-// now, test the update query timestamp comparison
-let selectedFitbitUpdate = recentUpdateList[3];
-let compositeId = GeneralUtility.generateCompositeIDForFitbitUpdate([selectedFitbitUpdate.ownerId, selectedFitbitUpdate.collectionType, selectedFitbitUpdate.date]);
-console.log(`compositeId: ${compositeId}`);
-
-
-let olderList = await prisma.fitbit_update.findMany({
-    where:{
-        status: "notification",
-        ownerId: selectedFitbitUpdate.ownerId,
-        collectionType: selectedFitbitUpdate.collectionType,
-        date: selectedFitbitUpdate.date,
-        createdAt: {
-            lte: selectedFitbitUpdate.createdAt
-        },
-    },
-    //take: limit,
-    orderBy: {
-        createdAt: 'desc',
-    },
-});
-
-console.log(`olderList (${selectedFitbitUpdate.createdAt}): ${JSON.stringify(olderList, null, 2)}`);
-
-// next, try updating them to "processed"
-
-const updateOrderList = await prisma.fitbit_update.updateMany({
-    where: {
-        status: "notification",
-        ownerId: selectedFitbitUpdate.ownerId,
-        collectionType: selectedFitbitUpdate.collectionType,
-        date: selectedFitbitUpdate.date,
-        createdAt: {
-            lte: selectedFitbitUpdate.createdAt
-        },
-    },
-    data: {
-        status: 'processed',
-    },
-});
-
-console.log(`updateOrderList (${selectedFitbitUpdate.createdAt}): ${JSON.stringify(updateOrderList, null, 2)}`);

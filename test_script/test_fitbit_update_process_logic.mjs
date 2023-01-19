@@ -31,7 +31,7 @@ console.log(`recentUpdateList.length: ${recentUpdateList.length}`);
 // try to find the taskLog for the past 4 mins
 
 let nowDateTime = DateTime.now();
-let beforeDateTime = nowDateTime.minus({ minutes: 720 });
+let beforeDateTime = nowDateTime.minus({ minutes: 5 });
 
 
 let recentTaskLogList = await DatabaseUtility.findTaskLogWithActionTypeDuringPeriod("processFitbitUpdate", beforeDateTime, nowDateTime, 0);
@@ -58,7 +58,7 @@ recentTagLogWithResultList.forEach((taskLog) => {
     taskLog.executionResult.value.body.forEach((fitbitUpdateLogList) => {
         fitbitUpdateLogList.forEach((fitbitUpdateLog) => {
             let fitbitId = fitbitUpdateLog["ownerId"];
-            console.log(`fitbitId: ${fitbitId}`);
+            //console.log(`fitbitId: ${fitbitId}`);
             if (!recentFitbitIdWithUpdateProcessed.includes(fitbitId)) {
                 recentFitbitIdWithUpdateProcessed.push(fitbitId);
             }
@@ -69,7 +69,7 @@ recentTagLogWithResultList.forEach((taskLog) => {
     });
 });
 
-//console.log(`recentFitbitIdWithUpdateProcessed: ${JSON.stringify(recentFitbitIdWithUpdateProcessed, null, 2)}`);
+console.log(`recentFitbitIdWithUpdateProcessed: ${JSON.stringify(recentFitbitIdWithUpdateProcessed, null, 2)}`);
 console.log(`recentFitbitIdWithUpdateProcessed.length: ${recentFitbitIdWithUpdateProcessed.length}`);
 
 // now, the list have all the recent updates Fitbit Ids in 4 mins

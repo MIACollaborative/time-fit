@@ -37,7 +37,7 @@ let beforeDateTime = nowDateTime.minus({minutes: 60});
 let recentTaskLogList = await DatabaseUtility.findTaskLogWithActionTypeDuringPeriod("processFitbitUpdate", beforeDateTime, nowDateTime, 0);
 
 console.log(`recentTaskLogList: ${JSON.stringify(recentTaskLogList, null, 2)}`);
-console.log(`recentTaskLogList.length: ${recentUpdateList.length}`);
+console.log(`recentTaskLogList.length: ${recentTaskLogList.length}`);
 
 
 

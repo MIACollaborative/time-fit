@@ -56,6 +56,7 @@ let recentFitbitIdWithUpdateProcessed = [];
 
 recentTagLogWithResultList.forEach((taskLog) => {
     taskLog.executionResult.value.body.forEach((fitbitUpdateLog) => {
+        console.log(`fitbitId: ${fitbitId}`);
         let fitbitId = fitbitUpdateLog["ownerId"];
         if(!recentFitbitIdWithUpdateProcessed.includes(fitbitId)){
             recentFitbitIdWithUpdateProcessed.push(fitbitId);

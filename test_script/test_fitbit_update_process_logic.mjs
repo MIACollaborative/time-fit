@@ -75,15 +75,24 @@ console.log(`recentFitbitIdWithUpdateProcessed.length: ${recentFitbitIdWithUpdat
 // now, the list have all the recent updates Fitbit Ids in 4 mins
 
 // ok, so now, filter the update list if they are about these ID
-let recentUpdateWithFitbitIdNoteRecentlyProcessedList = recentUpdateList.filter((updateInfo) => {
+let recentUpdateWithFitbitIdNotRecentlyProcessedList = recentUpdateList.filter((updateInfo) => {
     return !recentFitbitIdWithUpdateProcessed.includes(updateInfo.ownerId);
 });
 
-console.log(`recentUpdateWithFitbitIdNoteRecentlyProcessedList: ${JSON.stringify(recentUpdateWithFitbitIdNoteRecentlyProcessedList, null, 2)}`);
-console.log(`recentUpdateWithFitbitIdNoteRecentlyProcessedList.length: ${recentUpdateWithFitbitIdNoteRecentlyProcessedList.length}`);
+console.log(`recentUpdateWithFitbitIdNoteRecentlyProcessedList: ${JSON.stringify(recentUpdateWithFitbitIdNotRecentlyProcessedList, null, 2)}`);
+console.log(`recentUpdateWithFitbitIdNoteRecentlyProcessedList.length: ${recentUpdateWithFitbitIdNotRecentlyProcessedList.length}`);
 
+let filteredUpdateList = [];
 
-let filteredUpdateList = await GeneralUtility.removeFitbitUpdateDuplicate(recentUpdateWithFitbitIdNoteRecentlyProcessedList, false);
+if(recentUpdateWithFitbitIdNotRecentlyProcessedList.length > 0){
+    // actually, if there are multiple, I can actually do multiple, LOL
+    filteredUpdateList = await GeneralUtility.removeFitbitUpdateDuplicate(recentUpdateWithFitbitIdNotRecentlyProcessedList, false);
+}
+else{
+    // all have been recently queried, LOL
+    // then, just pick a random update to perform
+
+}
 
 console.log(`filteredUpdateList: ${JSON.stringify(filteredUpdateList, null, 2)}`);
 console.log(`filteredUpdateList.length: ${filteredUpdateList.length}`);

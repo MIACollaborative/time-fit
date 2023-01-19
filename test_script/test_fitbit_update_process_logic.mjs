@@ -86,10 +86,12 @@ let filteredUpdateList = [];
 
 if(recentUpdateWithFitbitIdNotRecentlyProcessedList.length > 0){
     // actually, if there are multiple, I can actually do multiple, LOL
+    console.log(`There are some Fitbit Ids that are not recently processed!-------------------------------------------`);
     filteredUpdateList = await GeneralUtility.removeFitbitUpdateDuplicate(recentUpdateWithFitbitIdNotRecentlyProcessedList, false);
 }
 else{
     // all have been recently queried, LOL
+    console.log(`All Fitbit Ids that are not recently processed!-------------------------------------------`);
     // then, just pick a random update to perform
 
 }

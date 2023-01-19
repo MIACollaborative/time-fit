@@ -48,7 +48,7 @@ let recentTagLogWithResultList = recentTaskLogList.filter((taskLog) => {
 });
 
 console.log(`recentTagLogWithResultList: ${JSON.stringify(recentTagLogWithResultList, null, 2)}`);
-console.log(`recentTagLogWithResultList.length: ${recentUpdateList.length}`);
+console.log(`recentTagLogWithResultList.length: ${recentTagLogWithResultList.length}`);
 
 
 // now, extract the Fitbit ID
@@ -64,7 +64,7 @@ recentTagLogWithResultList.forEach((taskLog) => {
 });
 
 console.log(`recentFitbitIdWithUpdateProcessed: ${JSON.stringify(recentFitbitIdWithUpdateProcessed, null, 2)}`);
-console.log(`recentFitbitIdWithUpdateProcessed.length: ${recentUpdateList.length}`);
+console.log(`recentFitbitIdWithUpdateProcessed.length: ${recentFitbitIdWithUpdateProcessed.length}`);
 
 // now, the list have all the recent updates Fitbit Ids in 4 mins
 

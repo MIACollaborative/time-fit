@@ -20,7 +20,7 @@ let theAction = {
 
 };
 
-let updateType = "processed";
+let updateType = "notification";
 
 let recentUpdateList = await DatabaseUtility.getFitbitUpdateByStatusWithLimit(updateType, 0, theAction.prioritizeSystemUpdate, theAction.favorRecent);
 

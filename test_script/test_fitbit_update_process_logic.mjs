@@ -17,10 +17,12 @@ let theAction = {
     prioritizeSystemUpdate: true, 
 
     favorRecent: true
-    
+
 };
 
-let recentUpdateList = await DatabaseUtility.getFitbitUpdateByStatusWithLimit("notification", 1, theAction.prioritizeSystemUpdate, theAction.favorRecent);
+let updateType = "processed";
+
+let recentUpdateList = await DatabaseUtility.getFitbitUpdateByStatusWithLimit(updateType, 1, theAction.prioritizeSystemUpdate, theAction.favorRecent);
 
 console.log(`recentUpdateList: ${JSON.stringify(recentUpdateList, null, 2)}`);
 console.log(`recentUpdateList.length: ${recentUpdateList.length}`);

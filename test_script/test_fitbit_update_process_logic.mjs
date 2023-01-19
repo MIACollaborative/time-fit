@@ -41,11 +41,14 @@ console.log(`recentTaskLogList.length: ${recentUpdateList.length}`);
 
 
 
-/*
+
 // next, filterd by those whose 
 let recentTagLogWithResultList = recentTaskLogList.filter((taskLog) => {
     return taskLog.executionResult.value.body.length > 0
 });
+
+console.log(`recentTagLogWithResultList: ${JSON.stringify(recentTagLogWithResultList, null, 2)}`);
+console.log(`recentTagLogWithResultList.length: ${recentUpdateList.length}`);
 
 
 // now, extract the Fitbit ID
@@ -60,18 +63,21 @@ recentTagLogWithResultList.forEach((taskLog) => {
     });
 });
 
+console.log(`recentFitbitIdWithUpdateProcessed: ${JSON.stringify(recentFitbitIdWithUpdateProcessed, null, 2)}`);
+console.log(`recentFitbitIdWithUpdateProcessed.length: ${recentUpdateList.length}`);
+
 // now, the list have all the recent updates Fitbit Ids in 4 mins
 
 // ok, so now, filter the update list if they are about these ID
-recentUpdateList = recentUpdateList.filter((updateInfo)=> {
+let recentUpdateWithFitbitIdNoteRecentlyProcessedList = recentUpdateList.filter((updateInfo)=> {
     return !recentFitbitIdWithUpdateProcessed.includes(updateInfo.ownerId);
 });
 
-console.log(`recentUpdateList without recent procssing: ${JSON.stringify(recentUpdateList, null, 2)}`);
-console.log(`recentUpdateList without recent procssing.length: ${filteredUpdateList.length}`);
-*/
+console.log(`recentUpdateWithFitbitIdNoteRecentlyProcessedList: ${JSON.stringify(recentUpdateWithFitbitIdNoteRecentlyProcessedList, null, 2)}`);
+console.log(`recentUpdateWithFitbitIdNoteRecentlyProcessedList.length: ${recentUpdateWithFitbitIdNoteRecentlyProcessedList.length}`);
 
-let filteredUpdateList = await GeneralUtility.removeFitbitUpdateDuplicate(recentUpdateList, false);
+
+let filteredUpdateList = await GeneralUtility.removeFitbitUpdateDuplicate(recentUpdateWithFitbitIdNoteRecentlyProcessedList, false);
 
 console.log(`filteredUpdateList: ${JSON.stringify(filteredUpdateList, null, 2)}`);
 console.log(`filteredUpdateList.length: ${filteredUpdateList.length}`);

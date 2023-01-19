@@ -31,7 +31,7 @@ console.log(`recentUpdateList.length: ${recentUpdateList.length}`);
 // try to find the taskLog for the past 4 mins
 
 let nowDateTime = DateTime.now();
-let beforeDateTime = nowDateTime.minus({ minutes: 120 });
+let beforeDateTime = nowDateTime.minus({ minutes: 720 });
 
 
 let recentTaskLogList = await DatabaseUtility.findTaskLogWithActionTypeDuringPeriod("processFitbitUpdate", beforeDateTime, nowDateTime, 0);

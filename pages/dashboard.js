@@ -42,6 +42,8 @@ import UserTable from "../component/UserTable";
 import TaskLogGroupByTable from "../component/TaskLogGroupByTable";
 import UpdateDiffTable from "../component/UpdateDiffTable";
 
+import { DateTime } from "luxon";
+
 function replacer(key, value) {
   if (typeof value === "Date") {
     return value.toString();
@@ -106,6 +108,20 @@ export async function getServerSideProps(ctx) {
 
   let queryLimit = 150;
 
+
+  let nowDate = DateTime.now();
+  let startDate = nowDate.minus({weeks: 1}).startOf("day");
+  let sevenDaysConstraint = {
+    gte: startDate.toISO(),
+    lte: nowDate.toISO()
+  };
+  /*
+  createdAt: {
+    gte: startDate.toISO(),
+    lte: endDate.toISO()
+  }
+  */
+
   console.log(`dashboard.getServerSideProps: find userList`);
   if (adminUsernameList.includes(userName)) {
     userList = await prisma.users.findMany({
@@ -137,7 +153,7 @@ export async function getServerSideProps(ctx) {
         },
 
       ],
-      take: queryLimit
+      //take: queryLimit
     });
 
     responseInfoList = JSON.parse(JSON.stringify(responseList, replacer));
@@ -154,7 +170,7 @@ export async function getServerSideProps(ctx) {
           updatedAt: "desc",
         },
       ],
-      take: queryLimit
+      //take: queryLimit
     });
 
     fitbitSubscriptionInfoList = JSON.parse(JSON.stringify(fitbitSubscriptionList, replacer));
@@ -165,6 +181,9 @@ export async function getServerSideProps(ctx) {
   if (adminUsernameList.includes(userName)) {
     // v2: try filter
     fitbitNotificationList = await prisma.fitbit_update.findMany({
+      where:{
+        createdAt: sevenDaysConstraint
+      },
       orderBy: [
         {
           //date: "desc",
@@ -194,6 +213,9 @@ export async function getServerSideProps(ctx) {
   console.log(`dashboard.getServerSideProps: find fitbitDataList`);
   if (adminUsernameList.includes(userName)) {
     fitbitDataList = await prisma.fitbit_data.findMany({
+      where:{
+        createdAt: sevenDaysConstraint
+      },
       include: {
         owner: true,
       },
@@ -202,7 +224,7 @@ export async function getServerSideProps(ctx) {
           updatedAt: "desc",
         },
       ],
-      take: queryLimit
+      //take: queryLimit
     });
 
     fitbitDataInfoList = JSON.parse(JSON.stringify(fitbitDataList, replacer));
@@ -211,6 +233,9 @@ export async function getServerSideProps(ctx) {
   console.log(`dashboard.getServerSideProps: find updateDiffList`);
   if (adminUsernameList.includes(userName)) {
     updateDiffList = await prisma.update_diff.findMany({
+      where:{
+        createdAt: sevenDaysConstraint
+      },
       orderBy: [
         {
           createdAt: "desc",
@@ -246,6 +271,9 @@ export async function getServerSideProps(ctx) {
   console.log(`dashboard.getServerSideProps: find taskLogList`);
   if (adminUsernameList.includes(userName)) {
     taskLogList = await prisma.taskLog.findMany({
+      where:{
+        createdAt: sevenDaysConstraint
+      },
       /*
       where: {
         NOT: {
@@ -258,7 +286,7 @@ export async function getServerSideProps(ctx) {
           updatedAt: "desc",
         },
       ],
-      take: queryLimit
+      //take: queryLimit
     });
 
     taskLogInfoList = JSON.parse(JSON.stringify(taskLogList, replacer));
@@ -268,7 +296,8 @@ export async function getServerSideProps(ctx) {
   if (adminUsernameList.includes(userName)) {
     taskLogInvestigatorList = await prisma.taskLog.findMany({
       where: {
-        taskLabel: { contains: "investigator" }
+        taskLabel: { contains: "investigator" },
+        createdAt: sevenDaysConstraint
       },
       orderBy: [
         {

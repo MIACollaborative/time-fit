@@ -14,7 +14,7 @@ if (process.env.NODE_ENV !== "production") {
 let theAction = {
     type: "processFitbitUpdate",
 
-    prioritizeSystemUpdate: true, 
+    prioritizeSystemUpdate: true,
 
     favorRecent: true
 
@@ -31,7 +31,7 @@ console.log(`recentUpdateList.length: ${recentUpdateList.length}`);
 // try to find the taskLog for the past 4 mins
 
 let nowDateTime = DateTime.now();
-let beforeDateTime = nowDateTime.minus({minutes: 60});
+let beforeDateTime = nowDateTime.minus({ minutes: 60 });
 
 
 let recentTaskLogList = await DatabaseUtility.findTaskLogWithActionTypeDuringPeriod("processFitbitUpdate", beforeDateTime, nowDateTime, 0);
@@ -55,12 +55,17 @@ console.log(`recentTagLogWithResultList.length: ${recentTagLogWithResultList.len
 let recentFitbitIdWithUpdateProcessed = [];
 
 recentTagLogWithResultList.forEach((taskLog) => {
-    taskLog.executionResult.value.body.forEach((fitbitUpdateLog) => {
-        console.log(`fitbitId: ${fitbitId}`);
-        let fitbitId = fitbitUpdateLog["ownerId"];
-        if(!recentFitbitIdWithUpdateProcessed.includes(fitbitId)){
-            recentFitbitIdWithUpdateProcessed.push(fitbitId);
-        }
+    taskLog.executionResult.value.body.forEach((fitbitUpdateLogList) => {
+        fitbitUpdateLogList.forEach((fitbitUpdateLog) => {
+            let fitbitId = fitbitUpdateLog["ownerId"];
+            console.log(`fitbitId: ${fitbitId}`);
+            if (!recentFitbitIdWithUpdateProcessed.includes(fitbitId)) {
+                recentFitbitIdWithUpdateProcessed.push(fitbitId);
+            }
+
+
+        });
+
     });
 });
 
@@ -70,7 +75,7 @@ console.log(`recentFitbitIdWithUpdateProcessed.length: ${recentFitbitIdWithUpdat
 // now, the list have all the recent updates Fitbit Ids in 4 mins
 
 // ok, so now, filter the update list if they are about these ID
-let recentUpdateWithFitbitIdNoteRecentlyProcessedList = recentUpdateList.filter((updateInfo)=> {
+let recentUpdateWithFitbitIdNoteRecentlyProcessedList = recentUpdateList.filter((updateInfo) => {
     return !recentFitbitIdWithUpdateProcessed.includes(updateInfo.ownerId);
 });
 

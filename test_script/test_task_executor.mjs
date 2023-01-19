@@ -76,7 +76,8 @@ let choiceList = [
 //console.log(`testRandomization(${total}) for ${JSON.stringify(choiceList)}: ${JSON.stringify(testRandomization(choiceList, total))}`);
 
 let now = DateTime.now();
-let taskCompositeResultList = await TaskExecutor.executeTaskForUserListForDatetime(GeneralUtility.taskList[6], userList, now);
+//let taskCompositeResultList = await TaskExecutor.executeTaskForUserListForDatetime(GeneralUtility.taskList[3], userList, now);
+let taskCompositeResultList = await TaskExecutor.executeTaskForUserListForDatetime(GeneralUtility.taskList[3], [GeneralUtility.systemUser], now);
 
 console.log(`taskCompositeResultList: ${JSON.stringify(taskCompositeResultList)}`);
 

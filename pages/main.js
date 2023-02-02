@@ -217,10 +217,10 @@ export default function Main({
     router.push("/turn-off-fitbit-reminder");
     return null;
   }
-  else if(!GeneralUtility.isWalkSetTo10(userInfo)){
-    router.push("/set-walk-auto-to-10");
-    return null;
-  }
+  // else if(!GeneralUtility.isWalkSetTo10(userInfo)){
+  //   router.push("/set-walk-auto-to-10");
+  //   return null;
+  // }
   else if(!GeneralUtility.isWalkToJoySaveToContacts(userInfo)){
     router.push("/save-walktojoy-to-contacts");
     return null;

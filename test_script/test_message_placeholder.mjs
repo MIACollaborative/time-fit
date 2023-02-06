@@ -16,7 +16,7 @@ let aUser = await prisma.users.findFirst({
 
 let userInfo = JSON.parse(JSON.stringify(aUser, replacer));
 
-let sampleMesssageTemplate = `Your last response: [response|SV_bw498iRdfDhdLme:SV_73Dz01KrwwLUyk6|last].`;
+let sampleMesssageTemplate = `Your last response: [response|SV_73Dz01KrwwLUyk6:SV_bw498iRdfDhdLme|last].`;
 
 
 let resultMsg = await DatabaseUtility.replacePlaceholderFromMessage(sampleMesssageTemplate, userInfo, "");

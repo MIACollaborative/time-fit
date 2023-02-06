@@ -10,13 +10,13 @@ function replacer(key, value) {
 
 let aUser = await prisma.users.findFirst({
     where: {
-        username: "test1"
+        username: "test2"
     }
 });
 
 let userInfo = JSON.parse(JSON.stringify(aUser, replacer));
 
-let sampleMesssageTemplate = `You wear Fitbit over 480 mins for [fitbit_wearing_days_since_join|480|3]/3 days sincing joining the study.`;
+let sampleMesssageTemplate = `Your last response: [response|SV_bw498iRdfDhdLme:SV_73Dz01KrwwLUyk6|last].`;
 
 
 let resultMsg = await DatabaseUtility.replacePlaceholderFromMessage(sampleMesssageTemplate, userInfo, "");

@@ -36,6 +36,7 @@ model users {
   activateAt DateTime?
   fitbitReminderTurnOff Boolean? @default(false)
   saveWalkToJoyToContacts Boolean? @default(false)
+  autoWalkTo10 Boolean? @default(false)
 
   // for group assignment
   gif Boolean? @default(false)

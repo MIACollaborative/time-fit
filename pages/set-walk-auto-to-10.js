@@ -105,7 +105,7 @@ export default function SetWalkAutoTo10({ userInfo }) {
     let preparationInfo = undefined;
     console.log(`onSaveClick: userInfo.autoWalkTo10 ${userInfo.autoWalkTo10}`);
     preparationInfo = {
-      fitbitReminderTurnOff: true
+      autoWalkTo10: true
     }
 
     console.log(`onSaveClick: updatedInfo preparation ${JSON.stringify(preparationInfo, null, 2)}`);

@@ -15,7 +15,7 @@ id,group,interventionMessage,topic,note
 14,prompt-re,"[name], this is a friendly reminder to complete your end-of-day survey this evening. Happy walking!",End-of-day & intervention End-of-day,Didn't fill out survey for 2 consecutive days: x2 days at 12PM
 15,prompt,"[name], here is your weekly summary for this past week: You have walked [7-day-average-steps] steps on average each day, and went for a total of [7-day-walks-over-10mins] sustained walks for over 10 minutes this past week. Keep up the good work!",Data Summary,
 16,prompt,"[name], it's time to plan for your walks for this week: <link> .",Planning survey,
-17,prompt-re,"Hey [name], this is a friendly reminder to plan for your walks for this week (See previous message for the link).",Planning survey,After 8 hours
+17,prompt-re,"Hey [name], this is a friendly reminder to plan for your walks for this week: [survey_link_from_tasks|intervention_planning_1:intervention_planning_2-6|last].",Planning survey reminder,After 8 hours
 18,,,,
 19,investigator,[PID] has accumulated 6 consecutive days of Fitbit non-worn days. Give this person a call.,Phone call reminder to investigator,IF non-worn days for 6 consecutive days
 20,investigator,[PID] has missed for 5 consecutive days of End-of-day survey. Give this person a call.,Phone call reminder to investigator,IF missed end-of-day survey for 5 consecutive days

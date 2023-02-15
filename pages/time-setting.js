@@ -150,7 +150,7 @@ export default function TimeSetting({ userInfo}) {
         <h1 className="project-text">Waking Hours</h1>
 
         <div>
-            <div>On <b>weekdays</b>, when do you typically <b>wakeup</b>?</div><br />
+            <div>On <b>weekdays</b>, when do you typically <b>wake up</b>?</div><br />
             <MobileTimePicker
               label="Weekday Wake Up Time"
               value={weekdayWakeup}
@@ -176,7 +176,7 @@ export default function TimeSetting({ userInfo}) {
             <br /><br />
             <Divider />
             <br />
-            <div>On <b>weekends</b>, when do you typically <b>wakeup</b>?</div><br />
+            <div>On <b>weekends</b>, when do you typically <b>wake up</b>?</div><br />
             <MobileTimePicker
               label="Weekend Wake Up Time"
               value={weekendWakeup}
@@ -202,7 +202,7 @@ export default function TimeSetting({ userInfo}) {
             <br /><br />
             <Divider />
             <br />
-            <div>Timzone: {zoneName} </div>
+            <div>Timezone: {zoneName} </div>
             <br />
             <Select
               labelId="demo-simple-select-label"

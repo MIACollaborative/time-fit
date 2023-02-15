@@ -31,7 +31,7 @@ model users {
   timezone String?
 
   // for study management
-  phase String @default("baseline") // baseline vs. intervention
+  phase String @default("baseline") // baseline vs. intervention vs. complete
   joinAt DateTime?
   activateAt DateTime?
   fitbitReminderTurnOff Boolean? @default(false)

@@ -148,7 +148,7 @@ export default function TimeSetting({ userInfo }) {
         <Layout title={"Time Zone"} description={""}>
             <h1 className="project-text">Time Zone</h1>
             <div>
-                <div>Selected Timzone: {zoneName} </div>
+                <div>Selected Timezone: {zoneName} </div>
                 <br />
                 <Select
                     labelId="demo-simple-select-label"

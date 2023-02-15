@@ -2,8 +2,12 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import Layout from "../component/Layout";
-
+import Select from '@mui/material/Select';
 import TextField from "@mui/material/TextField";
+
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
 /*
 import logger from "../lib/logger";
 
@@ -76,6 +80,10 @@ export default function UserEdit({ userInfo }) {
         userInfo != undefined && userInfo.phone != undefined ? userInfo.phone : ""
     );
 
+    const [phase, setPhase] = useState(
+        userInfo != undefined && userInfo.phase != undefined ? userInfo.phase : ""
+    );
+
     // status: enum mapping to three possible session states: "loading" | "authenticated" | "unauthenticated"
     if (status == "loading") return <div>loading...</div>;
 
@@ -117,7 +125,9 @@ export default function UserEdit({ userInfo }) {
         let preparationInfo = undefined;
         console.log(`onSaveClick: userInfo.joinAt ${userInfo.joinAt}`);
         preparationInfo = {
-            phone
+            preferredName,
+            phone,
+            phase
         }
 
         console.log(`onSaveClick: updatedInfo preparation ${JSON.stringify(preparationInfo, null, 2)}`);
@@ -165,8 +175,33 @@ export default function UserEdit({ userInfo }) {
                             setPhone(event.currentTarget.value);
                         }}
                     /> : null}</Fragment>
-
                 <br />
+                <Divider />
+                <br />
+                <Fragment>
+                <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Phase</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={phase}
+                        label="Phase"
+                        onChange={(event) => {
+                            console.log(`setPhase: ${event.target.value}`);
+                            setPhase(event.target.value);
+                        }}
+                    >
+                        <MenuItem value={"baseline"}>baseline</MenuItem>
+                        <MenuItem value={"intervention"}>intervention</MenuItem>
+                        <MenuItem value={"complete"}>complete</MenuItem>
+                    </Select>
+                    </FormControl>
+
+
+                </Fragment>
+                <br />
+                <Divider />
+                
                 <br />
                 <Button variant="contained"
                     className="project-button"

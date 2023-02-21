@@ -24,7 +24,11 @@ let recordList = await prisma.fitbit_update.findMany({
     },
     */
     take: 3,
-    //orderBy: orderList
+    orderBy: [
+        {
+            createdAt: 'desc',
+        }
+    ]
 });
 
 for(let i = 0; i < recordList.length; i++){

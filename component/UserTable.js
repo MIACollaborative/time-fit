@@ -100,6 +100,7 @@ export default function UserTable({ infoList, userInfo, hostURL }) {
               <TableCell align="right">Phase</TableCell>
               <TableCell align="right">Join At</TableCell>
               <TableCell align="right">Activate At</TableCell>
+              <TableCell align="right">Complete At</TableCell>
               <TableCell align="right">Gif</TableCell>
               <TableCell align="right">Salience</TableCell>
               <TableCell align="right">Modification</TableCell>
@@ -129,6 +130,7 @@ export default function UserTable({ infoList, userInfo, hostURL }) {
                 <TableCell align="right">{row.phase}</TableCell>
                 <TableCell align="right">{row.joinAt}</TableCell>
                 <TableCell align="right">{row.activateAt}</TableCell>
+                <TableCell align="right">{row.completeAt}</TableCell>
                 <TableCell align="right">{JSON.stringify(row.gif)}</TableCell>
                 <TableCell align="right">{JSON.stringify(row.salience)}</TableCell>
                 <TableCell align="right">{JSON.stringify(row.modification)}</TableCell>

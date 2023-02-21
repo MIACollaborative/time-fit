@@ -130,6 +130,18 @@ export default function UserEdit({ userInfo }) {
             phase
         }
 
+        if(phase == "complete"){
+            // need to update completeAT
+            preparationInfo["completeAt"] = DateTime.fromJSDate(new Date()).toISO();
+        }
+        else{
+            // not complete
+            // need to erase completeAt
+            if(userInfo["completeAt"] != undefined){
+                preparationInfo["completeAt"] = null;
+            }
+        }
+
         console.log(`onSaveClick: updatedInfo preparation ${JSON.stringify(preparationInfo, null, 2)}`);
 
         updateInfo(

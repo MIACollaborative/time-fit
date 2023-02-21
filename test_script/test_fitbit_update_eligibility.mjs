@@ -28,7 +28,7 @@ let recordList = await prisma.fitbit_update.findMany({
 });
 
 for(let i = 0; i < recordList.length; i++){
-    let fitbitUpdate = record[i];
+    let fitbitUpdate = recordList[i];
     console.log(`[${fitbitUpdate.ownerId}][${fitbitUpdate.date}] ----------------------------------------`);
     let result = await DatabaseUtility.shouldFitbitUpdateBeProcessed(fitbitUpdate);
     console.log(`${fitbitUpdate.ownerId} - ${fitbitUpdate.date}: shouldUpdate? ${result}`);

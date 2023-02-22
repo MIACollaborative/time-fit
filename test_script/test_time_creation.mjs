@@ -25,6 +25,6 @@ let userInfo = JSON.parse(JSON.stringify(aUser, replacer));
 let dateString = "2023-02-22";
 
 
-let targetDate = DateTime.fromISO(dateString, {setZone: true}, {zone: userInfo.timezone} );
+let targetDate = DateTime.fromISO(dateString, {zone: userInfo.timezone} );
 
 console.log(`targetDate: [${targetDate}]--------------`);

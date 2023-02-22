@@ -35,7 +35,7 @@ let recordList = [
     {
         "id": "63f4d6c36ff9520d57514dfa",
         "collectionType": "activities",
-        "date": "2023-02-22",
+        "date": "2023-02-21",
         "ownerId": "4SW9W9",
         "ownerType": "user",
         "subscriptionId": "1",

@@ -5,6 +5,12 @@ import TaskExecutor from "../lib/TaskExecutor.mjs";
 import DatabaseUtility from "../lib/DatabaseUtility.mjs";
 import GeneralUtility from "../lib/GeneralUtility.mjs";
 
+function replacer(key, value) {
+    if (typeof value === "Date") {
+        return value.toString();
+    }
+    return value;
+}
 
 
 if (process.env.NODE_ENV !== "production") {
@@ -21,6 +27,8 @@ let recordList = await prisma.fitbit_update.findMany({
     ]
 });
 */
+
+
 
 
 let recordList = [
@@ -41,6 +49,22 @@ let recordList = [
 
 for(let i = 0; i < recordList.length; i++){
     let fitbitUpdate = recordList[i];
+
+    /*
+    let aUser = await prisma.users.findFirst({
+        where: {
+            username: "test1"
+        }
+    });
+    
+    let userInfo = JSON.parse(JSON.stringify(aUser, replacer));
+
+
+    let dateString = fitbitUpdate.date;
+    let targetDate = GeneralUtility.getLocalTime(DateTime.fromISO(dateString), userInfo.timezone);
+
+    console.log(`targetDate: [${targetDate}]--------------`);
+    */
     console.log(`[${fitbitUpdate.ownerId}][${fitbitUpdate.date}] ----------------------------------------`);
     let result = await DatabaseUtility.shouldFitbitUpdateBeProcessed(fitbitUpdate);
     console.log(`${fitbitUpdate.ownerId} - ${fitbitUpdate.date}: shouldUpdate? ${result}`);

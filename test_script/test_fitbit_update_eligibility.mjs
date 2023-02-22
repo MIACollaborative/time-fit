@@ -66,6 +66,6 @@ for(let i = 0; i < recordList.length; i++){
     console.log(`targetDate: [${targetDate}]--------------`);
     */
     console.log(`[${fitbitUpdate.ownerId}][${fitbitUpdate.date}] ----------------------------------------`);
-    let result = await DatabaseUtility.shouldFitbitUpdateBeProcessed(fitbitUpdate);
+    let result = await DatabaseUtility.isFitbitUpdateDateWithinAppropriateScope(fitbitUpdate);
     console.log(`${fitbitUpdate.ownerId} - ${fitbitUpdate.date}: shouldUpdate? ${result}`);
 }

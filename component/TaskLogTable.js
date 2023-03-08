@@ -6,6 +6,7 @@ import logger from "../lib/logger";
 
 import React, { Fragment, useState } from 'react';
 import { Button } from '@mui/material';
+import TextField from "@mui/material/TextField";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -24,6 +25,8 @@ function replacer(key, value) {
 }
 
 export default function TaskLogTable({ infoList, userInfo }) {
+
+  const [filterTaskLabel, setFilterTaskLabel] = useState("");
 
   /*
   id  String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -60,11 +63,31 @@ export default function TaskLogTable({ infoList, userInfo }) {
   // row.executionResult.value != undefined && ()
 
 
+  let filteredInfoList = infoList.filter((info) => {
+    if(filterTaskLabel != ""){
+      return info.taskLabel == filterTaskLabel;
+    }
+    else{
+      return true;
+    }
+  });
 
   return (
     <Fragment>
             <br/>
             <ObjectListExortToolbar filePrefix={"TaskLog"} infoList={infoList} userInfo={userInfo}></ObjectListExortToolbar>
+            <br />
+            <TextField
+                //fullWidth
+                label="Filter task label"
+                //id="fullWidth"
+                value={filterTaskLabel}
+                onChange={(event) => {
+                    console.log(`setFilterTaskLabel: ${event.currentTarget.value}`);
+                    setFilterTaskLabel(event.currentTarget.value);
+
+                }}
+            />
 
       <br/>
       <TableContainer component={Paper}>
@@ -84,7 +107,7 @@ export default function TaskLogTable({ infoList, userInfo }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {infoList.map((row, index) => {
+          {filteredInfoList.map((row, index) => {
             
             let highlightExecutionResult = false;
 

@@ -6,7 +6,7 @@ id,group,interventionMessage,topic,note
 5,prompt,Pat yourself on the back for completing your walks this past week! Please take a moment to complete your first Weekly check-in survey: <link> .,FIRST Weekly check-in survey,For intervention week 1
 6,prompt-re,"Knock knock. Hi [name], please complete your Weekly check-in survey: <link> .",Weekly check-in survey,"After 24hours, 48 hours"
 7,prompt-re,Uh-oh. We have lost connection with your Fitbit. Please open your Fitbit app to sync your device.,Fitbit syncing,No new data received from Fitbit app for 2 consecutive days: x3 days at wakeup+2hr
-8,prompt-re,Knock knock. We havn't been detecting much activity on your Fitbit device. Please make sure to wear your Fitbit for atleast 8 hours each day. :),Fitbit wearing,Non-worn days for 2 consecutive days: x3 days at wakeup+1hour
+8,prompt-re,Knock knock. We haven't been detecting much activity on your Fitbit device. Please make sure to wear your Fitbit for at least 8 hours each day. :),Fitbit wearing,Non-worn days for 2 consecutive days: x3 days at wakeup+1hour
 9,prompt,"[name], this is a friendly reminder that you will be moving onto the intervention phase starting tomorrow. Happy walking!",activation to intervention,
 10,prompt,"Remember to enhance your walking experience on your upcoming walks. Here is what you said you would try this week: ""[response|SV_bBoOhje0dSNbZgq:SV_cACIS909SMXMUp8|last]"".",Planned Walk reminder,Tuesday/Thursday
 11,prompt,"[name], it's time to reflect on today's walk(s). Please take a moment to complete this survey: <link> .",(NO LONGER USED) Salience Follow-up,

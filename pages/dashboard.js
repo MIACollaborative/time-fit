@@ -310,7 +310,7 @@ export async function getServerSideProps(ctx) {
     taskLogInvestigatorInfoList = JSON.parse(JSON.stringify(taskLogInvestigatorList, replacer));
   }
 
-  console.log(`dashboard.getServerSideProps: find taskLogList`);
+  console.log(`dashboard.getServerSideProps: find taskLogGroupByInfoList`);
   // wil enable once I test the groupby feature
 
   if (adminUsernameList.includes(userName)) {

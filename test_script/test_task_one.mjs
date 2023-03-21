@@ -44,7 +44,7 @@ let taskList = GeneralUtility.taskList.filter((taskInfo) => {
 for(let i = 0; i < taskList.length; i++){
     let oneTask = taskList[i];
 
-    let startDate = DateTime.fromFormat("03/13/2023, 12:00:00 PM", "F", { zone: "America/Detroit" });
+    let startDate = DateTime.fromFormat("03/13/2023, 07:00:00 AM", "F", { zone: "America/Detroit" });
     
     // now, go through a week
     for(let j = 0; j <=7; j++){

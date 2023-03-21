@@ -314,6 +314,9 @@ export async function getServerSideProps(ctx) {
   // wil enable once I test the groupby feature
 
   if (adminUsernameList.includes(userName)) {
+    // temporary disable 
+    taskLogGroupByInfoList = [];
+    /*
     taskLogGroupByList = await prisma.taskLog.groupBy({
       by: ["username", "messageLabel"],
       _count: {
@@ -327,6 +330,7 @@ export async function getServerSideProps(ctx) {
       //take: queryLimit
     });
     taskLogGroupByInfoList = JSON.parse(JSON.stringify(taskLogGroupByList, replacer));
+    */
   }
 
 

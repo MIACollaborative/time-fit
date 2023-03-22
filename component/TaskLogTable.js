@@ -27,6 +27,7 @@ function replacer(key, value) {
 export default function TaskLogTable({ infoList, userInfo }) {
 
   const [filterTaskLabel, setFilterTaskLabel] = useState("");
+  const [filterTaskUser, setFilterTaskUser] = useState("");
 
   /*
   id  String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -63,14 +64,20 @@ export default function TaskLogTable({ infoList, userInfo }) {
   // row.executionResult.value != undefined && ()
 
 
-  let filteredInfoList = infoList.filter((info) => {
-    if(filterTaskLabel != ""){
+  let filteredInfoList = infoList;
+  
+  if(filterTaskLabel != ""){
+    filteredInfoList = filteredInfoList.filter((info) => {
       return info.taskLabel == filterTaskLabel;
-    }
-    else{
-      return true;
-    }
-  });
+    });
+  }
+
+  if(filterTaskUser != ""){
+    filteredInfoList = filteredInfoList.filter((info) => {
+      return info.username == filterTaskUser;
+    });
+  }
+
 
   return (
     <Fragment>
@@ -88,6 +95,18 @@ export default function TaskLogTable({ infoList, userInfo }) {
 
                 }}
             />
+            <br />
+            <TextField
+                //fullWidth
+                label="Filter task username"
+                //id="fullWidth"
+                value={filterTaskUser}
+                onChange={(event) => {
+                    console.log(`setFilterTaskUser: ${event.currentTarget.value}`);
+                    setFilterTaskUser(event.currentTarget.value);
+
+                }}
+            />
 
       <br/>
       <TableContainer component={Paper}>
@@ -101,10 +120,12 @@ export default function TaskLogTable({ infoList, userInfo }) {
             <TableCell align="right">Randomization</TableCell>
             <TableCell align="right">Action</TableCell>
             <TableCell align="right">Execution Result</TableCell>
-            <TableCell align="right">User Info Cache</TableCell>
+            
             <TableCell align="right">Created At (your time)</TableCell>
             <TableCell align="right">Created At</TableCell>
             <TableCell align="right">Updated At</TableCell>
+            <TableCell align="right">PreCondition Result</TableCell>
+            <TableCell align="right">User Info Cache</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -137,10 +158,11 @@ export default function TaskLogTable({ infoList, userInfo }) {
               <TableCell align="right">{GeneralUtility.convertRandomizationResultToString(row.randomizationResult)}</TableCell>
               <TableCell align="right">{GeneralUtility.extractOutcomeToString(row.randomizationResult.theChoice)}</TableCell>
               <TableCell align="right" style={ highlightExecutionResult? {background: "lightcoral"}:{} }>{GeneralUtility.convertExecutionResultToString(row.executionResult)}</TableCell>
-              <TableCell align="right">{GeneralUtility.extractUserKeyAttributesToString(row.userInfoCache)}</TableCell>
               <TableCell align="right">{DateTime.fromISO(row.createdAt).toLocaleString(DateTime.DATETIME_FULL)}</TableCell>
               <TableCell align="right">{row.createdAt}</TableCell>
               <TableCell align="right">{row.updatedAt}</TableCell>
+              <TableCell align="right">{JSON.stringify(row.preConditionResult)}</TableCell>
+              <TableCell align="right">{GeneralUtility.extractUserKeyAttributesToString(row.userInfoCache)}</TableCell>
             </TableRow>
           })}
         </TableBody>

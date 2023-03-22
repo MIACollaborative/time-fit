@@ -256,7 +256,7 @@ model taskLog {
 
   // for tracking of decision rule/ task activation
   isActivated  Boolean    @default(true)
-  activationReasoning Json[]?
+  activationReasoning Json[] @default([])
 
 
   // for action

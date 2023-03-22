@@ -11,16 +11,32 @@ if (process.env.NODE_ENV !== "production") {
     dotenv.config();
 }
 
+let nowDate = DateTime.now();
+let startDate = nowDate.minus({weeks: 2}).startOf("day");
+let daysConstraint = {
+  gte: startDate.toISO(),
+  lte: nowDate.toISO()
+};
+
 
 let sampleList = await prisma.fitbit_update.findMany({
     where:{
-        status: "notification"
+        username: "test2",
+        taskLabel: "intervention_morning gif",
+        createdAt: daysConstraint
     },
+    /*
     take: 5,
     orderBy: {
         createdAt: 'desc',
     },
+    */
 });
+
+console.log(`taskLogList: ${JSON.stringify(sampleList)}`);
+
+
+/*
 
 
 let fUpdate = sampleList[0];
@@ -44,4 +60,4 @@ const updateList = await prisma.fitbit_update.findMany({
 });
 
 console.log(`updateList: ${JSON.stringify(updateList.map((update) => {return update.createdAt;}))}`);
-
+*/

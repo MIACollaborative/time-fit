@@ -254,6 +254,11 @@ model taskLog {
   // for pre condition records
   preConditionResult Json?
 
+  // for tracking of decision rule/ task activation
+  isActivated  Boolean    @default(true)
+  activationReasoning Json[]?
+
+
   // for action
   randomizationResult Json
 

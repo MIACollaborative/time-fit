@@ -200,7 +200,6 @@ async function testWakeupBedTime(now) {
 
     let tempTimezone = "Asia/Taipei"; // "America/New_York";
     console.log(`Local time for ${tempTimezone} is ${getLocalTime(now, tempTimezone)} [${getWeekdayOrWeekend(getLocalTime(now, tempTimezone))}]`);
-    //console.log(`url: ${process.env.NEXTAUTH_URL}`);
 
     // see if I can detect weekday and weekend for a particular timezone, then
 

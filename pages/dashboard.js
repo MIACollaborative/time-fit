@@ -347,7 +347,7 @@ export async function getServerSideProps(ctx) {
     messageInfoList = JSON.parse(JSON.stringify(messageList, replacer));
   }
 
-  let hostURL = `${process.env.NEXTAUTH_URL}`;
+  let hostURL = `${process.env.HOST_URL}`;
 
   return {
     props: { userInfoList, responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, updateDiffInfoList, taskInfoList, taskLogInfoList, taskLogGroupByInfoList, taskLogInvestigatorInfoList, messageInfoList, userInfo, hostURL },

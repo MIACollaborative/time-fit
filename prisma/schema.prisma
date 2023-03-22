@@ -252,7 +252,7 @@ model taskLog {
   // caching user info
   userInfoCache Json?
 
-  // for pre condition records
+  // for pre condition records, replaced by activationReasoning, but keep it for compatibility
   preConditionResult Json?
 
   // for tracking of decision rule/ task activation

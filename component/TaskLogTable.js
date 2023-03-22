@@ -130,11 +130,9 @@ export default function TaskLogTable({ infoList, userInfo }) {
               <TableCell align="right">Randomization</TableCell>
               <TableCell align="right">Action</TableCell>
               <TableCell align="right">Execution Result</TableCell>
-
               <TableCell align="right">Created At (your time)</TableCell>
               <TableCell align="right">Created At</TableCell>
               <TableCell align="right">Updated At</TableCell>
-              <TableCell align="right">PreCondition Result</TableCell>
               <TableCell align="right">User Info Cache</TableCell>
             </TableRow>
           </TableHead>
@@ -171,7 +169,7 @@ export default function TaskLogTable({ infoList, userInfo }) {
                 <TableCell align="right">{DateTime.fromISO(row.createdAt).toLocaleString(DateTime.DATETIME_FULL)}</TableCell>
                 <TableCell align="right">{row.createdAt}</TableCell>
                 <TableCell align="right">{row.updatedAt}</TableCell>
-                <TableCell align="right">{JSON.stringify(row.preConditionResult)}</TableCell>
+                
                 <TableCell align="right">{GeneralUtility.extractUserKeyAttributesToString(row.userInfoCache)}</TableCell>
               </TableRow>
             })}

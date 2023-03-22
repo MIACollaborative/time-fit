@@ -222,6 +222,7 @@ model task {
   enabled Boolean? @default(false)
   priority Int? @default(1)
   participantIndependent Boolean? @default(false)
+  preActivationLogging Boolean? @default(false)
   ignoreTimezone Boolean? @default(false)
   checkPoint Json
   group Json

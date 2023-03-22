@@ -119,7 +119,7 @@ export async function getServerSideProps(ctx) {
   console.log(`main.getServerSideProps: isSurveyCompletedByPerson: ${isBaselineSurveyCompleted}`);
   //isAccessTokenActive = introspectResult.active;
 
-  let hostURL = `${process.env.NEXTAUTH_URL}`;
+  let hostURL = `${process.env.HOST_URL}`;
 
   return {
     props: {

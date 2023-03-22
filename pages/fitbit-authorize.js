@@ -45,7 +45,7 @@ export async function getServerSideProps(ctx) {
 
   const userInfo = JSON.parse(JSON.stringify(uniqueUser, replacer));
 
-  let hostURL = `${process.env.NEXTAUTH_URL}`;
+  let hostURL = `${process.env.HOST_URL}`;
   return {
     props: { userInfo, hostURL },
   };

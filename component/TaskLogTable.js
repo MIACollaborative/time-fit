@@ -7,7 +7,6 @@ import logger from "../lib/logger";
 import React, { Fragment, useState } from 'react';
 import { Button } from '@mui/material';
 import Grid from "@mui/material/Grid";
-import Item from '@mui/material/Item';
 import TextField from "@mui/material/TextField";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -85,11 +84,12 @@ export default function TaskLogTable({ infoList, userInfo }) {
     <Fragment>
       <br />
       <Grid container spacing={2}>
-        <Grid item xs={4}>
-          <Item><ObjectListExortToolbar filePrefix={"TaskLog"} infoList={infoList} userInfo={userInfo}></ObjectListExortToolbar></Item>
+      <Grid item xs={3} ></Grid>
+        <Grid item xs={2}>
+        <ObjectListExortToolbar filePrefix={"TaskLog"} infoList={infoList} userInfo={userInfo}></ObjectListExortToolbar>
         </Grid>
         <Grid item xs={2}>
-          <Item><TextField
+        <TextField
             //fullWidth
             label="Filter task label"
             //id="fullWidth"
@@ -99,10 +99,10 @@ export default function TaskLogTable({ infoList, userInfo }) {
               setFilterTaskLabel(event.currentTarget.value);
 
             }}
-          /></Item>
+          />
         </Grid>
         <Grid item xs={2}>
-          <Item> <TextField
+        <TextField
             //fullWidth
             label="Filter task username"
             //id="fullWidth"
@@ -112,8 +112,9 @@ export default function TaskLogTable({ infoList, userInfo }) {
               setFilterTaskUser(event.currentTarget.value);
 
             }}
-          /></Item>
+          />
         </Grid>
+        <Grid item  xs={3}></Grid>
       </Grid>
 
 

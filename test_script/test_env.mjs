@@ -10,5 +10,5 @@ if (process.env.NODE_ENV !== "production") {
     dotenv.config();
 }
 
-console.log(`NEXTAUTH_URL: ${process.env.NEXTAUTH_URL}`);
+console.log(`HOST_URL: ${process.env.HOST_URL}`);
 console.log(`DATABASE_URL: ${process.env.DATABASE_URL}`);

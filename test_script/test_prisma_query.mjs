@@ -19,7 +19,7 @@ let daysConstraint = {
 };
 
 
-let sampleList = await prisma.fitbit_update.findMany({
+let sampleList = await prisma.taskLog.findMany({
     where:{
         username: "test2",
         taskLabel: "intervention_morning gif",

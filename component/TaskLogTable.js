@@ -166,7 +166,7 @@ export default function TaskLogTable({ infoList, userInfo }) {
                 <TableCell align="right">{row.isActivated}</TableCell>
                 <TableCell align="right">{JSON.stringify(row.activationReasoning)}</TableCell>
                 <TableCell align="right">{GeneralUtility.convertRandomizationResultToString(row.randomizationResult)}</TableCell>
-                <TableCell align="right">{GeneralUtility.extractOutcomeToString(row.randomizationResult.theChoice)}</TableCell>
+                <TableCell align="right">{GeneralUtility.extractOutcomeToString(row.randomizationResult != undefined? row.randomizationResult.theChoice: undefined)}</TableCell>
                 <TableCell align="right" style={highlightExecutionResult ? { background: "lightcoral" } : {}}>{GeneralUtility.convertExecutionResultToString(row.executionResult)}</TableCell>
                 <TableCell align="right">{DateTime.fromISO(row.createdAt).toLocaleString(DateTime.DATETIME_FULL)}</TableCell>
                 <TableCell align="right">{row.createdAt}</TableCell>

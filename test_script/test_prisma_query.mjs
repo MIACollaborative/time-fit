@@ -33,7 +33,7 @@ let sampleList = await prisma.taskLog.findMany({
     */
 });
 
-console.log(`taskLogList: ${JSON.stringify(sampleList)}`);
+console.log(`taskLogList: ${JSON.stringify(sampleList, null, 2)}`);
 
 
 /*

@@ -161,7 +161,7 @@ export default function TaskLogTable({ infoList, userInfo }) {
               >
                 <TableCell align="right">{row.taskLabel}</TableCell>
                 <TableCell align="right">{row.username}</TableCell>
-                <TableCell align="right">{row.isActivated}</TableCell>
+                <TableCell align="right">{JSON.stringify(row.isActivated)}</TableCell>
                 <TableCell align="right">{JSON.stringify(row.activationReasoning)}</TableCell>
                 <TableCell align="right">{GeneralUtility.convertRandomizationResultToString(row.randomizationResult)}</TableCell>
                 <TableCell align="right">{GeneralUtility.extractOutcomeToString(row.randomizationResult != undefined? row.randomizationResult.theChoice: undefined)}</TableCell>

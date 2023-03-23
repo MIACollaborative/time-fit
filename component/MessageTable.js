@@ -23,7 +23,7 @@ function replacer(key, value) {
   return value;
 }
 
-export default function MessageTable({ infoList, userInfo, hostURL }) {
+export default function MessageTable({ infoList, userInfo, assetHostURL }) {
 
   /*
   id  String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -101,7 +101,7 @@ export default function MessageTable({ infoList, userInfo, hostURL }) {
                     let gifURL = "";
 
                     if (messageInfo.gif != undefined) {
-                      gifURL = `${hostURL}/image/gif/${messageInfo.gif}.gif`;
+                      gifURL = `${assetHostURL}/image/gif/${messageInfo.gif}.gif`;
                     }
 
                     let msgPromise = GeneralUtility.sendTwilioMessage(userInfo.phone, messageBody, gifURL.length > 0 ? [gifURL] : []);

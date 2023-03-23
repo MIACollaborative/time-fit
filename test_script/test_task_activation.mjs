@@ -60,9 +60,11 @@ for(let i = 0; i < taskList.length; i++){
         let [isGroupResult, groupEvaluationRecordList] = TaskExecutor.isGroupForUser(oneTask.group, oneUser);
         let [isCheckPointResult, checkPointEvaluationRecordList] = TaskExecutor.isCheckPointForUser(oneTask.checkPoint, oneUser, curDate);
 
-        console.log(`[${curDate}] isTimeZoneSetResult: ${isTimeZoneSetResult} --------------------------------------------------------------\n\n`);
-        console.log(`[${curDate}] isGroupResult: ${isGroupResult} --------------------------------------------------------------\n\n`);
-        console.log(`[${curDate}] isCheckPointResult: ${isCheckPointResult} --------------------------------------------------------------\n\n`);
+        console.log(`------------------\n\n`);
+
+        console.log(`[${curDate}] isTimeZoneSetResult: ${isTimeZoneSetResult}\n\n`);
+        console.log(`[${curDate}] isGroupResult: ${isGroupResult}\n\n`);
+        console.log(`[${curDate}] isCheckPointResult: ${isCheckPointResult}\n\n`);
 
         console.log(`--------------------------------------------------------------\n\n`);
 

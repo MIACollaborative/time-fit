@@ -51,12 +51,13 @@ for(let i = 0; i < taskList.length; i++){
     // now, go through a week
     for(let j = 0; j <=30; j++){
         let curDate = startDate.plus({minutes: j});
+        console.log(`[${curDate}] --------------------------------------------------------------\n\n`);
 
         // let result = await TaskExecutor.executeTaskForUserListForDatetime(oneTask, [oneUser], curDate);
         
         let [isCheckPointResult, checkPointEvaluationRecordList] = TaskExecutor.isCheckPointForUser(oneTask.checkPoint, oneUser, curDate);
 
-        console.log(`[${curDate}] result: ${isCheckPointResult}\n\n`);
+        console.log(`[${curDate}] result: ${isCheckPointResult} --------------------------------------------------------------\n\n`);
     }
 
     

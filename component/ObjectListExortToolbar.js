@@ -43,8 +43,6 @@ export default function ObjectListExortToolbar({ infoList, userInfo, filePrefix}
   ip String?
   */
 
-  console.log(`FitbitDataTable: ${JSON.stringify(infoList, null, 2)}`);
-
 
   return (
     <Fragment>

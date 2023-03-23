@@ -347,16 +347,16 @@ export async function getServerSideProps(ctx) {
   }
   */
 
-  let hostURL = `${process.env.HOST_URL}`;
+  let assetHostURL = `${process.env.ASSET_HOST_URL}`;
 
   // userInfoList,  taskLogInfoList,messageInfoList, 
   return {
-    props: { responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, updateDiffInfoList, taskInfoList,  taskLogGroupByInfoList, taskLogInvestigatorInfoList, userInfo, hostURL },
+    props: { responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, updateDiffInfoList, taskInfoList,  taskLogGroupByInfoList, taskLogInvestigatorInfoList, userInfo, assetHostURL },
   };
 }
 
 //  userInfoList, taskLogInfoList,messageInfoList, 
-export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, updateDiffInfoList, taskInfoList, taskLogGroupByInfoList, taskLogInvestigatorInfoList, userInfo, hostURL }) {
+export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, updateDiffInfoList, taskInfoList, taskLogGroupByInfoList, taskLogInvestigatorInfoList, userInfo, assetHostURL }) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [tabName, setTabName] = useState("Users");
@@ -583,7 +583,7 @@ export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList
       ) : null}
 
       {tabName == "Message" ? (
-        <MessageTable infoList={messageInfoList} userInfo={userInfo} hostURL={hostURL} />
+        <MessageTable infoList={messageInfoList} userInfo={userInfo} assetHostURL={assetHostURL} />
       ) : null}
     </Layout>
   );

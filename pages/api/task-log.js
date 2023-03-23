@@ -18,6 +18,11 @@ model Post {
 
 const adminUsernameList = ["test1", "test2", "test3", "test4"];
 
+export const config = {
+    api: {
+      responseLimit: false,
+    },
+}
 
 export default async function handler(req, res) {
     const session = await getSession({ req })

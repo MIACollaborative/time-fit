@@ -56,11 +56,17 @@ for(let i = 0; i < taskList.length; i++){
 
         // let result = await TaskExecutor.executeTaskForUserListForDatetime(oneTask, [oneUser], curDate);
         
+        let isTimeZoneSetResult =  GeneralUtility.isTimezoneSet(userInfo);
+        let [isGroupResult, groupEvaluationRecordList] = TaskExecutor.isGroupForUser(taskSpec.group, userInfo);
         let [isCheckPointResult, checkPointEvaluationRecordList] = TaskExecutor.isCheckPointForUser(oneTask.checkPoint, oneUser, curDate);
 
-        console.log(`[${curDate}] result: ${isCheckPointResult} --------------------------------------------------------------\n\n`);
+        console.log(`[${curDate}] isTimeZoneSetResult: ${isTimeZoneSetResult} --------------------------------------------------------------\n\n`);
+        console.log(`[${curDate}] isGroupResult: ${isGroupResult} --------------------------------------------------------------\n\n`);
+        console.log(`[${curDate}] isCheckPointResult: ${isCheckPointResult} --------------------------------------------------------------\n\n`);
 
-        resultList.push({date: curDate, result: isCheckPointResult});
+        console.log(`--------------------------------------------------------------\n\n`);
+
+        resultList.push({date: curDate, result: isTimeZoneSetResult && isGroupResult &&  isCheckPointResult});
     }
 
     

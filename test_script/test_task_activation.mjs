@@ -21,7 +21,7 @@ function replacer(key, value) {
 let userList = await prisma.users.findMany({
     where: {
         username: {
-          contains: "test2",
+          contains: "test3",
         },
       },
 });
@@ -47,10 +47,10 @@ for(let i = 0; i < taskList.length; i++){
     //let startDate = DateTime.fromFormat("03/13/2023, 08:00:00 AM", "F", { zone: "America/Detroit" });
 
     // 2023-03-22T12:30:01.248Z
-    let startDate = DateTime.fromISO("2023-03-22T11:58:01.248");
+    let startDate = DateTime.fromISO("2023-03-18T12:29:02.059Z");
     
     // now, go through a week
-    for(let j = 0; j <=30; j++){
+    for(let j = 0; j <=5; j++){
         let curDate = startDate.plus({minutes: j});
         console.log(`[${curDate}] --------------------------------------------------------------\n\n`);
 

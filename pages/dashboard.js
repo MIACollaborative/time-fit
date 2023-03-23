@@ -14,7 +14,7 @@ import { inspect } from "util";
 import Link from "next/link";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Divider from "@mui/material/Divider";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -122,6 +122,7 @@ export async function getServerSideProps(ctx) {
   }
   */
 
+  /*
   console.log(`dashboard.getServerSideProps: find userList`);
   if (adminUsernameList.includes(userName)) {
     userList = await prisma.users.findMany({
@@ -135,6 +136,7 @@ export async function getServerSideProps(ctx) {
 
     userInfoList = JSON.parse(JSON.stringify(userList, replacer));
   }
+  */
 
   console.log(`dashboard.getServerSideProps: find responseList`);
   if (adminUsernameList.includes(userName)) {
@@ -268,19 +270,14 @@ export async function getServerSideProps(ctx) {
     taskInfoList = JSON.parse(JSON.stringify(taskList, replacer));
   }
 
+  /*
   console.log(`dashboard.getServerSideProps: find taskLogList`);
   if (adminUsernameList.includes(userName)) {
     taskLogList = await prisma.taskLog.findMany({
       where:{
         createdAt: sevenDaysConstraint
       },
-      /*
-      where: {
-        NOT: {
-          taskLabel: {contains: "investigator"}
-        },
-      },
-      */
+
       orderBy: [
         {
           updatedAt: "desc",
@@ -291,6 +288,7 @@ export async function getServerSideProps(ctx) {
 
     taskLogInfoList = JSON.parse(JSON.stringify(taskLogList, replacer));
   }
+  */
 
   console.log(`dashboard.getServerSideProps: find taskLogInvestigatorList`);
   if (adminUsernameList.includes(userName)) {
@@ -334,6 +332,7 @@ export async function getServerSideProps(ctx) {
   }
 
 
+  /*
   console.log(`dashboard.getServerSideProps: find messageList`);
   if (adminUsernameList.includes(userName)) {
     messageList = await prisma.message.findMany({
@@ -346,27 +345,113 @@ export async function getServerSideProps(ctx) {
 
     messageInfoList = JSON.parse(JSON.stringify(messageList, replacer));
   }
+  */
 
   let hostURL = `${process.env.HOST_URL}`;
 
+  // userInfoList,  taskLogInfoList,messageInfoList, 
   return {
-    props: { userInfoList, responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, updateDiffInfoList, taskInfoList, taskLogInfoList, taskLogGroupByInfoList, taskLogInvestigatorInfoList, messageInfoList, userInfo, hostURL },
+    props: { responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, updateDiffInfoList, taskInfoList,  taskLogGroupByInfoList, taskLogInvestigatorInfoList, userInfo, hostURL },
   };
 }
 
-export default function Dashboard({ userInfoList, responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, updateDiffInfoList, taskInfoList, taskLogInfoList, taskLogGroupByInfoList, taskLogInvestigatorInfoList, messageInfoList, userInfo, hostURL }) {
+//  userInfoList, taskLogInfoList,messageInfoList, 
+export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, updateDiffInfoList, taskInfoList, taskLogGroupByInfoList, taskLogInvestigatorInfoList, userInfo, hostURL }) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [tabName, setTabName] = useState("Users");
+
+
+  // userInfoList
+  const [userInfoList, setUserInfoList] = useState([]);
+
+  // messageInfoList
+  const [messageInfoList, setMessageInfoList] = useState([]);
+  // taskLogInfoList
+  const [taskLogInfoList, setTaskLogInfoList] = useState([]);
+
 
   const handleTabChange = (event, newTabName) => {
     setTabName(newTabName);
   };
 
-  //logger.logToDB("main", {message: "test"});
+  /*
+  async function queryTaskLogs(functionName, startDate, endDate) {
+    const result = await fetch(`/api/task-log?function_name=${functionName}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        limit: 0,
+        startDate: DateTime.fromJSDate(startDate).toISO(),
+        endDate: DateTime.fromJSDate(endDate).toISO()
+      }),
+    }).then((r) => {
+      return r.json();
+    });
+    return result;
+  }
+  */
 
-  //const [value1, setValue1] = useState('');
-  //const [value2, setValue2] = useState('');
+
+    
+    let nowDate = DateTime.now();
+    let startDate = nowDate.minus({weeks: 1}).startOf("day");
+
+    // userInfoList
+    useEffect(() => {
+      //queryTaskLogs("get",startDate.toJSDate(), nowDate.toJSDate() )
+      fetch('/api/user?function_name=get', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(`setUserInfoList: length: ${data.result.length}`);
+          setUserInfoList(data.result)
+        })
+    }, []);
+
+    // messageInfoList
+    useEffect(() => {
+      //queryTaskLogs("get",startDate.toJSDate(), nowDate.toJSDate() )
+      fetch('/api/message?function_name=get', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(`setMessageInfoList: length: ${data.result.length}`);
+          setMessageInfoList(data.result)
+        })
+    }, []);
+
+    useEffect(() => {
+      //queryTaskLogs("get",startDate.toJSDate(), nowDate.toJSDate() )
+      fetch('/api/task-log?function_name=get', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          limit: 0,
+          startDate: startDate.toISO(),
+          endDate: nowDate.toISO()
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(`setTaskLogInfoList: length: ${data.result.length}`);
+          setTaskLogInfoList(data.result)
+        })
+    }, []);
 
   // status: enum mapping to three possible session states: "loading" | "authenticated" | "unauthenticated"
   if (status == "loading") return <div>loading...</div>;
@@ -376,11 +461,17 @@ export default function Dashboard({ userInfoList, responseInfoList, fitbitSubscr
     return null;
   }
 
+    // Function for getting taskLog
+
+    
+
+
+
   console.log(`session: ${JSON.stringify(session)}`);
 
-  console.log(`userInfoList: ${JSON.stringify(userInfoList)}`);
+  //console.log(`userInfoList: ${JSON.stringify(userInfoList)}`);
 
-  console.log(`fitbitDataInfoList: ${JSON.stringify(fitbitDataInfoList)}`);
+  //console.log(`fitbitDataInfoList: ${JSON.stringify(fitbitDataInfoList)}`);
 
   return (
     <Layout title={"Walk To Joy"} description={""}>

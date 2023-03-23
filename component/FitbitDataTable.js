@@ -43,7 +43,7 @@ export default function FitbitDataTable({ infoList, userInfo}) {
   ip String?
   */
 
-  console.log(`FitbitDataTable: ${JSON.stringify(infoList, null, 2)}`);
+  console.log(`FitbitDataTable: ${infoList.length}`);
 
 
   return (

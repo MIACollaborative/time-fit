@@ -39,6 +39,7 @@ let taskList = GeneralUtility.taskList.filter((taskInfo) => {
     return taskInfo.label == "intervention_morning gif";
 });
 
+let resultList = [];
 
 for(let i = 0; i < taskList.length; i++){
     let oneTask = taskList[i];
@@ -58,8 +59,16 @@ for(let i = 0; i < taskList.length; i++){
         let [isCheckPointResult, checkPointEvaluationRecordList] = TaskExecutor.isCheckPointForUser(oneTask.checkPoint, oneUser, curDate);
 
         console.log(`[${curDate}] result: ${isCheckPointResult} --------------------------------------------------------------\n\n`);
+
+        resultList.push({date: curDate, result: isCheckPointResult});
     }
 
     
 }
 
+console.log(`\n\n--------------------------------------------------------------\n\n`);
+
+for(let i = 0; i < resultList.length; i++){
+    let resultInfo = resultList[i];
+    console.log(`[${resultInfo.date}] result: ${resultInfo.result}\n\n`);
+}

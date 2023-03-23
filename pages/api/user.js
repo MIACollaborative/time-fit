@@ -1,6 +1,8 @@
 import prisma from "../../lib/prisma"
 import { getSession } from "next-auth/react";
 
+const adminUsernameList = ["test1", "test2", "test3", "test4"];
+
 export default async function handler(req, res) {
     const session = await getSession({ req })
     if (!session) {
@@ -13,7 +15,7 @@ export default async function handler(req, res) {
     
     const { function_name } = req.query;
 
-    
+    let sessionUserName = session.user.name;
     
 
     console.log(`function: ${function_name}`);
@@ -22,6 +24,13 @@ export default async function handler(req, res) {
     const {username} = req.body;
 
     switch (function_name) {
+        case "get":
+            let itemList = [];
+            if (adminUsernameList.includes(sessionUserName)) {
+                itemList = await prisma.users.findMany();
+            }
+            res.status(200).json({ result: itemList });
+            return;        
         case "update_time_preference":
             const {weekdayWakeup, weekdayBed, weekendWakeup, weekendBed, timezone } = req.body;
             const updateUser = await prisma.users.update({
@@ -75,6 +84,8 @@ export default async function handler(req, res) {
 
             res.status(200).json({ result: userInfo });
             return;
+
+
         default:
             return;
     }

@@ -47,7 +47,7 @@ for(let i = 0; i < taskList.length; i++){
     //let startDate = DateTime.fromFormat("03/13/2023, 08:00:00 AM", "F", { zone: "America/Detroit" });
 
     // 2023-03-22T12:30:01.248Z
-    let startDate = DateTime.fromISO("2023-03-18T12:29:02.059Z");
+    let startDate = DateTime.fromISO("2023-03-18T14:59:02.059Z");
     
     // now, go through a week
     for(let j = 0; j <=5; j++){

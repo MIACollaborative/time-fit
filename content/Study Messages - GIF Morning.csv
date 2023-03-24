@@ -33,7 +33,7 @@ id,group,interventionMessage,walkMessage,gif,timeOfDay,sampleMessage
 32,gif-m,Let's starting your day with some energy!,How about a short walk this morning?,rabbit-jump-22,Morning,
 33,gif-m,Want to start your day with some joy?,How about a short walk this morning?,panda-dance-24,Morning,
 34,gif-m,Starting your day strong will give you momentum all day!,How about a walk this morning?,pug-chimp-26,Morning,
-35,gif-m,THIS IS A TEST: morning gif message , ,,,
+35,gif-m,[Test] morning gif message with a non-existent gif URL. You should not see a gif with this message., ,this-gif-does-not-exist,,
 36,,,,,,
 37,,,,,,
 38,,,,,,

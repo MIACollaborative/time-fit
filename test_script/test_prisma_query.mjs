@@ -20,19 +20,19 @@ let daysConstraint = {
 
 
 let sampleList = await prisma.taskLog.findMany({
-    take: 10000
+    take: 10000,
     /*
     where:{
         username: "test2",
         taskLabel: "intervention_morning gif",
         createdAt: daysConstraint
     },
-    
+    */
     
     orderBy: {
         createdAt: 'desc',
     },
-    */
+    
 });
 
 let errorTaskLogList = sampleList.filter((taskLog) =>{

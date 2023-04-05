@@ -20,12 +20,13 @@ let daysConstraint = {
 
 
 let sampleList = await prisma.taskLog.findMany({
+    /*
     where:{
         username: "test2",
         taskLabel: "intervention_morning gif",
         createdAt: daysConstraint
     },
-    /*
+    
     take: 5,
     orderBy: {
         createdAt: 'desc',
@@ -33,31 +34,8 @@ let sampleList = await prisma.taskLog.findMany({
     */
 });
 
-console.log(`taskLogList: ${JSON.stringify(sampleList, null, 2)}`);
-
-
-/*
-
-
-let fUpdate = sampleList[0];
-console.log(`fUpdate: ${fUpdate}`);
-
-let timeString = "2022-11-08T17:01:56.214Z";
-console.log(`timeString: ${timeString}`);
-let timestamp = DateTime.fromISO(timeString).toJSDate();
-console.log(`timestamp: ${timestamp}`);
-
-const updateList = await prisma.fitbit_update.findMany({
-    where: {
-        //status: "notification",
-        ownerId: fUpdate.ownerId,
-        collectionType: fUpdate.collectionType,
-        date: fUpdate.date,
-        createdAt: {
-            lte: timestamp //fUpdate.createdAt
-        },
-    },
+let errorTaskLogList = sampleList.filter((taskLog) =>{
+    return taskLog.executionResult.value.status == "failed";
 });
 
-console.log(`updateList: ${JSON.stringify(updateList.map((update) => {return update.createdAt;}))}`);
-*/
+console.log(`errorTaskLogList: ${JSON.stringify(errorTaskLogList[0], null, 2)}`);

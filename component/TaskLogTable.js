@@ -72,9 +72,9 @@ export default function TaskLogTable({ infoList, userInfo }) {
   
 
   const columns = [
-    { field: 'taskLabel', headerName: 'Task Label', width: 70 },
-    { field: 'username', headerName: 'Username', width: 130 },
-    { field: 'isActivated', headerName: 'isActivated', width: 130,
+    { field: 'taskLabel', headerName: 'Task Label', sortable: true, width: 70 },
+    { field: 'username', headerName: 'Username',  sortable: true, width: 130 },
+    { field: 'isActivated', headerName: 'isActivated',  sortable: true, width: 130,
     valueGetter: (params) =>
     `${JSON.stringify(params.row.isActivated)}`,},
     {
@@ -112,7 +112,7 @@ export default function TaskLogTable({ infoList, userInfo }) {
     {
       field: 'createAtYourTime',
       headerName: 'Created At (your time)',
-      sortable: false,
+      sortable: true,
       width: 160,
       valueGetter: (params) =>
       DateTime.fromISO(params.row.createdAt).toLocaleString(DateTime.DATETIME_FULL),
@@ -121,7 +121,7 @@ export default function TaskLogTable({ infoList, userInfo }) {
       field: 'createdAt',
       headerName: 'Created At',
       description: 'This column has a value getter and is not sortable.',
-      sortable: false,
+      sortable: true,
       width: 160,
       valueGetter: (params) =>
       params.row.createdAt,
@@ -129,7 +129,7 @@ export default function TaskLogTable({ infoList, userInfo }) {
     {
       field: 'updatedAt',
       headerName: 'Updated At',
-      sortable: false,
+      sortable: true,
       width: 160,
       valueGetter: (params) =>
       params.row.updatedAt,
@@ -145,8 +145,11 @@ export default function TaskLogTable({ infoList, userInfo }) {
   ];
 
 
+  // no need for customized filter tool
+  
   let filteredInfoList = infoList;
 
+  /*
   if (filterTaskLabel != "") {
     filteredInfoList = filteredInfoList.filter((info) => {
       return info.taskLabel == filterTaskLabel;
@@ -160,17 +163,24 @@ export default function TaskLogTable({ infoList, userInfo }) {
   }
 
   console.log(`filteredInfoList.length: ${filteredInfoList.length}`);
+  */
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
+    <Fragment>
+      <br />
+      <ObjectListExortToolbar filePrefix={"TaskLog"} infoList={infoList} userInfo={userInfo}></ObjectListExortToolbar>
+      <br />
+      <div style={{ height: 400, width: '100%' }}>
       <DataGrid
-        rows={filteredInfoList}
+        rows={infoList}
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5]}
         checkboxSelection
       />
     </div>
+    </Fragment>
+    
   );;
 
 

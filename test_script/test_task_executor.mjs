@@ -75,7 +75,7 @@ let choiceList = [
 ];
 //console.log(`testRandomization(${total}) for ${JSON.stringify(choiceList)}: ${JSON.stringify(testRandomization(choiceList, total))}`);
 
-let now = DateTime.now();
+let now = DateTime.fromISO("2023-04-05T14:00:00.000Z"); //DateTime.now();
 //let taskCompositeResultList = await TaskExecutor.executeTaskForUserListForDatetime(GeneralUtility.taskList[3], userList, now);
 let taskCompositeResultList = await TaskExecutor.executeTaskForUserListForDatetime(GeneralUtility.taskList[0], [GeneralUtility.systemUser], now);
 

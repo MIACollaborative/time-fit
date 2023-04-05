@@ -18,6 +18,11 @@ import Paper from '@mui/material/Paper';
 import GeneralUtility from '../lib/GeneralUtility.mjs';
 import { DateTime } from "luxon";
 import ObjectListExortToolbar from './ObjectListExortToolbar.js';
+
+
+import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+
+
 function replacer(key, value) {
   if (typeof value === "Date") {
     return value.toString();
@@ -64,6 +69,81 @@ export default function TaskLogTable({ infoList, userInfo }) {
 
   // row.executionResult.value != undefined && ()
 
+  
+
+  const columns = [
+    { field: 'taskLabel', headerName: 'Task Label', width: 70 },
+    { field: 'username', headerName: 'Username', width: 130 },
+    { field: 'isActivated', headerName: 'isActivated', width: 130,
+    valueGetter: (params) =>
+    `${JSON.stringify(params.row.isActivated)}`,},
+    {
+      field: 'activationReasoning',
+      headerName: 'Activation Reasoning',
+      width: 240,
+      valueGetter: (params) =>
+    `${JSON.stringify(params.row.activationReasoning)}`
+    },
+    {
+      field: 'randomizationResult',
+      headerName: 'Randomization Result',
+      //description: 'This column has a value getter and is not sortable.',
+      sortable: false,
+      width: 160,
+      valueGetter: (params) =>
+        `${GeneralUtility.convertRandomizationResultToString(params.row.randomizationResult)}`,
+    },
+    {
+      field: 'action',
+      headerName: 'Action',
+      sortable: false,
+      width: 160,
+      valueGetter: (params) =>
+      GeneralUtility.extractOutcomeToString(params.row.randomizationResult != undefined? params.row.randomizationResult.theChoice: undefined),
+    },
+    {
+      field: 'executionResult',
+      headerName: 'Execution Result',
+      sortable: false,
+      width: 160,
+      valueGetter: (params) =>
+      GeneralUtility.convertExecutionResultToString(params.row.executionResult),
+    },
+    {
+      field: 'createAtYourTime',
+      headerName: 'Created At (your time)',
+      sortable: false,
+      width: 160,
+      valueGetter: (params) =>
+      DateTime.fromISO(params.row.createdAt).toLocaleString(DateTime.DATETIME_FULL),
+    },
+    {
+      field: 'createdAt',
+      headerName: 'Created At',
+      description: 'This column has a value getter and is not sortable.',
+      sortable: false,
+      width: 160,
+      valueGetter: (params) =>
+      params.row.createdAt,
+    },
+    {
+      field: 'updatedAt',
+      headerName: 'Updated At',
+      sortable: false,
+      width: 160,
+      valueGetter: (params) =>
+      params.row.updatedAt,
+    },
+    {
+      field: 'userInfoCache',
+      headerName: 'User Info Cache',
+      sortable: false,
+      width: 160,
+      valueGetter: (params) =>
+      GeneralUtility.extractUserKeyAttributesToString(params.row.userInfoCache),
+    },
+  ];
+
 
   let filteredInfoList = infoList;
 
@@ -78,6 +158,20 @@ export default function TaskLogTable({ infoList, userInfo }) {
       return info.username == filterTaskUser;
     });
   }
+
+  console.log(`filteredInfoList.length: ${filteredInfoList.length}`);
+
+  return (
+    <div style={{ height: 400, width: '100%' }}>
+      <DataGrid
+        rows={filteredInfoList}
+        columns={columns}
+        pageSize={5}
+        rowsPerPageOptions={[5]}
+        checkboxSelection
+      />
+    </div>
+  );;
 
 
   return (

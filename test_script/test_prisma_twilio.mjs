@@ -20,22 +20,9 @@ let daysConstraint = {
 
 
 let sampleList = await prisma.taskLog.findMany({
-    /*
     where:{
-        username: "test2",
-        taskLabel: "intervention_morning gif",
-        createdAt: daysConstraint
-    },
-    
-    take: 5,
-    orderBy: {
-        createdAt: 'desc',
-    },
-    */
+        type: "twilio",
+    }
 });
 
-let errorTaskLogList = sampleList.filter((taskLog) =>{
-    return taskLog.executionResult["type"] != undefined && taskLog.executionResult.value.status == "failed";
-});
-
-console.log(`errorTaskLogList: ${JSON.stringify(errorTaskLogList[0], null, 2)}`);
+console.log(`twilioList: ${JSON.stringify(sampleList[0], null, 2)}`);

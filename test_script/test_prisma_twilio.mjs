@@ -36,7 +36,7 @@ let sampleList = await prisma.taskLog.findMany({
 });
 
 let twilioList = sampleList.filter((taskLog) =>{
-    return taskLog.executionResult["twilio"] == "twilio";
+    return taskLog.executionResult["type"] == "twilio";
 });
 
 console.log(`twilioList: ${JSON.stringify(twilioList[0], null, 2)}`);

@@ -20,7 +20,7 @@ let daysConstraint = {
 
 
 let sampleList = await prisma.taskLog.findMany({
-    take: 1000
+    take: 10000
     /*
     where:{
         username: "test2",

@@ -20,6 +20,7 @@ let daysConstraint = {
 
 
 let sampleList = await prisma.taskLog.findMany({
+    take: 100
     /*
     where:{
         username: "test2",
@@ -27,7 +28,7 @@ let sampleList = await prisma.taskLog.findMany({
         createdAt: daysConstraint
     },
     
-    take: 5,
+    
     orderBy: {
         createdAt: 'desc',
     },
@@ -35,7 +36,7 @@ let sampleList = await prisma.taskLog.findMany({
 });
 
 let errorTaskLogList = sampleList.filter((taskLog) =>{
-    return taskLog.executionResult["type"] != undefined && taskLog.executionResult.value.status == "failed";
+    return taskLog.executionResult["value"] != undefined && taskLog.executionResult.value.status == "failed";
 });
 
 console.log(`errorTaskLogList: ${JSON.stringify(errorTaskLogList[0], null, 2)}`);

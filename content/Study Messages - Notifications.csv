@@ -25,3 +25,4 @@ id,group,interventionMessage,topic,note
 24,prompt,"[name], please complete the Baseline Survey before the upcoming Monday to be activated into the intervention phase. Find the link to survey here: https://walktojoy.info/",Baseline remaining task reminder,
 25,prompt,"FOR TESTING: You have accumulated 6 consecutive days of Fitbit non-worn days this past week, and the investigator has been notified!",TEST,
 26,prompt,"[name], you have worn your Fitbit for [fitbit_wearing_days_since_join|480|3] days since joining the study. To start receiving messages this upcoming Monday, please make sure to wear your Fitbit for more than 8 hours each day. You need at least 3 full days before moving into the active phase!",Baseline remaining task reminder,
+27,investigator,A task error was generated in the past hour. Please check the dashboard for more details.,,

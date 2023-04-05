@@ -77,15 +77,17 @@ let choiceList = [
 
 let now = DateTime.now();
 //let taskCompositeResultList = await TaskExecutor.executeTaskForUserListForDatetime(GeneralUtility.taskList[3], userList, now);
-let taskCompositeResultList = await TaskExecutor.executeTaskForUserListForDatetime(GeneralUtility.taskList[3], [GeneralUtility.systemUser], now);
+let taskCompositeResultList = await TaskExecutor.executeTaskForUserListForDatetime(GeneralUtility.taskList[0], [GeneralUtility.systemUser], now);
 
 console.log(`taskCompositeResultList: ${JSON.stringify(taskCompositeResultList)}`);
 
+/*
 if(taskCompositeResultList.length > 0){
     let insertResult = await prisma.taskLog.createMany({
         data: taskCompositeResultList
     });
     console.log(`insertResult: ${JSON.stringify(insertResult)}`);
 }
+*/
 
 

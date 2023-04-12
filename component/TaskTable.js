@@ -61,6 +61,7 @@ export default function TaskTable({ infoList }) {
           <TableRow>
             <TableCell align="right">Task Label</TableCell>
             <TableCell align="right">Enabled</TableCell>
+            <TableCell align="right">preActivationLogging</TableCell>
             <TableCell align="right">Priority</TableCell>
             <TableCell align="right">Check Point</TableCell>
             <TableCell align="right">Group</TableCell>
@@ -78,6 +79,7 @@ export default function TaskTable({ infoList }) {
             >
               <TableCell align="right">{row.label}</TableCell>
               <TableCell align="right">{row.enabled == true? "true":"false"}</TableCell>
+              <TableCell align="right">{row.preActivationLogging == true? "true":"false"}</TableCell>
               <TableCell align="right">{row.priority}</TableCell>
               <TableCell align="right">{JSON.stringify(row.checkPoint)}</TableCell>
               <TableCell align="right">{JSON.stringify(row.group)}</TableCell>

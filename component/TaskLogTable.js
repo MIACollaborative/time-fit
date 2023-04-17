@@ -80,7 +80,7 @@ export default function TaskLogTable({ infoList, userInfo }) {
     {
       field: 'activationReasoning',
       headerName: 'Activation Reasoning',
-      width: 240,
+      //width: 240,
       valueGetter: (params) =>
     `${JSON.stringify(params.row.activationReasoning)}`
     },
@@ -89,7 +89,7 @@ export default function TaskLogTable({ infoList, userInfo }) {
       headerName: 'Randomization Result',
       //description: 'This column has a value getter and is not sortable.',
       sortable: false,
-      width: 160,
+      //width: 160,
       valueGetter: (params) =>
         `${GeneralUtility.convertRandomizationResultToString(params.row.randomizationResult)}`,
     },
@@ -97,7 +97,7 @@ export default function TaskLogTable({ infoList, userInfo }) {
       field: 'action',
       headerName: 'Action',
       sortable: false,
-      width: 160,
+      // width: 160,
       valueGetter: (params) =>
       GeneralUtility.extractOutcomeToString(params.row.randomizationResult != undefined? params.row.randomizationResult.theChoice: undefined),
     },
@@ -105,7 +105,7 @@ export default function TaskLogTable({ infoList, userInfo }) {
       field: 'executionResult',
       headerName: 'Execution Result',
       sortable: false,
-      width: 160,
+      //width: 160,
       valueGetter: (params) =>
       GeneralUtility.convertExecutionResultToString(params.row.executionResult),
     },
@@ -113,7 +113,7 @@ export default function TaskLogTable({ infoList, userInfo }) {
       field: 'createAtYourTime',
       headerName: 'Created At (your time)',
       sortable: true,
-      width: 160,
+      //width: 160,
       valueGetter: (params) =>
       DateTime.fromISO(params.row.createdAt).toLocaleString(DateTime.DATETIME_FULL),
     },
@@ -122,7 +122,7 @@ export default function TaskLogTable({ infoList, userInfo }) {
       headerName: 'Created At',
       description: 'This column has a value getter and is not sortable.',
       sortable: true,
-      width: 160,
+      //width: 160,
       valueGetter: (params) =>
       params.row.createdAt,
     },
@@ -130,7 +130,7 @@ export default function TaskLogTable({ infoList, userInfo }) {
       field: 'updatedAt',
       headerName: 'Updated At',
       sortable: true,
-      width: 160,
+      //width: 160,
       valueGetter: (params) =>
       params.row.updatedAt,
     },
@@ -138,7 +138,7 @@ export default function TaskLogTable({ infoList, userInfo }) {
       field: 'userInfoCache',
       headerName: 'User Info Cache',
       sortable: false,
-      width: 160,
+      //width: 160,
       valueGetter: (params) =>
       GeneralUtility.extractUserKeyAttributesToString(params.row.userInfoCache),
     },

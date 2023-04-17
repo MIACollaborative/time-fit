@@ -72,15 +72,15 @@ export default function TaskLogTable({ infoList, userInfo }) {
   
 
   const columns = [
-    { field: 'taskLabel', headerName: 'Task Label', sortable: true, width: 70 },
+    { field: 'taskLabel', headerName: 'Task Label', sortable: true, width: 140 },
     { field: 'username', headerName: 'Username',  sortable: true, width: 130 },
-    { field: 'isActivated', headerName: 'isActivated',  sortable: true, width: 130,
+    { field: 'isActivated', headerName: 'isActivated',  sortable: true, width: 70,
     valueGetter: (params) =>
     `${JSON.stringify(params.row.isActivated)}`,},
     {
       field: 'activationReasoning',
       headerName: 'Activation Reasoning',
-      //width: 240,
+      width: 320,
       valueGetter: (params) =>
     `${JSON.stringify(params.row.activationReasoning)}`
     },
@@ -113,7 +113,7 @@ export default function TaskLogTable({ infoList, userInfo }) {
       field: 'createAtYourTime',
       headerName: 'Created At (your time)',
       sortable: true,
-      //width: 160,
+      width: 320,
       valueGetter: (params) =>
       DateTime.fromISO(params.row.createdAt).toLocaleString(DateTime.DATETIME_FULL),
     },
@@ -122,7 +122,7 @@ export default function TaskLogTable({ infoList, userInfo }) {
       headerName: 'Created At',
       description: 'This column has a value getter and is not sortable.',
       sortable: true,
-      //width: 160,
+      width: 320,
       valueGetter: (params) =>
       params.row.createdAt,
     },

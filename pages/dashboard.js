@@ -115,6 +115,11 @@ export async function getServerSideProps(ctx) {
     gte: startDate.toISO(),
     lte: nowDate.toISO()
   };
+
+  let forteenDaysConstraint = {
+    gte: nowDate.minus({weeks: 2}).startOf("day").toISO(),
+    lte: nowDate.toISO()
+  };
   /*
   createdAt: {
     gte: startDate.toISO(),
@@ -184,7 +189,7 @@ export async function getServerSideProps(ctx) {
     // v2: try filter
     fitbitNotificationList = await prisma.fitbit_update.findMany({
       where:{
-        createdAt: sevenDaysConstraint
+        createdAt: forteenDaysConstraint //sevenDaysConstraint
       },
       orderBy: [
         {
@@ -216,7 +221,7 @@ export async function getServerSideProps(ctx) {
   if (adminUsernameList.includes(userName)) {
     fitbitDataList = await prisma.fitbit_data.findMany({
       where:{
-        createdAt: sevenDaysConstraint
+        createdAt: forteenDaysConstraint //sevenDaysConstraint
       },
       include: {
         owner: true,

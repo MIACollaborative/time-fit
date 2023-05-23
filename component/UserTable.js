@@ -84,13 +84,14 @@ export default function UserTable({ infoList, userInfo, hostURL, renderData }) {
   updatedAt DateTime? @updatedAt
   */
 
+  // {renderData? <TableContainer ...> ... </TableContaienr>:null}
+
   return (
     <Fragment>
       <br />
       <ObjectListExortToolbar filePrefix={"User"} infoList={infoList} userInfo={userInfo}></ObjectListExortToolbar>
       <br />
-      {
-        renderData? <TableContainer component={Paper}>
+      {renderData? <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -144,8 +145,7 @@ export default function UserTable({ infoList, userInfo, hostURL, renderData }) {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>: null
-      }
+      </TableContainer>:null}
       
 
     </Fragment>

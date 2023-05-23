@@ -21,7 +21,7 @@ function replacer(key, value) {
   return value;
 }
 
-export default function FitbitSubscriptionTable({ infoList}) {
+export default function FitbitSubscriptionTable({ infoList, renderData }) {
 
     // example
 
@@ -43,44 +43,45 @@ export default function FitbitSubscriptionTable({ infoList}) {
 
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Id</TableCell>
-            <TableCell align="right">Collection Type</TableCell>
-            <TableCell align="right">Owner Id</TableCell>
-            <TableCell align="right">Owner Type</TableCell>
-            <TableCell align="right">Subscriber Id</TableCell>
-            <TableCell align="right">Subscription Id</TableCell>
-            <TableCell align="right">Owner Username</TableCell>
-            <TableCell align="right">Created At</TableCell>
-            <TableCell align="right">Updated At</TableCell>
+    {renderData? <TableContainer component={Paper}>
+    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <TableHead>
+        <TableRow>
+          <TableCell>Id</TableCell>
+          <TableCell align="right">Collection Type</TableCell>
+          <TableCell align="right">Owner Id</TableCell>
+          <TableCell align="right">Owner Type</TableCell>
+          <TableCell align="right">Subscriber Id</TableCell>
+          <TableCell align="right">Subscription Id</TableCell>
+          <TableCell align="right">Owner Username</TableCell>
+          <TableCell align="right">Created At</TableCell>
+          <TableCell align="right">Updated At</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {infoList.map((row, index) => (
+          <TableRow
+            key={index}
+            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+          >
+            <TableCell component="th" scope="row">
+              {row.id}
+            </TableCell>
+            <TableCell align="right">{row.collectionType}</TableCell>
+            <TableCell align="right">{row.ownerId}</TableCell>
+            <TableCell align="right">{row.ownerType}</TableCell>
+            <TableCell align="right">{row.subscriberId}</TableCell>
+            <TableCell align="right">{row.subscriptionId}</TableCell>
+            
+            <TableCell align="right">{row.owner.username}</TableCell>
+            <TableCell align="right">{row.createdAt}</TableCell>
+            <TableCell align="right">{row.updatedAt}</TableCell>
           </TableRow>
-        </TableHead>
-        <TableBody>
-          {infoList.map((row, index) => (
-            <TableRow
-              key={index}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.id}
-              </TableCell>
-              <TableCell align="right">{row.collectionType}</TableCell>
-              <TableCell align="right">{row.ownerId}</TableCell>
-              <TableCell align="right">{row.ownerType}</TableCell>
-              <TableCell align="right">{row.subscriberId}</TableCell>
-              <TableCell align="right">{row.subscriptionId}</TableCell>
-              
-              <TableCell align="right">{row.owner.username}</TableCell>
-              <TableCell align="right">{row.createdAt}</TableCell>
-              <TableCell align="right">{row.updatedAt}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+        ))}
+      </TableBody>
+    </Table>
+  </TableContainer>:null}
+    
   )
 }
 

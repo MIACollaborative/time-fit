@@ -23,7 +23,7 @@ function replacer(key, value) {
   return value;
 }
 
-export default function FitbitDataTable({ infoList, userInfo}) {
+export default function FitbitDataTable({ infoList, userInfo, renderData }) {
 
     // example
 
@@ -51,7 +51,7 @@ export default function FitbitDataTable({ infoList, userInfo}) {
     <br/>
     <ObjectListExortToolbar filePrefix={"FitbitData"} infoList={infoList} userInfo={userInfo}></ObjectListExortToolbar>
     <br/>
-    <TableContainer component={Paper}>
+    {renderData? <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -92,7 +92,8 @@ export default function FitbitDataTable({ infoList, userInfo}) {
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+    </TableContainer>:null}
+  
     </Fragment>
   )
 }

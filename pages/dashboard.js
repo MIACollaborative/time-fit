@@ -53,6 +53,8 @@ function replacer(key, value) {
 
 const adminUsernameList = ["test1", "test2", "test3", "test4"];
 
+let notRenderingList = ["Fitbit Notification", "Fitbit Data", "Update Diff", "Task Log By User", "Task Log"];
+
 export async function getServerSideProps(ctx) {
   const session = await getSession(ctx);
   console.log(`dashboard.getServerSideProps: session: ${JSON.stringify(session)}`);
@@ -549,7 +551,7 @@ export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList
       </ToggleButtonGroup>
 
       {tabName == "Users" ? (
-        <UserTable infoList={userInfoList} userInfo={userInfo} />
+        <UserTable infoList={userInfoList} userInfo={userInfo} renderData={!notRenderingList.includes(tabName)} />
       ) : null}
 
       {tabName == "Survey Response" ? (

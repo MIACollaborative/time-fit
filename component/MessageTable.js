@@ -50,6 +50,7 @@ export default function MessageTable({ infoList, userInfo, assetHostURL, renderD
   */
 
   return (
+    <>
     {renderData? <TableContainer component={Paper}>
     <Table sx={{ minWidth: 650 }} aria-label="simple table">
       <TableHead>
@@ -125,6 +126,8 @@ export default function MessageTable({ infoList, userInfo, assetHostURL, renderD
       </TableBody>
     </Table>
   </TableContainer>:null}
+    </>
+    
     
   )
 }

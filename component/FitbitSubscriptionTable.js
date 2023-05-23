@@ -4,7 +4,7 @@ import logger from "../lib/logger";
 
 */
 
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -43,7 +43,8 @@ export default function FitbitSubscriptionTable({ infoList, renderData }) {
 
 
   return (
-    {renderData? <TableContainer component={Paper}>
+    <Fragment>
+{renderData? <TableContainer component={Paper}>
     <Table sx={{ minWidth: 650 }} aria-label="simple table">
       <TableHead>
         <TableRow>
@@ -81,6 +82,8 @@ export default function FitbitSubscriptionTable({ infoList, renderData }) {
       </TableBody>
     </Table>
   </TableContainer>:null}
+    </Fragment>
+    
     
   )
 }

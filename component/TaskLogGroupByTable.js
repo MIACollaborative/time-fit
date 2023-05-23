@@ -55,7 +55,7 @@ export default function TaskLogGroupByTable({ infoList, renderData }) {
   */
 
   return (
-    {renderData? <TableContainer component={Paper}>
+    <>{renderData? <TableContainer component={Paper}>
     <Table sx={{ minWidth: 650 }} aria-label="simple table">
       <TableHead>
         <TableRow>
@@ -77,7 +77,7 @@ export default function TaskLogGroupByTable({ infoList, renderData }) {
         ))}
       </TableBody>
     </Table>
-  </TableContainer>:null}
+  </TableContainer>:null}</>
   
   )
 }

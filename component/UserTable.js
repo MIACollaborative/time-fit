@@ -27,7 +27,7 @@ function replacer(key, value) {
   return value;
 }
 
-export default function UserTable({ infoList, userInfo, hostURL }) {
+export default function UserTable({ infoList, userInfo, hostURL, renderData }) {
 
   /*
   id  String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -84,12 +84,14 @@ export default function UserTable({ infoList, userInfo, hostURL }) {
   updatedAt DateTime? @updatedAt
   */
 
+  // {renderData? <TableContainer ...> ... </TableContaienr>:null}
+
   return (
     <Fragment>
       <br />
       <ObjectListExortToolbar filePrefix={"User"} infoList={infoList} userInfo={userInfo}></ObjectListExortToolbar>
       <br />
-      <TableContainer component={Paper}>
+      {renderData? <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -143,7 +145,8 @@ export default function UserTable({ infoList, userInfo, hostURL }) {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
+      </TableContainer>:null}
+      
 
     </Fragment>
   )

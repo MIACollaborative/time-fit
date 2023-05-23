@@ -30,7 +30,7 @@ function replacer(key, value) {
   return value;
 }
 
-export default function TaskLogTable({ infoList, userInfo }) {
+export default function TaskLogTable({ infoList, userInfo, renderData }) {
 
   const [filterTaskLabel, setFilterTaskLabel] = useState("");
   const [filterTaskUser, setFilterTaskUser] = useState("");
@@ -223,7 +223,7 @@ export default function TaskLogTable({ infoList, userInfo }) {
 
 
       <br />
-      <TableContainer component={Paper}>
+      {renderData? <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -279,7 +279,8 @@ export default function TaskLogTable({ infoList, userInfo }) {
             })}
           </TableBody>
         </Table>
-      </TableContainer>
+      </TableContainer>:null}
+      
     </Fragment>
 
   )

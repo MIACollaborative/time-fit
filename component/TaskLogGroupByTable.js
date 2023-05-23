@@ -22,7 +22,7 @@ function replacer(key, value) {
   return value;
 }
 
-export default function TaskLogGroupByTable({ infoList }) {
+export default function TaskLogGroupByTable({ infoList, renderData }) {
 
   /*
   id  String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -55,29 +55,30 @@ export default function TaskLogGroupByTable({ infoList }) {
   */
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="right">Username</TableCell>
-            <TableCell align="right">Message Label</TableCell>
-            <TableCell align="right">Count</TableCell>
+    {renderData? <TableContainer component={Paper}>
+    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <TableHead>
+        <TableRow>
+          <TableCell align="right">Username</TableCell>
+          <TableCell align="right">Message Label</TableCell>
+          <TableCell align="right">Count</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {infoList.map((row, index) => (
+          <TableRow
+            key={index}
+            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+          >
+            <TableCell align="right">{row.username}</TableCell>
+            <TableCell align="right">{row.messageLabel}</TableCell>
+            <TableCell align="right">{row._count.messageLabel}</TableCell>
           </TableRow>
-        </TableHead>
-        <TableBody>
-          {infoList.map((row, index) => (
-            <TableRow
-              key={index}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell align="right">{row.username}</TableCell>
-              <TableCell align="right">{row.messageLabel}</TableCell>
-              <TableCell align="right">{row._count.messageLabel}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+        ))}
+      </TableBody>
+    </Table>
+  </TableContainer>:null}
+  
   )
 }
 

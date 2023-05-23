@@ -23,7 +23,7 @@ function replacer(key, value) {
   return value;
 }
 
-export default function SurveyResponseTable({ infoList, userInfo }) {
+export default function SurveyResponseTable({ infoList, userInfo, renderData }) {
 
   /*
   <TableCell>Id</TableCell>
@@ -38,7 +38,7 @@ export default function SurveyResponseTable({ infoList, userInfo }) {
       <ObjectListExortToolbar filePrefix={"SurveyResponse"} infoList={infoList} userInfo={userInfo}></ObjectListExortToolbar>
 
       <br />
-      <TableContainer component={Paper}>
+      {renderData? <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -72,7 +72,7 @@ export default function SurveyResponseTable({ infoList, userInfo }) {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
+      </TableContainer>:null}
 
     </Fragment>
 

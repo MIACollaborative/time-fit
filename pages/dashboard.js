@@ -555,42 +555,42 @@ export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList
       ) : null}
 
       {tabName == "Survey Response" ? (
-        <SurveyResponseTable infoList={responseInfoList} userInfo={userInfo} />
+        <SurveyResponseTable infoList={responseInfoList} userInfo={userInfo} renderData={!notRenderingList.includes(tabName)} />
       ) : null}
 
       {tabName == "Fitbit Subscription" ? (
-        <FitbitSubscriptionTable infoList={fitbitSubscriptionInfoList} />
+        <FitbitSubscriptionTable infoList={fitbitSubscriptionInfoList} renderData={!notRenderingList.includes(tabName)} />
       ) : null}
 
       {tabName == "Fitbit Notification" ? (
-        <FitbitNotificationTable infoList={fitbitNotificationInfoList}  userInfo={userInfo}/>
+        <FitbitNotificationTable infoList={fitbitNotificationInfoList}  userInfo={userInfo} renderData={!notRenderingList.includes(tabName)} />
       ) : null}
       {tabName == "Fitbit Data" ? (
-        <FitbitDataTable infoList={fitbitDataInfoList}  userInfo={userInfo}/>
+        <FitbitDataTable infoList={fitbitDataInfoList}  userInfo={userInfo} renderData={!notRenderingList.includes(tabName)} />
       ) : null}
 
       {tabName == "Update Diff" ? (
-        <UpdateDiffTable infoList={updateDiffInfoList}  userInfo={userInfo}/>
+        <UpdateDiffTable infoList={updateDiffInfoList}  userInfo={userInfo} renderData={!notRenderingList.includes(tabName)} />
       ) : null}
 
       {tabName == "Task" ? (
-        <TaskTable infoList={taskInfoList} />
+        <TaskTable infoList={taskInfoList} renderData={!notRenderingList.includes(tabName)} />
       ) : null}
 
       {tabName == "Investigator Task Log" ? (
-        <TaskLogTable infoList={taskLogInvestigatorInfoList} userInfo={userInfo} />
+        <TaskLogTable infoList={taskLogInvestigatorInfoList} userInfo={userInfo}renderData={!notRenderingList.includes(tabName)} />
       ) : null}
 
       {tabName == "Task Log By User" ? (
-        <TaskLogGroupByTable infoList={taskLogGroupByInfoList} />
+        <TaskLogGroupByTable infoList={taskLogGroupByInfoList} renderData={!notRenderingList.includes(tabName)} />
       ) : null}
 
       {tabName == "Task Log" ? (
-        <TaskLogTable infoList={taskLogInfoList} userInfo={userInfo} />
+        <TaskLogTable infoList={taskLogInfoList} userInfo={userInfo} renderData={!notRenderingList.includes(tabName)} />
       ) : null}
 
       {tabName == "Message" ? (
-        <MessageTable infoList={messageInfoList} userInfo={userInfo} assetHostURL={assetHostURL} />
+        <MessageTable infoList={messageInfoList} userInfo={userInfo} assetHostURL={assetHostURL} renderData={!notRenderingList.includes(tabName)} />
       ) : null}
     </Layout>
   );

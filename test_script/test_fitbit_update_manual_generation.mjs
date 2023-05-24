@@ -82,7 +82,7 @@ let summaryList = [];
 
 for(let i = 0; i < userList.length; i++){
     let user = userList[i];
-    let startDate = DateTime.fromISO("2023-05-24T05:01:00.059Z");
+    let startDate = DateTime.fromISO("2023-05-25T05:01:00.059Z");
 
     console.log(`[${user.username}][${startDate}] ----------------------------------------`);
     let resultList = await generateManualFitbitUpdate(user, startDate);

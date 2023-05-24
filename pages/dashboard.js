@@ -449,7 +449,7 @@ export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList
         },
         body: JSON.stringify({
           limit: 0,
-          startDate: nowDate.minus({weeks: 1}).startOf("day"), // startDate.toISO(),
+          startDate: nowDate.minus({days: 4}).startOf("day"), // startDate.toISO(),
           endDate: nowDate.toISO()
         }),
       })

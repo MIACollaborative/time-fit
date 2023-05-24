@@ -29,11 +29,13 @@ let recordList = await prisma.fitbit_update.findMany({
 */
 
 let userList = await prisma.users.findMany({
+    /*
     where: {
         username: {
           contains: "participant11",
         },
     },
+    */
 });
 
 
@@ -76,6 +78,8 @@ async function generateManualFitbitUpdate(userInfo, datetime){
     return proxyUpdateList;
 }
 
+let summaryList = [];
+
 for(let i = 0; i < userList.length; i++){
     let user = userList[i];
     let startDate = DateTime.fromISO("2023-05-24T05:01:00.059Z");
@@ -83,4 +87,11 @@ for(let i = 0; i < userList.length; i++){
     console.log(`[${user.username}][${startDate}] ----------------------------------------`);
     let resultList = await generateManualFitbitUpdate(user, startDate);
     console.log(`${user.username} - ${startDate}: resultList.length: ${resultList.length}`);
+    summaryList.push({username: user.username, datetime: startDate, updateGenerated: resultList.length > 0});
+}
+console.log(`[Summary] ----------------------------------------`);
+for(let i = 0; i < summaryList.length; i++){
+    let sInfo = summaryList[i];
+
+    console.log(sInfo.username, sInfo.datetime, sInfo.updateGenerated);
 }

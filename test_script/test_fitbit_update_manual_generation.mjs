@@ -93,5 +93,5 @@ console.log(`[Summary] ----------------------------------------`);
 for(let i = 0; i < summaryList.length; i++){
     let sInfo = summaryList[i];
 
-    console.log(DateTime.fromISO(sInfo.datetime).toLocaleString(DateTime.DATETIME_FULL), sInfo.username, "\t", sInfo.fitbitId, sInfo.updateGenerated);
+    console.log(DateTime.fromISO(sInfo.datetime).toLocaleString(DateTime.DATETIME_FULL), sInfo.username, "\t", sInfo.fitbitId, "\t", sInfo.updateGenerated);
 }

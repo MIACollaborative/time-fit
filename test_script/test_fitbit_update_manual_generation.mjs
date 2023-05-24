@@ -50,7 +50,7 @@ async function generateManualFitbitUpdate(userInfo, datetime){
     let proxyUpdateList = [];
     let collectionType = "activities";
     let ownerType = "walktojoy";
-    console.log(`userInfo: ${JSON.stringify(userInfo, null, 2)}`);
+    //console.log(`userInfo: ${JSON.stringify(userInfo, null, 2)}`);
 
     if (userInfo.fitbitId != undefined) {
         for(let i = 0; i < dateList.length; i++){
@@ -64,7 +64,7 @@ async function generateManualFitbitUpdate(userInfo, datetime){
             };
 
             let isWithinScope = await DatabaseUtility.isFitbitUpdateDateWithinAppropriateScope(proxyFitbitUpdate);
-
+            console.log(`[isWithinScope]: ${isWithinScope}`);
             if(isWithinScope){
                 proxyUpdateList.push(
                     proxyFitbitUpdate
@@ -82,5 +82,5 @@ for(let i = 0; i < userList.length; i++){
 
     console.log(`[${user.username}][${startDate}] ----------------------------------------`);
     let resultList = await generateManualFitbitUpdate(user, startDate);
-    console.log(`${user.username} - ${startDate}: shouldUpdate? ${resultList.length}`);
+    console.log(`${user.username} - ${startDate}: resultList.length: ${resultList.length}`);
 }

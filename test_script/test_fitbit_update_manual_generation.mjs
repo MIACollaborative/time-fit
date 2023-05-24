@@ -1,0 +1,86 @@
+import * as dotenv from "dotenv";
+import { DateTime } from "luxon";
+import prisma from "../lib/prisma.mjs";
+import TaskExecutor from "../lib/TaskExecutor.mjs";
+import DatabaseUtility from "../lib/DatabaseUtility.mjs";
+import GeneralUtility from "../lib/GeneralUtility.mjs";
+
+function replacer(key, value) {
+    if (typeof value === "Date") {
+        return value.toString();
+    }
+    return value;
+}
+
+
+if (process.env.NODE_ENV !== "production") {
+    dotenv.config();
+}
+
+/*
+let recordList = await prisma.fitbit_update.findMany({
+    take: 3,
+    orderBy: [
+        {
+            createdAt: 'desc',
+        }
+    ]
+});
+*/
+
+let userList = await prisma.users.findMany({
+    where: {
+        username: {
+          contains: "participant11",
+        },
+    },
+});
+
+
+async function generateManualFitbitUpdate(userInfo, datetime){
+    let dateList = [];
+
+    // now, generate a list of FitbitUpdates
+    // 1. one for the (-1) date
+    // 2. one for the (-7) date
+    dateList.push(datetime.minus({ days: 1 }).startOf("day"));
+    //dateList.push(datetime.minus({ days: 7 }).startOf("day"));
+
+
+    let proxyUpdateList = [];
+    let collectionType = "activities";
+    let ownerType = "walktojoy";
+    console.log(`userInfo: ${JSON.stringify(userInfo, null, 2)}`);
+
+    if (userInfo.fitbitId != undefined) {
+        for(let i = 0; i < dateList.length; i++){
+            let dateInfo = dateList[i];
+            let proxyFitbitUpdate = {
+                collectionType: collectionType,
+                date: dateInfo.toFormat('yyyy-MM-dd'),
+                ownerId: userInfo.fitbitId,
+                ownerType: ownerType,
+                subscriptionId: `${userInfo.fitbitId}-${collectionType}-${ownerType}`
+            };
+
+            let isWithinScope = await DatabaseUtility.isFitbitUpdateDateWithinAppropriateScope(proxyFitbitUpdate);
+
+            if(isWithinScope){
+                proxyUpdateList.push(
+                    proxyFitbitUpdate
+                );
+            }
+        }
+    }
+
+    return proxyUpdateList;
+}
+
+for(let i = 0; i < userList.length; i++){
+    let user = userList[i];
+    let startDate = DateTime.fromISO("2023-05-24T05:01:00.059Z");
+
+    console.log(`[${user.username}][${startDate}] ----------------------------------------`);
+    let resultList = await generateManualFitbitUpdate(user, );
+    console.log(`${user.username} - ${startDate}: shouldUpdate? ${resultList.length}`);
+}

@@ -35,15 +35,41 @@ let recordList = [
     {
         "id": "63f4d6c36ff9520d57514dfa",
         "collectionType": "activities",
-        "date": "2023-02-21",
-        "ownerId": "4SW9W9",
-        "ownerType": "user",
-        "subscriptionId": "1",
-        "status": "processed",
+        "date": "2023-05-17",
+        "ownerId": "7QYVGW",
+        "ownerType": "walktojoy",
+        "subscriptionId": "7QYVGW-activities",
+        "status": "notification",
         "ip": "34.67.42.65",
         "validity": null,
-        "createdAt": "2023-02-21T14:35:47.152Z",
-        "updatedAt": "2023-02-21T14:36:01.318Z"
+        "createdAt": "2023-05-17T14:35:47.152Z",
+        "updatedAt": "2023-05-17T14:36:01.318Z"
+    },
+    {
+        "id": "63f4d6c36ff9520d57514dfa",
+        "collectionType": "activities",
+        "date": "2023-05-18",
+        "ownerId": "7QYVGW",
+        "ownerType": "walktojoy",
+        "subscriptionId": "7QYVGW-activities",
+        "status": "notification",
+        "ip": "34.67.42.65",
+        "validity": null,
+        "createdAt": "2023-05-18T14:35:47.152Z",
+        "updatedAt": "2023-05-18T14:36:01.318Z"
+    },
+    {
+        "id": "63f4d6c36ff9520d57514dfa",
+        "collectionType": "activities",
+        "date": "2023-05-19",
+        "ownerId": "7QYVGW",
+        "ownerType": "walktojoy",
+        "subscriptionId": "7QYVGW-activities",
+        "status": "notification",
+        "ip": "34.67.42.65",
+        "validity": null,
+        "createdAt": "2023-05-19T14:35:47.152Z",
+        "updatedAt": "2023-05-19T14:36:01.318Z"
     },
 ];
 

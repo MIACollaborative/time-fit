@@ -170,7 +170,7 @@ export default function TaskLogTable({ infoList, userInfo, renderData }) {
       <br />
       <ObjectListExortToolbar filePrefix={"TaskLog"} infoList={infoList} userInfo={userInfo}></ObjectListExortToolbar>
       <br />
-      <div style={{ height: 400, width: '100%' }}>
+      {renderData? <div style={{ height: 400, width: '100%' }}>
       <DataGrid
         rows={infoList}
         columns={columns}
@@ -178,113 +178,116 @@ export default function TaskLogTable({ infoList, userInfo, renderData }) {
         rowsPerPageOptions={[5]}
         checkboxSelection
       />
-    </div>
+    </div>: null}
     </Fragment>
-    
   );;
 
 
-  return (
-    <Fragment>
-      <br />
-      <Grid container spacing={2}>
-      <Grid item xs={3} ></Grid>
-        <Grid item xs={2}>
-        <ObjectListExortToolbar filePrefix={"TaskLog"} infoList={infoList} userInfo={userInfo}></ObjectListExortToolbar>
-        </Grid>
-        <Grid item xs={2}>
-        <TextField
-            //fullWidth
-            label="Filter task label"
-            //id="fullWidth"
-            value={filterTaskLabel}
-            onChange={(event) => {
-              console.log(`setFilterTaskLabel: ${event.currentTarget.value}`);
-              setFilterTaskLabel(event.currentTarget.value);
 
-            }}
-          />
-        </Grid>
-        <Grid item xs={2}>
-        <TextField
-            //fullWidth
-            label="Filter task username"
-            //id="fullWidth"
-            value={filterTaskUser}
-            onChange={(event) => {
-              console.log(`setFilterTaskUser: ${event.currentTarget.value}`);
-              setFilterTaskUser(event.currentTarget.value);
+}
 
-            }}
-          />
-        </Grid>
-        <Grid item  xs={3}></Grid>
+/*
+return (
+  <Fragment>
+    <br />
+    <Grid container spacing={2}>
+    <Grid item xs={3} ></Grid>
+      <Grid item xs={2}>
+      <ObjectListExortToolbar filePrefix={"TaskLog"} infoList={infoList} userInfo={userInfo}></ObjectListExortToolbar>
       </Grid>
+      <Grid item xs={2}>
+      <TextField
+          //fullWidth
+          label="Filter task label"
+          //id="fullWidth"
+          value={filterTaskLabel}
+          onChange={(event) => {
+            console.log(`setFilterTaskLabel: ${event.currentTarget.value}`);
+            setFilterTaskLabel(event.currentTarget.value);
+
+          }}
+        />
+      </Grid>
+      <Grid item xs={2}>
+      <TextField
+          //fullWidth
+          label="Filter task username"
+          //id="fullWidth"
+          value={filterTaskUser}
+          onChange={(event) => {
+            console.log(`setFilterTaskUser: ${event.currentTarget.value}`);
+            setFilterTaskUser(event.currentTarget.value);
+
+          }}
+        />
+      </Grid>
+      <Grid item  xs={3}></Grid>
+    </Grid>
 
 
-      <br />
-      {renderData? <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="right">Task Label</TableCell>
-              <TableCell align="right">Username</TableCell>
-              <TableCell align="right">isActivated</TableCell>
-              <TableCell align="right">Activation Reasoning</TableCell>
-              <TableCell align="right">Randomization</TableCell>
-              <TableCell align="right">Action</TableCell>
-              <TableCell align="right">Execution Result</TableCell>
-              <TableCell align="right">Created At (your time)</TableCell>
-              <TableCell align="right">Created At</TableCell>
-              <TableCell align="right">Updated At</TableCell>
-              <TableCell align="right">User Info Cache</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredInfoList.map((row, index) => {
+    <br />
+    {renderData? <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell align="right">Task Label</TableCell>
+            <TableCell align="right">Username</TableCell>
+            <TableCell align="right">isActivated</TableCell>
+            <TableCell align="right">Activation Reasoning</TableCell>
+            <TableCell align="right">Randomization</TableCell>
+            <TableCell align="right">Action</TableCell>
+            <TableCell align="right">Execution Result</TableCell>
+            <TableCell align="right">Created At (your time)</TableCell>
+            <TableCell align="right">Created At</TableCell>
+            <TableCell align="right">Updated At</TableCell>
+            <TableCell align="right">User Info Cache</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {filteredInfoList.map((row, index) => {
 
-              let highlightExecutionResult = false;
+            let highlightExecutionResult = false;
 
-              if (row.executionResult.value == undefined) {
-                // this is the old one, likely for noAction
+            if (row.executionResult.value == undefined) {
+              // this is the old one, likely for noAction
+              ;
+            }
+            else {
+              if (row.executionResult.value.errorMessage == null || row.executionResult.value.errorMessage == "") {
                 ;
               }
               else {
-                if (row.executionResult.value.errorMessage == null || row.executionResult.value.errorMessage == "") {
-                  ;
-                }
-                else {
-                  highlightExecutionResult = true;
-                }
+                highlightExecutionResult = true;
               }
+            }
 
 
-              return <TableRow
-                key={index}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell align="right">{row.taskLabel}</TableCell>
-                <TableCell align="right">{row.username}</TableCell>
-                <TableCell align="right">{JSON.stringify(row.isActivated)}</TableCell>
-                <TableCell align="right">{JSON.stringify(row.activationReasoning)}</TableCell>
-                <TableCell align="right">{GeneralUtility.convertRandomizationResultToString(row.randomizationResult)}</TableCell>
-                <TableCell align="right">{GeneralUtility.extractOutcomeToString(row.randomizationResult != undefined? row.randomizationResult.theChoice: undefined)}</TableCell>
-                <TableCell align="right" style={highlightExecutionResult ? { background: "lightcoral" } : {}}>{GeneralUtility.convertExecutionResultToString(row.executionResult)}</TableCell>
-                <TableCell align="right">{DateTime.fromISO(row.createdAt).toLocaleString(DateTime.DATETIME_FULL)}</TableCell>
-                <TableCell align="right">{row.createdAt}</TableCell>
-                <TableCell align="right">{row.updatedAt}</TableCell>
-                
-                <TableCell align="right">{GeneralUtility.extractUserKeyAttributesToString(row.userInfoCache)}</TableCell>
-              </TableRow>
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>:null}
-      
-    </Fragment>
+            return <TableRow
+              key={index}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell align="right">{row.taskLabel}</TableCell>
+              <TableCell align="right">{row.username}</TableCell>
+              <TableCell align="right">{JSON.stringify(row.isActivated)}</TableCell>
+              <TableCell align="right">{JSON.stringify(row.activationReasoning)}</TableCell>
+              <TableCell align="right">{GeneralUtility.convertRandomizationResultToString(row.randomizationResult)}</TableCell>
+              <TableCell align="right">{GeneralUtility.extractOutcomeToString(row.randomizationResult != undefined? row.randomizationResult.theChoice: undefined)}</TableCell>
+              <TableCell align="right" style={highlightExecutionResult ? { background: "lightcoral" } : {}}>{GeneralUtility.convertExecutionResultToString(row.executionResult)}</TableCell>
+              <TableCell align="right">{DateTime.fromISO(row.createdAt).toLocaleString(DateTime.DATETIME_FULL)}</TableCell>
+              <TableCell align="right">{row.createdAt}</TableCell>
+              <TableCell align="right">{row.updatedAt}</TableCell>
+              
+              <TableCell align="right">{GeneralUtility.extractUserKeyAttributesToString(row.userInfoCache)}</TableCell>
+            </TableRow>
+          })}
+        </TableBody>
+      </Table>
+    </TableContainer>:null}
+    
+  </Fragment>
 
-  )
-}
+)
+*/
 
 
 // extra

@@ -46,8 +46,8 @@ export default function ObjectListExortToolbar({ infoList, userInfo, filePrefix}
 
   return (
     <Fragment>
-
     <div>
+      <span>Item count: {infoList.length}</span>&nbsp;&nbsp;
       <Button variant="contained" onClick={(event) => {
       // infoList
       const fileString = `data:text/json;chatset=utf-8,${encodeURIComponent(
@@ -94,7 +94,6 @@ export default function ObjectListExortToolbar({ infoList, userInfo, filePrefix}
     
     </div>
     <div>
-        <div>Item count: {infoList.length}</div>
         {
           infoList.length > 0? <div>Item[0]: {JSON.stringify(infoList[0])}</div>: null
         }

@@ -46,6 +46,7 @@ export default function ObjectListExortToolbar({ infoList, userInfo, filePrefix}
 
   return (
     <Fragment>
+
     <div>
       <Button variant="contained" onClick={(event) => {
       // infoList
@@ -91,6 +92,13 @@ export default function ObjectListExortToolbar({ infoList, userInfo, filePrefix}
 
     }} >Export TSV</Button>
     
+    </div>
+    <div>
+        <div>Item count: {infoList.length}</div>
+        {
+          infoList.length > 0? <div>Item[0]: {JSON.stringify(infoList[0])}</div>: null
+        }
+        
     </div>
     </Fragment>
   )

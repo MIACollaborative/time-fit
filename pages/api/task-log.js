@@ -25,9 +25,12 @@ export const config = {
 }
 
 export default async function handler(req, res) {
+    console.log(`task-log.handler`);
+
     const session = await getSession({ req })
     if (!session) {
         // Not Signed in
+        console.log(`task-log.handler: not sign in`);
         res.status(401).json({});
         res.end();
         return
@@ -38,9 +41,15 @@ export default async function handler(req, res) {
 
     let userName = session.user.name;
 
+    console.log(`task-log.handler: userName: ${userName}`);
+
     const { function_name } = req.query;
     //const { author_id } = req.body;
     const { limit=0, startDate, endDate } = req.body;
+
+    console.log(`task-log.handler: startDate: ${startDate}`);
+    console.log(`task-log.handler: endDate: ${endDate}`);
+    console.log(`task-log.handler: limit: ${limit}`);
 
     switch (function_name) {
         case "get":
@@ -66,9 +75,13 @@ export default async function handler(req, res) {
 
             let taskLogList = [];
             if (adminUsernameList.includes(userName)) {
+                console.log(`task-log.handler: is admin`);
                 taskLogList = await prisma.taskLog.findMany(queryObj);
             }
-            
+            else{
+                console.log(`task-log.handler: is not admin`);
+            }
+            console.log(`task-log.handler: taskLogList.length: ${taskLogList.length}`);
             res.status(200).json({ result: taskLogList });
             return;
         default:

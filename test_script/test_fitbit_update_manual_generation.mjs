@@ -8,7 +8,7 @@ import GeneralUtility from "../lib/GeneralUtility.mjs";
 function replacer(key, value) {
     if (typeof value === "Date") {
         return value.toString();
-    }
+    }s
     return value;
 }
 
@@ -87,11 +87,11 @@ for(let i = 0; i < userList.length; i++){
     console.log(`[${user.username}][${startDate}] ----------------------------------------`);
     let resultList = await generateManualFitbitUpdate(user, startDate);
     console.log(`${user.username} - ${startDate}: resultList.length: ${resultList.length}`);
-    summaryList.push({username: user.username, datetime: startDate, updateGenerated: resultList.length > 0});
+    summaryList.push({username: user.username, fitbitId: user.fitbitId, datetime: startDate, updateGenerated: resultList.length > 0});
 }
 console.log(`[Summary] ----------------------------------------`);
 for(let i = 0; i < summaryList.length; i++){
     let sInfo = summaryList[i];
 
-    console.log(sInfo.username, DateTime.fromISO(sInfo.datetime).toLocaleString(DateTime.DATETIME_FULL), sInfo.updateGenerated);
+    console.log(DateTime.fromISO(sInfo.datetime).toLocaleString(DateTime.DATETIME_FULL), sInfo.username, "\t", sInfo.fitbitId, sInfo.updateGenerated);
 }

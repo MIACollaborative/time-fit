@@ -93,5 +93,5 @@ console.log(`[Summary] ----------------------------------------`);
 for(let i = 0; i < summaryList.length; i++){
     let sInfo = summaryList[i];
 
-    console.log(sInfo.username, sInfo.datetime.toLocaleString(), sInfo.updateGenerated);
+    console.log(sInfo.username, sInfo.datetime.toLocal(), sInfo.updateGenerated);
 }

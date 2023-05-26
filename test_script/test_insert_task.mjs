@@ -13,4 +13,4 @@ let taskList = await prisma.task.createMany({
   data: GeneralUtility.taskList
 });
 
-console.log(`Insert taskList.length: ${taskList.length}`);
+console.log(`Insert taskList.length: ${taskList.count}`);

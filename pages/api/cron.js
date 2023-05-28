@@ -119,7 +119,8 @@ async function executeTask(now) {
         return taskCompositeResultList;
     });
 
-    console.log(`taskCompositeResultList: ${JSON.stringify(taskCompositeResultList)}`);
+    //console.log(`taskCompositeResultList: ${JSON.stringify(taskCompositeResultList)}`);
+    console.log(`taskCompositeResultList.length: ${JSON.stringify(taskCompositeResultList.length)}`);
 
     let insertResult = [];
 

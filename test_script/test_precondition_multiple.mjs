@@ -151,6 +151,6 @@ for (let i = 0; i < userInfoList.length; i++) {
     let userInfo = userInfoList[i];
     let checkResult = checkResultList[i];
 
-    console.log(`[Test] for ${userInfo.username}: result: ${checkResult}`);
+    console.log(`[Test] for ${userInfo.username}: result: ${JSON.stringify(checkResult)}`);
 
 }

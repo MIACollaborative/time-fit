@@ -141,6 +141,11 @@ let checkResultList = [];
 
 for (let i = 0; i < userInfoList.length; i++) {
     let userInfo = userInfoList[i];
+    
+    if (userInfo["username"] != "system-user" && (userInfo["joinAt"] == null || userInfo["phase"] == "complete")) {
+        checkResult = [false, []];
+        continue;
+    }
     let testDate = DateTime.fromFormat("05/30/2023, 12:00:00 PM", "F", { zone: userInfo.timezone });
     let checkResult = await TaskExecutor.isPreConditionMetForUser(sampleConditionObj, userInfo, testDate);
 

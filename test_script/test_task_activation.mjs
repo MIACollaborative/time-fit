@@ -59,10 +59,14 @@ for (let i = 0; i < taskList.length; i++) {
         for (let k = 0; k < userInfoList.length; k++) {
             let userInfo = userInfoList[k];
             let isTimeZoneSetResult = GeneralUtility.isTimezoneSet(userInfo);
+            console.log(`[${curDate}] isTimeZoneSetResult: ${isTimeZoneSetResult}\n\n`);
             let [isGroupResult, groupEvaluationRecordList] = TaskExecutor.isGroupForUser(oneTask.group, userInfo);
+            console.log(`[${curDate}] isGroupResult: ${isGroupResult}\n\n`);
             let [isCheckPointResult, checkPointEvaluationRecordList] = TaskExecutor.isCheckPointForUser(oneTask.checkPoint, userInfo, curDate);
+            console.log(`[${curDate}] isCheckPointResult: ${isCheckPointResult}\n\n`);
             let [isPreconditionResult, conditionEvaluationRecordList] = await TaskExecutor.isPreConditionMetForUser(oneTask.preCondition, userInfo, curDate);
-
+            console.log(`[${curDate}] isPreConditionMetForUser: ${isPreconditionResult}\n\n`);
+            
             console.log(`------------------\n\n`);
 
             console.log(`[${curDate}] isTimeZoneSetResult: ${isTimeZoneSetResult}\n\n`);

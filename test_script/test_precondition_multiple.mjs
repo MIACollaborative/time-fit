@@ -147,12 +147,13 @@ for (let i = 0; i < userInfoList.length; i++) {
     if (userInfo["username"] != "system-user" && (userInfo["joinAt"] == null || userInfo["phase"] == "complete")) {
         console.log(`Skpping ${userInfo["username"]}, joinAt: ${userInfo["joinAt"]}, phase: ${userInfo["phase"]}`);
         checkResult = [false, []];
+        checkResultList.push(checkResult);
         continue;
     }
     let testDate = DateTime.fromFormat("05/30/2023, 12:00:00 PM", "F", { zone: userInfo.timezone });
     checkResult = await TaskExecutor.isPreConditionMetForUser(sampleConditionObj, userInfo, testDate);
 
-    checkResultList.push(checkResult);
+    
 }
 
 for (let i = 0; i < userInfoList.length; i++) {

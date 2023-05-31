@@ -19,10 +19,9 @@ function replacer(key, value) {
 
 
 let userList = await prisma.users.findMany({
-
     where: {
         username: {
-          contains: "participant11",
+          contains: "participant",
         },
     },
 });
@@ -37,7 +36,7 @@ let oneUser = userInfoList[0];
 // let's create one task that has all the conditions
 
 let taskList = GeneralUtility.taskList.filter((taskInfo) => {
-    return taskInfo.label == "fitbit generate manual update";
+    return taskInfo.label == "participant activation";
 });
 
 let resultList = [];
@@ -48,9 +47,9 @@ for(let i = 0; i < taskList.length; i++){
     //let startDate = DateTime.fromFormat("03/13/2023, 08:00:00 AM", "F", { zone: "America/Detroit" });
 
     // 2023-03-22T12:30:01.248Z
-    let startDate = DateTime.fromISO("2023-05-24T04:59:00.059Z");
+    let startDate = DateTime.fromISO("2023-05-29T03:59:00.059Z");
     
-    // now, go through a week
+    // now, go through a few minutes
     for(let j = 0; j <=5; j++){
         let curDate = startDate.plus({minutes: j});
         console.log(`[${curDate}] --------------------------------------------------------------\n\n`);

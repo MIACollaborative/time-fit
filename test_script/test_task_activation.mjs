@@ -50,7 +50,7 @@ for (let i = 0; i < taskList.length; i++) {
     let startDate = DateTime.fromISO("2023-05-29T04:59:00.059Z");
 
     // now, go through a few minutes
-    for (let j = 0; j <= 5; j++) {
+    for (let j = 0; j <= 3; j++) {
         let curDate = startDate.plus({ minutes: j });
         console.log(`[${curDate}] --------------------------------------------------------------\n\n`);
 

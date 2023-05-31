@@ -21,7 +21,7 @@ function replacer(key, value) {
 let userList = await prisma.users.findMany({
     where: {
         username: {
-          contains: "participant",
+            contains: "participant",
         },
     },
 });
@@ -41,42 +41,49 @@ let taskList = GeneralUtility.taskList.filter((taskInfo) => {
 
 let resultList = [];
 
-for(let i = 0; i < taskList.length; i++){
+for (let i = 0; i < taskList.length; i++) {
     let oneTask = taskList[i];
 
     //let startDate = DateTime.fromFormat("03/13/2023, 08:00:00 AM", "F", { zone: "America/Detroit" });
 
     // 2023-03-22T12:30:01.248Z
     let startDate = DateTime.fromISO("2023-05-29T03:59:00.059Z");
-    
+
     // now, go through a few minutes
-    for(let j = 0; j <=5; j++){
-        let curDate = startDate.plus({minutes: j});
+    for (let j = 0; j <= 5; j++) {
+        let curDate = startDate.plus({ minutes: j });
         console.log(`[${curDate}] --------------------------------------------------------------\n\n`);
 
         // let result = await TaskExecutor.executeTaskForUserListForDatetime(oneTask, [oneUser], curDate);
-        
-        let isTimeZoneSetResult =  GeneralUtility.isTimezoneSet(oneUser);
-        let [isGroupResult, groupEvaluationRecordList] = TaskExecutor.isGroupForUser(oneTask.group, oneUser);
-        let [isCheckPointResult, checkPointEvaluationRecordList] = TaskExecutor.isCheckPointForUser(oneTask.checkPoint, oneUser, curDate);
 
-        console.log(`------------------\n\n`);
+        for (let k = 0; k < userInfoList.length; k++) {
+            let userInfo = userInfoList[k];
+            let isTimeZoneSetResult = GeneralUtility.isTimezoneSet(userInfo);
+            let [isGroupResult, groupEvaluationRecordList] = TaskExecutor.isGroupForUser(oneTask.group, userInfo);
+            let [isCheckPointResult, checkPointEvaluationRecordList] = TaskExecutor.isCheckPointForUser(oneTask.checkPoint, userInfo, curDate);
+            let [isPreconditionResult, conditionEvaluationRecordList] = await TaskExecutor.isPreConditionMetForUser(oneTask.preCondition, userInfo, curDate);
 
-        console.log(`[${curDate}] isTimeZoneSetResult: ${isTimeZoneSetResult}\n\n`);
-        console.log(`[${curDate}] isGroupResult: ${isGroupResult}\n\n`);
-        console.log(`[${curDate}] isCheckPointResult: ${isCheckPointResult}\n\n`);
+            console.log(`------------------\n\n`);
 
-        console.log(`--------------------------------------------------------------\n\n`);
+            console.log(`[${curDate}] isTimeZoneSetResult: ${isTimeZoneSetResult}\n\n`);
+            console.log(`[${curDate}] isGroupResult: ${isGroupResult}\n\n`);
+            console.log(`[${curDate}] isCheckPointResult: ${isCheckPointResult}\n\n`);
+            console.log(`[${curDate}] isPreConditionMetForUser: ${isPreconditionResult}\n\n`);
 
-        resultList.push({date: curDate, result: isTimeZoneSetResult && isGroupResult &&  isCheckPointResult});
+            console.log(`--------------------------------------------------------------\n\n`);
+
+            resultList.push({ date: curDate, username: userInfo.username, result: isTimeZoneSetResult && isGroupResult && isCheckPointResult && isPreconditionResult });
+
+        }
     }
-
-    
 }
+
+
+
 
 console.log(`\n\n--------------------------------------------------------------\n\n`);
 
-for(let i = 0; i < resultList.length; i++){
+for (let i = 0; i < resultList.length; i++) {
     let resultInfo = resultList[i];
-    console.log(`[${resultInfo.date}] result: ${resultInfo.result}\n\n`);
+    console.log(`[${resultInfo.date}], ${resultInfo.username} - result: ${resultInfo.result}\n\n`);
 }

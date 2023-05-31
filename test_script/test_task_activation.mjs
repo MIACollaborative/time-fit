@@ -89,5 +89,5 @@ console.log(`\n\n--------------------------------------------------------------\
 
 for (let i = 0; i < resultList.length; i++) {
     let resultInfo = resultList[i];
-    console.log(`[${resultInfo.date}], ${resultInfo.username} - result: ${resultInfo.result}\n\n`);
+    console.log(`[${resultInfo.date}], ${resultInfo.username} - result: ${resultInfo.result}`);
 }

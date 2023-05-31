@@ -142,8 +142,10 @@ let checkResultList = [];
 for (let i = 0; i < userInfoList.length; i++) {
     let userInfo = userInfoList[i];
     let checkResult = undefined;
+    console.log(`[${userInfo["username"]}]------------------------------------------`);
     
     if (userInfo["username"] != "system-user" && (userInfo["joinAt"] == null || userInfo["phase"] == "complete")) {
+        console.log(`Skpping ${userInfo["username"]}, joinAt: ${userInfo["joinAt"]}, phase: ${userInfo["phase"]}`);
         checkResult = [false, []];
         continue;
     }

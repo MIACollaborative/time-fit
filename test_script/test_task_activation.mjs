@@ -46,8 +46,8 @@ for (let i = 0; i < taskList.length; i++) {
 
     //let startDate = DateTime.fromFormat("03/13/2023, 08:00:00 AM", "F", { zone: "America/Detroit" });
 
-    // 2023-03-22T12:30:01.248Z
-    let startDate = DateTime.fromISO("2023-05-29T00:00:00.059Z");
+    // 2023-03-22T00:01:00.248Z +4
+    let startDate = DateTime.fromISO("2023-05-29T04:00:00.059Z");
 
     // now, go through a few minutes
     for (let j = 0; j <= 3; j++) {
@@ -66,7 +66,7 @@ for (let i = 0; i < taskList.length; i++) {
             console.log(`[${curDate}] isCheckPointResult: ${isCheckPointResult}\n\n`);
             let [isPreconditionResult, conditionEvaluationRecordList] = await TaskExecutor.isPreConditionMetForUser(oneTask.preCondition, userInfo, curDate);
             console.log(`[${curDate}] isPreConditionMetForUser: ${isPreconditionResult}\n\n`);
-            
+
             console.log(`------------------\n\n`);
 
             console.log(`[${curDate}] isTimeZoneSetResult: ${isTimeZoneSetResult}\n\n`);

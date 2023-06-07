@@ -8,6 +8,10 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
+
+
+
+
 /*
 import logger from "../lib/logger";
 
@@ -84,6 +88,10 @@ export default function UserEdit({ userInfo }) {
         userInfo != undefined && userInfo.phase != undefined ? userInfo.phase : ""
     );
 
+
+    const [newPassword, setNewPassword] = useState(undefined);
+    const [newPasswordHash, setNewPasswordHash] = useState(userInfo != undefined && userInfo.passwordHash != undefined ? userInfo.passwordHash : undefined);
+
     // status: enum mapping to three possible session states: "loading" | "authenticated" | "unauthenticated"
     if (status == "loading") return <div>loading...</div>;
 
@@ -121,13 +129,39 @@ export default function UserEdit({ userInfo }) {
         return result;
     }
 
+    async function onNewPasswordClick(event) {
+        let preparationInfo = undefined;
+        console.log(`onNewPasswordClick: userInfo.joinAt ${userInfo.joinAt}`);
+
+        const response = await fetch(
+            "/api/user?function_name=generate_new_password",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({}),
+            }
+        ).then((r) => {
+            return r.json();
+        });
+
+        let result = response.result;
+        console.log(`result: ${JSON.stringify(result)}`);
+
+        setNewPassword(result.password);
+        setNewPasswordHash(result.passwordHash);
+
+    }
+
     function onSaveClick(event) {
         let preparationInfo = undefined;
         console.log(`onSaveClick: userInfo.joinAt ${userInfo.joinAt}`);
         preparationInfo = {
             preferredName,
             phone,
-            phase
+            phase,
+            password: newPasswordHash
         }
 
         if(phase == "complete"){
@@ -213,8 +247,20 @@ export default function UserEdit({ userInfo }) {
                 </Fragment>
                 <br />
                 <Divider />
-                
                 <br />
+                <br />
+                <div>New password: {newPassword}</div>
+                {
+                    newPassword != undefined? <div>(You need to copy and save it somewhere.)</div>: null
+                }
+                <br />
+                <br />
+                <Button variant="contained"
+                    className="project-button"
+                    onClick={onNewPasswordClick} >Renerate New Password</Button>
+                <br />
+                <br />
+                <Divider />
                 <Button variant="contained"
                     className="project-button"
                     onClick={onSaveClick} >Save</Button>

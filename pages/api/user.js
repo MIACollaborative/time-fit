@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     console.log(`function: ${function_name}`);
 
 
-    const {username} = req.body;
+    const { username,  ...rest } = req.body;
 
     switch (function_name) {
         case "get":
@@ -67,32 +67,45 @@ export default async function handler(req, res) {
                 res.status(200).json({ result: "success" });
                 return;
         case "update_info":
-
-                const { username,  ...rest } = req.body;
-                console.log(`rest: ${JSON.stringify(rest)}`);
-                const aUser = await prisma.users.update({
-                    where: { username: username },
-                    data: rest,
-                });
+                const{password, ...pRest} = rest;
+                if(password != undefined){
+                    if (adminUsernameList.includes(sessionUserName)) {
+                        const aUser = await prisma.users.update({
+                            where: { username: username },
+                            data: rest,
+                        });
+                    }
+                    else{
+                        const aUser = await prisma.users.update({
+                            where: { username: username },
+                            data: pRest,
+                        });
+                    }
+                }
+                else{
+                    const aUser = await prisma.users.update({
+                        where: { username: username },
+                        data: rest,
+                    });
+                }
+                
     
                 res.status(200).json({ result: "success" });
                 return;
         case "generate_new_password":
             let saltRounds = 10;
-            let password = cryptoRandomString({ length: 8, characters: 'abcdefghijkmnpqrstuvwxyz023456789' });
-            console.log(`password: ${password}`);
-            let passwordHash = await bcrypt.hash(password, saltRounds).then((hashPassword) => {
+            let pass = cryptoRandomString({ length: 8, characters: 'abcdefghijkmnpqrstuvwxyz023456789' });
+            let passwordHash = await bcrypt.hash(pass, saltRounds).then((hashPassword) => {
                 // Store hash in your password DB.
                 return hashPassword;
             });
-            console.log(`passwordHash: ${passwordHash}`);
             res.status(200).json({ result: {
-                password,
+                password: pass,
                 passwordHash
             } });
             return;
         case "get_info":
-
+            
             const user = await prisma.users.findFirst({
                 where: { username: userName },
             });

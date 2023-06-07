@@ -1,5 +1,8 @@
 import prisma from "../../lib/prisma"
 import { getSession } from "next-auth/react";
+import cryptoRandomString from 'crypto-random-string';
+import bcrypt from "bcrypt";
+
 
 const adminUsernameList = ["test1", "test2", "test3", "test4"];
 
@@ -74,6 +77,20 @@ export default async function handler(req, res) {
     
                 res.status(200).json({ result: "success" });
                 return;
+        case "generate_new_password":
+            let saltRounds = 10;
+            let password = cryptoRandomString({ length: 8, characters: 'abcdefghijkmnpqrstuvwxyz023456789' });
+            console.log(`password: ${password}`);
+            let passwordHash = await bcrypt.hash(password, saltRounds).then((hashPassword) => {
+                // Store hash in your password DB.
+                return hashPassword;
+            });
+            console.log(`passwordHash: ${passwordHash}`);
+            res.status(200).json({ result: {
+                password,
+                passwordHash
+            } });
+            return;
         case "get_info":
 
             const user = await prisma.users.findFirst({

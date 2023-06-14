@@ -65,7 +65,7 @@ for (let i = 0; i < taskList.length; i++) {
         let userInfo = userInfoList[k];
 
         let isTimeZoneSetResult = GeneralUtility.isTimezoneSet(userInfo);
-        console.log(`[${curDate}] isTimeZoneSetResult: ${isTimeZoneSetResult}\n\n`);
+        console.log(`[${userInfo.username}] isTimeZoneSetResult: ${isTimeZoneSetResult}\n\n`);
         if (!isTimeZoneSetResult) {
             console.log(`Timezone not set: skip this participant: ${userInfo.username}`);
             //resultList.push({ date: curDate, username: userInfo.username, result: isTimeZoneSetResult });
@@ -73,7 +73,7 @@ for (let i = 0; i < taskList.length; i++) {
         }
 
         let [isGroupResult, groupEvaluationRecordList] = TaskExecutor.isGroupForUser(oneTask.group, userInfo);
-        console.log(`[${curDate}] isGroupResult: ${isGroupResult}\n\n`);
+        console.log(`[${userInfo.username}] isGroupResult: ${isGroupResult}\n\n`);
 
 
         let timeString = `${localDate.toFormat("D")}, ${DateTime.fromISO(userInfo[referenceTimePropertyName], { zone: userInfo.timezone != undefined ? userInfo.timezone : "America/Detroit" }).toFormat("t")}`;

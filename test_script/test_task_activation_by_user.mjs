@@ -80,8 +80,15 @@ for (let i = 0; i < taskList.length; i++) {
 
             let isTimeZoneSetResult = GeneralUtility.isTimezoneSet(userInfo);
             console.log(`[${curDate}] isTimeZoneSetResult: ${isTimeZoneSetResult}\n\n`);
+            if(!isTimeZoneSetResult){
+                console.log(`Timezone not set: skip this participant.`);
+                resultList.push({ date: curDate, username: userInfo.username, result: isTimeZoneSetResult });
+                continue;
+            }
+
             let [isGroupResult, groupEvaluationRecordList] = TaskExecutor.isGroupForUser(oneTask.group, userInfo);
             console.log(`[${curDate}] isGroupResult: ${isGroupResult}\n\n`);
+            
             let [isCheckPointResult, checkPointEvaluationRecordList] = TaskExecutor.isCheckPointForUser(oneTask.checkPoint, userInfo, curDate);
             console.log(`[${curDate}] isCheckPointResult: ${isCheckPointResult}\n\n`);
             let [isPreconditionResult, conditionEvaluationRecordList] = await TaskExecutor.isPreConditionMetForUser(oneTask.preCondition, userInfo, curDate);

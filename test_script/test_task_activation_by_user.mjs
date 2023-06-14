@@ -47,17 +47,37 @@ for (let i = 0; i < taskList.length; i++) {
     //let startDate = DateTime.fromFormat("03/13/2023, 08:00:00 AM", "F", { zone: "America/Detroit" });
 
     // 2023-03-22T00:01:00.248Z +4
-    let startDate = DateTime.fromISO("2023-06-05T04:00:00.059Z");
+    // how about using user's preference to decide the time
+
+
+    //let startDate = DateTime.fromISO(`2023-06-13T04:00:00.059Z`);
+
+    let localDate = DateTime.fromISO(`2023-06-13T12:00:00.000Z`);
 
     // now, go through a few minutes
-    for (let j = 0; j <= 3; j++) {
-        let curDate = startDate.plus({ minutes: j });
-        console.log(`[${curDate}] --------------------------------------------------------------\n\n`);
 
-        // let result = await TaskExecutor.executeTaskForUserListForDatetime(oneTask, [oneUser], curDate);
 
-        for (let k = 0; k < userInfoList.length; k++) {
-            let userInfo = userInfoList[k];
+    // let result = await TaskExecutor.executeTaskForUserListForDatetime(oneTask, [oneUser], curDate);
+
+    let referenceTimePropertyName = "weekdayWakeup";
+
+    for (let k = 0; k < userInfoList.length; k++) {
+        let userInfo = userInfoList[k];
+        
+
+        let timeString = `${localDate.toFormat("D")}, ${DateTime.fromISO(userInfo[referenceTimePropertyName], { zone: userInfo.timezone }).toFormat("t")}`;
+
+        // new
+        let startDate = DateTime.fromFormat(timeString, "f", { zone: userInfo.timezone });
+
+
+        console.log(`[${userInfo.username}] testing, starting at ${startDate.minus({minutes: 1})}-----------------------------`);
+
+        for (let j = 0; j <= 3; j++) {
+            let curDate = startDate.minus({minutes: 1}).plus({ minutes: j });
+            console.log(`[${curDate}] --------------------------------------------------------------\n\n`);
+
+
             let isTimeZoneSetResult = GeneralUtility.isTimezoneSet(userInfo);
             console.log(`[${curDate}] isTimeZoneSetResult: ${isTimeZoneSetResult}\n\n`);
             let [isGroupResult, groupEvaluationRecordList] = TaskExecutor.isGroupForUser(oneTask.group, userInfo);

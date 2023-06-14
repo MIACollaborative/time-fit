@@ -68,7 +68,7 @@ for (let i = 0; i < taskList.length; i++) {
         let timeString = `${localDate.toFormat("D")}, ${DateTime.fromISO(userInfo[referenceTimePropertyName], { zone: userInfo.timezone }).toFormat("t")}`;
 
         // new
-        let startDate = DateTime.fromFormat(timeString, "f", { zone: userInfo.timezone });
+        let startDate = DateTime.fromFormat(timeString, "f", { zone: userInfo.timezone }).plus({hours: 4});
 
 
         console.log(`[${userInfo.username}] testing, starting at ${startDate.minus({minutes: 1})}-----------------------------`);

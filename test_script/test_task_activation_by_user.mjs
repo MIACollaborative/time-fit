@@ -63,32 +63,34 @@ for (let i = 0; i < taskList.length; i++) {
 
     for (let k = 0; k < userInfoList.length; k++) {
         let userInfo = userInfoList[k];
-        
 
-        let timeString = `${localDate.toFormat("D")}, ${DateTime.fromISO(userInfo[referenceTimePropertyName], { zone: userInfo.timezone != undefined? userInfo.timezone: "America/Detroit" }).toFormat("t")}`;
+        let isTimeZoneSetResult = GeneralUtility.isTimezoneSet(userInfo);
+        console.log(`[${curDate}] isTimeZoneSetResult: ${isTimeZoneSetResult}\n\n`);
+        if (!isTimeZoneSetResult) {
+            console.log(`Timezone not set: skip this participant.`);
+            //resultList.push({ date: curDate, username: userInfo.username, result: isTimeZoneSetResult });
+            continue;
+        }
+
+
+        let timeString = `${localDate.toFormat("D")}, ${DateTime.fromISO(userInfo[referenceTimePropertyName], { zone: userInfo.timezone != undefined ? userInfo.timezone : "America/Detroit" }).toFormat("t")}`;
 
         // new
-        let startDate = DateTime.fromFormat(timeString, "f", { zone: userInfo.timezone }).plus({hours: 4});
+        let startDate = DateTime.fromFormat(timeString, "f", { zone: userInfo.timezone }).plus({ hours: 4 });
 
 
-        console.log(`[${userInfo.username}] testing, starting at ${startDate.minus({minutes: 1})} in zone: ${userInfo.timezone}-----------------------------`);
+        console.log(`[${userInfo.username}] testing, starting at ${startDate.minus({ minutes: 1 })} in zone: ${userInfo.timezone}-----------------------------`);
 
         for (let j = 0; j <= 3; j++) {
-            let curDate = startDate.minus({minutes: 1}).plus({ minutes: j });
+            let curDate = startDate.minus({ minutes: 1 }).plus({ minutes: j });
             console.log(`[${curDate}] --------------------------------------------------------------\n\n`);
 
 
-            let isTimeZoneSetResult = GeneralUtility.isTimezoneSet(userInfo);
-            console.log(`[${curDate}] isTimeZoneSetResult: ${isTimeZoneSetResult}\n\n`);
-            if(!isTimeZoneSetResult){
-                console.log(`Timezone not set: skip this participant.`);
-                resultList.push({ date: curDate, username: userInfo.username, result: isTimeZoneSetResult });
-                continue;
-            }
+
 
             let [isGroupResult, groupEvaluationRecordList] = TaskExecutor.isGroupForUser(oneTask.group, userInfo);
             console.log(`[${curDate}] isGroupResult: ${isGroupResult}\n\n`);
-            
+
             let [isCheckPointResult, checkPointEvaluationRecordList] = TaskExecutor.isCheckPointForUser(oneTask.checkPoint, userInfo, curDate);
             console.log(`[${curDate}] isCheckPointResult: ${isCheckPointResult}\n\n`);
             let [isPreconditionResult, conditionEvaluationRecordList] = await TaskExecutor.isPreConditionMetForUser(oneTask.preCondition, userInfo, curDate);

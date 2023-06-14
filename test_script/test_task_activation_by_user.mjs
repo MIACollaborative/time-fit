@@ -71,7 +71,7 @@ for (let i = 0; i < taskList.length; i++) {
         let startDate = DateTime.fromFormat(timeString, "f", { zone: userInfo.timezone }).plus({hours: 4});
 
 
-        console.log(`[${userInfo.username}] testing, starting at ${startDate.minus({minutes: 1})}-----------------------------`);
+        console.log(`[${userInfo.username}] testing, starting at ${startDate.minus({minutes: 1})} in zone: ${userInfo.timezone}-----------------------------`);
 
         for (let j = 0; j <= 3; j++) {
             let curDate = startDate.minus({minutes: 1}).plus({ minutes: j });

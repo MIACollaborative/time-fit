@@ -72,6 +72,9 @@ for (let i = 0; i < taskList.length; i++) {
             continue;
         }
 
+        let [isGroupResult, groupEvaluationRecordList] = TaskExecutor.isGroupForUser(oneTask.group, userInfo);
+        console.log(`[${curDate}] isGroupResult: ${isGroupResult}\n\n`);
+
 
         let timeString = `${localDate.toFormat("D")}, ${DateTime.fromISO(userInfo[referenceTimePropertyName], { zone: userInfo.timezone != undefined ? userInfo.timezone : "America/Detroit" }).toFormat("t")}`;
 
@@ -88,8 +91,7 @@ for (let i = 0; i < taskList.length; i++) {
 
 
 
-            let [isGroupResult, groupEvaluationRecordList] = TaskExecutor.isGroupForUser(oneTask.group, userInfo);
-            console.log(`[${curDate}] isGroupResult: ${isGroupResult}\n\n`);
+
 
             let [isCheckPointResult, checkPointEvaluationRecordList] = TaskExecutor.isCheckPointForUser(oneTask.checkPoint, userInfo, curDate);
             console.log(`[${curDate}] isCheckPointResult: ${isCheckPointResult}\n\n`);

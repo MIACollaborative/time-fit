@@ -65,7 +65,7 @@ for (let i = 0; i < taskList.length; i++) {
         let userInfo = userInfoList[k];
         
 
-        let timeString = `${localDate.toFormat("D")}, ${DateTime.fromISO(userInfo[referenceTimePropertyName], { zone: userInfo.timezone }).toFormat("t")}`;
+        let timeString = `${localDate.toFormat("D")}, ${DateTime.fromISO(userInfo[referenceTimePropertyName], { zone: userInfo.timezone != undefined? userInfo.timezone: "America/Detroit" }).toFormat("t")}`;
 
         // new
         let startDate = DateTime.fromFormat(timeString, "f", { zone: userInfo.timezone }).plus({hours: 4});

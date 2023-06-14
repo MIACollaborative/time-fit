@@ -67,7 +67,7 @@ for (let i = 0; i < taskList.length; i++) {
         let isTimeZoneSetResult = GeneralUtility.isTimezoneSet(userInfo);
         console.log(`[${curDate}] isTimeZoneSetResult: ${isTimeZoneSetResult}\n\n`);
         if (!isTimeZoneSetResult) {
-            console.log(`Timezone not set: skip this participant.`);
+            console.log(`Timezone not set: skip this participant: ${userInfo.username}`);
             //resultList.push({ date: curDate, username: userInfo.username, result: isTimeZoneSetResult });
             continue;
         }

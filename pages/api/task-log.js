@@ -20,7 +20,7 @@ const adminUsernameList = ["test1", "test2", "test3", "test4"];
 
 export const config = {
     api: {
-      responseLimit: "100mb",
+        responseLimit: "100mb",
     },
 }
 
@@ -45,20 +45,24 @@ export default async function handler(req, res) {
 
     const { function_name } = req.query;
     //const { author_id } = req.body;
-    const { limit=0, startDate, endDate } = req.body;
+    const { limit = 0, startDate, endDate } = req.body;
 
     console.log(`task-log.handler: startDate: ${startDate}`);
     console.log(`task-log.handler: endDate: ${endDate}`);
     console.log(`task-log.handler: limit: ${limit}`);
 
+    let timeConstraint = {
+        gte: DateTime.fromISO(startDate).toISO(),
+        lte: DateTime.fromISO(endDate).toISO()
+    };
+    let taskLogList = [];
+    let queryObj = undefined;
+
     switch (function_name) {
         case "get":
-            let timeConstraint = {
-                gte: DateTime.fromISO(startDate).toISO(),
-                lte: DateTime.fromISO(endDate).toISO()
-            };
 
-            let  queryObj = {
+
+            queryObj = {
                 where: {
                     createdAt: timeConstraint
                 },
@@ -69,16 +73,46 @@ export default async function handler(req, res) {
                 ],
             };
 
-            if(limit > 0 ){
+            if (limit > 0) {
                 queryObj["take"] = limit;
             }
 
-            let taskLogList = [];
             if (adminUsernameList.includes(userName)) {
                 console.log(`task-log.handler: is admin`);
                 taskLogList = await prisma.taskLog.findMany(queryObj);
             }
-            else{
+            else {
+                console.log(`task-log.handler: is not admin`);
+            }
+            console.log(`task-log.handler: taskLogList.length: ${taskLogList.length}`);
+            res.status(200).json({ result: taskLogList });
+            return;
+        case "get_investigator":
+
+
+            queryObj = {
+                where: {
+                    taskLabel: { contains: "investigator" },
+                    createdAt: timeConstraint
+                },
+                orderBy: [
+                    {
+                        updatedAt: "desc",
+                    },
+                ],
+                //take: queryLimit
+            };
+
+            if (limit > 0) {
+                queryObj["take"] = limit;
+            }
+
+
+            if (adminUsernameList.includes(userName)) {
+                console.log(`task-log.handler: is admin`);
+                taskLogList = await prisma.taskLog.findMany(queryObj);
+            }
+            else {
                 console.log(`task-log.handler: is not admin`);
             }
             console.log(`task-log.handler: taskLogList.length: ${taskLogList.length}`);

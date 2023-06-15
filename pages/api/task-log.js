@@ -41,15 +41,10 @@ export default async function handler(req, res) {
 
     let userName = session.user.name;
 
-    console.log(`task-log.handler: userName: ${userName}`);
-
     const { function_name } = req.query;
     //const { author_id } = req.body;
     const { limit = 0, startDate, endDate } = req.body;
 
-    console.log(`task-log.handler: startDate: ${startDate}`);
-    console.log(`task-log.handler: endDate: ${endDate}`);
-    console.log(`task-log.handler: limit: ${limit}`);
 
     let timeConstraint = {
         gte: DateTime.fromISO(startDate).toISO(),

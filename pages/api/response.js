@@ -22,7 +22,8 @@ export default async function handler(req, res) {
     console.log(`function: ${function_name}`);
 
 
-    const { username } = req.body;
+    let username = session.user.name;
+    //const { username } = req.body;
 
     switch (function_name) {
         case "is_survey_completed":

@@ -18,7 +18,12 @@ export default async function handler(req, res) {
     const { function_name } = req.query;
 
 
+    const { limit = 0, startDate, endDate } = req.body;
 
+    let timeConstraint = {
+        gte: DateTime.fromISO(startDate).toISO(),
+        lte: DateTime.fromISO(endDate).toISO()
+    };
 
     console.log(`function: ${function_name}`);
 
@@ -31,6 +36,9 @@ export default async function handler(req, res) {
             let itemList = [];
 
             let queryObj = {
+                where: {
+                    createdAt: timeConstraint
+                },
                 orderBy: [
                     {
                         updatedAt: "desc",

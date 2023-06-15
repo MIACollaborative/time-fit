@@ -112,14 +112,14 @@ export async function getServerSideProps(ctx) {
 
 
   let nowDate = DateTime.now();
-  let startDate = nowDate.minus({weeks: 1}).startOf("day");
+  let startDate = nowDate.minus({ weeks: 1 }).startOf("day");
   let sevenDaysConstraint = {
     gte: startDate.toISO(),
     lte: nowDate.toISO()
   };
 
   let forteenDaysConstraint = {
-    gte: nowDate.minus({weeks: 2}).startOf("day").toISO(),
+    gte: nowDate.minus({ weeks: 2 }).startOf("day").toISO(),
     lte: nowDate.toISO()
   };
   /*
@@ -145,17 +145,11 @@ export async function getServerSideProps(ctx) {
   }
   */
 
+  /*
   console.log(`dashboard.getServerSideProps: find responseList`);
   if (adminUsernameList.includes(userName)) {
     responseList = await prisma.response.findMany({
-      /*
-        select:{
-            name: true,
-            email: true,
-            createdAt: true,
-            updatedAt: true
-        },
-        */
+
       orderBy: [
         {
           updatedAt: "desc",
@@ -167,6 +161,7 @@ export async function getServerSideProps(ctx) {
 
     responseInfoList = JSON.parse(JSON.stringify(responseList, replacer));
   }
+  */
 
   console.log(`dashboard.getServerSideProps: find fitbitSubscriptionList`);
   if (adminUsernameList.includes(userName)) {
@@ -181,17 +176,23 @@ export async function getServerSideProps(ctx) {
       ],
       //take: queryLimit
     });
-
-    fitbitSubscriptionInfoList = JSON.parse(JSON.stringify(fitbitSubscriptionList, replacer));
+    if (fitbitSubscriptionList) {
+      // Process the retrieved subscriptions
+      fitbitSubscriptionInfoList = JSON.parse(JSON.stringify(fitbitSubscriptionList, replacer));
+    } else {
+      // Handle the case when no subscriptions are found
+      // ...
+    }
   }
 
 
+  /*
   console.log(`dashboard.getServerSideProps: find fitbitNotificationList`);
   if (adminUsernameList.includes(userName)) {
     // v2: try filter
     fitbitNotificationList = await prisma.fitbit_update.findMany({
-      where:{
-        createdAt: forteenDaysConstraint //sevenDaysConstraint
+      where: {
+        createdAt: sevenDaysConstraint
       },
       orderBy: [
         {
@@ -201,29 +202,16 @@ export async function getServerSideProps(ctx) {
       ],
       //take: queryLimit * 2
     });
-    //fitbitNotificationList = GeneralUtility.removeFitbitUpdateDuplicate(fitbitNotificationList, true).slice(0, queryLimit);
-
-
-    // v1: typical
-    /*
-    fitbitNotificationList = await prisma.fitbit_update.findMany({
-      orderBy: [
-        {
-          updatedAt: "desc",
-        },
-      ],
-      take: queryLimit * 2
-    });
-    */
-
     fitbitNotificationInfoList = JSON.parse(JSON.stringify(fitbitNotificationList, replacer));
   }
+  */
 
+  /*
   console.log(`dashboard.getServerSideProps: find fitbitDataList`);
   if (adminUsernameList.includes(userName)) {
     fitbitDataList = await prisma.fitbit_data.findMany({
-      where:{
-        createdAt: forteenDaysConstraint //sevenDaysConstraint
+      where: {
+        createdAt: sevenDaysConstraint
       },
       include: {
         owner: true,
@@ -231,18 +219,28 @@ export async function getServerSideProps(ctx) {
       orderBy: [
         {
           updatedAt: "desc",
-        },
+        }
       ],
       //take: queryLimit
     });
 
-    fitbitDataInfoList = JSON.parse(JSON.stringify(fitbitDataList, replacer));
-  }
+    if (fitbitDataList) {
+      // Process the retrieved subscriptions
+      fitbitDataInfoList = JSON.parse(JSON.stringify(fitbitDataList, replacer));
+    } else {
+      // Handle the case when no subscriptions are found
+      // ...
+    }
 
+
+  }
+  */
+
+  /*
   console.log(`dashboard.getServerSideProps: find updateDiffList`);
   if (adminUsernameList.includes(userName)) {
     updateDiffList = await prisma.update_diff.findMany({
-      where:{
+      where: {
         createdAt: sevenDaysConstraint
       },
       orderBy: [
@@ -255,6 +253,7 @@ export async function getServerSideProps(ctx) {
 
     updateDiffInfoList = JSON.parse(JSON.stringify(updateDiffList, replacer));
   }
+  */
 
   console.log(`dashboard.getServerSideProps: find taskList`);
   if (adminUsernameList.includes(userName)) {
@@ -297,6 +296,7 @@ export async function getServerSideProps(ctx) {
   }
   */
 
+  /*
   console.log(`dashboard.getServerSideProps: find taskLogInvestigatorList`);
   if (adminUsernameList.includes(userName)) {
     taskLogInvestigatorList = await prisma.taskLog.findMany({
@@ -314,14 +314,16 @@ export async function getServerSideProps(ctx) {
 
     taskLogInvestigatorInfoList = JSON.parse(JSON.stringify(taskLogInvestigatorList, replacer));
   }
+  */
 
-  console.log(`dashboard.getServerSideProps: find taskLogGroupByInfoList`);
+  //console.log(`dashboard.getServerSideProps: find taskLogGroupByInfoList`);
   // wil enable once I test the groupby feature
 
+  /*
   if (adminUsernameList.includes(userName)) {
     // temporary disable 
     taskLogGroupByInfoList = [];
-    /*
+    
     taskLogGroupByList = await prisma.taskLog.groupBy({
       by: ["username", "messageLabel"],
       _count: {
@@ -335,8 +337,9 @@ export async function getServerSideProps(ctx) {
       //take: queryLimit
     });
     taskLogGroupByInfoList = JSON.parse(JSON.stringify(taskLogGroupByList, replacer));
-    */
+
   }
+  */
 
 
   /*
@@ -356,14 +359,15 @@ export async function getServerSideProps(ctx) {
 
   let assetHostURL = `${process.env.ASSET_HOST_URL}`;
 
-  // userInfoList,  taskLogInfoList,messageInfoList, 
+  // userInfoList,  taskLogInfoList,messageInfoList, responseInfoList, taskLogGroupByInfoList, updateDiffInfoList,fitbitDataInfoList,taskLogInvestigatorInfoList, fitbitNotificationInfoList,
   return {
-    props: { responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, updateDiffInfoList, taskInfoList,  taskLogGroupByInfoList, taskLogInvestigatorInfoList, userInfo, assetHostURL },
+    props: { fitbitSubscriptionInfoList,  taskInfoList,  userInfo, assetHostURL },
   };
 }
 
-//  userInfoList, taskLogInfoList,messageInfoList, 
-export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList, fitbitNotificationInfoList, fitbitDataInfoList, updateDiffInfoList, taskInfoList, taskLogGroupByInfoList, taskLogInvestigatorInfoList, userInfo, assetHostURL }) {
+//  userInfoList, taskLogInfoList,messageInfoList, responseInfoList, taskLogGroupByInfoList, updateDiffInfoList,  fitbitDataInfoList, taskLogInvestigatorInfoList,fitbitNotificationInfoList, 
+
+export default function Dashboard({ fitbitSubscriptionInfoList, taskInfoList,  userInfo, assetHostURL }) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [tabName, setTabName] = useState("Users");
@@ -372,11 +376,26 @@ export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList
   // userInfoList
   const [userInfoList, setUserInfoList] = useState([]);
 
+  // fitbitDataInfoList
+  const [fitbitDataInfoList, setFitbitDataInfoList] = useState([]);
+
+  // fitbitNotificationInfoList
+  const [fitbitNotificationInfoList, setFitbitNotificationInfoList] = useState([]);
+
+  // responseInfoList
+  const [responseInfoList, setResponseInfoList] = useState([]);
+
+  // updateDiff
+  const [updateDiffInfoList, setUpdateDiffInfoList] = useState([]);
+
   // messageInfoList
   const [messageInfoList, setMessageInfoList] = useState([]);
+
   // taskLogInfoList
   const [taskLogInfoList, setTaskLogInfoList] = useState([]);
 
+  // taskLogInvestigatorInfoList
+  const [taskLogInvestigatorInfoList, setTaskLogInvestigatorInfoList] = useState([]);
 
   const handleTabChange = (event, newTabName) => {
     setTabName(newTabName);
@@ -402,63 +421,159 @@ export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList
   */
 
 
-    
-    let nowDate = DateTime.now();
-    let startDate = nowDate.minus({weeks: 1}).startOf("day");
 
-    // userInfoList
-    useEffect(() => {
-      //queryTaskLogs("get",startDate.toJSDate(), nowDate.toJSDate() )
-      fetch('/api/user?function_name=get', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({}),
+  let nowDate = DateTime.now();
+  let startDate = nowDate.minus({ weeks: 1 }).startOf("day");
+
+  // userInfoList
+  useEffect(() => {
+    //queryTaskLogs("get",startDate.toJSDate(), nowDate.toJSDate() )
+    fetch('/api/user?function_name=get', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(`setUserInfoList: length: ${data.result.length}`);
+        setUserInfoList(data.result)
       })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(`setUserInfoList: length: ${data.result.length}`);
-          setUserInfoList(data.result)
-        })
-    }, []);
+  }, []);
 
-    // messageInfoList
-    useEffect(() => {
-      //queryTaskLogs("get",startDate.toJSDate(), nowDate.toJSDate() )
-      fetch('/api/message?function_name=get', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({}),
+  // messageInfoList
+  useEffect(() => {
+    //queryTaskLogs("get",startDate.toJSDate(), nowDate.toJSDate() )
+    fetch('/api/message?function_name=get', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(`setMessageInfoList: length: ${data.result.length}`);
+        setMessageInfoList(data.result)
       })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(`setMessageInfoList: length: ${data.result.length}`);
-          setMessageInfoList(data.result)
-        })
-    }, []);
+  }, []);
 
+  // responseInfoList
+  useEffect(() => {
+    //queryTaskLogs("get",startDate.toJSDate(), nowDate.toJSDate() )
+    fetch('/api/response?function_name=get', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(`setResponseInfoList: length: ${data.result.length}`);
+        setResponseInfoList(data.result)
+      })
+  }, []);
+
+    // fitbitDataInfoList
     useEffect(() => {
       //queryTaskLogs("get",startDate.toJSDate(), nowDate.toJSDate() )
-      fetch('/api/task-log?function_name=get', {
+      fetch('/api/fitbit-data?function_name=get', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          limit: 0,
-          startDate: nowDate.minus({days: 7}).startOf("day"), // startDate.toISO(),
+          startDate: nowDate.minus({ days: 7 }).startOf("day"), // startDate.toISO(),
           endDate: nowDate.toISO()
         }),
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(`setTaskLogInfoList: length: ${data.result.length}`);
-          setTaskLogInfoList(data.result)
+          console.log(`setFitbitDataInfoList: length: ${data.result.length}`);
+          setFitbitDataInfoList(data.result)
         })
     }, []);
+
+        // fitbitNotificationInfoList
+        useEffect(() => {
+          //queryTaskLogs("get",startDate.toJSDate(), nowDate.toJSDate() )
+          fetch('/api/fitbit-update?function_name=get', {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              startDate: nowDate.minus({ days: 7 }).startOf("day"), // startDate.toISO(),
+              endDate: nowDate.toISO()
+            }),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              console.log(`setFitbitNotificationInfoList: length: ${data.result.length}`);
+              setFitbitNotificationInfoList(data.result)
+            })
+        }, []);
+
+  // updateDiffInfoList
+  useEffect(() => {
+    //queryTaskLogs("get",startDate.toJSDate(), nowDate.toJSDate() )
+    fetch('/api/update-diff?function_name=get', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(`setUpdateDiffInfoList: length: ${data.result.length}`);
+        setUpdateDiffInfoList(data.result)
+      })
+  }, []);
+
+  useEffect(() => {
+    //queryTaskLogs("get",startDate.toJSDate(), nowDate.toJSDate() )
+    fetch('/api/task-log?function_name=get', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        limit: 0,
+        startDate: nowDate.minus({ days: 7 }).startOf("day"), // startDate.toISO(),
+        endDate: nowDate.toISO()
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(`setTaskLogInfoList: length: ${data.result.length}`);
+        setTaskLogInfoList(data.result)
+      })
+  }, []);
+
+
+  // investigator
+  useEffect(() => {
+    //queryTaskLogs("get",startDate.toJSDate(), nowDate.toJSDate() )
+    fetch('/api/task-log?function_name=get_investigator', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        limit: 0,
+        startDate: nowDate.minus({ days: 7 }).startOf("day"), // startDate.toISO(),
+        endDate: nowDate.toISO()
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(`setTaskLogInvestigatorInfoList: length: ${data.result.length}`);
+        setTaskLogInvestigatorInfoList(data.result)
+      })
+  }, []);
 
   // status: enum mapping to three possible session states: "loading" | "authenticated" | "unauthenticated"
   if (status == "loading") return <div>loading...</div>;
@@ -468,9 +583,9 @@ export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList
     return null;
   }
 
-    // Function for getting taskLog
+  // Function for getting taskLog
 
-    
+
 
 
 
@@ -479,6 +594,15 @@ export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList
   //console.log(`userInfoList: ${JSON.stringify(userInfoList)}`);
 
   //console.log(`fitbitDataInfoList: ${JSON.stringify(fitbitDataInfoList)}`);
+
+  /*
+  <ToggleButton
+  value="Task Log By User"
+  aria-label="centered"
+>
+  Task Log By User
+</ToggleButton>
+*/
 
   return (
     <Layout title={"Walk To Joy"} description={""}>
@@ -530,12 +654,7 @@ export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList
         >
           Investigator Task Log
         </ToggleButton>
-        <ToggleButton
-          value="Task Log By User"
-          aria-label="centered"
-        >
-          Task Log By User
-        </ToggleButton>
+
         <ToggleButton
           value="Task Log"
           aria-label="centered"
@@ -563,14 +682,14 @@ export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList
       ) : null}
 
       {tabName == "Fitbit Notification" ? (
-        <FitbitNotificationTable infoList={fitbitNotificationInfoList}  userInfo={userInfo} renderData={!notRenderingList.includes(tabName)} />
+        <FitbitNotificationTable infoList={fitbitNotificationInfoList} userInfo={userInfo} renderData={!notRenderingList.includes(tabName)} />
       ) : null}
       {tabName == "Fitbit Data" ? (
-        <FitbitDataTable infoList={fitbitDataInfoList}  userInfo={userInfo} renderData={!notRenderingList.includes(tabName)} />
+        <FitbitDataTable infoList={fitbitDataInfoList} userInfo={userInfo} renderData={!notRenderingList.includes(tabName)} />
       ) : null}
 
       {tabName == "Update Diff" ? (
-        <UpdateDiffTable infoList={updateDiffInfoList}  userInfo={userInfo} renderData={!notRenderingList.includes(tabName)} />
+        <UpdateDiffTable infoList={updateDiffInfoList} userInfo={userInfo} renderData={!notRenderingList.includes(tabName)} />
       ) : null}
 
       {tabName == "Task" ? (
@@ -578,12 +697,10 @@ export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList
       ) : null}
 
       {tabName == "Investigator Task Log" ? (
-        <TaskLogTable infoList={taskLogInvestigatorInfoList} userInfo={userInfo}renderData={!notRenderingList.includes(tabName)} />
+        <TaskLogTable infoList={taskLogInvestigatorInfoList} userInfo={userInfo} renderData={!notRenderingList.includes(tabName)} />
       ) : null}
 
-      {tabName == "Task Log By User" ? (
-        <TaskLogGroupByTable infoList={taskLogGroupByInfoList} renderData={!notRenderingList.includes(tabName)} />
-      ) : null}
+
 
       {tabName == "Task Log" ? (
         <TaskLogTable infoList={taskLogInfoList} userInfo={userInfo} renderData={!notRenderingList.includes(tabName)} />
@@ -595,3 +712,9 @@ export default function Dashboard({ responseInfoList, fitbitSubscriptionInfoList
     </Layout>
   );
 }
+
+/*
+{tabName == "Task Log By User" ? (
+  <TaskLogGroupByTable infoList={taskLogGroupByInfoList} renderData={!notRenderingList.includes(tabName)} />
+) : null}
+*/

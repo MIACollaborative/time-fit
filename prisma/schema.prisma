@@ -1,9 +1,10 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+// previewFeatures = ["mongoDb", "filterJson"]
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["mongoDb", "filterJson"]
+  previewFeatures = ["filterJson"]
 }
 
 datasource db {

@@ -524,7 +524,9 @@ export default function Dashboard({ fitbitSubscriptionInfoList, taskInfoList,  u
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({}),
+      body: JSON.stringify({             
+        startDate: nowDate.minus({ days: 7 }).startOf("day"), // startDate.toISO(),
+      endDate: nowDate.toISO()}),
     })
       .then((res) => res.json())
       .then((data) => {

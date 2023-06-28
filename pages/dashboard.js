@@ -166,9 +166,11 @@ export async function getServerSideProps(ctx) {
   console.log(`dashboard.getServerSideProps: find fitbitSubscriptionList`);
   if (adminUsernameList.includes(userName)) {
     fitbitSubscriptionList = await prisma.fitbit_subscription.findMany({
+      /*
       include: {
         owner: true,
       },
+      */
       orderBy: [
         {
           updatedAt: "desc",

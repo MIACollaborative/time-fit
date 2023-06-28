@@ -136,7 +136,7 @@ export default async function handler(req, res) {
                         weekendBed: deleteValue
                     },
                 });
-            }ß
+            }
             res.status(200).json({ result: result});
             return;
         case "get_info":

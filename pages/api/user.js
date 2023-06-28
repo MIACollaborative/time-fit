@@ -109,30 +109,34 @@ export default async function handler(req, res) {
                 unset: true,
               };
         
-            let result = await prisma.users.update({
-                where: { username: username },
-                data: {
-                    preferredName: deleteValue,
-                    phone: deleteValue,
-                    timezone: deleteValue,
-                    phase: "baseline",
-                    joinAt: deleteValue,
-                    activateAt: deleteValue,
-                    completeAt: deleteValue,
-                    fitbitReminderTurnOff: false,
-                    saveWalkToJoyToContacts: false,
-                    autoWalkTo10: false,
-                    fitbitId: deleteValue,
-                    fitbitDisplayName: deleteValue,
-                    fitbitFullName: deleteValue,
-                    accessToken: deleteValue,
-                    refreshToken: deleteValue,
-                    weekdayWakeup: deleteValue,
-                    weekdayBed: deleteValue,
-                    weekendWakeup: deleteValue,
-                    weekendBed: deleteValue
-                },
-            });
+              let result = undefined;
+
+              if (adminUsernameList.includes(sessionUserName)) {
+                result = await prisma.users.update({
+                    where: { username: username },
+                    data: {
+                        preferredName: deleteValue,
+                        phone: deleteValue,
+                        timezone: deleteValue,
+                        phase: "baseline",
+                        joinAt: deleteValue,
+                        activateAt: deleteValue,
+                        completeAt: deleteValue,
+                        fitbitReminderTurnOff: false,
+                        saveWalkToJoyToContacts: false,
+                        autoWalkTo10: false,
+                        fitbitId: deleteValue,
+                        fitbitDisplayName: deleteValue,
+                        fitbitFullName: deleteValue,
+                        accessToken: deleteValue,
+                        refreshToken: deleteValue,
+                        weekdayWakeup: deleteValue,
+                        weekdayBed: deleteValue,
+                        weekendWakeup: deleteValue,
+                        weekendBed: deleteValue
+                    },
+                });
+            }ß
             res.status(200).json({ result: result});
             return;
         case "get_info":

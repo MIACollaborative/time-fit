@@ -113,7 +113,7 @@ model fitbit_data {
   content Json
 
   // connect to users collection
-  owner    users    @relation(fields: [ownerId], references: [fitbitId])
+  owner    users    @relation(fields: [ownerId], references: [fitbitId], onDelete: NoAction, onUpdate: NoAction)
 
   // for standard time
   createdAt DateTime? @default(now())
@@ -134,7 +134,7 @@ model fitbit_update {
 
 
   // connect to users collection
-  owner    users    @relation(fields: [ownerId], references: [fitbitId])
+  owner    users    @relation(fields: [ownerId], references: [fitbitId], onDelete: NoAction, onUpdate: NoAction)
 
   // connect to fibit_stream collection
   stream    fitbit_subscription    @relation(fields: [subscriptionId], references: [subscriptionId])
@@ -167,7 +167,7 @@ model fitbit_subscription {
 
 
   // connect to users collection
-  owner    users    @relation(fields: [ownerId], references: [fitbitId])
+  owner    users    @relation(fields: [ownerId], references: [fitbitId], onDelete: NoAction, onUpdate: NoAction)
 
   // connect to fitbit_update collection
   updateList fitbit_update[]

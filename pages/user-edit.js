@@ -54,13 +54,13 @@ export async function getServerSideProps(ctx) {
     let userName = ctx.query.user; // session.user.name;
 
     let uniqueUser = undefined;
-    
+
     if (adminUsernameList.includes(session.user.name)) {
-        uniqueUser =  await prisma.users.findFirst({
+        uniqueUser = await prisma.users.findFirst({
             where: { username: userName },
         });
     }
-    
+
 
     console.log(`main.getServerSideProps: user: ${JSON.stringify(uniqueUser)}`);
 
@@ -154,6 +154,31 @@ export default function UserEdit({ userInfo }) {
 
     }
 
+    async function onResetClick(event) {
+        let preparationInfo = undefined;
+        console.log(`onResetClick: userInfo.username ${userInfo.username}`);
+
+        const response = await fetch(
+            "/api/user?function_name=reset",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username: userInfo.username
+                }),
+            }
+        ).then((r) => {
+            return r.json();
+        });
+
+        let result = response.result;
+        console.log(`result: ${JSON.stringify(result)}`);
+        router.push("/dashboard");
+        return response;
+    }
+
     function onSaveClick(event) {
         let preparationInfo = undefined;
         console.log(`onSaveClick: userInfo.joinAt ${userInfo.joinAt}`);
@@ -164,14 +189,14 @@ export default function UserEdit({ userInfo }) {
             password: newPasswordHash
         }
 
-        if(phase == "complete"){
+        if (phase == "complete") {
             // need to update completeAT
             preparationInfo["completeAt"] = DateTime.fromJSDate(new Date()).toISO();
         }
-        else{
+        else {
             // not complete
             // need to erase completeAt
-            if(userInfo["completeAt"] != undefined){
+            if (userInfo["completeAt"] != undefined) {
                 preparationInfo["completeAt"] = null;
             }
         }
@@ -225,22 +250,22 @@ export default function UserEdit({ userInfo }) {
                 <Divider />
                 <br />
                 <Fragment>
-                <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Phase</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={phase}
-                        label="Phase"
-                        onChange={(event) => {
-                            console.log(`setPhase: ${event.target.value}`);
-                            setPhase(event.target.value);
-                        }}
-                    >
-                        <MenuItem value={"baseline"}>baseline</MenuItem>
-                        <MenuItem value={"intervention"}>intervention</MenuItem>
-                        <MenuItem value={"complete"}>complete</MenuItem>
-                    </Select>
+                    <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Phase</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={phase}
+                            label="Phase"
+                            onChange={(event) => {
+                                console.log(`setPhase: ${event.target.value}`);
+                                setPhase(event.target.value);
+                            }}
+                        >
+                            <MenuItem value={"baseline"}>baseline</MenuItem>
+                            <MenuItem value={"intervention"}>intervention</MenuItem>
+                            <MenuItem value={"complete"}>complete</MenuItem>
+                        </Select>
                     </FormControl>
 
 
@@ -251,7 +276,7 @@ export default function UserEdit({ userInfo }) {
                 <br />
                 <div>New password: {newPassword}</div>
                 {
-                    newPassword != undefined? <div>(You need to copy and save it somewhere.)</div>: null
+                    newPassword != undefined ? <div>(You need to copy and save it somewhere.)</div> : null
                 }
                 <br />
                 <br />
@@ -264,6 +289,55 @@ export default function UserEdit({ userInfo }) {
                 <Button variant="contained"
                     className="project-button"
                     onClick={onSaveClick} >Save</Button>
+
+
+                <Divider />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+
+                <Button variant="contained"
+                    className="project-button"
+                    onClick={onResetClick} >Reset (Dangerous!!!)</Button>
             </div>
 
         </Layout>

@@ -89,9 +89,34 @@ async function executeTask(now) {
     */
 
 
+    // version 2: try inserting results for each task once it's ready
+    for(let i = 0; i < taskList.length; i++){
+        let task = taskList[i];
 
+        let insertResult = undefined;
 
-    
+        let aTaskResultList = [];
+
+        if( task.participantIndependent == false){
+            aTaskResultList = await TaskExecutor.executeTaskForUserListForDatetime(task, userList, now);
+        }
+        else{
+            aTaskResultList = await TaskExecutor.executeTaskForUserListForDatetime(task, [GeneralUtility.systemUser], now);
+        }
+
+        if(aTaskResultList.length > 0){
+            insertResult = await prisma.taskLog.createMany({
+                data: aTaskResultList
+            });
+        }
+        console.log(`insertResult for ${task.label}: ${JSON.stringify(insertResult)}`);
+
+    }
+
+    return;
+
+    // version 1: do all tasks and insert all results at once
+    /*
     let resultPromiseList = taskList.map((task) => {
         if( task.participantIndependent == false){
             return TaskExecutor.executeTaskForUserListForDatetime(task, userList, now);
@@ -99,17 +124,7 @@ async function executeTask(now) {
         else{
             return TaskExecutor.executeTaskForUserListForDatetime(task, [GeneralUtility.systemUser], now);
         }
-
-        /*
-        let aTaskResultList = await TaskExecutor.executeTaskForUserListForDatetime(task, userList, now);
-        taskCompositeResultList = taskCompositeResultList.concat(aTaskResultList);
-        */
     });
-    /*
-    .filter((resultList) => {
-        return resultList.length > 0;
-    });
-    */
 
     await Promise.all(resultPromiseList)
     .then((resultListList) => {
@@ -132,21 +147,11 @@ async function executeTask(now) {
     console.log(`insertResult: ${JSON.stringify(insertResult)}`);
 
     return;
+    */
 
 }
 
-async function createFitbitSubscription(now) {
-    // first, find those users who have fitbit info, but does not have subscriptions properly created for them.
-
-    let userIncompleteSubscriptionList = await DatabaseUtility.getUsersWithLessThanCertainSubscritions(2);
-
-    // 
-    
-
-
-}
-
-
+/*
 async function sendTwilioMessage(phone, messageBody) {
     console.log(`Main.sendTwilioMessage: ${phone} - ${messageBody}`);
     const result = await fetch(`http://localhost:3000/api/twilio?function_name=send_message`, {
@@ -164,6 +169,7 @@ async function sendTwilioMessage(phone, messageBody) {
 
     return result;
 }
+*/
 
 
 
@@ -192,7 +198,7 @@ export default async function handler(req, res) {
     res.status(200).end();
 }
 
-
+/*
 async function testWakeupBedTime(now) {
     let pingTimeUTC = now.toUTC();
     // .toLocaleString(DateTime.TIME_SIMPLE);
@@ -284,3 +290,4 @@ async function testWakeupBedTime(now) {
     }
 
 }
+*/

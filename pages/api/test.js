@@ -101,23 +101,21 @@ export default async function handler(req, res) {
             return;
         case "mongo-query":
             queryObj = {
-                where: {
-                    createdAt: timeConstraint
-                },
-                orderBy: [
-                    {
-                        updatedAt: "desc",
-                    },
-                ],
+                createdAt: {
+                    $gte: DateTime.fromISO(startDate).toJSDate(),
+                    $lte: DateTime.fromISO(endDate).toJSDate()
+                }
             };
 
+            /*
             if (limit > 0) {
                 queryObj["take"] = limit;
             }
+            */
 
             if (adminUsernameList.includes(userName)) {
                 console.log(`test.handler: is admin`);
-                taskLogList = await prisma.taskLog.findMany(queryObj);
+                taskLogList = await MongoDBHelper.getDataFromTable("taskLog", queryObj);
             }
             else {
                 console.log(`test.handler: is not admin`);
@@ -130,23 +128,21 @@ export default async function handler(req, res) {
             return;
         case "mongo-get":
             queryObj = {
-                where: {
-                    createdAt: timeConstraint
-                },
-                orderBy: [
-                    {
-                        updatedAt: "desc",
-                    },
-                ],
+                createdAt: {
+                    $gte: DateTime.fromISO(startDate).toJSDate(),
+                    $lte: DateTime.fromISO(endDate).toJSDate()
+                }
             };
 
+            /*
             if (limit > 0) {
                 queryObj["take"] = limit;
             }
+            */
 
             if (adminUsernameList.includes(userName)) {
                 console.log(`test.handler: is admin`);
-                taskLogList = await prisma.taskLog.findMany(queryObj);
+                taskLogList = await MongoDBHelper.getDataFromTable("taskLog", queryObj);
             }
             else {
                 console.log(`test.handler: is not admin`);

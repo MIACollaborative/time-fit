@@ -138,7 +138,7 @@ export default function Dashboard({ userInfo, assetHostURL }) {
 
             }} >Call query</Button>
             <br />
-          <Divider />
+            <Divider />
             <Button variant="contained" onClick={(event) => {
                 callTestEndPoint("get").then((data) => {
                     console.log(`get data: ${JSON.stringify(data)}`);
@@ -147,6 +147,28 @@ export default function Dashboard({ userInfo, assetHostURL }) {
                     .catch((error) => { console.error(error); })
 
             }} >Call get</Button>
+            <br />
+            <Divider />
+            <Button variant="contained" onClick={(event) => {
+
+                callTestEndPoint("mongo-query").then((data) => {
+                    console.log(`mongo-query data: ${JSON.stringify(data.result)}`);
+                })
+                    .catch((error) => { console.error(error); })
+
+            }} >Call mongo-query</Button>
+            <br />
+            <Divider />
+            <Button variant="contained" onClick={(event) => {
+                callTestEndPoint("mongo-get").then((data) => {
+                    console.log(`mongo-get data: ${JSON.stringify(data)}`);
+                    console.log(`mongo-get data.result.length: ${JSON.stringify(data.result.length)}`);
+                })
+                    .catch((error) => { console.error(error); })
+
+            }} >Call mongo-get</Button>
+
+
         </Layout>
     );
 }

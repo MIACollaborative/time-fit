@@ -136,7 +136,7 @@ export default function Dashboard({ userInfo, assetHostURL }) {
                 })
                     .catch((error) => { console.error(error); })
 
-            }} >Call "/query"</Button>
+            }} >Call query</Button>
             <br />
           <Divider />
             <Button variant="contained" onClick={(event) => {
@@ -146,7 +146,7 @@ export default function Dashboard({ userInfo, assetHostURL }) {
                 })
                     .catch((error) => { console.error(error); })
 
-            }} >Call "/get"</Button>
+            }} >Call get</Button>
         </Layout>
     );
 }

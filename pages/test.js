@@ -100,7 +100,7 @@ export default function Dashboard({ userInfo, assetHostURL }) {
             },
             body: JSON.stringify({
                 limit: 0,
-                startDate: nowDate.minus({ days: 7 }).startOf("day"),
+                startDate: nowDate.minus({ days: 21 }).startOf("day"),
                 endDate: nowDate.toISO()
             }),
         })

@@ -21,7 +21,7 @@ id,group,interventionMessage,topic,note
 20,salience,"On your walk today, try reflecting on how your mood feels. Do you feel happy? Tired? Anxious?",Emotion,
 21,salience,Consider your walk today as a way to decompress after a busy day. How does the walk make you feel?,Emotion,
 22,salience,Walking = endorphins! Try noticing the changes in your mood throughout your walk today. Release those happy chemicals!,Emotion,
-23,salience,"Walking is one of the best ways to tackle the day's ups & downs. On your walk, try taking a slow deep breathe in and out.",Emotion,
+23,salience,"Walking is one of the best ways to tackle the day's ups & downs. On your walk, try taking a slow deep breath in and out.",Emotion,
 24,salience,"As you walk, think about a recent event that made you smile or feel happy. What was it, and how does it make you feel now as you walk and reflect on that event?",Emotion/Memory,
 25,salience,"During your walks, try to be spontaneous and find a new path to walk. Did you find any interesting place you didn’t know existed?",Activity,
 26,salience,"For your walk today, try playing a simple game to make the walk more interesting! Each time a neighbor pass by, how about a warm smile? How does that make you feel?",Activity/Emotion,

@@ -39,18 +39,24 @@ console.log(
     `taskLogFailedBecuaseTokenList.length: ${taskLogFailedList.length}`
 );
 
-let failedActionResultList = taskLogFailedList.map((taskLog) => {
+let failedTokenList = taskLogFailedList.map((taskLog) => {
     let errorLogStringList = v.replaceAll(v.replaceAll(taskLog.executionResult.value.errorMessage, "\n", ""), "'", "\"").split("-");
 
-    let errorLogList = errorLogStringList.filter((errorString) => {return errorString.length > 0;}).map((errorString) => {return JSON.parse(errorString)});
+    let tokenList = errorLogStringList.filter((errorString) => {return errorString.length > 0;}).map((errorString) => {
+        let tokenIndexStart = errorString.indexOf("Refresh token invalid: ") + "Refresh token invalid: ".length;
+        let tokenIndexEnd = errorString.indexOf(". Visit https")  - 1;
 
-    let errorLogWithCreatedAtList = errorLogList.map((errorLog) => {
-        return {...errorLog, createdAt: taskLog.createdAt};
+        return v.substring(errorString, tokenIndexStart, tokenIndexEnd);
+
     });
 
-    return errorLogWithCreatedAtList;
+    let errorTokenWithCreatedAtList = tokenList.map((token) => {
+        return {...token, createdAt: taskLog.createdAt};
+    });
+
+    return errorTokenWithCreatedAtList;
 });
 
 console.log(
-  `failedActionResultList: ${JSON.stringify(failedActionResultList, null, 2)}`
+  `failedTokenList: ${JSON.stringify(failedTokenList, null, 2)}`
 );

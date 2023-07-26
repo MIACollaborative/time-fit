@@ -46,9 +46,14 @@ let failedTokenListList = taskLogFailedList.map((taskLog) => {
         let tokenIndexStart = errorString.indexOf("Refresh token invalid: ") + "Refresh token invalid: ".length;
         let tokenIndexEnd = errorString.indexOf(". Visit https")  - 1;
 
-        return v.substring(errorString, tokenIndexStart, tokenIndexEnd);
+        if(tokenIndexStart > 0 && tokenIndexEnd > 0){
+            return errorString.substring(tokenIndexStart, tokenIndexEnd);
+        }
+        else{
+            return "";
+        }
 
-    });
+    }).filter((str) => {return str.length > 0;});
 
     let errorTokenWithCreatedAtList = tokenList.map((token) => {
         return {token, createdAt: taskLog.createdAt};

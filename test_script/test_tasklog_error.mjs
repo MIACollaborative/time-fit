@@ -20,11 +20,13 @@ const taskLogFailedList = await prisma.taskLog.findMany({
     executionResult: {
       equals: {
         type: "fitbit-process-update",
+        /*
         value: {
             equals: {
             status: "failed",
           },
         },
+        */
       },
     },
   },

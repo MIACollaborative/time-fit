@@ -68,6 +68,7 @@ failedTokenListList.forEach((tokenList) => {
     failedTokenInfoList.push(...tokenList);
 });
 
+console.log(`failedTokenInfoList: ${JSON.stringify(failedTokenInfoList)}`);
 
 // ok, now, go find the user..... LOG
 
@@ -77,7 +78,7 @@ let setTokenList = [];
 
 failedTokenInfoList.forEach((tokenInfo) => {
     let token = tokenInfo.token;
-
+    console.log(`Token: ${token}`);
     if(!setTokenList.includes(token)){
         setTokenList.push(token);
     }

@@ -40,7 +40,7 @@ console.log(
 );
 
 let failedActionResultList = taskLogFailedList.map((taskLog) => {
-    let errorLogStringList = v.replaceAll(taskLog.executionResult.value.errorMessage, "\n", "").split("-");
+    let errorLogStringList = v.replaceAll(v.replaceAll(taskLog.executionResult.value.errorMessage, "\n", ""), "'", "\"").split("-");
 
     let errorLogList = errorLogStringList.filter((errorString) => {return errorString.length > 0;}).map((errorString) => {return JSON.parse(errorString)});
 

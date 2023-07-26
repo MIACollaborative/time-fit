@@ -59,7 +59,7 @@ let failedTokenListList = taskLogFailedList.map((taskLog) => {
     }).filter((str) => {return str.length > 0;});
 
     let errorTokenWithCreatedAtList = tokenList.map((token) => {
-        return {token, createdAt: taskLog.createdAt};
+        return {token, createdAt: DateTime.fromJSDate(taskLog.createdAt).setZone("America/New_York").toISO()};
     });
 
     return errorTokenWithCreatedAtList;

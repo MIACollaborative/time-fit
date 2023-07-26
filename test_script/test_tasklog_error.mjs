@@ -13,10 +13,16 @@ if (process.env.NODE_ENV !== "production") {
 let username = "test1";
 
 // this gives you the number of taskLog that associated with this particular user.
+let endDateString = DateTime.now().toISO();
+let startDateString = DateTime.now().minus({days: 7}).toISO();
 
 const taskLogFailedList = await prisma.taskLog.findMany({
   where: {
     taskLabel: "fitbit process notification",
+    createdAt: {
+        gte: startDateString,
+        lte: endDateString
+    }
   },
 });
 

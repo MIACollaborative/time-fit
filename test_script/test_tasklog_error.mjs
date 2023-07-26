@@ -68,7 +68,7 @@ failedTokenListList.forEach((tokenList) => {
     failedTokenInfoList.push(...tokenList);
 });
 
-console.log(`failedTokenInfoList: ${JSON.stringify(failedTokenInfoList)}`);
+//console.log(`failedTokenInfoList: ${JSON.stringify(failedTokenInfoList)}`);
 
 // ok, now, go find the user..... LOG
 
@@ -106,12 +106,20 @@ console.log(`refrehTokenUserMap: ${JSON.stringify(refrehTokenUserMap)}`);
 
 
 // now, dump the token?
-/*
+
 failedTokenInfoList = failedTokenInfoList.map((tokenInfo) => {
     let userInfo = refrehTokenUserMap[tokenInfo.token];
+
+    if(userInfo){
+        return {
+            username: userInfo.username,
+            fitbitId: userInfo.fitbitId,
+            ...tokenInfo,
+        };
+    }
     return {
-        username: userInfo.username,
-        fitbitId: userInfo.fitbitId,
+        username: undefined,
+        fitbitId: undefined,
         ...tokenInfo,
     };
 });
@@ -119,5 +127,4 @@ failedTokenInfoList = failedTokenInfoList.map((tokenInfo) => {
 
 console.log(
     `failedTokenInfoList: ${JSON.stringify(failedTokenInfoList, null, 2)}`
-  );
-*/
+);

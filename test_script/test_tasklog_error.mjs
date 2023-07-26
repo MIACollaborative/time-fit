@@ -6,38 +6,36 @@ import DatabaseUtility from "../lib/DatabaseUtility.mjs";
 import v from "voca";
 //import { DateTime } from "luxon";
 
-
 if (process.env.NODE_ENV !== "production") {
-    dotenv.config();
+  dotenv.config();
 }
-
-
-
 
 let username = "test1";
 
 // this gives you the number of taskLog that associated with this particular user.
 
 const taskLogFailedList = await prisma.taskLog.findMany({
-    where: {
-        taskLabel: "fitbit process notification",
-        executionResult: {
-            type: "fitbit-process-update",
-            value: {
-                status: "failed"
-            }
+  where: {
+    taskLabel: "fitbit process notification",
+    executionResult: {
+      is: {
+        type: "fitbit-process-update",
+        value: {
+          is: {
+            status: "failed",
+          },
         },
-    }
-})
-
+      },
+    },
+  },
+});
 
 let failedActionResultList = taskLogFailedList.map((taskLog) => {
-    return JSON.parse(v.replaceAll(taskLog.executionResult.value.errorMessage, "\n", ""));
-})
+  return JSON.parse(
+    v.replaceAll(taskLog.executionResult.value.errorMessage, "\n", "")
+  );
+});
 
-
-
-
-
-
-console.log(`failedActionResultList: ${JSON.stringify(failedActionResultList, null, 2)}`);
+console.log(
+  `failedActionResultList: ${JSON.stringify(failedActionResultList, null, 2)}`
+);

@@ -44,7 +44,7 @@ let failedTokenListList = taskLogFailedList.map((taskLog) => {
 
     let tokenList = errorLogStringList.filter((errorString) => {return errorString.length > 5;}).map((errorString) => {
         let tokenIndexStart = errorString.indexOf("Refresh token invalid: ") + "Refresh token invalid: ".length;
-        let tokenIndexEnd = errorString.indexOf(". Visit https")  - 1;
+        let tokenIndexEnd = errorString.indexOf(". Visit https");
 
         if(tokenIndexStart > 0 && tokenIndexEnd > 0){
             return errorString.substring(tokenIndexStart, tokenIndexEnd);

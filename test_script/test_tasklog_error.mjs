@@ -57,12 +57,55 @@ let failedTokenListList = taskLogFailedList.map((taskLog) => {
     return errorTokenWithCreatedAtList;
 });
 
-let failedTokenList = [];
+let failedTokenInfoList = [];
 
 failedTokenListList.forEach((tokenList) => {
-    failedTokenList.push(...tokenList);
+    failedTokenInfoList.push(...tokenList);
 });
 
+
+// ok, now, go find the user..... LOG
+
+let refrehTokenUserMap = {};
+
+let setTokenList = [];
+
+failedTokenListList.forEach((tokenInfo) => {
+    let token = tokenInfo.token;
+
+    if(!setTokenList.includes(token)){
+        setTokenList.push(token);
+    }
+});
+
+for(let i = 0; i < setTokenList.length;i++){
+    let token = setTokenList[i];
+
+    // now, get the user
+    let result = await prisma.users.findFirst({
+        where: { refreshToken: token }
+    });
+
+    if(result.length > 0 ){
+        let username = result.username;
+        refrehTokenUserMap[token] = result;
+    }
+}
+
+// now, dump the token?
+failedTokenInfoList = failedTokenInfoList.map((tokenInfo) => {
+    let userInfo = refrehTokenUserMap[toekenInfo.token];
+    return {
+        username: userInfo.username,
+        fitbitId: userInfo.fitbitId,
+        ...tokenInfo,
+    };
+});
+
+
 console.log(
-  `failedTokenList: ${JSON.stringify(failedTokenList, null, 2)}`
-);
+    `failedTokenInfoList: ${JSON.stringify(failedTokenInfoList, null, 2)}`
+  );
+  
+
+

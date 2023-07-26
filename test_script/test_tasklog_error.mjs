@@ -86,7 +86,7 @@ for(let i = 0; i < setTokenList.length;i++){
         where: { refreshToken: token }
     });
 
-    if(result.length > 0 ){
+    if(result != undefined){
         let username = result.username;
         refrehTokenUserMap[token] = result;
     }

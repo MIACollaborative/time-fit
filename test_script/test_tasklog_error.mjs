@@ -94,9 +94,10 @@ for(let i = 0; i < setTokenList.length;i++){
 
 console.log(`refrehTokenUserMap: ${JSON.stringify(refrehTokenUserMap)}`);
 
-return;
+
 
 // now, dump the token?
+/*
 failedTokenInfoList = failedTokenInfoList.map((tokenInfo) => {
     let userInfo = refrehTokenUserMap[tokenInfo.token];
     return {
@@ -110,6 +111,4 @@ failedTokenInfoList = failedTokenInfoList.map((tokenInfo) => {
 console.log(
     `failedTokenInfoList: ${JSON.stringify(failedTokenInfoList, null, 2)}`
   );
-  
-
-
+*/

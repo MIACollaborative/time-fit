@@ -30,14 +30,25 @@ taskLogFailedList = taskLogFailedList.filter((taskLog) => {
     return taskLog.executionResult.value.status == "failed";
 });
 
+
+let taskLogFailedBecuaseTokenList = taskLogFailedList.filter((taskLog) => {
+    return v.includes(taskLog.executionResult.value.errorMessage, "Refresh token invalid");
+});
+
 console.log(
-    `taskLogFailedList.length: ${taskLogFailedList.length}`
-  );
+    `taskLogFailedBecuaseTokenList.length: ${taskLogFailedList.length}`
+);
 
 let failedActionResultList = taskLogFailedList.map((taskLog) => {
-  return JSON.parse(
-    v.replaceAll(taskLog.executionResult.value.errorMessage, "\n", "")
-  );
+    let errorLogStringList = v.replaceAll(taskLog.executionResult.value.errorMessage, "\n", "").split("-");
+
+    let errorLogList = errorLogStringList.filter((errorString) => {return errorString.length > 0;}).map((errorString) => {return JSON.parse(errorString)});
+
+    let errorLogWithCreatedAtList = errorLogList.map((errorLog) => {
+        return {...errorLog, createdAt: taskLog.createdAt};
+    });
+
+    return errorLogWithCreatedAtList;
 });
 
 console.log(

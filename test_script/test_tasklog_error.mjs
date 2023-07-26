@@ -94,7 +94,7 @@ for(let i = 0; i < setTokenList.length;i++){
         where: { refreshToken: token }
     });
 
-    console.log(`userInfo: ${JSON.stringify(userInfo)}`);
+    console.log(`token [${token}], userInfo: ${JSON.stringify(userInfo)}`);
 
     if(userInfo != undefined){
         refrehTokenUserMap[token] = userInfo;

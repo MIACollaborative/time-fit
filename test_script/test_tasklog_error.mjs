@@ -18,10 +18,10 @@ const taskLogFailedList = await prisma.taskLog.findMany({
   where: {
     taskLabel: "fitbit process notification",
     executionResult: {
-      is: {
+      equals: {
         type: "fitbit-process-update",
         value: {
-          is: {
+            equals: {
             status: "failed",
           },
         },

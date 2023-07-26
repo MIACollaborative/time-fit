@@ -16,7 +16,7 @@ let username = "test1";
 let endDateString = DateTime.now().toISO();
 let startDateString = DateTime.now().minus({days: 7}).toISO();
 
-const taskLogFailedList = await prisma.taskLog.findMany({
+let taskLogFailedList = await prisma.taskLog.findMany({
   where: {
     taskLabel: "fitbit process notification",
     createdAt: {

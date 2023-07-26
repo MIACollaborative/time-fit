@@ -4,6 +4,7 @@ import prisma from "../lib/prisma.mjs";
 import TaskExecutor from "../lib/TaskExecutor.mjs";
 import DatabaseUtility from "../lib/DatabaseUtility.mjs";
 import v from "voca";
+import csvWriter from "csv-write-stream";
 //import { DateTime } from "luxon";
 
 if (process.env.NODE_ENV !== "production") {
@@ -35,9 +36,11 @@ let taskLogFailedBecuaseTokenList = taskLogFailedList.filter((taskLog) => {
     return v.includes(taskLog.executionResult.value.errorMessage, "Refresh token invalid");
 });
 
+/*
 console.log(
     `taskLogFailedBecuaseTokenList.length: ${taskLogFailedList.length}`
 );
+*/
 
 let failedTokenListList = taskLogFailedList.map((taskLog) => {
     let errorLogStringList = v.replaceAll(v.replaceAll(taskLog.executionResult.value.errorMessage, "\n", ""), "'", "\"").split("-");
@@ -78,7 +81,7 @@ let setTokenList = [];
 
 failedTokenInfoList.forEach((tokenInfo) => {
     let token = tokenInfo.token;
-    console.log(`Token: ${token}`);
+    //console.log(`Token: ${token}`);
     if(!setTokenList.includes(token)){
         setTokenList.push(token);
     }
@@ -94,14 +97,14 @@ for(let i = 0; i < setTokenList.length;i++){
         where: { refreshToken: token }
     });
 
-    console.log(`token [${token}], userInfo: ${JSON.stringify(userInfo)}`);
+    //console.log(`token [${token}], userInfo: ${JSON.stringify(userInfo)}`);
 
     if(userInfo != undefined){
         refrehTokenUserMap[token] = userInfo;
     }
 }
 
-console.log(`refrehTokenUserMap: ${JSON.stringify(refrehTokenUserMap)}`);
+//console.log(`refrehTokenUserMap: ${JSON.stringify(refrehTokenUserMap)}`);
 
 
 
@@ -128,3 +131,19 @@ failedTokenInfoList = failedTokenInfoList.map((tokenInfo) => {
 console.log(
     `failedTokenInfoList: ${JSON.stringify(failedTokenInfoList, null, 2)}`
 );
+
+async function writeToCSV(resultList, outputFileName) {
+    var writer = csvWriter({ sendHeaders: true });
+    writer.pipe(fs.createWriteStream(outputFileName));
+    resultList.forEach((result) => {
+      writer.write(result);
+    });
+    writer.end();
+  }
+
+let dateString = DateTime.now().toISO({ format: 'basic', includeOffset: false });
+
+let prefix = "error-token";
+let exportFileName = `./test_output/${prefix}_${dateString}.csv`;
+
+await writeToCSV(failedTokenInfoList, exportFileName);

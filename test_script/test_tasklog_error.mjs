@@ -78,17 +78,20 @@ failedTokenListList.forEach((tokenInfo) => {
     }
 });
 
+console.log(`setTokenList: ${JSON.stringify(setTokenList)}`);
+
 for(let i = 0; i < setTokenList.length;i++){
     let token = setTokenList[i];
 
     // now, get the user
-    let result = await prisma.users.findFirst({
+    let userInfo = await prisma.users.findFirst({
         where: { refreshToken: token }
     });
 
-    if(result != undefined){
-        let username = result.username;
-        refrehTokenUserMap[token] = result;
+    console.log(`userInfo: ${JSON.stringify(userInfo)}`);
+
+    if(userInfo != undefined){
+        refrehTokenUserMap[token] = userInfo;
     }
 }
 

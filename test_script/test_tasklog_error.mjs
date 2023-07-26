@@ -32,6 +32,10 @@ const taskLogFailedList = await prisma.taskLog.findMany({
   },
 });
 
+console.log(
+    `taskLogFailedList.length: ${taskLogFailedList.length}`
+  );
+
 let failedActionResultList = taskLogFailedList.map((taskLog) => {
   return JSON.parse(
     v.replaceAll(taskLog.executionResult.value.errorMessage, "\n", "")

@@ -42,7 +42,7 @@ console.log(
 let failedTokenList = taskLogFailedList.map((taskLog) => {
     let errorLogStringList = v.replaceAll(v.replaceAll(taskLog.executionResult.value.errorMessage, "\n", ""), "'", "\"").split("-");
 
-    let tokenList = errorLogStringList.filter((errorString) => {return errorString.length > 0;}).map((errorString) => {
+    let tokenList = errorLogStringList.filter((errorString) => {return errorString.length > 5;}).map((errorString) => {
         let tokenIndexStart = errorString.indexOf("Refresh token invalid: ") + "Refresh token invalid: ".length;
         let tokenIndexEnd = errorString.indexOf(". Visit https")  - 1;
 
@@ -51,7 +51,7 @@ let failedTokenList = taskLogFailedList.map((taskLog) => {
     });
 
     let errorTokenWithCreatedAtList = tokenList.map((token) => {
-        return {...token, createdAt: taskLog.createdAt};
+        return {token, createdAt: taskLog.createdAt};
     });
 
     return errorTokenWithCreatedAtList;

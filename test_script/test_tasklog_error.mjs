@@ -17,17 +17,11 @@ let username = "test1";
 const taskLogFailedList = await prisma.taskLog.findMany({
   where: {
     taskLabel: "fitbit process notification",
-    executionResult: {
-        type: "fitbit-process-update",
-        /*
-        value: {
-            equals: {
-            status: "failed",
-          },
-        },
-        */
-    },
   },
+});
+
+taskLogFailedList = taskLogFailedList.filter((taskLog) => {
+    return taskLog.executionResult.value.status == "failed";
 });
 
 console.log(

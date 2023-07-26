@@ -39,7 +39,7 @@ console.log(
     `taskLogFailedBecuaseTokenList.length: ${taskLogFailedList.length}`
 );
 
-let failedTokenList = taskLogFailedList.map((taskLog) => {
+let failedTokenListList = taskLogFailedList.map((taskLog) => {
     let errorLogStringList = v.replaceAll(v.replaceAll(taskLog.executionResult.value.errorMessage, "\n", ""), "'", "\"").split("-");
 
     let tokenList = errorLogStringList.filter((errorString) => {return errorString.length > 5;}).map((errorString) => {
@@ -55,6 +55,12 @@ let failedTokenList = taskLogFailedList.map((taskLog) => {
     });
 
     return errorTokenWithCreatedAtList;
+});
+
+let failedTokenList = [];
+
+failedTokenListList.forEach((tokenList) => {
+    failedTokenList.push(...tokenList);
 });
 
 console.log(

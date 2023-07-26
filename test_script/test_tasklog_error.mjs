@@ -70,7 +70,7 @@ let refrehTokenUserMap = {};
 
 let setTokenList = [];
 
-failedTokenListList.forEach((tokenInfo) => {
+failedTokenInfoList.forEach((tokenInfo) => {
     let token = tokenInfo.token;
 
     if(!setTokenList.includes(token)){

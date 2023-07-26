@@ -94,7 +94,7 @@ for(let i = 0; i < setTokenList.length;i++){
 
 // now, dump the token?
 failedTokenInfoList = failedTokenInfoList.map((tokenInfo) => {
-    let userInfo = refrehTokenUserMap[toekenInfo.token];
+    let userInfo = refrehTokenUserMap[tokenInfo.token];
     return {
         username: userInfo.username,
         fitbitId: userInfo.fitbitId,

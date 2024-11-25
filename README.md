@@ -121,6 +121,33 @@ yarn dev
 
 ```
 
+### Start the cron job (each minute)
+
+In a temrinal:
+
+```bash
+npm run cron
+
+# or
+yarn cron
+
+```
+
+## For Production
+
+If using pm2, do the following:
+
+```bash
+
+pm2 start npm --name nextapp --time --max-memory-restart 1G --cron-restart="40 * * * *" -- run start
+
+pm2 start npm --name cron --time  -- run cron
+
+```
+
+## Next.js instructions
+
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.

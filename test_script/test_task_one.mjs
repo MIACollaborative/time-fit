@@ -4,7 +4,7 @@ import prisma from "../lib/prisma.mjs";
 import TaskExecutor from "../lib/TaskExecutor.mjs";
 import DatabaseUtility from "../lib/DatabaseUtility.mjs";
 import GeneralUtility from "../lib/GeneralUtility.mjs";
-
+import { MyTaskList } from "../lib/MyTaskList.mjs";
 
 if (process.env.NODE_ENV !== "production") {
     dotenv.config();
@@ -35,7 +35,7 @@ let oneUser = userInfoList[0];
 
 // let's create one task that has all the conditions
 
-let taskList = GeneralUtility.taskList.filter((taskInfo) => {
+let taskList = MyTaskList.filter((taskInfo) => {
     return taskInfo.label == "intervention_morning gif";
 });
 

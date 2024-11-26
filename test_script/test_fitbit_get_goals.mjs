@@ -18,7 +18,7 @@ const accessToken = theUser.accessToken;
 FitbitHelper.getActivityGoalsForFitbitID(fitbitID, accessToken, "daily")
 .then((responseData) => {
   console.log(
-      `FitbitHelper.getActivityGoalsForFitbitID: responseData: ${responseData}`
+      `FitbitHelper.getActivityGoalsForFitbitID: responseData: ${JSON.stringify(responseData)}`
     );
 })
 .catch((error) => {

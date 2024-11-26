@@ -1,14 +1,19 @@
 import FitbitHelper from "../lib/FitbitHelper.mjs";
 import { inspect } from 'util';
+import prisma from "../lib/prisma.mjs";
 import * as dotenv from "dotenv";
 
 if (process.env.NODE_ENV !== "production") {
     dotenv.config();
 }
 
-let fitbitID = process.env.FITBIT_TEST_ID;
-let accessToken = process.env.FITBIT_TEST_ACCESS_TOKEN;
-let testToken = accessToken;
+
+const theUser = await prisma.users.findFirst({
+    where: { username: "test1" },
+});
+
+const fitbitID = theUser.fitbitID;
+const accessToken = theUser.accessToken;
 
 FitbitHelper.getActivityGoalsForFitbitID(fitbitID, accessToken, "daily")
 .then((responseData) => {

@@ -1,51 +1,24 @@
 import FitbitHelper from "../lib/FitbitHelper.mjs";
 import { inspect } from 'util';
-//import MongoDBHelper from "../utilities/MongoDBHelper.mjs"
-//import * as dotenv from "dotenv";
+import prisma from "../lib/prisma.mjs";
+import * as dotenv from "dotenv";
 
-/*
 if (process.env.NODE_ENV !== "production") {
     dotenv.config();
 }
-*/
-
-//const mHelper = new MongoDBHelper();
-
-//const databaseName = "walk_to_joy";
-
-//mHelper.testConnection();
 
 
-// MongoDBHelper.insertDataIntoTable("walk_to_joy", "logs", [{message: "test3"}], true);
-
-/*
-FitbitHelper.getProfile(`${process.env.FITBIT_ACCESS_TOKEN}`)
-.then((responseData) => {
-    console.log(`FitbitHelper.getProfile: responseData`);
-
-    // console.log(`FitbitHelper.getProfile: responseData ${JSON.stringify(responseData)}`);
+const theUser = await prisma.users.findFirst({
+    where: { username: "test1" },
 });
-*/
 
-/*
-FitbitHelper.getAuthorizationInformation("***REMOVED***07")
-.then((responseData) => {
+const fitbitID = theUser.fitbitID;
+const accessToken = theUser.accessToken;
 
-    console.log(
-        `FitbitHelper.getAuthorizationInformation: responseData: ${responseData}`
-      );
-});
-*/
-
-let accessToken = process.env.FITBIT_TEST_ACCESS_TOKEN;
-let testToken = accessToken;
-
-
-
-FitbitHelper.introspectToken(accessToken, testToken)
+FitbitHelper.getActivityGoalsForFitbitID(fitbitID, accessToken, "daily")
 .then((responseData) => {
   console.log(
-      `FitbitHelper.introspectToken: responseData: ${responseData}`
+      `FitbitHelper.getActivityGoalsForFitbitID: responseData: ${responseData}`
     );
 })
 .catch((error) => {

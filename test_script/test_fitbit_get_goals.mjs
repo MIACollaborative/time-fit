@@ -12,7 +12,7 @@ const theUser = await prisma.users.findFirst({
     where: { username: "test1" },
 });
 
-const fitbitID = theUser.fitbitID;
+const fitbitID = theUser.fitbitId;
 const accessToken = theUser.accessToken;
 
 FitbitHelper.getActivityGoalsForFitbitID(fitbitID, accessToken, "daily")

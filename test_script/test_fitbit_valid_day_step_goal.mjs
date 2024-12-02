@@ -22,11 +22,11 @@ console.log(JSON.stringify(theUser, null, 2));
 
 
 
-const dateGoalList = await DatabaseUtility.getUserFitbitDailyGoalAndWearingMinutesDuringPeriodById(theUser.fitbitId, "2024-11-27", "2024-12-02", "steps");
+const dateGoalList = await DatabaseUtility.getUserFitbitDailyGoalAndWearingMinutesDuringPeriodById(theUser.fitbitId, "2024-11-10", "2024-12-02", "steps");
 
 console.log("dateGoalList" + JSON.stringify(dateGoalList));
 
 
-const wearingDateGoalList = await DatabaseUtility.getUserFitbitDailyGoalsForWearingDaysDuringPeriodById(theUser.fitbitId, "2024-11-27", "2024-12-02", "steps", 60 * 8, 3);
+const wearingDateGoalList = await DatabaseUtility.getUserFitbitDailyGoalsForWearingDaysDuringPeriodById(theUser.fitbitId, "2024-11-10", "2024-12-02", "steps", 60 * 8, 3);
 
 console.log("wearingDateGoalList" + JSON.stringify(wearingDateGoalList));

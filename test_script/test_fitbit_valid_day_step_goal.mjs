@@ -10,7 +10,7 @@ if (process.env.NODE_ENV !== "production") {
 let userList = await prisma.users.findMany({
     where: {
         username: {
-          is: "test1",
+          contains: "test1",
         },
       },
 });

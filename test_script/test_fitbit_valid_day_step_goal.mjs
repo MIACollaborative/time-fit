@@ -7,7 +7,7 @@ if (process.env.NODE_ENV !== "production") {
     dotenv.config();
 }
 
-let userList = await prisma.users.findFirst({
+let userList = await prisma.users.findMany({
     where: {
         username: {
           is: "test1",

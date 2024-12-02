@@ -1,7 +1,5 @@
 import * as dotenv from "dotenv";
-import { DateTime } from "luxon";
 import prisma from "../lib/prisma.mjs";
-import TaskExecutor from "../lib/TaskExecutor.mjs";
 import DatabaseUtility from "../lib/DatabaseUtility.mjs";
 
 
@@ -9,17 +7,10 @@ if (process.env.NODE_ENV !== "production") {
     dotenv.config();
 }
 
-function replacer(key, value) {
-    if (typeof value === "Date") {
-        return value.toString();
-    }
-    return value;
-}
-
 let userList = await prisma.users.findFirst({
     where: {
         username: {
-          contains: "test1",
+          is: "test1",
         },
       },
 });

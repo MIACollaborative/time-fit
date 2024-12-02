@@ -27,6 +27,8 @@ let userList = await prisma.users.findFirst({
 
 let theUser = userList[0];
 
+console.log(JSON.stringify(theUser, null, 2));
+
 
 
 const dateGoalList = await DatabaseUtility.getUserFitbitDailyDateAndGoalDuringPeriodById(theUser.fitbitId, "2024-11-27", "2024-12-02", "steps", 3);

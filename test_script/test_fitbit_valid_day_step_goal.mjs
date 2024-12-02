@@ -26,8 +26,7 @@ const dateGoalList = await DatabaseUtility.getUserFitbitDailyGoalAndWearingMinut
 
 console.log("dateGoalList" + JSON.stringify(dateGoalList));
 
-/*
+
 const wearingDateGoalList = await DatabaseUtility.getUserFitbitDailyGoalsForWearingDaysDuringPeriodById(theUser.fitbitId, "2024-11-10", "2024-12-02", "steps", 60 * 8, 3);
 
 console.log("wearingDateGoalList" + JSON.stringify(wearingDateGoalList));
-*/

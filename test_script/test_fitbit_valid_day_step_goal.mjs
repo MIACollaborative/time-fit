@@ -41,6 +41,6 @@ const randomMultiplier = [0.6, 0.8, 1.2][Math.floor(Math.random() * 3)];
             
 console.log("randomMultiplier:", randomMultiplier);
 
-const roundedStepGoal = Math.floor(averageStepGoal * randomMultiplier/100);
+const roundedStepGoal = Math.floor(averageStepGoal * randomMultiplier/100) * 100;
 
 console.log("roundedStepGoal:", roundedStepGoal);

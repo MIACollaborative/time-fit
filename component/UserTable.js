@@ -107,6 +107,8 @@ export default function UserTable({ infoList, userInfo, hostURL, renderData }) {
               <TableCell align="right">Salience</TableCell>
               <TableCell align="right">Modification</TableCell>
               <TableCell align="right">Fitbit Id</TableCell>
+              <TableCell align="right">Step Goal</TableCell>
+              <TableCell align="right">Step Goal Time</TableCell>
               <TableCell align="right">Weekday Wakeup</TableCell>
               <TableCell align="right">Weekday Bed</TableCell>
               <TableCell align="right">Weekend Wakeup</TableCell>
@@ -137,6 +139,8 @@ export default function UserTable({ infoList, userInfo, hostURL, renderData }) {
                 <TableCell align="right">{JSON.stringify(row.salience)}</TableCell>
                 <TableCell align="right">{JSON.stringify(row.modification)}</TableCell>
                 <TableCell align="right">{row.fitbitId}</TableCell>
+                <TableCell align="right">{row.dailyStepsGoal}</TableCell>
+                <TableCell align="right">{JSON.stringify(row.dailyStepsGoalMeta)}</TableCell>
                 <TableCell align="right">{row.weekdayWakeup}</TableCell>
                 <TableCell align="right">{row.weekdayBed}</TableCell>
                 <TableCell align="right">{row.weekendWakeup}</TableCell>

@@ -72,8 +72,8 @@ model users {
   weekendBed DateTime?
 
   // for goal setting
-  dailyStepsGoal Int
-  dailyStepsGoalMeta Json
+  dailyStepsGoal Int?
+  dailyStepsGoalMeta Json?
 
   // for time
   createdAt DateTime? @default(now())

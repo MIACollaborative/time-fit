@@ -1,6 +1,7 @@
 import * as dotenv from "dotenv";
 import prisma from "../lib/prisma.mjs";
 import DatabaseUtility from "../lib/DatabaseUtility.mjs";
+import ServerUtility from "../lib/ServerUtility.mjs";
 
 
 if (process.env.NODE_ENV !== "production") {
@@ -37,7 +38,7 @@ const averageStepGoal = wearingDateGoalList.reduce((total, next) => total + next
 
 console.log("averageStepGoal:", averageStepGoal);
 
-const randomMultiplier = [0.6, 0.8, 1.2][Math.floor(Math.random() * 3)];
+const randomMultiplier = [0.6, 0.8, 1.2][ServerUtility.getRandomIntInclusiveRNG(0, 2)];
             
 console.log("randomMultiplier:", randomMultiplier);
 

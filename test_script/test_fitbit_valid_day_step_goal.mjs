@@ -30,3 +30,14 @@ console.log(JSON.stringify(theUser, null, 2));
 const wearingDateGoalList = await DatabaseUtility.getUserFitbitDailyGoalsForWearingDaysDuringPeriodById(theUser.fitbitId, "2024-11-10", "2024-12-02", "steps", 60 * 8, 3);
 
 console.log("wearingDateGoalList" + JSON.stringify(wearingDateGoalList));
+
+
+// calculate average step goals
+const averageStepGoal = wearingDateGoalList.reduce((total, next) => total + next.goal, 0) / wearingDateGoalList.length;
+
+console.log("averageStepGoal" + averageStepGoal);
+
+
+const roundedStepGoal = Math.floor(averageStepGoal * [0.6, 0.8, 1.2][Math.floor(Math.random() * 3)]/100);
+
+console.log("roundedStepGoal" + roundedStepGoal);

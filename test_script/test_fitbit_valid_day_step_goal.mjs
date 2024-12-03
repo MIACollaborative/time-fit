@@ -35,9 +35,12 @@ console.log("wearingDateGoalList" + JSON.stringify(wearingDateGoalList));
 // calculate average step goals
 const averageStepGoal = wearingDateGoalList.reduce((total, next) => total + next.goal, 0) / wearingDateGoalList.length;
 
-console.log("averageStepGoal" + averageStepGoal);
+console.log("averageStepGoal:", averageStepGoal);
 
+const randomMultiplier = [0.6, 0.8, 1.2][Math.floor(Math.random() * 3)];
+            
+console.log("randomMultiplier:", randomMultiplier);
 
-const roundedStepGoal = Math.floor(averageStepGoal * [0.6, 0.8, 1.2][Math.floor(Math.random() * 3)]/100);
+const roundedStepGoal = Math.floor(averageStepGoal * randomMultiplier/100);
 
-console.log("roundedStepGoal" + roundedStepGoal);
+console.log("roundedStepGoal:", roundedStepGoal);

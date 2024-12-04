@@ -46,12 +46,13 @@ async function postClockEvent(date){
 
 nodeCron.schedule(theExpression.expression, async () => {
   let cronTime = process.hrtime();
-  console.log(`execute cron event generation task ${theExpression.label} at ${cronTime}`);
+  let now = DateTime.now().toJSDate();
+  console.log(`execute cron event generation task ${theExpression.label} at ${now}`);
   let t1 = process.hrtime();
 
   // for testing: 2022-09-19 08:00 PM 000 milliseconds
   //let now = new Date(2023, 5, 16, 10, 0, 1); //EDT/EST
-  let now = DateTime.now().toJSDate();
+  
   
   // for real
   //let now = DateTime.now().toJSDate();

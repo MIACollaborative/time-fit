@@ -174,15 +174,18 @@ async function sendTwilioMessage(phone, messageBody) {
 
 
 export default async function handler(req, res) {
-    const { function_name } = req.query;
+    const { function_name, date } = req.query;
 
     let ip = GeneralUtility.getIPFromRequest(req);
     console.log(`cron.handler ip: ${ip}, function_name: ${function_name}`);
 
     console.log(`cron.handler isRequestFromLocalhost: ${GeneralUtility.isRequestFromLocalhost(req)}`);
 
-    let now = DateTime.now(); //.plus({day: 2}); // DateTime.now();
+    // version 1
+    //let now = DateTime.now(); //.plus({day: 2}); // DateTime.now();
 
+    // version 2: use the date parameter from the cron job
+    const now = DateTime.fromISO(date);
 
     switch (function_name) {
         case "execute_task":

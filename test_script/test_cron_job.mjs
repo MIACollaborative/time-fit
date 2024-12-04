@@ -1,6 +1,7 @@
 import nodeCron from "node-cron";
 import axios from "axios";
 import { DateTime } from "luxon";
+import * as dotenv from 'dotenv';
 
 let expressionLabelDict = {
   "1 minute": {
@@ -56,8 +57,6 @@ nodeCron.schedule(theExpression.expression, async () => {
   //let now = DateTime.now().toJSDate();
 
   // ensure that the lasteDate is not the same as now at the minute level
-  let cEvent = new ClockEvent("clock", "system-user", now);
-
   if(lastDate != undefined){
       let lastDateMinute = DateTime.fromJSDate(lastDate).startOf("minute").toJSDate();
       let nowMinute = DateTime.fromJSDate(now).startOf("minute").toJSDate();

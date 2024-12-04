@@ -20,7 +20,9 @@ let theExpression = expressionLabelDict["1 minute"];
 let lastDate = undefined;
 
 async function postClockEvent(date){
-  let thePromise = axios({
+  console.log(`postClockEvent: ${DateTime.fromJSDate(date).toISO()}`);
+
+  return axios({
     method: 'post',
     url: 'http://localhost:3000/api/cron',
     // `headers` are custom headers to be sent
@@ -39,16 +41,17 @@ async function postClockEvent(date){
     let data = response.data;
     console.log(`Cron result: ${JSON.stringify(data)}`);
     return data;
+  })
+  .catch((error) => {
+    console.error(`Error: ${error}`);
   });
-
-  return thePromise;
 }
 
 nodeCron.schedule(theExpression.expression, async () => {
-  let cronTime = process.hrtime();
-  let now = DateTime.now().toJSDate();
+  const cronTime = process.hrtime();
+  const now = DateTime.now().toJSDate();
   console.log(`execute cron event generation task ${theExpression.label} at ${now}`);
-  let t1 = process.hrtime();
+  const t1 = process.hrtime();
 
   // for testing: 2022-09-19 08:00 PM 000 milliseconds
   //let now = new Date(2023, 5, 16, 10, 0, 1); //EDT/EST
@@ -58,27 +61,27 @@ nodeCron.schedule(theExpression.expression, async () => {
   //let now = DateTime.now().toJSDate();
 
   // ensure that the lasteDate is not the same as now at the minute level
-  if(lastDate != undefined){
-      let lastDateMinute = DateTime.fromJSDate(lastDate).startOf("minute").toJSDate();
-      let nowMinute = DateTime.fromJSDate(now).startOf("minute").toJSDate();
-      if(lastDateMinute.getTime() != nowMinute.getTime()){
-          
-          console.log(`Event: ${JSON.stringify(cEvent)}`);
+  //console.log(`lasteDate (before): ${lastDate}`);
+
+  if(lastDate !== undefined){
+      const lastDateMinute = DateTime.fromJSDate(lastDate).startOf("minute").toJSDate();
+      const nowMinute = DateTime.fromJSDate(now).startOf("minute").toJSDate();
+
+      if(lastDateMinute.getTime() !== nowMinute.getTime()){
           await postClockEvent(now);
-          console.log(`${DateTime.fromJSDate(now).toISO()}: post clock event`);
       }
       else{
           console.log(`${DateTime.fromJSDate(now).toISO()}: Skipping event generation as lastDate and now are the same at the minute level`);
       }
   }
   else{
-    await postClockEvent(now);
-      console.log(`${DateTime.fromJSDate(now).toISO()}: post clock event`);  
+      await postClockEvent(now);
   }
 
   lastDate = now;
+  //console.log(`lasteDate (after): ${lastDate}`);
   
-  let t2 = process.hrtime(t1);
+  const t2 = process.hrtime(t1);
   console.log('did tick in', t2[0] * 1000 + t2[1] / 100000, 'ms');
 }, {recoverMissedExecutions: true});
 

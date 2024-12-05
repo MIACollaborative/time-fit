@@ -28,14 +28,10 @@ FitbitHelper.getActivityGoalsForFitbitID(fitbitID, accessToken, "daily")
     );
 
     let action = {
-        value: true, // not sure what to make out of it yet
-        chance: 1.0,
-        action: {
-            type: "updateStepsGoalToFitbitServer", // messageLabel, or messageGroup
-            messageLabel: "", //messageLabel, only matter if the type is messageLabel
-            messageGroup: "", // "nongif-m", // messageGroup, only matter if the type is messageGroup
-            avoidHistory: false, // if we want to minimize the chance of sending the same message to the same user in a short window
-        }
+        type: "updateStepsGoalToFitbitServer", // messageLabel, or messageGroup
+        messageLabel: "", //messageLabel, only matter if the type is messageLabel
+        messageGroup: "", // "nongif-m", // messageGroup, only matter if the type is messageGroup
+        avoidHistory: false, // if we want to minimize the chance of sending the same message to the same user in a short window
     };
   return TaskExecutor.executeActionForUser(action, theUser, DateTime.now());
 })

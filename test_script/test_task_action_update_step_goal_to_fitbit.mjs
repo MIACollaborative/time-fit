@@ -4,6 +4,7 @@ import prisma from "../lib/prisma.mjs";
 import TaskExecutor from "../lib/TaskExecutor.mjs";
 import DatabaseUtility from "../lib/DatabaseUtility.mjs";
 import GeneralUtility from "../lib/GeneralUtility.mjs";
+import FitbitHelper from "../lib/FitbitHelper.mjs";
 
 
 

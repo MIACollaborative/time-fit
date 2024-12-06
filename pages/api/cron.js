@@ -2,6 +2,7 @@ import prisma from "../../lib/prisma";
 import { DateTime } from "luxon";
 import TaskExecutor from "../../lib/TaskExecutor.mjs";
 import GeneralUtility from "../../lib/GeneralUtility.mjs";
+import DatabaseUtility from "../../lib/DatabaseUtility.mjs";
 
 function replacer(key, value) {
     if (typeof value === "Date") {
@@ -186,6 +187,15 @@ export default async function handler(req, res) {
 
     // version 2: use the date parameter from the cron job
     const now = DateTime.fromISO(date);
+
+    // insert clock event to event colleection
+    await DatabaseUtility.insertEvent({
+        type: "clock",
+        content: {
+            dateString: date
+        }
+    });
+
 
     switch (function_name) {
         case "execute_task":

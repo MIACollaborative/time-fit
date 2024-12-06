@@ -80,6 +80,13 @@ model users {
   updatedAt DateTime? @updatedAt
 }
 
+model event {
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+  type String
+  content  Json
+  createdAt DateTime @default(now())
+}
+
 
 model response {
   id  String  @id @default(auto()) @map("_id") @db.ObjectId

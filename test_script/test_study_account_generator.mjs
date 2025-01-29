@@ -105,10 +105,10 @@ function generateGroupAssignmentList(populationSize) {
 
 let initialDelay = 1000;
 let interval = 1000;
-let startIndex = 1; //1;
-let endIndex = 5; //65;
+let startIndex = 65; //1;
+let endIndex = 85; //65;
 
-let prefix = `test`;
+let prefix = `participant`;
 
 
 //deleteAccountWithPrefix(prefix);
@@ -175,26 +175,7 @@ timer(initialDelay, interval).pipe(
     return startIndex + x < endIndex;
   }),
   map(x => {
-
     let newStudyCodeObj = resultList[x];
-
-
-
-    /*
-    let studyCode = `${prefix}${startIndex + x}`;
-    
-    //let hashStudyCode = md5(studyCode);
-    // cryptoRandomString({length: 10, type: 'alphanumeric'});
-    // let hashStudyCode = cryptoRandomString({length: 8, characters: 'ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789'});
-    let hashStudyCode = cryptoRandomString({length: 8, characters: 'abcdefghijkmnpqrstuvwxyz023456789'});
-
-    console.log(`[${studyCode}]: ${hashStudyCode}`);
-    let newStudyCodeObj = {
-      studyId: studyCode,
-      passCode: hashStudyCode,
-    };
-    */
-
     return newStudyCodeObj;
   })
 ).subscribe(newStudyCodeObj => {
@@ -205,16 +186,6 @@ timer(initialDelay, interval).pipe(
   console.log(newStudyCodeObj);
 
   insertUser(newStudyCodeObj);
-  
-  /*
-  ServerService.submitOrReplaceInTable("study_code", newStudyCodeObj, false)
-  .then(response => {
-    console.log(`Successfully insert [${newStudyCodeObj.note}]: ${newStudyCodeObj.code}`);
-  })
-  .catch(error => console.error(error))
-  .finally();
-  */
-
 
 });
 

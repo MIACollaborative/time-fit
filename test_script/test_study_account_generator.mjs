@@ -145,9 +145,9 @@ for (let i = startIndex; i < endIndex; i++) {
     password: passwordHash,
     passwordRaw: password,
     hash,
-    gif: gAssignment.gif ==1? true: false,
-    salience: gAssignment.salience ==1? true: false,
-    modification: gAssignment.modification ==1? true: false,
+    gif: true, //gAssignment.gif ==1? true: false,
+    salience: true, // gAssignment.salience ==1? true: false,
+    modification: false, //gAssignment.modification ==1? true: false,
   };
 
   resultList.push(newStudyCodeObj);

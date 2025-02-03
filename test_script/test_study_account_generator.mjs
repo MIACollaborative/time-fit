@@ -106,7 +106,7 @@ function generateGroupAssignmentList(populationSize) {
 let initialDelay = 1000;
 let interval = 1000;
 let startIndex = 65; //1;
-let endIndex = 85; //65;
+let endIndex = 75; //65;
 
 let prefix = `participant`;
 

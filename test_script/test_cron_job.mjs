@@ -86,32 +86,3 @@ nodeCron.schedule(theExpression.expression, async () => {
 }, {recoverMissedExecutions: true});
 
 
-/*
-nodeCron.schedule(theExpression.expression, async () => {
-    console.log(`execute task ${theExpression.label} at ${DateTime.now()}`);
-    let thePromise = axios({
-      method: 'post',
-      url: 'http://localhost:3000/api/cron',
-      // `headers` are custom headers to be sent
-      params: {
-        'function_name': 'execute_task',//  'check_user_weekday_wakeup_time',
-      }
-    })
-    .then((response) => {
-      //console.log(response.data);
-      console.log(response.status);
-      console.log(response.statusText);
-      //console.log(response.headers);
-      //console.log(response.config);
-
-      let data = response.data;
-      console.log(`Cron result: ${JSON.stringify(data)}`);
-      return data;
-    });
-
-    return thePromise;
-
-  });
-*/
-
-

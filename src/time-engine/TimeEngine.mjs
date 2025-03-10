@@ -44,6 +44,8 @@ export default class TimeEngine {
 
         const t1 = process.hrtime();
 
+        console.log(`Schedule: ${now}`);
+
         // for testing: 2022-09-19 08:00 PM 000 milliseconds
         //let now = new Date(2023, 5, 16, 10, 0, 1); //EDT/EST
 

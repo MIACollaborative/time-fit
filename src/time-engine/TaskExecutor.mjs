@@ -1,12 +1,9 @@
 import { DateTime, Interval } from "luxon";
-import TwilioHelper from "./TwilioHelper.mjs";
-
-//import prisma from "./prisma.mjs";
-
-import GeneralUtility from "../lib/GeneralUtility.mjs";
-import DatabaseUtility from "../lib/DatabaseUtility.mjs";
-import ServerUtility from "../lib/ServerUtility.mjs";
-import FitbitHelper from "./FitbitHelper.mjs";
+import TwilioHelper from "../../lib/TwilioHelper.mjs";
+import GeneralUtility from "../../lib/GeneralUtility.mjs";
+import DatabaseUtility from "../../lib/DatabaseUtility.mjs";
+import ServerUtility from "../../lib/ServerUtility.mjs";
+import FitbitHelper from "../../lib/FitbitHelper.mjs";
 
 export default class TaskExecutor {
   taskSpec;
@@ -496,13 +493,6 @@ export default class TaskExecutor {
           resultBody = `[${error.code}] ${error.stack}`;
         }
 
-        // version 1
-        /*
-                resultStatus = insertProxyUpdateResult.count == proxyUpdateList.length ? "success" : "failed";
-                resultErrorMessage = `Attempt to insert: ${proxyUpdateList.length}, Insert: ${insertProxyUpdateResult.count}`;
-                resultBody = insertProxyUpdateResult;
-                */
-
         record.executionResult = {
           type: "generate-manual-fitbit-update",
           value: {
@@ -737,15 +727,6 @@ export default class TaskExecutor {
           // then, just pick a random update to perform
         }
 
-        //console.log(`filteredUpdateList: ${JSON.stringify(filteredUpdateList, null, 2)}`);
-        console.log(`filteredUpdateList.length: ${filteredUpdateList.length}`);
-        // now, for each update, retrieve accordingly
-
-        /*
-                let resultList =  filteredUpdateList.map((fitbitUpdate) => {
-                    return await 
-                });
-                */
 
         let queryTime = new Date();
         let resultList = [];
@@ -797,18 +778,6 @@ export default class TaskExecutor {
         resultBody = resultList.map((result) => {
           return result.body;
         });
-
-        // need to mark successful retrieval as done
-
-        // sample result
-        /*
-                {
-                    value: resultStatus,
-                    data: resultErrorMessage,
-                    compositeId: compositeId,
-                    body: 
-                }
-                */
 
         let successResultList = resultList.filter((result) => {
           return result.value == "success";
@@ -935,34 +904,19 @@ export default class TaskExecutor {
 
         resultBody = qResultList.map((result) => {
           return result.body;
-          /*
-                    result.body: [{
-                        value: summaryResult.value,
-                        ownerId: userInfo.fitbitId,
-                        dataType: GeneralUtility.FITBIT_INTRADAY_DATA_TYPE_ACTIVITY_SUMMARY,
-                        dateTime: dateString,
-                        dataPeriod: theAction.dataPeriod
-                    }, {
-                        value: heartrateResult.value,
-                        ownerId: userInfo.fitbitId,
-                        dataType: "activities-heart",
-                        dateTime: dateString,
-                        dataPeriod: theAction.dataPeriod
-                    }]
-                    */
         });
 
         // need to mark successful retrieval as done
 
         // sample result
         /*
-                {
-                    value: resultStatus,
-                    data: resultErrorMessage,
-                    compositeId: compositeId,
-                    body: 
-                }
-                */
+        {
+            value: resultStatus,
+            data: resultErrorMessage,
+            compositeId: compositeId,
+            body: 
+        }
+        */
 
         let successResultOnlyList = qResultList.filter((result) => {
           return result.value == "success";
@@ -1651,48 +1605,12 @@ export default class TaskExecutor {
         startDate = undefined;
         endDate = undefined;
 
-        /*
-                    start:{
-                        reference: "now", 
-                        offset: {type: "plus", value: {hours: 0}}
-                    }
-                */
-
-        //console.log(`${this.name} checkOneConditionForUser dateTime: ${dateTime}`);
-        //let dateTimeUTC = dateTime.toUTC();
-        //console.log(`${this.name} checkOneConditionForUser dateTimeUTC: ${dateTimeUTC}`);
-        //let localTimeForUser = GeneralUtility.getLocalTime(dateTimeUTC, userInfo.timezone);
-        //console.log(`${this.name} checkOneConditionForUser localTimeForUser: ${localTimeForUser}`);
-
-        //console.log(`${this.name} checkOneConditionForUser condition.criteria.start: ${JSON.stringify(condition.criteria.period.start, null, 2)}`);
-
         startDate = GeneralUtility.generateStartOrEndDateTimeByReference(
           localTimeForUser,
           userInfo,
           condition.criteria.period.start,
           "start"
         );
-        /*
-                if (condition.criteria.period.start != undefined) {
-                    switch (condition.criteria.period.start.reference) {
-                        case "now":
-                            startDate = localTimeForUser.toUTC();// DateTime.utc();
-                            break;
-                        case "today":
-                            // I need to use datetime
-                            // Step 1: convert to a participant's local time
-                            startDate = localTimeForUser.startOf("day").toUTC();
-                            break;
-                        default:
-                            break;
-                    }
-                    startDate = GeneralUtility.operateDateTime(startDate, condition.criteria.period.start.offset.value, condition.criteria.period.start.offset.type);
-                }
-                else {
-                    // use a very early time: year 2000
-                    startDate = DateTime.utc(2000);
-                }
-                */
 
         endDate = GeneralUtility.generateStartOrEndDateTimeByReference(
           localTimeForUser,
@@ -1700,25 +1618,6 @@ export default class TaskExecutor {
           condition.criteria.period.end,
           "end"
         );
-        /*
-                if (condition.criteria.period.end != undefined) {
-                    switch (condition.criteria.period.end.reference) {
-                        case "now":
-                            endDate = localTimeForUser.toUTC(); // DateTime.utc();
-                            break;
-                        case "today":
-                            endDate = localTimeForUser.endOf("day").toUTC();
-                            break;
-                        default:
-                            break;
-                    }
-                    endDate = GeneralUtility.operateDateTime(endDate, condition.criteria.period.end.offset.value, condition.criteria.period.end.offset.type);
-                }
-                else {
-                    // use now
-                    endDate = localTimeForUser.toUTC(); // DateTime.now().endOf("day").toUTC();
-                }
-                */
 
         let updateList = [];
 
@@ -1947,33 +1846,6 @@ export default class TaskExecutor {
           "end"
         );
 
-        /*
-                if (condition.criteria.end != undefined) {
-                    switch (condition.criteria.end.reference) {
-                        case "now":
-                            endDate = localTimeForUser;// DateTime.utc();
-                            break;
-                        case "activateAtDate":
-                            // GeneralUtility.getLocalTime(DateTime.fromISO(userInfo.activateAt), userInfo.timezone).startOf("day").toUTC();
-                            endDate = GeneralUtility.getLocalTime(DateTime.fromISO(userInfo.activateAt), userInfo.timezone).endOf("day");
-                            break;
-                        case "joinAtDate":
-                            // GeneralUtility.getLocalTime(DateTime.fromISO(userInfo.activateAt), userInfo.timezone).startOf("day").toUTC();
-                            endDate = GeneralUtility.getLocalTime(DateTime.fromISO(userInfo.joinAt), userInfo.timezone).endOf("day");
-                            break;
-                        default:
-                            break;
-                    }
-                    endDate = GeneralUtility.operateDateTime(endDate, condition.criteria.end.offset.value, condition.criteria.end.offset.type);
-
-                    
-                }
-                else {
-                    // use now
-                    endDate = localTimeForUser; // DateTime.utc();
-                }
-                */
-
         // default to be inclusive
         // version 2: with "period"
         if (
@@ -1985,13 +1857,6 @@ export default class TaskExecutor {
           endDate = endDate.plus({ milliseconds: 1 });
         }
 
-        // version 1: without "period"
-        /*
-                if (condition.criteria.end.inclusive == undefined || (condition.criteria.end.inclusive != undefined && condition.criteria.end.inclusive == true)) {
-                    // inclusive
-                    endDate = endDate.plus({ "milliseconds": 1 });
-                }
-                */
 
         console.log(
           `${this.name} checkOneConditionForUser[${
@@ -2140,17 +2005,10 @@ export default class TaskExecutor {
       }] (${userInfo.username}) now: ${now}`
     );
     let nowUTC = now.toUTC();
-    console.log(`isCheckPointForUser nowUTC: ${nowUTC}`);
-
-    console.log(`isCheckPointForUser timezone: ${userInfo.timezone}`);
 
     let localTimeForUser = GeneralUtility.getLocalTime(now, userInfo.timezone);
     let localWeekIndex = localTimeForUser.weekday;
 
-    console.log(`isCheckPointForUser.localTimeForUser: ${localTimeForUser}`);
-    console.log(`isCheckPointForUser.localWeekIndex: ${localWeekIndex}`);
-
-    //DateTime.fromISO(userInfo.weekdayWakeup).toUTC().set({year: nowUTC.year, month: nowUTC.month, day: nowUTC.day, second: nowUTC.second, millisecond: nowUTC.millisecond});
 
     // Step 1.2: check whether the weekday even pass (if it is the right day)
     // [Note] I will likely have to deal with people go to bed at 12:00 AM later
@@ -2206,12 +2064,6 @@ export default class TaskExecutor {
 
       targetTime = syncedReferenceTime; //userReferenceTime;
 
-      // version 1, which is fine, but for consistency, use localTime for comparison to be clear
-      /*
-            let userReferenceUTCTime = GeneralUtility.convertToUTCWithUTCDate(userReferenceTime, nowUTC);
-            targetTime = userReferenceUTCTime;
-            */
-
       // need to check if the time is on the right date locally
       console.log(`isCheckPointForUser.targetTime: ${targetTime}`);
     } else if (checkPoint.reference.type == "preference") {
@@ -2255,29 +2107,6 @@ export default class TaskExecutor {
       });
       targetTime = syncedReferenceTime; //userReferenceTime;
 
-      // version 3
-      /*
-            let tempReferenceTime = DateTime.fromFormat(hourMinuteString, "t", { zone: userInfo.timezone });
-            let [tempDateTime, syncedReferenceTime] = GeneralUtility.syncToFirstDateTimeBeforeUnit(localTimeForUser, tempReferenceTime, "hour");
-            */
-
-      // version 2, use localTime
-      // this will not give us the same date
-
-      /*
-            let userReferenceTime = DateTime.fromISO(userInfo[referenceTimePropertyName], { zone: userInfo.timezone });
-            //console.log(`isCheckPointForUser userReferenceTime: ${userReferenceTime}, type: ${typeof userReferenceTime}`);
-            targetTime = GeneralUtility.setToReferenceDateAndSeconds(userReferenceTime, localTimeForUser);
-            */
-
-      // version 1, use UTC, but create confusion and even errors after offset and sync date
-      /*
-            let userReferenceUTCTime = GeneralUtility.convertToUTCWithUTCDate(userReferenceTime, nowUTC);
-
-            console.log(`isCheckPointForUser userReferenceUTCTime: ${userReferenceUTCTime}`);
-
-            targetTime = userReferenceUTCTime;
-            */
       console.log(`isCheckPointForUser.targetTime: ${targetTime}`);
     }
 
@@ -2296,24 +2125,6 @@ export default class TaskExecutor {
 
     console.log(`targetTime after offset: ${targetTime}`);
 
-    // now, considering repeat
-    /*
-        repeat: {
-            interval: { minutes: 5 }, // every x (5) minutes
-            range: {
-                // after: starting from that reference, before, strating befoore that reference
-                before: {
-                    // will execute within distance (100 mins) prior to the reference point
-                    distance: { minutes: 20 * 5 },
-                },
-                after: {
-                    // will execute within distance (100 mins) after the reference point
-                    distance: { minutes: 20 * 5 },
-                }
-            }
-        }
-        
-        */
 
     // v2
     // ['months', 'days', 'hours']

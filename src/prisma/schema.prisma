@@ -1,0 +1,288 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// previewFeatures = ["mongoDb", "filterJson"]
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["filterJson"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model log {
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+  type String
+  createdAt DateTime @default(now())
+  content  Json
+}
+
+
+model users {
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+  username String @unique
+  password String
+  hash String @unique
+
+  // additional user information
+  preferredName String?
+  phone String?
+  timezone String?
+
+  // for study management
+  phase String @default("baseline") // baseline vs. intervention vs. complete
+  joinAt DateTime?
+  activateAt DateTime?
+  completeAt DateTime?
+  fitbitReminderTurnOff Boolean? @default(false)
+  saveWalkToJoyToContacts Boolean? @default(false)
+  autoWalkTo10 Boolean? @default(false)
+
+  // for group assignment
+  gif Boolean? @default(false)
+  salience Boolean? @default(false)
+  modification Boolean? @default(false)
+
+  // reference other collections
+  taskLogList  taskLog[]
+
+
+  // for Fitbit
+  fitbitId String?
+  fitbitDisplayName String?
+  fitbitFullName String?
+  accessToken String?
+  refreshToken String?
+
+  // for Fitbit data and subscription
+  fitbitSubscriptionList fitbit_subscription[]
+  fitbitUpdateList fitbit_update[]
+  fitbitDataList fitbit_data[]
+  
+
+  // for survey response
+  responseList response[]
+
+  // for user preference
+  weekdayWakeup DateTime?
+  weekdayBed DateTime?
+  weekendWakeup DateTime?
+  weekendBed DateTime?
+
+  // for goal setting
+  dailyStepsGoal Int?
+  dailyStepsGoalMeta Json?
+
+  // for time
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model event {
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+  type String
+  content  Json
+  createdAt DateTime @default(now())
+}
+
+
+model response {
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+
+  // for survey response
+  participantId String
+  responseId String? // optional mostly for baackward compatibility
+  dateTime DateTime?
+  surveyId String?
+  surveyLink String
+  surveyParamsString String?
+  content  String
+
+  // connect to users collection
+  participant    users    @relation(fields: [participantId], references: [fitbitId])
+
+
+
+  // for time
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model fitbit_data {
+
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+
+  // for easy categorization
+  dataType String
+  ownerId String
+  dateTime String
+  compositeId String @unique // as a unique identifier for query
+  lastModified String
+  content Json
+
+  // connect to users collection
+  owner    users    @relation(fields: [ownerId], references: [fitbitId], onDelete: NoAction, onUpdate: NoAction)
+
+  // for standard time
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model fitbit_update {
+
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+
+  
+  // for subscription notification from Fitbit
+  collectionType String
+  date String
+  ownerId String
+  ownerType String
+  subscriptionId String  @unique
+
+
+  // connect to users collection
+  owner    users    @relation(fields: [ownerId], references: [fitbitId], onDelete: NoAction, onUpdate: NoAction)
+
+  // connect to fibit_stream collection
+  stream    fitbit_subscription    @relation(fields: [subscriptionId], references: [subscriptionId])
+
+  // for query data: notification -> processed
+  status String @default("notification")
+
+  // for security logging
+  ip String?
+  validity Boolean?
+
+  
+
+  // for time
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model fitbit_subscription {
+
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+
+  
+  // for subscription notification from Fitbit
+  collectionType String
+  ownerId String
+  ownerType String
+  subscriberId String
+  subscriptionId String @unique
+
+
+  // connect to users collection
+  owner    users    @relation(fields: [ownerId], references: [fitbitId], onDelete: NoAction, onUpdate: NoAction)
+
+  // connect to fitbit_update collection
+  updateList fitbit_update[]
+
+  // for time
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model update_diff {
+
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+
+  collectionName String
+  documentId String  @db.ObjectId
+  documentDiff Json
+
+  // for time
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model message {
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+
+  // for message
+  label String @unique
+  group String
+  groupIndex Int
+  interventionMessage  String?
+  walkMessage String?
+  gif String?
+  timeOfDay String?
+  topic String?
+  sampleMessage String?
+  note String?
+
+  // reference other collections
+  taskLogList  taskLog[]
+
+
+  // for time
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model task {
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+
+  // for task
+  label String @unique
+  index Int?
+  enabled Boolean? @default(false)
+  priority Int? @default(1)
+  participantIndependent Boolean? @default(false)
+  preActivationLogging Boolean? @default(false)
+  ignoreTimezone Boolean? @default(false)
+  checkPoint Json
+  group Json
+  randomization Json
+  preCondition Json?
+
+  // reference other collections
+  taskLogList  taskLog[]
+
+  // for time
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+
+model taskLog {
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+
+  // for task
+  task    task    @relation(fields: [taskLabel], references: [label])
+  taskLabel String
+
+  // for user
+  user    users    @relation(fields: [username], references: [username])
+  username String
+
+  // caching user info
+  userInfoCache Json?
+
+  // for pre condition records, replaced by activationReasoning, but keep it for compatibility
+  preConditionResult Json?
+
+  // for tracking of decision rule/ task activation
+  isActivated  Boolean    @default(true)
+  activationReasoning Json[]
+
+
+  // for action
+  randomizationResult Json
+
+  // for message, possibly none if no action or action that does not invovle message
+  message    message?    @relation(fields: [messageLabel], references: [label])
+  messageLabel String?
+
+  
+  // for execution
+  executionResult Json?
+  
+  // for time
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}

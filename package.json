@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "time-engine": "node ./src/time-engine/TimeEngine.mjs",
+    "time-engine": "node ./src/index.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

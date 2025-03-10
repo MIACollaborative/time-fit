@@ -36,14 +36,12 @@ export default class TimeEngine {
   }
 
   static async start() {
-    scheduler = nodeCron.schedule(
+    TimeEngine.scheduler = nodeCron.schedule(
       theExpression.expression,
       async () => {
         const cronTime = process.hrtime();
         const now = DateTime.now().toJSDate();
-        console.log(
-          `execute cron event generation task ${theExpression.label} at ${now}`
-        );
+
         const t1 = process.hrtime();
 
         // for testing: 2022-09-19 08:00 PM 000 milliseconds
@@ -128,6 +126,10 @@ export default class TimeEngine {
   }
 
   static async processClock(now) {
+
+    console.log(
+      `Process clock at ${now}`
+    );
 
     await DatabaseHelper.insertEvent({
       type: "clock",

@@ -1,11 +1,15 @@
 import { DateTime } from "luxon";
 import TaskExecutor from "./TaskExecutor.mjs";
-import DatabaseHelper from "../utility/DatabaseHelper.mjs";
-import * as dotenv from "dotenv";
 
 export default class TimeEngine {
   static scheduler = undefined;
   static lastDate = undefined;
+
+  static getUserListFunction = undefined;
+  static getTaskListFunction = undefined;
+  static insertEventFunction = undefined;
+  static insertTaskLogListFunction = undefined;
+
   static systemUser = {
     username: "system-user",
     preferredName: "System User",
@@ -28,6 +32,26 @@ export default class TimeEngine {
   static async stop() {
     clearInterval(TimeEngine.scheduler);
   }
+
+
+  static registerGetUserListFunction(func){
+    TimeEngine.getUserListFunction = func;
+  }
+
+  static registerGetTaskListFunction(func){
+    TimeEngine.getTaskListFunction = func;
+  }
+
+  // registerInsertEventFunction
+  static registerInsertEventFunction(func){
+    TimeEngine.insertEventFunction = func;
+  }
+
+  // registerInsertTaskLogListFunction
+  static registerInsertTaskLogListFunction(func){
+    TimeEngine.insertTaskLogListFunction = func;
+  } 
+
 
   static async onInterval(){
     const cronTime = process.hrtime();
@@ -53,19 +77,10 @@ export default class TimeEngine {
 
   static async executeTask(now) {
 
-    let users = await DatabaseHelper.getUsers();
-    
-    const userList = users.map((userInfo) => {
-      return exclude(userInfo, [
-        "password",
-        "hash",
-        "accessToken",
-        "refreshToken",
-      ]);
-    });
+    const userList = await TimeEngine.getUserListFunction();
 
-    const taskList = await DatabaseHelper.getTasksSortedByPriority("asc");
 
+    const taskList = await TimeEngine.getTaskListFunction();
     for (let i = 0; i < taskList.length; i++) {
       let task = taskList[i];
 
@@ -78,7 +93,7 @@ export default class TimeEngine {
       );
 
       if (aTaskResultList.length > 0) {
-        await DatabaseHelper.insertTaskLogList(aTaskResultList);
+        await TimeEngine.insertTaskLogListFunction(aTaskResultList);
       }
     }
 
@@ -91,7 +106,7 @@ export default class TimeEngine {
       `Process clock at ${now}`
     );
 
-    await DatabaseHelper.insertEvent({
+    await TimeEngine.insertEventFunction({
       type: "clock",
       content: {
         dateString: now,

@@ -84,9 +84,9 @@ export default class TimeEngine {
     for (let i = 0; i < taskList.length; i++) {
       let task = taskList[i];
 
-      let finalUserList = task.participantIndependent ? [systemUser]: userList;
+      let finalUserList = task.participantIndependent ? [TimeEngine.systemUser]: userList;
 
-      const aTaskResultList = await TaskExecutor.executeTaskForUserListForDatetime(
+      const aTaskResultList = await TaskExecutor.executeTaskForUserListForDate(
         task,
         finalUserList,
         now
@@ -101,28 +101,13 @@ export default class TimeEngine {
   }
 
   static async processClock(now) {
-
-    console.log(
-      `Process clock at ${now}`
-    );
-
+    console.log(`Process clock at ${now}`);
     await TimeEngine.insertEventFunction({
       type: "clock",
       content: {
         dateString: now,
       },
     });
-
-    console.log(`Clock event: ${now}`);
-
-    /*
-    switch (function_name) {
-      case "execute_task":
-        let resultList = executeTask(now);
-        break;
-      default:
-        break;
-    }
-    */
+    const resultList = await TimeEngine.executeTask(now);
   }
 }

@@ -10,12 +10,14 @@ export default class TaskExecutor {
 
   constructor() {}
 
-  static async executeTaskForUserListForDatetime(taskSpec, userList, datetime) {
+  static async executeTaskForUserListForDate(taskSpec, userList, date) {
     // Step 1: use grouop to filter out the participants to be considered for this task
     //let userList = this.participantList;
 
+    const datetime = DateTime.fromJSDate(date);
+
     console.log(
-      `executeTaskForUserListForDatetime taskSpec.enabled: ${taskSpec.enabled} for ${taskSpec.label}`
+      `executeTaskForUserListForDate taskSpec.enabled: ${taskSpec.enabled} for ${taskSpec.label}`
     );
 
     // just for reference in other part of the class.
@@ -34,7 +36,6 @@ export default class TaskExecutor {
     for (let i = 0; i < userList.length; i++) {
       let userInfo = userList[i];
 
-      // username: "system-user"
       if (
         userInfo["username"] != "system-user" &&
         (userInfo["joinAt"] == null || userInfo["phase"] == "complete")
@@ -145,14 +146,6 @@ export default class TaskExecutor {
         recordList: conditionEvaluationRecordList,
       });
 
-      /*
-            userNamePreConditionResultMap[userInfo.username] = {
-                result: checkResult,
-                recordList: conditionEvaluationRecordList
-            };
-            taskLogObj["preConditionResult"] = userNamePreConditionResultMap[userInfo.username];
-            */
-
       if (!checkResult) {
         taskLogObj["isActivated"] = false;
         if (taskSpec["preActivationLogging"]) {
@@ -161,15 +154,6 @@ export default class TaskExecutor {
         continue;
       }
 
-      /*
-            if (taskLogObj["isActivated"] == false) {
-                if (taskSpec["preActivationLogging"]) {
-                    taskResultList.push(taskLogObj);
-                }
-                continue;
-            }
-            */
-
       // step 5: execute action
       let chanceChoice = TaskExecutor.obtainChoiceWithRandomization(
         taskSpec.randomization
@@ -177,7 +161,7 @@ export default class TaskExecutor {
       let randomNumber = chanceChoice.randomNumber;
       let theAction = chanceChoice.theChoice.action;
       console.log(
-        `executeTaskForUserListForDatetime (${
+        `executeTaskForUserListForDate (${
           userInfo.username
         }): chanceChoice: ${JSON.stringify(chanceChoice)}`
       );
@@ -197,7 +181,7 @@ export default class TaskExecutor {
         GeneralUtility.extractUserInfoCache(userInfo);
 
       console.log(
-        `executeTaskForUserListForDatetime.compositeResult: ${JSON.stringify(
+        `executeTaskForUserListForDate.compositeResult: ${JSON.stringify(
           compositeResult
         )}`
       );
@@ -207,7 +191,7 @@ export default class TaskExecutor {
       taskResultList.push(taskLogObj);
 
       console.log(
-        `executeTaskForUserListForDatetime (${
+        `executeTaskForUserListForDate (${
           userInfo.username
         }) taskLogObj: ${JSON.stringify(taskLogObj)}`
       );
@@ -304,6 +288,13 @@ export default class TaskExecutor {
     console.log(`theAction.type: ${theAction.type}`);
 
     switch (theAction.type) {
+      case "printHello":
+        console.log(`Hello, ${userInfo.username}!`);
+        record.executionResult = {
+          type: "console",
+          value: "hello"
+        };
+        break;
       case "messageLabel":
         // find the message through messageLabel
         messageInfo = await DatabaseUtility.findMessageByLabel(

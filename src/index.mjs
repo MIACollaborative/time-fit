@@ -2,7 +2,7 @@ import TimeEngine from "./time-engine/TimeEngine.mjs";
 import DatabaseHelper from "./utility/DatabaseHelper.mjs";
 
 async function myGetUserList(){
-    let users = await DatabaseHelper.getUsers();
+    const users = await DatabaseHelper.getUsers();
     const userList = users.map((userInfo) => {
       return exclude(userInfo, [
         "password",
@@ -15,7 +15,79 @@ async function myGetUserList(){
 }
 
 async function myGetTaskList(){
-    let tasks = await DatabaseHelper.getTasksSortedByPriority("asc");
+    // ideal version
+    //const tasks = await DatabaseHelper.getTasksSortedByPriority("asc");
+
+
+    // testing version
+    const tasks = [    {
+        label: "print-hello",
+        enabled: true,
+        priority: 100,
+        participantIndependent: true,
+        preActivationLogging: false,
+        ignoreTimezone: true,
+        checkPoint: {
+            type: "absolute", // absolute vs. relative, ignore
+            reference: {
+                weekIndexList: [1, 2, 3, 4, 5, 6, 7],
+
+                type: "fixed", // fixed or preference
+                value: "00:00 AM" // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
+
+            },
+            offset: {
+                type: "plus",
+                value: { hours: 0 } // {hours: 0}
+            },
+            repeat: {
+                interval: { minutes: 1 }, // every x (5) minutes
+                range: {
+                    // after: starting from that reference, before, strating befoore that reference
+                    
+                    before: {
+                        // will execute within distance (100 mins) prior to the reference point
+                        // set it to 24 * 60 means everything up to the start of the day (and even earlier, but irrelevant)
+                        distance: { minutes: 24 * 60 },
+                    },
+                    after: {
+                        // will execute within distance (100 mins) after the reference point
+                        // set it to 24 * 60 means everything til the end of the day (and even later, but irrelevant)
+                        distance: { minutes: 24 * 60 },
+                    }
+                }
+            }
+        },
+        group: {
+            type: "all", // all or group or list
+            membership: { // only matter if type is "group"
+                gif: [],
+                salience: [],
+                modification: []
+            },
+            list: [], //["test1", "test2"] // user name list, only matter if type is "list"
+        },
+        randomization: {
+            // Note: could potentially separate this out to be random + action
+            enabled: true, // true or false
+            outcome: [
+                {
+                    value: true, // not sure what to make out of it yet
+                    chance: 1.0,
+                    action: {
+                        type: "printHello", // messageLabel, or messageGroup
+                        messageLabel: "", //messageLabel, only matter if the type is messageLabel
+                        messageGroup: "", // "nongif-m", // messageGroup, only matter if the type is messageGroup
+                        avoidHistory: false, // if we want to minimize the chance of sending the same message to k,the same user in a short window
+                        surveyType: "", //surveyLabel or surveyLink
+                        surveyLink: ""
+                    }
+                }
+            ]
+        },
+        preCondition: { enabled: false }
+    },];
+
     return tasks;
 }
 

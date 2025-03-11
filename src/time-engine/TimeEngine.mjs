@@ -76,7 +76,7 @@ export default class TimeEngine {
   }
 
   static async executeTask(now) {
-    
+
     const taskList = await TimeEngine.getTaskListFunction();
     for (let i = 0; i < taskList.length; i++) {
       let task = taskList[i];
@@ -86,13 +86,11 @@ export default class TimeEngine {
         continue;
       }
 
-      const userList = await TimeEngine.getUserListFunction();
-
-      let finalUserList = task.participantIndependent ? [TimeEngine.systemUser]: userList;
+      let userList = task.participantIndependent ? [TimeEngine.systemUser]: await TimeEngine.getUserListFunction();
 
       const aTaskResultList = await TaskExecutor.executeTaskForUserListForDate(
         task,
-        finalUserList,
+        userList,
         now
       );
 

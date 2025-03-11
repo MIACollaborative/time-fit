@@ -84,6 +84,11 @@ export default class TimeEngine {
     for (let i = 0; i < taskList.length; i++) {
       let task = taskList[i];
 
+      // if task is not active, skip
+      if (!task.enabled) {
+        continue;
+      }
+
       let finalUserList = task.participantIndependent ? [TimeEngine.systemUser]: userList;
 
       const aTaskResultList = await TaskExecutor.executeTaskForUserListForDate(

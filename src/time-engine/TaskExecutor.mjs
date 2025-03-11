@@ -21,10 +21,6 @@ export default class TaskExecutor {
 
     let taskResultList = [];
 
-    if (taskSpec.enabled == false) {
-      return taskResultList;
-    }
-
     for (let i = 0; i < userList.length; i++) {
       let userInfo = userList[i];
 

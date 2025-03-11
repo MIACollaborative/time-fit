@@ -69,7 +69,7 @@ async function myGetTaskList(){
         },
         randomization: {
             // Note: could potentially separate this out to be random + action
-            enabled: true, // true or false
+            enabled: false, // true or false
             outcome: [
                 {
                     value: true, // not sure what to make out of it yet

@@ -85,7 +85,7 @@ export default class TaskExecutor {
         TaskExecutor.isCheckPointForUser(
           taskSpec.checkPoint,
           userInfo,
-          datetime
+          date
         );
       console.log(
         `isCheckPointResult: user[${userInfo.username}]: ${isCheckPointResult}`
@@ -1886,16 +1886,13 @@ export default class TaskExecutor {
         target: "all",
       });
     } else if (groupSpec.type == "list") {
-      let isListed = false;
-      if (groupSpec.list.includes(userInfo.username)) {
-        isListed = true;
-      }
-      result = isListed;
+      result = groupSpec.list.includes(userInfo.username);
       evaluationReportList.push({
         step: "group-list",
         target: groupSpec.list,
       });
     } else if (groupSpec.type == "group") {
+
       let groupMatched = false;
       Object.keys(groupSpec.membership).forEach((groupName, index) => {
         if (groupSpec.membership[groupName].includes(userInfo[groupName])) {
@@ -1925,7 +1922,7 @@ export default class TaskExecutor {
       result = true;
       evaluationReportList.push({
         step: "checkpoint-type",
-        target: "ignore",
+        target: checkPoint.type,
       });
       return [result, evaluationReportList];
     }

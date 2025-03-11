@@ -31,9 +31,7 @@ export default class TimeEngine {
     phase: "intervention",
   };
 
-  constructor() {
-    TimeEngine.start();
-  }
+  constructor() {}
 
   static async start() {
     TimeEngine.scheduler = nodeCron.schedule(

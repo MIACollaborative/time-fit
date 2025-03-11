@@ -4,6 +4,7 @@ import GeneralUtility from "../../lib/GeneralUtility.mjs";
 import DatabaseUtility from "../../lib/DatabaseUtility.mjs";
 import ServerUtility from "../../lib/ServerUtility.mjs";
 import FitbitHelper from "../../lib/FitbitHelper.mjs";
+import UserInfoHelper from "../utility/UserInfoHelper.mjs";
 
 export default class TaskExecutor {
   taskSpec;
@@ -11,14 +12,9 @@ export default class TaskExecutor {
   constructor() {}
 
   static async executeTaskForUserListForDate(taskSpec, userList, date) {
-    // Step 1: use grouop to filter out the participants to be considered for this task
-    //let userList = this.participantList;
-
     const datetime = DateTime.fromJSDate(date);
 
-    console.log(
-      `executeTaskForUserListForDate taskSpec.enabled: ${taskSpec.enabled} for ${taskSpec.label}`
-    );
+    console.log(`executeTaskForUserListForDate taskSpec.enabled: ${taskSpec.enabled} for ${taskSpec.label}`);
 
     // just for reference in other part of the class.
     this.taskSpec = taskSpec;
@@ -29,44 +25,31 @@ export default class TaskExecutor {
       return taskResultList;
     }
 
-    console.log(`executeTask: userList.length: ${userList.length}`);
-
-    console.log(`executeTask: ignoreTimezone: ${taskSpec.ignoreTimezone}`);
-
     for (let i = 0; i < userList.length; i++) {
       let userInfo = userList[i];
-
-      if (
-        userInfo["username"] != "system-user" &&
-        (userInfo["joinAt"] == null || userInfo["phase"] == "complete")
-      ) {
-        continue;
-      }
 
       // prepare taskLog
       let taskLogObj = {};
       taskLogObj["taskLabel"] = taskSpec.label;
       taskLogObj["username"] = userInfo.username;
-      //taskLogObj["preConditionResult"] = {};
       taskLogObj["randomizationResult"] = {};
-
-      taskLogObj["messageLabel"] = "";
       taskLogObj["executionResult"] = {};
       taskLogObj["activationReasoning"] = [];
 
+      // TO DO: this is very specific to choice and action, need to refactor this out.
+      taskLogObj["messageLabel"] = "";
+
       // step 1: isTimezoneSet
+      // this is very much like a pre-condition, but just a system-enforce one.
       if (taskSpec.ignoreTimezone == false) {
-        let isTimeZoneSetResult = GeneralUtility.isTimezoneSet(userInfo);
-        console.log(
-          `isTimezoneSet: user[${userInfo.username}]: ${isTimeZoneSetResult}`
-        );
+        let isTimeZoneSetResult = UserInfoHelper.isPropertySet(userInfo, "timezone");
 
         taskLogObj["activationReasoning"].push({
           phase: "timezone-set",
           result: isTimeZoneSetResult,
-          // do I want to store more?
           recordList: [],
         });
+        
         if (!isTimeZoneSetResult) {
           taskLogObj["isActivated"] = false;
           if (taskSpec["preActivationLogging"]) {
@@ -79,14 +62,12 @@ export default class TaskExecutor {
       // step 2: group membership
       let [isGroupResult, groupEvaluationRecordList] =
         TaskExecutor.isGroupForUser(taskSpec.group, userInfo);
-      console.log(
-        `isGroupForUser: user[${userInfo.username}]: ${isGroupResult}`
-      );
+
+
 
       taskLogObj["activationReasoning"].push({
         phase: "group",
         result: isGroupResult,
-        // do I want to store more?
         recordList: groupEvaluationRecordList,
       });
 
@@ -1931,49 +1912,15 @@ export default class TaskExecutor {
       result = groupMatched;
     }
 
-    // verion 2
     return [result, evaluationReportList];
-
-    // version 1
-    return false;
   }
 
   static isCheckPointForUser(checkPoint, userInfo, now) {
-    // Will return true if the time is right for this user. If not, return false;
     let result = false;
     let evaluationReportList = [];
 
-    // checkPoint example
-    /*
-        checkPoint: {
-            type: "absolute", // absolute vs. relative
-            reference: {
-                weekday:[1,2,3,4,5,6,7],
-                type: "fixed", // fixed or preference
-                value: "8:00 PM" // (if preference) (wakeupTime, bedTime, createdAt)
-            },
-            offset: {
-                type: "plus",
-                value: {hours: 0}
-            },
-            repeat: {
-                interval: { minutes: 5 }, // every x (5) minutes
-                range: {
-                    // after: starting from that reference, before, strating befoore that reference
-                    before: {
-                        // will execute within distance (100 mins) prior to the reference point
-                        distance: { minutes: 20 * 5 },
-                    },
-                    after: {
-                        // will execute within distance (100 mins) after the reference point
-                        distance: { minutes: 20 * 5 },
-                    }
-                }
-            }
-        },
-        */
+    const datetime = DateTime.fromJSDate(now);
 
-    // step 0: if checkPoint is to be Ignore
     if (checkPoint.type == "ignore") {
       result = true;
       evaluationReportList.push({
@@ -1981,28 +1928,11 @@ export default class TaskExecutor {
         target: "ignore",
       });
       return [result, evaluationReportList];
-      //return true;
     }
 
-    // step 1: identify what time attribute should be used for comparison
-
-    // step 1.1: use timezone to get local time
-    //let now = DateTime.now();
-    console.log(
-      `isCheckPointForUser[${
-        this.taskSpec != undefined
-          ? this.taskSpec.label
-          : "[testing] no taskSpec"
-      }] (${userInfo.username}) now: ${now}`
-    );
-    let nowUTC = now.toUTC();
-
-    let localTimeForUser = GeneralUtility.getLocalTime(now, userInfo.timezone);
+    let nowUTC = datetime.toUTC();
+    let localTimeForUser = GeneralUtility.getLocalTime(datetime, userInfo.timezone);
     let localWeekIndex = localTimeForUser.weekday;
-
-
-    // Step 1.2: check whether the weekday even pass (if it is the right day)
-    // [Note] I will likely have to deal with people go to bed at 12:00 AM later
 
     evaluationReportList.push({
       step: "checkpoint-dayofweek",
@@ -2011,60 +1941,25 @@ export default class TaskExecutor {
     });
 
     if (!checkPoint.reference.weekIndexList.includes(localWeekIndex)) {
-      // this is not the right week index
-      //console.log(`isCheckPointForUser weekIndex not included: ${localWeekIndex}/${checkPoint.reference.weekIndexList}`);
-
       result = false;
       return [result, evaluationReportList];
-    } else {
-      //console.log(`isCheckPointForUser weekIndex included: ${localWeekIndex}/${checkPoint.reference.weekIndexList}`);
     }
 
-    // ok. so now at least the weekday (or weekend) is correct (or included)
-
     let targetTime = undefined;
-    //let localTargetTime = undefined;
-
     let diffDateTime = undefined;
 
-    //console.log(`isCheckPointForUser checkPoint.reference.type: ${checkPoint.reference.type}`);
-    //console.log(`isCheckPointForUser checkPoint.reference.value: ${checkPoint.reference.value}`);
-
     if (checkPoint.reference.type == "fixed") {
-      // value: "8:00 PM"
-      let hourMinuteString = checkPoint.reference.value;
+      const hourMinuteString = checkPoint.reference.value;
 
-      // version 4: use the localTime
-      // D: 9/4/2017
-      // f: 8/6/2014, 1:07 PM
-      let timeString = `${localTimeForUser.toFormat("D")}, ${hourMinuteString}`;
+      const timeString = `${localTimeForUser.toFormat("D")}, ${hourMinuteString}`;
+      const syncedReferenceTime = DateTime.fromFormat(timeString, "f", {zone: userInfo.timezone,});
 
-      // new
-      let syncedReferenceTime = DateTime.fromFormat(timeString, "f", {
-        zone: userInfo.timezone,
-      });
+      targetTime = syncedReferenceTime;
 
-      // original
-      //let tempReferenceTime = DateTime.fromFormat(hourMinuteString, "t", { zone: userInfo.timezone });
-
-      // Version 2: we need the local year/month/day/hours/minutes to be all correct
-      //let [tempDateTime, syncedReferenceTime] = GeneralUtility.syncToFirstDateTimeBeforeUnit(localTimeForUser, tempReferenceTime, "hour");
-
-      // Version 1: this will give us the same hours in the local timezone, according to the machine time (which is not greeat)
-      //let userReferenceTime = DateTime.fromFormat(hourMinuteString, "t", { zone: userInfo.timezone });
-
-      targetTime = syncedReferenceTime; //userReferenceTime;
-
-      // need to check if the time is on the right date locally
-      console.log(`isCheckPointForUser.targetTime: ${targetTime}`);
     } else if (checkPoint.reference.type == "preference") {
-      // (if preference) (wakeupTime, bedTime, createdAt)
-      // get local time
-
       let referenceTimePropertyName = "";
 
-      //console.log(`isCheckPointForUser checkPoint.reference.value: ${checkPoint.reference.value}`);
-
+      // TO DO: this part is very application specific, need to refactor this out
       if (checkPoint.reference.value == "wakeupTime") {
         if (localWeekIndex <= 5) {
           referenceTimePropertyName = "weekdayWakeup";
@@ -2081,41 +1976,26 @@ export default class TaskExecutor {
         referenceTimePropertyName = checkPoint.reference.value;
       }
 
-      //console.log(`isCheckPointForUser referenceTimePropertyName: ${referenceTimePropertyName}`);
-      //console.log(`isCheckPointForUser referenceHourMinuteString: ${referenceTimePropertyName}`);
-
-      // version 4: use the localTime
-      // D: 9/4/2017
-      // f: 8/6/2014, 1:07 PM
-      let timeString = `${localTimeForUser.toFormat("D")}, ${DateTime.fromISO(
+      const timeString = `${localTimeForUser.toFormat("D")}, ${DateTime.fromISO(
         userInfo[referenceTimePropertyName],
         { zone: userInfo.timezone }
       ).toFormat("t")}`;
 
       // new
-      let syncedReferenceTime = DateTime.fromFormat(timeString, "f", {
+      const syncedReferenceTime = DateTime.fromFormat(timeString, "f", {
         zone: userInfo.timezone,
       });
-      targetTime = syncedReferenceTime; //userReferenceTime;
+      targetTime = syncedReferenceTime;
 
-      console.log(`isCheckPointForUser.targetTime: ${targetTime}`);
     }
 
-    // absolute vs. relative
-    //console.log(`isCheckPoint checkPoint.type: ${checkPoint.type}`);
-    if (checkPoint.type == "absolute") {
-      // do nothing
-    } else if (checkPoint.type == "relative") {
-      //console.log(`isCheckPointForUser checkPoint.offset.value: ${JSON.stringify(checkPoint.offset.value)}`);
+    if (checkPoint.type == "relative") {
       if (checkPoint.offset.type == "plus") {
         targetTime = targetTime.plus(checkPoint.offset.value);
       } else if (checkPoint.offset.type == "minus") {
         targetTime = targetTime.minus(checkPoint.offset.value);
       }
     }
-
-    console.log(`targetTime after offset: ${targetTime}`);
-
 
     // v2
     // ['months', 'days', 'hours']

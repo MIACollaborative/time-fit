@@ -9,6 +9,7 @@ export default class TimeEngine {
   static getTaskListFunction = undefined;
   static insertEventFunction = undefined;
   static insertTaskLogListFunction = undefined;
+  static checkPointPreferenceTimeStringFunction = undefined;
 
   static systemUser = {
     username: "system-user",
@@ -52,11 +53,21 @@ export default class TimeEngine {
     TimeEngine.insertTaskLogListFunction = func;
   } 
 
+  static registerCheckPointPreferenceTimeStringFunction(func){
+    TimeEngine.checkPointPreferenceTimeStringFunction = func;
+    // let TaskExecutor know about this function
+    TaskExecutor.registerCheckPointPreferenceTimeStringFunction(func);
+  } 
+
 
   static async onInterval(){
     const cronTime = process.hrtime();
     const now = DateTime.now().toJSDate();
 
+    // for testing
+    await TimeEngine.processClock(now);
+
+    /*
     if (TimeEngine.lastDate !== undefined) {
       const lastDateMinute = DateTime.fromJSDate(TimeEngine.lastDate)
         .startOf("minute")
@@ -71,6 +82,7 @@ export default class TimeEngine {
         // Skipping event generation as lastDate and now are the same at the minute level
       }
     } 
+    */
 
     TimeEngine.lastDate = now;
   }

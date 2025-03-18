@@ -8,8 +8,14 @@ import UserInfoHelper from "../utility/UserInfoHelper.mjs";
 
 export default class TaskExecutor {
   taskSpec;
+  registerCheckPointPreferenceTimeStringFunction;
 
   constructor() {}
+
+  // registerCheckPointPreferenceTimeStringFunction
+  static registerCheckPointPreferenceTimeStringFunction(func) {
+    TaskExecutor.checkPointPreferenceTimeStringFunction = func;
+  }
 
   static async executeTaskForUserListForDate(taskSpec, userList, date) {
     const datetime = DateTime.fromJSDate(date);
@@ -1943,12 +1949,10 @@ export default class TaskExecutor {
 
     if (checkPoint.reference.type == "fixed") {
       const hourMinuteString = checkPoint.reference.value;
-
       const timeString = `${localTimeForUser.toFormat("D")}, ${hourMinuteString}`;
-      const syncedReferenceTime = DateTime.fromFormat(timeString, "f", {zone: userInfo.timezone,});
+      const syncedReferenceTime = DateTime.fromFormat(timeString, "f", {zone: userInfo.timezone});
 
       targetTime = syncedReferenceTime;
-
     } else if (checkPoint.reference.type == "preference") {
       let referenceTimePropertyName = "";
 
@@ -1979,7 +1983,6 @@ export default class TaskExecutor {
         zone: userInfo.timezone,
       });
       targetTime = syncedReferenceTime;
-
     }
 
     if (checkPoint.type == "relative") {
@@ -1990,6 +1993,8 @@ export default class TaskExecutor {
       }
     }
 
+    // print target time before repeat
+    console.log(`isCheckPointForUser: targetTime (before repeat): ${targetTime}`);
     // v2
     // ['months', 'days', 'hours']
     // do this so that minutes will be an integer, all the additional errors can be embodied by the seconds
@@ -2033,6 +2038,11 @@ export default class TaskExecutor {
 
       let intervalStart = targetTime;
       let intervalEnd = targetTime;
+
+      // print both
+      console.log(
+        `isCheckPoint: intervalStart: ${intervalStart}, intervalEnd: ${intervalEnd}`
+      );
       // before
       if (checkPoint.repeat.range.before != undefined) {
         intervalStart = targetTime.minus(
@@ -2047,6 +2057,12 @@ export default class TaskExecutor {
 
       // add a millisecond just so that the interval is inclusive of both ends
       intervalEnd = intervalEnd.plus({ milliseconds: 1 });
+
+      // prit both
+      console.log(
+        `isCheckPoint: intervalStart: ${intervalStart}, intervalEnd: ${intervalEnd}`
+      );
+
 
       // now check if the current time is within the interval
       let correctStartEndInterval = Interval.fromDateTimes(

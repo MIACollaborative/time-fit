@@ -27,36 +27,27 @@ async function myGetTaskList() {
       participantIndependent: true,
       preActivationLogging: false,
       ignoreTimezone: true,
-      checkPoint: {
-        // enabled: true/false
-        type: "relative", // absolute vs. relative, ignore
-        reference: {
-          weekIndexList: [1, 2, 3, 4, 5, 6, 7],
-
-          type: "fixed", // fixed or preference
-          value: "12:00 AM", // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
-        },
-        offset: {
-          type: "plus",
-          value: { hours: 0 }, // {hours: 0}
-        },
-        repeat: {
-          interval: { minutes: 1 }, // every x (5) minutes
-          range: {
-            // after: starting from that reference, before, strating befoore that reference
-
-            before: {
-              // will execute within distance (100 mins) prior to the reference point
-              // set it to 24 * 60 means everything up to the start of the day (and even earlier, but irrelevant)
-              distance: { minutes: 24 * 60 },
+      checkPoints: {
+        enabled: true, // enabled: true/false
+        pointList: [
+          {
+            type: "relative", // absolute vs. relative (with offset)
+            reference: {
+              type: "spec", //"spec" or "cron"
+              value: {
+                dateCriteria: {
+                  weekIndexList: [1, 2, 3, 4, 5, 6, 7],                  
+                },
+                timeStringType: "fixed", // fixed or preference
+                timeString: "12:00 AM", // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
+              }
             },
-            after: {
-              // will execute within distance (100 mins) after the reference point
-              // set it to 24 * 60 means everything til the end of the day (and even later, but irrelevant)
-              distance: { minutes: 24 * 60 },
-            },
-          },
-        },
+            offset: {
+              type: "plus",
+              value: { hours: 0 }, // {hours: 0}
+            }
+          }
+        ]
       },
       group: {
         type: "all", // all or group or list
@@ -97,8 +88,12 @@ async function extractPreferenceTimeStringForUser(
   userInfo,
   checkPoint,
   preferenceTimeStringName,
-  localWeekIndex
+  date
 ) {
+  const datetime = DateTime.fromJSDate(date);
+  const localTimeForUser = GeneralUtility.getLocalTime(datetime, userInfo.timezone);
+  const localWeekIndex = localTimeForUser.weekday;
+
   let referenceTimePropertyName = "";
 
   // TO DO: this part is very application specific, need to refactor this out
@@ -128,12 +123,6 @@ TimeEngine.registerGetTaskListFunction(myGetTaskList);
 
 // Register a function to check preference time string
 TimeEngine.registerCheckPointPreferenceTimeStringFunction(extractPreferenceTimeStringForUser);
-
-// Register a function to insert event
-TimeEngine.registerInsertEventFunction(DatabaseHelper.insertEvent);
-
-// Register a function to insert taskLog
-TimeEngine.registerInsertTaskLogListFunction(DatabaseHelper.insertTaskLogList);
 
 // Start the time engine
 TimeEngine.start();

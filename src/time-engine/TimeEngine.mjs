@@ -24,7 +24,9 @@ export default class TimeEngine {
   constructor() {}
 
   static async start() {
-    // check if an interval has already been set up
+    TimeEngine.registerInsertEventFunction(DatabaseHelper.insertEvent);
+    TimeEngine.registerInsertTaskLogListFunction(DatabaseHelper.insertTaskLogList);
+
     if (!TimeEngine.scheduler) {
       TimeEngine.scheduler  =  setInterval(await TimeEngine.onInterval, 1 * 1000);
     }

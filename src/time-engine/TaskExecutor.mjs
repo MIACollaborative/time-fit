@@ -9,11 +9,12 @@ import UserInfoHelper from "../utility/UserInfoHelper.mjs";
 export default class TaskExecutor {
   taskSpec;
   registerCheckPointPreferenceTimeStringFunction;
+  checheckPointPreferenceTimeStringFunction;
 
   constructor() {}
 
   // registerCheckPointPreferenceTimeStringFunction
-  static registerCheckPointPreferenceTimeStringFunction(func) {
+  static registerCheckPointPreferenceTimeStringExtractionFunction(func) {
     TaskExecutor.checkPointPreferenceTimeStringFunction = func;
   }
 
@@ -61,7 +62,9 @@ export default class TaskExecutor {
         }
       }
 
+      // TO DO: disable for now, should enable later
       // step 2: group membership
+      /*
       let [isGroupResult, groupEvaluationRecordList] =
         TaskExecutor.isGroupForUser(taskSpec.group, userInfo);
 
@@ -79,6 +82,7 @@ export default class TaskExecutor {
         }
         continue;
       }
+      */
 
       // step 3: checkpoint (time)
       let [isCheckPointResult, checkPointEvaluationRecordList] =
@@ -1897,81 +1901,44 @@ export default class TaskExecutor {
       const nowUTC = datetime.toUTC();
       const localTimeForUser = GeneralUtility.getLocalTime(datetime, userInfo.timezone);
 
-      if(checkPoint.type == "fixed") {
-        if(checkPoint.reference.type == "spec"){
-          const weekIndexList = checkPoint.reference.value.dateCriteria.weekIndexList;
-          const localWeekIndex = localTimeForUser.weekday;
+      if(checkPoint.reference.type == "spec"){
+        const weekIndexList = checkPoint.reference.value.dateCriteria.weekIndexList;
+        const localWeekIndex = localTimeForUser.weekday;
 
-          evaluationReportList.push({
-            step: `checkpoint-${i}-dayofweek`,
-            target: weekIndexList,
-            souce: localWeekIndex,
-          });
+        evaluationReportList.push({
+          step: `checkpoint-${i}-dayofweek`,
+          target: weekIndexList,
+          souce: localWeekIndex,
+        });
 
-          if (!weekIndexList.includes(localWeekIndex)) {
-            result = false;
-            return [result, evaluationReportList];
-          }
-
-          const dateTimeRefeneceType = checkPoint.reference.value.timeStringType;
-
-          // now check the time
-          let hourMinuteString = "";
-
-          if (dateTimeRefeneceType == "fixed") {
-            hourMinuteString = checkPoint.reference.value.timeString;
-          } 
-          else if (dateTimeRefeneceType == "preference") {
-            const preferenceString = checkPoint.reference.value.timeString;
-
-            // TO DO: figure something else to get the hourMinuteString based on preferenceString
-            hourMinuteString = checkPoint.reference.value.timeString;
-            /*
-            let referenceTimePropertyName = "";
-      
-            // TO DO: this part is very application specific, need to refactor this out
-            if (preferenceString == "wakeupTime") {
-              if (localWeekIndex <= 5) {
-                referenceTimePropertyName = "weekdayWakeup";
-              } else {
-                referenceTimePropertyName = "weekendWakeup";
-              }
-            } else if (preferenceString == "bedTime") {
-              if (localWeekIndex <= 5) {
-                referenceTimePropertyName = "weekdayBed";
-              } else {
-                referenceTimePropertyName = "weekendBed";
-              }
-            } else {
-              referenceTimePropertyName = preferenceString;
-            }
-      
-            const timeString = `${localTimeForUser.toFormat("D")}, ${DateTime.fromISO(
-              userInfo[referenceTimePropertyName],
-              { zone: userInfo.timezone }
-            ).toFormat("t")}`;
-      
-            // new
-            const syncedReferenceTime = DateTime.fromFormat(timeString, "f", {
-              zone: userInfo.timezone,
-            });
-            targetTime = syncedReferenceTime;
-            */
-          }
-
-          const timeString = `${localTimeForUser.toFormat("D")}, ${hourMinuteString}`;
-          const syncedReferenceTime = DateTime.fromFormat(timeString, "f", {zone: userInfo.timezone});
-          targetTime = syncedReferenceTime;
-
-
-
-
+        if (!weekIndexList.includes(localWeekIndex)) {
+          result = false;
+          return [result, evaluationReportList];
         }
-        else if(checkPoint.reference.type == "cron"){
 
+        const dateTimeRefeneceType = checkPoint.reference.value.timeStringType;
+
+        // now check the time
+        let hourMinuteString = "";
+
+        if (dateTimeRefeneceType == "fixed") {
+          hourMinuteString = checkPoint.reference.value.timeString;
+        } 
+        else if (dateTimeRefeneceType == "preference") {
+          const preferenceString = checkPoint.reference.value.timeString;
+          hourMinuteString = TaskExecutor.checheckPointPreferenceTimeStringFunction(userInfo, checkPoint, preferenceString, date);
         }
+
+        const timeString = `${localTimeForUser.toFormat("D")}, ${hourMinuteString}`;
+        const syncedReferenceTime = DateTime.fromFormat(timeString, "f", {zone: userInfo.timezone});
+        targetTime = syncedReferenceTime;
       }
-      else if(checkPoint.type == "relative"){
+      else if(checkPoint.reference.type == "cron"){
+
+      }
+      
+      // now, see if there is an offset. If so, add it.
+      if(checkPoint.type == "relative"){
         if (checkPoint.offset.type == "plus") {
           targetTime = targetTime.plus(checkPoint.offset.value);
         } else if (checkPoint.offset.type == "minus") {

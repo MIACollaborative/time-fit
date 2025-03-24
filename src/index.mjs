@@ -122,7 +122,7 @@ TimeEngine.registerGetUserListFunction(myGetUserList);
 TimeEngine.registerGetTaskListFunction(myGetTaskList);
 
 // Register a function to check preference time string
-TimeEngine.registerCheckPointPreferenceTimeStringFunction(extractPreferenceTimeStringForUser);
+TimeEngine.registerCheckPointPreferenceTimeStringExtractionFunction(extractPreferenceTimeStringForUser);
 
 // Start the time engine
 TimeEngine.start();

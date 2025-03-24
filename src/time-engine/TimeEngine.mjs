@@ -9,7 +9,7 @@ export default class TimeEngine {
   static getTaskListFunction = undefined;
   static insertEventFunction = undefined;
   static insertTaskLogListFunction = undefined;
-  static checkPointPreferenceTimeStringFunction = undefined;
+  static checkPointPreferenceTimeStringExtractionFunction = undefined;
 
   static systemUser = {
     username: "system-user",
@@ -55,10 +55,10 @@ export default class TimeEngine {
     TimeEngine.insertTaskLogListFunction = func;
   } 
 
-  static registerCheckPointPreferenceTimeStringFunction(func){
-    TimeEngine.checkPointPreferenceTimeStringFunction = func;
+  static registerCheckPointPreferenceTimeStringExtractionFunction(func){
+    TimeEngine.checkPointPreferenceTimeStringExtractionFunction = func;
     // let TaskExecutor know about this function
-    TaskExecutor.registerCheckPointPreferenceTimeStringFunction(func);
+    TaskExecutor.registerCheckPointPreferenceTimeStringExtractionFunction(func);
   } 
 
 

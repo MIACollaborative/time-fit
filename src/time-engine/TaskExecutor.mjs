@@ -8,14 +8,14 @@ import UserInfoHelper from "../utility/UserInfoHelper.mjs";
 
 export default class TaskExecutor {
   taskSpec;
-  registerCheckPointPreferenceTimeStringFunction;
-  checheckPointPreferenceTimeStringFunction;
+  registerCheckPointPreferenceTimeStringExtractionFunction;
+  checheckPointPreferenceTimeStringExtractionFunction;
 
   constructor() {}
 
   // registerCheckPointPreferenceTimeStringFunction
   static registerCheckPointPreferenceTimeStringExtractionFunction(func) {
-    TaskExecutor.checkPointPreferenceTimeStringFunction = func;
+    TaskExecutor.checheckPointPreferenceTimeStringExtractionFunction = func;
   }
 
   static async executeTaskForUserListForDate(taskSpec, userList, date) {
@@ -1926,7 +1926,7 @@ export default class TaskExecutor {
         } 
         else if (dateTimeRefeneceType == "preference") {
           const preferenceString = checkPoint.reference.value.timeString;
-          hourMinuteString = TaskExecutor.checheckPointPreferenceTimeStringFunction(userInfo, checkPoint, preferenceString, date);
+          hourMinuteString = TaskExecutor.checheckPointPreferenceTimeStringExtractionFunction(userInfo, checkPoint, preferenceString, date);
         }
 
         const timeString = `${localTimeForUser.toFormat("D")}, ${hourMinuteString}`;
@@ -1950,18 +1950,37 @@ export default class TaskExecutor {
 
     };
 
+    const diffDateTime = GeneralUtility.diffDateTime(targetTime, nowUTC, [
+      "minutes",
+      "seconds",
+    ]);
 
+    evaluationReportList.push({
+      step: `checkpoint-${i}-time`,
+      target: targetTime,
+      souce: nowUTC,
+    });
 
+    const diffObj = diffDateTime.toObject();
 
+    const secondsThreshold = 20;
 
+    if (
+      diffObj.minutes != 0 ||
+      Math.abs(diffObj.seconds) >= secondsThreshold
+    ) {
+      result = false;
+    } else {
+      result = true;
+    }
     
+    console.log(`isCheckPointForUser: ${result}`);
+
+    return [result, evaluationReportList];
 
 
 
 
-
-
-    let diffDateTime = undefined;
 
     if (checkPoints.reference.type == "fixed") {
       const hourMinuteString = checkPoints.reference.value;
@@ -2018,9 +2037,7 @@ export default class TaskExecutor {
       "minutes",
       "seconds",
     ]);
-    let diffObj = diffDateTime.toObject();
 
-    let secondsThreshold = 20;
 
     // v1
     // diffDateTime = GeneralUtility.diffDateTime(targetTime, nowUTC, "minutes");

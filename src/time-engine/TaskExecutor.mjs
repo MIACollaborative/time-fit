@@ -1932,19 +1932,37 @@ export default class TaskExecutor {
         const timeString = `${localTimeForUser.toFormat("D")}, ${hourMinuteString}`;
         const syncedReferenceTime = DateTime.fromFormat(timeString, "f", {zone: userInfo.timezone});
         targetTime = syncedReferenceTime;
+        // now, see if there is an offset. If so, add it.
+        if(checkPoint.type == "relative"){
+          if (checkPoint.offset.type == "plus") {
+            targetTime = targetTime.plus(checkPoint.offset.value);
+          } else if (checkPoint.offset.type == "minus") {
+            targetTime = targetTime.minus(checkPoint.offset.value);
+          }
+        }
       }
       else if(checkPoint.reference.type == "cron"){
+        targetTime = localTimeForUser;
+        
+        // if there is offset, reverse it.
+        if(checkPoint.type == "relative"){
+          if (checkPoint.offset.type == "plus") {
+            targetTime = targetTime.minus(checkPoint.offset.value);
+          } else if (checkPoint.offset.type == "minus") {
+            targetTime = targetTime.plus(checkPoint.offset.value);
+          }
+        }
+
+        // now, use target time to match the cron expression
+        const cronExpression = checkPoint.reference.value;
+
+        // ok, now need to check if target time matchs the cron expression, considering the timezone (local time)
+        // referencce cronstrue to see if I can use its utility
+        // https://github.com/bradymholt/cronstrue
 
       }
       
-      // now, see if there is an offset. If so, add it.
-      if(checkPoint.type == "relative"){
-        if (checkPoint.offset.type == "plus") {
-          targetTime = targetTime.plus(checkPoint.offset.value);
-        } else if (checkPoint.offset.type == "minus") {
-          targetTime = targetTime.minus(checkPoint.offset.value);
-        }
-      }
+
 
       // now, targetTime is set. now check that it matches
 

@@ -1,7 +1,6 @@
 import { DateTime, Interval } from "luxon";
 import UserInfoHelper from "../utility/UserInfoHelper.js";
 import DateTimeHelper from "../utility/DateTimeHelper.js";
-import CronExpressionParser from "cron-parser";
 
 export default class TaskExecutor {
   taskSpec;
@@ -1991,8 +1990,7 @@ export default class TaskExecutor {
 
         // now, use target time to match the cron expression
         const cronExpressionString = checkPoint.reference.value;
-        const cronExpression = CronExpressionParser.parse(cronExpressionString);
-        checkPointResult = cronExpression.includesDate(targetTime.toJSDate());
+        checkPointResult = DateTimeHelper.matchCronExpreesionAndDate(cronExpressionString, targetTime.toJSDate());
 
         // wait, but this is exact match, up to the seconds, even...
 

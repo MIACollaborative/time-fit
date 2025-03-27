@@ -8,13 +8,18 @@ import MessageGroupAction from "../action-collection/MessageGroupAction.js";
 
 export default class TaskExecutor {
   taskSpec;
-  registerCheckPointPreferenceTimeStringExtractionFunction;
-  checheckPointPreferenceTimeStringExtractionFunction;
+  static checkPointPreferenceTimeStringExtractionFunction;
+  static actionTypeMap = {};
+  static registerAction;
 
   constructor() {}
-
+  
   static registerCheckPointPreferenceTimeStringExtractionFunction(func) {
-    TaskExecutor.checheckPointPreferenceTimeStringExtractionFunction = func;
+    TaskExecutor.checkPointPreferenceTimeStringExtractionFunction = func;
+  }
+
+  static registerAction(name, actionClass) {
+    TaskExecutor.actionTypeMap[name] = actionClass;
   }
 
   static async executeTaskForUserListForDate(taskSpec, userList, date) {
@@ -230,6 +235,10 @@ export default class TaskExecutor {
 
     console.log(`theAction.type: ${theAction.type}`);
 
+    // the ideal version
+    //record.executionResult = actionTypeMap[theAction.type].execute(theAction, { userInfo });
+
+
     switch (theAction.type) {
       case "printHello":
         record.executionResult = await HelloAction.execute(theAction, {
@@ -246,6 +255,7 @@ export default class TaskExecutor {
           userInfo,
         });
         break;
+
       case "messageLabelToResearchInvestigator":
         // find the message through messageLabel
         messageInfo = await DatabaseUtility.findMessageByLabel(
@@ -1799,7 +1809,7 @@ export default class TaskExecutor {
         } else if (dateTimeRefeneceType == "preference") {
           const preferenceString = checkPoint.reference.value.timeString;
           hourMinuteString =
-            TaskExecutor.checheckPointPreferenceTimeStringExtractionFunction(
+            TaskExecutor.checkPointPreferenceTimeStringExtractionFunction(
               userInfo,
               checkPoint,
               preferenceString,

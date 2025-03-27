@@ -1,5 +1,6 @@
 import TimeEngine from "./time-engine/TimeEngine.js";
 import DatabaseHelper from "./utility/DatabaseHelper.js";
+import HelloAction from "./action-collection/HelloAction.js";
 
 async function myGetUserList() {
   const users = await DatabaseHelper.getUsers();
@@ -116,6 +117,10 @@ TimeEngine.registerGetTaskListFunction(myGetTaskList);
 
 // Register a function to check preference time string
 TimeEngine.registerCheckPointPreferenceTimeStringExtractionFunction(extractPreferenceTimeStringForUser);
+
+
+// Register a ction
+TimeEngine.registerAction("printHello", HelloAction);
 
 // Start the time engine
 TimeEngine.start();

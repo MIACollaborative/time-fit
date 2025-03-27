@@ -37,6 +37,10 @@ export default class TimeEngine {
     clearInterval(TimeEngine.scheduler);
   }
 
+  static registerAction(name, actionClass) {
+    TaskExecutor.registerAction(name, actionClass);
+  }
+
 
   static registerGetUserListFunction(func){
     TimeEngine.getUserListFunction = func;

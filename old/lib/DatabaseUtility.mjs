@@ -19,7 +19,6 @@ export default class DatabaseUtility {
     }
 
     static async insertEvent(event){
-        console.log(`DatabaseUtility.insertEvent: ${event}`);
         const createResult = await prisma.event.create({
             data: event
         });

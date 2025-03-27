@@ -1,6 +1,7 @@
 import { DateTime, Interval } from "luxon";
 import UserInfoHelper from "../utility/UserInfoHelper.js";
 import DateTimeHelper from "../utility/DateTimeHelper.js";
+import RandomizationHelper from "../utility/RandomizationHelper.js";
 
 export default class TaskExecutor {
   taskSpec;
@@ -1163,53 +1164,16 @@ export default class TaskExecutor {
   }
 
   static randomizeSelection(choiceList) {
-    // Example
-    /*
-        [
-            {
-                value: true,
-                chance: 0.5,
-                action: {
-                    type: "surveyId", // surveyId, or surveyGroup
-                    surveyId: "XYZ", //surveyId, only matter if the tyep is surveyId
-                    surveyGroup: "gif", // surveyGroup, only matter if the type is surveyGroup
-                    avoidHistory: true, // if we want to minimize the chance of sending the same message to the same user in a short window
-                }
-            },
-            {
-                value: false,
-                chance: 0.5,
-                action: {
-                    type: "surveyId", // surveyId, or surveyGroup
-                    surveyId: "XYZ", //surveyId, only matter if the tyep is surveyId
-                    surveyGroup: "gif", // surveyGroup, only matter if the type is surveyGroup
-                    avoidHistory: true, // if we want to minimize the chance of sending the same message to the same user in a short window
-                }
-            }
-        ]
-        */
-
-    // ok, here is the strategy.
-    // Step 1: get a random number between 0 - 1
-
-    // Step 2: continually deduct the chance from the random number
-    // if the random number become zero (or does it needs to be smaller?)
-
-    // [0, 1)
 
     let theChoice = undefined;
-
-    let randNumber = Math.random();
+    const randNumber = RandomizationHelper.getRandomNumber(); // Math.random();
 
     let allowance = randNumber;
 
     for (let i = 0; i < choiceList.length; i++) {
-      let choice = choiceList[i];
-
-      let cChance = choice.chance;
-
+      const choice = choiceList[i];
+      const cChance = choice.chance;
       allowance = allowance - cChance;
-
       // Example: 0.5 + 0.5
       // since 0 will be count as the first 0.5, so if allowance == 0, it should be count as the next one
       if (allowance < 0) {
@@ -1217,9 +1181,6 @@ export default class TaskExecutor {
         break;
       }
     }
-
-    // now, what to do if theChoice is undefined?
-    // meaning, the randomization indicate not to take action
 
     return {
       randomNumber: randNumber,

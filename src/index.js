@@ -60,19 +60,12 @@ async function myGetTaskList() {
         list: [], //["test1", "test2"] // user name list, only matter if type is "list"
       },
       randomization: {
-        // Note: could potentially separate this out to be random + action
         enabled: false, // true or false
         outcome: [
           {
-            value: true, // not sure what to make out of it yet
             chance: 1.0,
             action: {
-              type: "printHello", // messageLabel, or messageGroup
-              messageLabel: "", //messageLabel, only matter if the type is messageLabel
-              messageGroup: "", // "nongif-m", // messageGroup, only matter if the type is messageGroup
-              avoidHistory: false, // if we want to minimize the chance of sending the same message to k,the same user in a short window
-              surveyType: "", //surveyLabel or surveyLink
-              surveyLink: "",
+              type: "printHello",
             },
           },
         ],

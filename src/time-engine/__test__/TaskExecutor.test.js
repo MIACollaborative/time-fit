@@ -436,3 +436,96 @@ describe('group-membership', () => {
     expect(TaskExecutor.isGroupForUser(mockGroupCriteria, mockUserInfo3)[0]).toBe(true);
   });
 });
+
+
+describe('randomize choice', () => {
+  test('First choice when no randomization', () => {
+    const mockRandomization1 = {
+      enabled: false,
+      outcome: [
+        {
+          chance: 0.5,
+          action: {
+            type: "printHello",
+          },
+        },
+        {
+          chance: 0.5,
+          action: {
+            type: "printHello2",
+          },
+        },
+      ],
+    };
+
+    // use TaskExecutor.obtainChoiceWithRandomization to check
+    for (let i = 0; i < 100; i++) {
+      expect(TaskExecutor.obtainChoiceWithRandomization(mockRandomization1)["theChoice"].action.type == "printHello").toBe(true);
+    }
+
+    const mockRandomization2 = {
+      enabled: true, // true or false
+      outcome: [
+        {
+          chance: 1.0,
+          action: {
+            type: "printHello",
+          },
+        },
+        {
+          chance: 0,
+          action: {
+            type: "printHello2",
+          },
+        },
+      ],
+    };
+
+    // use TaskExecutor.obtainChoiceWithRandomization to check
+    // test it 100 times and all of them should be printHello
+    for (let i = 0; i < 100; i++) {
+      expect(TaskExecutor.obtainChoiceWithRandomization(mockRandomization2)["theChoice"].action.type == "printHello").toBe(true);
+    }
+
+    // create another mockRandomization that has 0.5 chance for each
+    const mockRandomization3 = {
+      enabled: true, // true or false
+      outcome: [
+        {
+          chance: 0.5,
+          action: {
+            type: "printHello",
+          },
+        },
+        {
+          chance: 0.5,
+          action: {
+            type: "printHello2",
+          },
+        },
+      ],
+    };
+
+    // do it 1000 times and check if the probability is close to 0.5
+    let printHelloCount = 0;
+    let printHello2Count = 0;
+    for (let i = 0; i < 1000; i++) {
+      if (TaskExecutor.obtainChoiceWithRandomization(mockRandomization3)["theChoice"].action.type == "printHello") {
+        printHelloCount++;
+      } else {
+        printHello2Count++;
+      }
+    }
+    expect(Math.abs(printHelloCount - printHello2Count) < 100).toBe(true);
+
+    // expect printHelloCount/1000 to be close to 0.5
+    expect(Math.abs(printHelloCount/1000 - 0.5) < 0.1).toBe(true);
+
+    // expect printHello2Count/1000 to be close to 0.5
+    expect(Math.abs(printHello2Count/1000 - 0.5) < 0.1).toBe(true);
+
+
+
+
+  });
+});

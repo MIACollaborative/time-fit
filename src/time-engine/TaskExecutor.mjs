@@ -1,9 +1,9 @@
 import { DateTime, Interval } from "luxon";
-import TwilioHelper from "../../lib/TwilioHelper.mjs";
-import GeneralUtility from "../../lib/GeneralUtility.mjs";
-import DatabaseUtility from "../../lib/DatabaseUtility.mjs";
-import ServerUtility from "../../lib/ServerUtility.mjs";
-import FitbitHelper from "../../lib/FitbitHelper.mjs";
+import TwilioHelper from "../../old/lib/TwilioHelper.mjs";
+import GeneralUtility from "../../old/lib/GeneralUtility.mjs";
+import DatabaseUtility from "../../old/lib/DatabaseUtility.mjs";
+import ServerUtility from "../../old/lib/ServerUtility.mjs";
+import FitbitHelper from "../../old/lib/FitbitHelper.mjs";
 import UserInfoHelper from "../utility/UserInfoHelper.mjs";
 
 export default class TaskExecutor {
@@ -21,7 +21,9 @@ export default class TaskExecutor {
   static async executeTaskForUserListForDate(taskSpec, userList, date) {
     const datetime = DateTime.fromJSDate(date);
 
-    console.log(`executeTaskForUserListForDate taskSpec.enabled: ${taskSpec.enabled} for ${taskSpec.label}`);
+    console.log(
+      `executeTaskForUserListForDate taskSpec.enabled: ${taskSpec.enabled} for ${taskSpec.label}`
+    );
 
     // just for reference in other part of the class.
     this.taskSpec = taskSpec;
@@ -45,14 +47,17 @@ export default class TaskExecutor {
       // step 1: isTimezoneSet
       // this is very much like a pre-condition, but just a system-enforce one.
       if (taskSpec.ignoreTimezone == false) {
-        let isTimeZoneSetResult = UserInfoHelper.isPropertySet(userInfo, "timezone");
+        let isTimeZoneSetResult = UserInfoHelper.isPropertySet(
+          userInfo,
+          "timezone"
+        );
 
         taskLogObj["activationReasoning"].push({
           phase: "timezone-set",
           result: isTimeZoneSetResult,
           recordList: [],
         });
-        
+
         if (!isTimeZoneSetResult) {
           taskLogObj["isActivated"] = false;
           if (taskSpec["preActivationLogging"]) {
@@ -86,11 +91,7 @@ export default class TaskExecutor {
 
       // step 3: checkpoint (time)
       let [isCheckPointResult, checkPointEvaluationRecordList] =
-        TaskExecutor.isCheckPointForUser(
-          taskSpec.checkPoints,
-          userInfo,
-          date
-        );
+        TaskExecutor.isCheckPointForUser(taskSpec.checkPoints, userInfo, date);
       console.log(
         `isCheckPointResult: user[${userInfo.username}]: ${isCheckPointResult}`
       );
@@ -277,7 +278,7 @@ export default class TaskExecutor {
         console.log(`Hello, ${userInfo.username}!`);
         record.executionResult = {
           type: "console",
-          value: "hello"
+          value: "hello",
         };
         break;
       case "messageLabel":
@@ -703,7 +704,6 @@ export default class TaskExecutor {
           // then, just pick a random update to perform
         }
 
-
         let queryTime = new Date();
         let resultList = [];
         for (let i = 0; i < filteredUpdateList.length; i++) {
@@ -1109,10 +1109,9 @@ export default class TaskExecutor {
 
         break;
       case "updateStepsGoalToFitbitServer":
-
-      const theUser = await DatabaseUtility.getUserInfoByUsername(
-        userInfo.username
-      );
+        const theUser = await DatabaseUtility.getUserInfoByUsername(
+          userInfo.username
+        );
 
         const fitbitID = theUser.fitbitId;
         const accessToken = theUser.accessToken;
@@ -1759,8 +1758,6 @@ export default class TaskExecutor {
         startDate = undefined;
         endDate = undefined;
 
-
-
         startDate = GeneralUtility.generateStartOrEndDateTimeByReference(
           localTimeForUser,
           userInfo,
@@ -1793,7 +1790,6 @@ export default class TaskExecutor {
           // inclusive
           endDate = endDate.plus({ milliseconds: 1 });
         }
-
 
         console.log(
           `${this.name} checkOneConditionForUser[${
@@ -1857,7 +1853,6 @@ export default class TaskExecutor {
         target: groupSpec.list,
       });
     } else if (groupSpec.type == "group") {
-
       let groupMatched = false;
       Object.keys(groupSpec.membership).forEach((groupName, index) => {
         if (groupSpec.membership[groupName].includes(userInfo[groupName])) {
@@ -1893,16 +1888,22 @@ export default class TaskExecutor {
     }
 
     // now iterate through the pointList with a loop
-    for(let i = 0; i < checkPoints.pointList.length; i++) {
+    for (let i = 0; i < checkPoints.pointList.length; i++) {
       const checkPoint = checkPoints.pointList[i];
 
       let targetTime = undefined;
-      let result = false;
+      let checkPointResult = false;
       const nowUTC = datetime.toUTC();
-      const localTimeForUser = GeneralUtility.getLocalTime(datetime, userInfo.timezone);
+      const localTimeForUser = GeneralUtility.getLocalTime(
+        datetime,
+        userInfo.timezone
+      );
 
-      if(checkPoint.reference.type == "spec"){
-        const weekIndexList = checkPoint.reference.value.dateCriteria.weekIndexList;
+      if (checkPoint.reference.type == "spec") {
+        // print type
+        console.log(`checkPoint.reference.type: ${checkPoint.reference.type}`);
+        const weekIndexList =
+          checkPoint.reference.value.dateCriteria.weekIndexList;
         const localWeekIndex = localTimeForUser.weekday;
 
         evaluationReportList.push({
@@ -1923,29 +1924,47 @@ export default class TaskExecutor {
 
         if (dateTimeRefeneceType == "fixed") {
           hourMinuteString = checkPoint.reference.value.timeString;
-        } 
-        else if (dateTimeRefeneceType == "preference") {
+        } else if (dateTimeRefeneceType == "preference") {
           const preferenceString = checkPoint.reference.value.timeString;
-          hourMinuteString = TaskExecutor.checheckPointPreferenceTimeStringExtractionFunction(userInfo, checkPoint, preferenceString, date);
+          hourMinuteString =
+            TaskExecutor.checheckPointPreferenceTimeStringExtractionFunction(
+              userInfo,
+              checkPoint,
+              preferenceString,
+              date
+            );
         }
 
-        const timeString = `${localTimeForUser.toFormat("D")}, ${hourMinuteString}`;
-        const syncedReferenceTime = DateTime.fromFormat(timeString, "f", {zone: userInfo.timezone});
+        // print hourMinuteString
+        console.log(`hourMinuteString: ${hourMinuteString}`);
+
+        const timeString = `${localTimeForUser.toFormat(
+          "D"
+        )}, ${hourMinuteString}`;
+        const syncedReferenceTime = DateTime.fromFormat(timeString, "f", {
+          zone: userInfo.timezone,
+        });
+
+        // print syncedReferenceTime
+        console.log(`syncedReferenceTime: ${syncedReferenceTime}`);
         targetTime = syncedReferenceTime;
+        // print targetTime
+        console.log(`isCheckPointForUser: targetTime: ${targetTime}`);
         // now, see if there is an offset. If so, add it.
-        if(checkPoint.type == "relative"){
+        if (checkPoint.type == "relative") {
           if (checkPoint.offset.type == "plus") {
             targetTime = targetTime.plus(checkPoint.offset.value);
           } else if (checkPoint.offset.type == "minus") {
             targetTime = targetTime.minus(checkPoint.offset.value);
           }
         }
-      }
-      else if(checkPoint.reference.type == "cron"){
+      } else if (checkPoint.reference.type == "cron") {
+        // print type
+        console.log(`checkPoint.reference.type: ${checkPoint.reference.type}`);
         targetTime = localTimeForUser;
-        
+
         // if there is offset, reverse it.
-        if(checkPoint.type == "relative"){
+        if (checkPoint.type == "relative") {
           if (checkPoint.offset.type == "plus") {
             targetTime = targetTime.minus(checkPoint.offset.value);
           } else if (checkPoint.offset.type == "minus") {
@@ -1959,51 +1978,53 @@ export default class TaskExecutor {
         // ok, now need to check if target time matchs the cron expression, considering the timezone (local time)
         // referencce cronstrue to see if I can use its utility
         // https://github.com/bradymholt/cronstrue
-
       }
-      
 
+      // print targetTime
+      console.log(`isCheckPointForUser: targetTime: ${targetTime}`);
 
-      // now, targetTime is set. now check that it matches
+      const diffDateTime = GeneralUtility.diffDateTime(targetTime, nowUTC, [
+        "minutes",
+        "seconds",
+      ]);
 
-    };
+      evaluationReportList.push({
+        step: `checkpoint-${i}-time`,
+        target: targetTime,
+        souce: nowUTC,
+      });
 
-    const diffDateTime = GeneralUtility.diffDateTime(targetTime, nowUTC, [
-      "minutes",
-      "seconds",
-    ]);
+      const diffObj = diffDateTime.toObject();
 
-    evaluationReportList.push({
-      step: `checkpoint-${i}-time`,
-      target: targetTime,
-      souce: nowUTC,
-    });
+      const secondsThreshold = 20;
 
-    const diffObj = diffDateTime.toObject();
+      if (
+        diffObj.minutes != 0 ||
+        Math.abs(diffObj.seconds) >= secondsThreshold
+      ) {
+        checkPointResult = false;
+      } else {
+        checkPointResult = true;
+      }
 
-    const secondsThreshold = 20;
-
-    if (
-      diffObj.minutes != 0 ||
-      Math.abs(diffObj.seconds) >= secondsThreshold
-    ) {
-      result = false;
-    } else {
-      result = true;
+      if (checkPointResult == true) {
+        result = true;
+        break;
+      }
     }
-    
+
     console.log(`isCheckPointForUser: ${result}`);
 
     return [result, evaluationReportList];
 
-
-
-
-
     if (checkPoints.reference.type == "fixed") {
       const hourMinuteString = checkPoints.reference.value;
-      const timeString = `${localTimeForUser.toFormat("D")}, ${hourMinuteString}`;
-      const syncedReferenceTime = DateTime.fromFormat(timeString, "f", {zone: userInfo.timezone});
+      const timeString = `${localTimeForUser.toFormat(
+        "D"
+      )}, ${hourMinuteString}`;
+      const syncedReferenceTime = DateTime.fromFormat(timeString, "f", {
+        zone: userInfo.timezone,
+      });
 
       targetTime = syncedReferenceTime;
     } else if (checkPoints.reference.type == "preference") {
@@ -2047,7 +2068,9 @@ export default class TaskExecutor {
     }
 
     // print target time before repeat
-    console.log(`isCheckPointForUser: targetTime (before repeat): ${targetTime}`);
+    console.log(
+      `isCheckPointForUser: targetTime (before repeat): ${targetTime}`
+    );
     // v2
     // ['months', 'days', 'hours']
     // do this so that minutes will be an integer, all the additional errors can be embodied by the seconds
@@ -2055,7 +2078,6 @@ export default class TaskExecutor {
       "minutes",
       "seconds",
     ]);
-
 
     // v1
     // diffDateTime = GeneralUtility.diffDateTime(targetTime, nowUTC, "minutes");
@@ -2113,7 +2135,6 @@ export default class TaskExecutor {
       console.log(
         `isCheckPoint: intervalStart: ${intervalStart}, intervalEnd: ${intervalEnd}`
       );
-
 
       // now check if the current time is within the interval
       let correctStartEndInterval = Interval.fromDateTimes(

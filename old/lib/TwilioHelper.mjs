@@ -1,16 +1,5 @@
 import Twilio from 'twilio';
-
-import * as dotenv from "dotenv";
-
-
-//console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
-
-if (process.env.NODE_ENV !== "production") {
-  dotenv.config();
-  //console.log(`after config() - TWILIO_ACCOUNT_SID: ${process.env.TWILIO_ACCOUNT_SID}, TWILIO_AUTH_TOKEN: ${process.env.TWILIO_AUTH_TOKEN}`);
-}
-
-//console.log(`TWILIO_ACCOUNT_SID: ${process.env.TWILIO_ACCOUNT_SID}, TWILIO_AUTH_TOKEN: ${process.env.TWILIO_AUTH_TOKEN}`);
+process.loadEnvFile();
 
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;

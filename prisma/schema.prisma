@@ -1,10 +1,8 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-// previewFeatures = ["mongoDb", "filterJson"]
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["filterJson"]
 }
 
 datasource db {
@@ -50,7 +48,7 @@ model users {
 
 
   // for Fitbit
-  fitbitId String?
+  fitbitId String? @unique
   fitbitDisplayName String?
   fitbitFullName String?
   accessToken String?

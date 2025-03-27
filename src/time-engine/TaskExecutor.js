@@ -1,6 +1,7 @@
 import { DateTime, Interval } from "luxon";
 import UserInfoHelper from "../utility/UserInfoHelper.js";
 import DateTimeHelper from "../utility/DateTimeHelper.js";
+import CronExpressionParser from "cron-parser";
 
 export default class TaskExecutor {
   taskSpec;
@@ -1953,6 +1954,26 @@ export default class TaskExecutor {
             targetTime = targetTime.minus(checkPoint.offset.value);
           }
         }
+
+        targetTime = targetTime.set({ second: 0, millisecond: 0 });
+
+        const diffDateTime = DateTimeHelper.diffDateTime(targetTime, nowUTC, [
+          "minutes",
+          "seconds",
+        ]);
+
+        const diffObj = diffDateTime.toObject();
+
+        const secondsThreshold = 20;
+
+        if (
+          diffObj.minutes != 0 ||
+          Math.abs(diffObj.seconds) >= secondsThreshold
+        ) {
+          checkPointResult = false;
+        } else {
+          checkPointResult = true;
+        }
       } else if (checkPoint.reference.type == "cron") {
         // print type
         console.log(`checkPoint.reference.type: ${checkPoint.reference.type}`);
@@ -1966,9 +1987,14 @@ export default class TaskExecutor {
             targetTime = targetTime.plus(checkPoint.offset.value);
           }
         }
+        targetTime = targetTime.set({ second: 0, millisecond: 0 });
 
         // now, use target time to match the cron expression
-        const cronExpression = checkPoint.reference.value;
+        const cronExpressionString = checkPoint.reference.value;
+        const cronExpression = CronExpressionParser.parse(cronExpressionString);
+        checkPointResult = cronExpression.includesDate(targetTime.toJSDate());
+
+        // wait, but this is exact match, up to the seconds, even...
 
         // ok, now need to check if target time matchs the cron expression, considering the timezone (local time)
         // referencce cronstrue to see if I can use its utility
@@ -1977,30 +2003,11 @@ export default class TaskExecutor {
 
       // print targetTime
       console.log(`isCheckPointForUser: targetTime: ${targetTime}`);
-
-      const diffDateTime = DateTimeHelper.diffDateTime(targetTime, nowUTC, [
-        "minutes",
-        "seconds",
-      ]);
-
       evaluationReportList.push({
         step: `checkpoint-${i}-time`,
         target: targetTime,
         souce: nowUTC,
       });
-
-      const diffObj = diffDateTime.toObject();
-
-      const secondsThreshold = 20;
-
-      if (
-        diffObj.minutes != 0 ||
-        Math.abs(diffObj.seconds) >= secondsThreshold
-      ) {
-        checkPointResult = false;
-      } else {
-        checkPointResult = true;
-      }
 
       if (checkPointResult == true) {
         result = true;

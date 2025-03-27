@@ -272,5 +272,15 @@ describe('checkpoint-cron', () => {
     const mockDate4 = new Date("2025-03-14T12:00:00.000-04:00");
     // this should be false
     expect(TaskExecutor.isCheckPointForUser(mockCheckPoints2, mockUserInfo, mockDate4)[0]).toBe(false);
+
+    // create a Date for Thursday at 12:00 PM
+    const mockDate5 = new Date("2025-03-13T12:00:00.000-04:00");
+    // this should be false
+    expect(TaskExecutor.isCheckPointForUser(mockCheckPoints2, mockUserInfo, mockDate5)[0]).toBe(false);
+
+    // create a Date for Thursday at 1 pm
+    const mockDate6 = new Date("2025-03-13T13:00:00.000-04:00");
+    // this should be false
+    expect(TaskExecutor.isCheckPointForUser(mockCheckPoints2, mockUserInfo, mockDate6)[0]).toBe(false);
   });
 });

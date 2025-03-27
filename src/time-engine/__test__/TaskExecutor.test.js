@@ -284,3 +284,155 @@ describe('checkpoint-cron', () => {
     expect(TaskExecutor.isCheckPointForUser(mockCheckPoints2, mockUserInfo, mockDate6)[0]).toBe(false);
   });
 });
+
+
+
+describe('group-all', () => {
+  test('Anyone will match', () => {
+    const mockGroupCriteria = {
+      type: "all",
+      membership: {
+        gif: [],
+        salience: [],
+        modification: [],
+      },
+      list: [],
+    };
+    const mockUserInfo = {
+      username: "test",
+      timezone: "America/New_York",
+      preference: {
+        wakeup: "12:00 PM",
+      },
+      groupMembership: {
+        gif: [true],
+        salience: [true],
+        modification: [true]
+      }
+    };
+
+    // use TaskExecutor.isGroupForUser to check
+    expect(TaskExecutor.isGroupForUser(mockGroupCriteria, mockUserInfo)[0]).toBe(true);
+
+    // create another mockUserInfo that does not have the membership
+    const mockUserInfo2 = {
+      username: "test",
+      timezone: "America/New_York",
+      preference: {
+        wakeup: "12:00 PM",
+      },
+      groupMembership: {
+      }
+    };
+
+    // use TaskExecutor.isGroupForUser to check. Should be true as anyone will pass
+    expect(TaskExecutor.isGroupForUser(mockGroupCriteria, mockUserInfo2)[0]).toBe(true);
+  });
+});
+
+describe('group-list', () => {
+  test('Usernames on the list will match', () => {
+    const mockGroupCriteria = {
+      type: "list",
+      membership: {
+        gif: [],
+        salience: [],
+        modification: [],
+      },
+      list: ["test1", "test2"],
+    };
+    const mockUserInfo = {
+      username: "test1",
+      timezone: "America/New_York",
+      preference: {
+        wakeup: "12:00 PM",
+      },
+      groupMembership: {
+        gif: [true],
+        salience: [true],
+        modification: [true]
+      }
+    };
+
+    const mockUserInfo2 = {
+      username: "test3",
+      timezone: "America/New_York",
+      preference: {
+        wakeup: "12:00 PM",
+      },
+      groupMembership: {
+        gif: [true],
+        salience: [true],
+        modification: [true]
+      }
+    };
+
+    // first one will be true
+    expect(TaskExecutor.isGroupForUser(mockGroupCriteria, mockUserInfo)[0]).toBe(true);
+
+    // second one will be false
+    expect(TaskExecutor.isGroupForUser(mockGroupCriteria, mockUserInfo2)[0]).toBe(false);
+  });
+});
+
+
+describe('group-membership', () => {
+  test('User with the right membership will match', () => {
+    const mockGroupCriteria = {
+      type: "group",
+      membership: {
+        gif: [true],
+        salience: [false],
+        modification: [],
+      },
+      list: [],
+    };
+    const mockUserInfo1 = {
+      username: "test1",
+      timezone: "America/New_York",
+      preference: {
+        wakeup: "12:00 PM",
+      },
+      groupMembership: {
+        gif: true,
+        salience: undefined,
+        modification: undefined,
+      }
+    };
+
+    const mockUserInfo2 = {
+      username: "test2",
+      timezone: "America/New_York",
+      preference: {
+        wakeup: "12:00 PM",
+      },
+      groupMembership: {
+        gif: false,
+        salience: undefined,
+        modification: true
+      }
+    };
+
+    const mockUserInfo3 = {
+      username: "test3",
+      timezone: "America/New_York",
+      preference: {
+        wakeup: "12:00 PM",
+      },
+      groupMembership: {
+        gif: false,
+        salience: false,
+        modification: true,
+      }
+    };
+
+    // first one will be true
+    expect(TaskExecutor.isGroupForUser(mockGroupCriteria, mockUserInfo1)[0]).toBe(true);
+
+    // second one will be false
+    expect(TaskExecutor.isGroupForUser(mockGroupCriteria, mockUserInfo2)[0]).toBe(false);
+
+    // third one will be true
+    expect(TaskExecutor.isGroupForUser(mockGroupCriteria, mockUserInfo3)[0]).toBe(true);
+  });
+});

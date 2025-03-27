@@ -1,5 +1,3 @@
-//import prisma from "./prisma.mjs";
-
 export default class UserInfoHelper {
   constructor() {}
   static isPropertySet(userInfo, propertyName) {

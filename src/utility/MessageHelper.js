@@ -1,4 +1,4 @@
-import prisma from "./prisma.mjs";
+import prisma from "./prisma.js";
 import RandomizationHelper from "./RandomizationHelper";
 
 export default class MessageHelper {

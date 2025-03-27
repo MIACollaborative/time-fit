@@ -1,4 +1,4 @@
-import prisma from "./prisma.mjs";
+import prisma from "./prisma.js";
 
 export default class DatabaseHelper {
   constructor() {}

@@ -1,9 +1,10 @@
 {
   "name": "time-fit",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
-    "index": "node ./src/index.mjs",
+    "index": "node ./src/index.js",
     "test": "jest"
   },
   "dependencies": {

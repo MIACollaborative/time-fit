@@ -1,5 +1,5 @@
-import TimeEngine from "./time-engine/TimeEngine.mjs";
-import DatabaseHelper from "./utility/DatabaseHelper.mjs";
+import TimeEngine from "./time-engine/TimeEngine.js";
+import DatabaseHelper from "./utility/DatabaseHelper.js";
 
 async function myGetUserList() {
   const users = await DatabaseHelper.getUsers();

@@ -39,9 +39,10 @@ model users {
   autoWalkTo10 Boolean? @default(false)
 
   // for group assignment
-  gif Boolean? @default(false)
-  salience Boolean? @default(false)
-  modification Boolean? @default(false)
+  //gif Boolean? @default(false)
+  //salience Boolean? @default(false)
+  //modification Boolean? @default(false)
+  groupMembership Json?
 
   // reference other collections
   taskLogList  taskLog[]

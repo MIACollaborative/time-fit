@@ -4,7 +4,7 @@ import GeneralUtility from "../../old/lib/GeneralUtility.mjs";
 import DatabaseUtility from "../../old/lib/DatabaseUtility.mjs";
 import ServerUtility from "../../old/lib/ServerUtility.mjs";
 import FitbitHelper from "../../old/lib/FitbitHelper.mjs";
-import UserInfoHelper from "../utility/UserInfoHelper.mjs";
+import UserInfoHelper from "../utility/UserInfoHelper.js";
 
 export default class TaskExecutor {
   taskSpec;

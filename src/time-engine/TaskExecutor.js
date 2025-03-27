@@ -134,11 +134,11 @@ export default class TaskExecutor {
       }
 
       // step 5: execute action
-      let chanceChoice = TaskExecutor.obtainChoiceWithRandomization(
+      const chanceChoice = TaskExecutor.obtainChoiceWithRandomization(
         taskSpec.randomization
       );
-      let randomNumber = chanceChoice.randomNumber;
-      let theAction = chanceChoice.theChoice.action;
+      const randomNumber = chanceChoice.randomNumber;
+      const theAction = chanceChoice.theChoice.action;
       console.log(
         `executeTaskForUserListForDate (${
           userInfo.username
@@ -183,37 +183,7 @@ export default class TaskExecutor {
     console.log(
       `obtainChoiceWithRandomization: ${JSON.stringify(randomizationSpec)}`
     );
-    // Example
-    /*
-        randomization:{
-            // Note: could potentially separate this out to be random + action
-            enabled: true, // true or false
-            outcome: [
-                {
-                    value: true,
-                    chance: 0.5,
-                    action: {
-                        type: "surveyId", // surveyId, or surveyGroup
-                        surveyId: "XYZ", //surveyId, only matter if the tyep is surveyId
-                        surveyGroup: "gif", // surveyGroup, only matter if the type is surveyGroup
-                        avoidHistory: true, // if we want to minimize the chance of sending the same message to the same user in a short window
-                    }
-                },
-                {
-                    value: false,
-                    chance: 0.5,
-                    action: {
-                        type: "surveyId", // surveyId, or surveyGroup
-                        surveyId: "XYZ", //surveyId, only matter if the tyep is surveyId
-                        surveyGroup: "gif", // surveyGroup, only matter if the type is surveyGroup
-                        avoidHistory: true, // if we want to minimize the chance of sending the same message to the same user in a short window
-                    }
-                }
-            ]
-        }
-        */
 
-    // To Do: need to consider whether enabled: false makes sense
     if (randomizationSpec.enabled == false) {
       return {
         randomNumber: 0,
@@ -227,15 +197,6 @@ export default class TaskExecutor {
     const { randomNumber, theChoice } = TaskExecutor.randomizeSelection(
       randomizationSpec.outcome
     );
-
-    /*
-        let theAction = {
-            type: "noAction"
-        };
-        if(theChoice != undefined){
-            theAction = theChoice.action;
-        }
-        */
 
     return { randomNumber, theChoice };
   }

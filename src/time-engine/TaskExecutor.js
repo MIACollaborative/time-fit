@@ -2,6 +2,9 @@ import { DateTime, Interval } from "luxon";
 import UserInfoHelper from "../utility/UserInfoHelper.js";
 import DateTimeHelper from "../utility/DateTimeHelper.js";
 import RandomizationHelper from "../utility/RandomizationHelper.js";
+import HelloAction from "../action-collection/HelloAction.js";
+import MessageLabelAction from "../action-collection/MessageLabelAction.js";
+import MessageGroupAction from "../action-collection/MessageGroupAction.js";
 
 export default class TaskExecutor {
   taskSpec;
@@ -61,7 +64,7 @@ export default class TaskExecutor {
 
       // TO DO: disable for now, should enable later
       // step 2: group membership
-      
+
       let [isGroupResult, groupEvaluationRecordList] =
         TaskExecutor.isGroupForUser(taskSpec.group, userInfo);
 
@@ -79,7 +82,6 @@ export default class TaskExecutor {
         }
         continue;
       }
-      
 
       // step 3: checkpoint (time)
       const [isCheckPointResult, checkPointEvaluationRecordList] =
@@ -147,7 +149,7 @@ export default class TaskExecutor {
 
       taskLogObj["randomizationResult"] = chanceChoice;
 
-      let compositeResult = await TaskExecutor.executeActionForUser(
+      const compositeResult = await TaskExecutor.executeActionForUser(
         theAction,
         userInfo,
         datetime
@@ -209,12 +211,15 @@ export default class TaskExecutor {
         userInfo != undefined ? userInfo.username : "ignore"
       }): ${JSON.stringify(theAction)}`
     );
+
     let record = {
-      messageLabel: "", //null,
       executionResult: null,
     };
 
     record.action = theAction;
+
+    // TO DO: this is action specific, need to refactor them out.
+
     let messageInfo;
     let messageBody = "";
     let gifURL = "";
@@ -227,55 +232,19 @@ export default class TaskExecutor {
 
     switch (theAction.type) {
       case "printHello":
-        console.log(`Hello, ${userInfo.username}!`);
-        record.executionResult = {
-          type: "console",
-          value: "hello",
-        };
+        record.executionResult = await HelloAction.execute(theAction, {
+          userInfo,
+        });
         break;
       case "messageLabel":
-        // find the message through messageLabel
-        messageInfo = await DatabaseUtility.findMessageByLabel(
-          theAction.messageLabel
-        );
-        console.log(
-          `executeActionForUser messageInfo: ${JSON.stringify(messageInfo)}`
-        );
-
-        // for logging
-        record.messageLabel = messageInfo.label;
-
-        surveyURL = await GeneralUtility.extractSurveyLinkFromAction(theAction);
-
-        console.log(`executeActionForUser surveyURL: ${surveyURL}`);
-
-        messageBody = await DatabaseUtility.composeUserMessageForTwilio(
+        record.executionResult = await MessageLabelAction.execute(theAction, {
           userInfo,
-          messageInfo,
-          surveyURL
-        );
-
-        if (messageInfo.gif != undefined) {
-          gifURL = `${process.env.ASSET_HOST_URL}/image/gif/${messageInfo.gif}.gif`;
-        }
-
-        console.log(`messageBody: ${messageBody}`);
-        console.log(`Gif url: ${gifURL}`);
-
-        record.executionResult = {
-          type: "twilio",
-          value: await TwilioHelper.sendMessage(
-            userInfo.phone,
-            messageBody,
-            gifURL.length > 0 ? [gifURL] : []
-          ),
-        };
-
-        console.log(
-          `executeActionForUser record.executionResult: ${JSON.stringify(
-            record.executionResult
-          )}`
-        );
+        });
+        break;
+      case "messageGroup":
+        record.executionResult = await MessageGroupAction.execute(theAction, {
+          userInfo,
+        });
         break;
       case "messageLabelToResearchInvestigator":
         // find the message through messageLabel
@@ -315,46 +284,6 @@ export default class TaskExecutor {
           ),
         };
 
-        console.log(
-          `executeActionForUser record.executionResult: ${JSON.stringify(
-            record.executionResult
-          )}`
-        );
-        break;
-      case "messageGroup":
-        messageInfo = await DatabaseUtility.findMessageByGroup(
-          theAction.messageGroup,
-          theAction.avoidHistory,
-          userInfo.username
-        );
-        console.log(
-          `executeActionForUser messageInfo: ${JSON.stringify(messageInfo)}`
-        );
-
-        // for logging
-        record.messageLabel = messageInfo.label;
-
-        surveyURL = GeneralUtility.extractSurveyLinkFromAction(theAction);
-        console.log(`executeActionForUser surveyURL: ${surveyURL}`);
-
-        messageBody = await DatabaseUtility.composeUserMessageForTwilio(
-          userInfo,
-          messageInfo,
-          surveyURL
-        );
-        if (messageInfo.gif != undefined) {
-          gifURL = `${process.env.ASSET_HOST_URL}/image/gif/${messageInfo.gif}.gif`;
-        }
-        console.log(`messageBody: ${messageBody}`);
-        console.log(`Gif url: ${gifURL}`);
-        record.executionResult = {
-          type: "twilio",
-          value: await TwilioHelper.sendMessage(
-            userInfo.phone,
-            messageBody,
-            gifURL.length > 0 ? [gifURL] : []
-          ),
-        };
         console.log(
           `executeActionForUser record.executionResult: ${JSON.stringify(
             record.executionResult
@@ -1123,7 +1052,6 @@ export default class TaskExecutor {
   }
 
   static randomizeSelection(choiceList) {
-
     let theChoice = undefined;
     const randNumber = RandomizationHelper.getRandomNumber(); // Math.random();
 
@@ -1789,9 +1717,13 @@ export default class TaskExecutor {
       let groupMatched = false;
 
       const membershipList = Object.keys(groupSpec.membership);
-      for(let i = 0; i < membershipList.length; i++) {
+      for (let i = 0; i < membershipList.length; i++) {
         const groupName = membershipList[i];
-        if (groupSpec.membership[groupName].includes(userInfo["groupMembership"][groupName])) {
+        if (
+          groupSpec.membership[groupName].includes(
+            userInfo["groupMembership"][groupName]
+          )
+        ) {
           groupMatched = true;
         }
 
@@ -1801,7 +1733,7 @@ export default class TaskExecutor {
           source: userInfo[groupName],
         });
 
-        if(groupMatched) {
+        if (groupMatched) {
           break;
         }
       }

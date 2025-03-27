@@ -145,8 +145,6 @@ export default class TaskExecutor {
         }): chanceChoice: ${JSON.stringify(chanceChoice)}`
       );
 
-      //taskLogObj["preConditionResult"] = userNamePreConditionResultMap[userInfo.username];
-
       taskLogObj["randomizationResult"] = chanceChoice;
 
       let compositeResult = await TaskExecutor.executeActionForUser(

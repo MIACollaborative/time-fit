@@ -1,5 +1,6 @@
 import { DateTime, Interval } from "luxon";
 import UserInfoHelper from "../utility/UserInfoHelper.js";
+import DateTimeHelper from "../utility/DateTimeHelper.js";
 
 export default class TaskExecutor {
   taskSpec;
@@ -1345,7 +1346,7 @@ export default class TaskExecutor {
     //console.log(`${this.name} checkOneConditionForUser dateTime: ${dateTime}`);
     let dateTimeUTC = dateTime.toUTC();
     //console.log(`${this.name} checkOneConditionForUser dateTimeUTC: ${dateTimeUTC}`);
-    let localTimeForUser = GeneralUtility.getLocalTime(
+    let localTimeForUser = DateTimeHelper.getLocalTime(
       dateTimeUTC,
       userInfo.timezone
     );
@@ -1889,7 +1890,7 @@ export default class TaskExecutor {
       let targetTime = undefined;
       let checkPointResult = false;
       const nowUTC = datetime.toUTC();
-      const localTimeForUser = GeneralUtility.getLocalTime(
+      const localTimeForUser = DateTimeHelper.getLocalDateTime(
         datetime,
         userInfo.timezone
       );
@@ -1978,7 +1979,7 @@ export default class TaskExecutor {
       // print targetTime
       console.log(`isCheckPointForUser: targetTime: ${targetTime}`);
 
-      const diffDateTime = GeneralUtility.diffDateTime(targetTime, nowUTC, [
+      const diffDateTime = DateTimeHelper.diffDateTime(targetTime, nowUTC, [
         "minutes",
         "seconds",
       ]);

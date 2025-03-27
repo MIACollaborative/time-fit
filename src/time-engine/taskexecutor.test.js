@@ -1,6 +1,6 @@
 import TaskExecutor from "./TaskExecutor.js";
 
-describe('checkpoint', () => {
+describe('checkpoint-spec', () => {
   test('12:00 PM will match properly', () => {
     // static isCheckPointForUser(checkPoints, userInfo, now) 
     const mockCheckPoints = {
@@ -130,6 +130,65 @@ describe('checkpoint', () => {
     const mockDate7 = new Date("2025-03-14T13:00:00.000-04:00");
     // this should be true
     expect(TaskExecutor.isCheckPointForUser(mockCheckPoints3, mockUserInfo, mockDate7)[0]).toBe(true);
+
+  });
+});
+
+
+describe('checkpoint-preference', () => {
+  test('User preference time will match properly', () => {
+    const mockCheckPoints = {
+      enabled: true,
+      pointList: [
+        {
+          type: "relative",
+          reference: {
+            type: "spec",
+            value: {
+              dateCriteria: {
+                weekIndexList: [1, 2, 3, 4, 5],
+              },
+              timeStringType: "preference",
+              timeString: "wakeupTime",
+            },
+          },
+          offset: {
+            type: "plus",
+            value: { hours: 0 },
+          },
+        },
+      ],
+    };
+    const mockUserInfo = {
+      username: "test",
+      timezone: "America/New_York",
+      preference: {
+        wakeup: "12:00 PM",
+      }
+    };
+
+    // create a timestring extraction function that will return 12:00 PM
+    const mockTimeStringExtractionFunction = (userInfo,
+      checkPoint,
+      preferenceTimeStringName,
+      date
+    ) => {
+      console.log(`${preferenceTimeStringName}: ` + userInfo.preference["wakeup"]);
+      return userInfo.preference["wakeup"];
+    };
+
+    TaskExecutor.registerCheckPointPreferenceTimeStringExtractionFunction(mockTimeStringExtractionFunction);
+
+    // create a Date that is at a Friday in 2025 March 14th
+    const mockDate1 = new Date("2025-03-14T12:00:00.000-04:00");
+    // this should be true
+    expect(TaskExecutor.isCheckPointForUser(mockCheckPoints, mockUserInfo, mockDate1)[0]).toBe(true);
+
+    // create a date that is at 01:00 PM on a Friday in March 2025
+    const mockDate2 = new Date("2025-03-14T13:00:00.000-04:00");
+    // this should be false
+    expect(TaskExecutor.isCheckPointForUser(mockCheckPoints, mockUserInfo, mockDate2)[0]).toBe(false);
+
 
   });
 });

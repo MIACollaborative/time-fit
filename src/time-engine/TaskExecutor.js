@@ -36,13 +36,10 @@ export default class TaskExecutor {
       taskLogObj["executionResult"] = {};
       taskLogObj["activationReasoning"] = [];
 
-      // TO DO: this is very specific to choice and action, need to refactor this out.
-      taskLogObj["messageLabel"] = "";
-
       // step 1: isTimezoneSet
       // this is very much like a pre-condition, but just a system-enforce one.
       if (taskSpec.ignoreTimezone == false) {
-        let isTimeZoneSetResult = UserInfoHelper.isPropertySet(
+        const isTimeZoneSetResult = UserInfoHelper.isPropertySet(
           userInfo,
           "timezone"
         );
@@ -85,14 +82,14 @@ export default class TaskExecutor {
       */
 
       // step 3: checkpoint (time)
-      let [isCheckPointResult, checkPointEvaluationRecordList] =
+      const [isCheckPointResult, checkPointEvaluationRecordList] =
         TaskExecutor.isCheckPointForUser(taskSpec.checkPoints, userInfo, date);
       console.log(
         `isCheckPointResult: user[${userInfo.username}]: ${isCheckPointResult}`
       );
 
       taskLogObj["activationReasoning"].push({
-        phase: "checkpoint",
+        phase: "checkpoints",
         result: isCheckPointResult,
         // do I want to store more?
         recordList: checkPointEvaluationRecordList,

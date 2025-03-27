@@ -80,5 +80,56 @@ describe('checkpoint', () => {
     // this should be false
     expect(TaskExecutor.isCheckPointForUser(mockCheckPoints2, mockUserInfo, mockDate5)[0]).toBe(false);
 
+    // create another mock checkPoints that combine the two
+    const mockCheckPoints3 = {
+      enabled: true,
+      pointList: [
+        {
+          type: "relative",
+          reference: {
+            type: "spec",
+            value: {
+              dateCriteria: {
+                weekIndexList: [1, 2, 3, 4, 5],
+              },
+              timeStringType: "fixed",
+              timeString: "12:00 PM",
+            },
+          },
+          offset: {
+            type: "plus",
+            value: { hours: 0 },
+          },
+        },
+        {
+          type: "relative",
+          reference: {
+            type: "spec",
+            value: {
+              dateCriteria: {
+                weekIndexList: [1, 2, 3, 4, 5],
+              },
+              timeStringType: "fixed",
+              timeString: "12:00 PM",
+            },
+          },
+          offset: {
+            type: "plus",
+            value: { hours: 1 },
+          },
+        },
+      ],
+    };
+
+    // create a Date that is at 12:00 PM on a Friday in March 2025
+    const mockDate6 = new Date("2025-03-14T12:00:00.000-04:00");
+    // this should be true
+    expect(TaskExecutor.isCheckPointForUser(mockCheckPoints3, mockUserInfo, mockDate6)[0]).toBe(true);
+
+    // create a Date that is at 01:00 PM on a Friday in March 2025
+    const mockDate7 = new Date("2025-03-14T13:00:00.000-04:00");
+    // this should be true
+    expect(TaskExecutor.isCheckPointForUser(mockCheckPoints3, mockUserInfo, mockDate7)[0]).toBe(true);
+
   });
 });

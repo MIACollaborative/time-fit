@@ -1,4 +1,4 @@
-import TaskExecutor from "./TaskExecutor.js";
+import TaskExecutor from "../TaskExecutor.js";
 
 describe('checkpoint-spec', () => {
   test('12:00 PM will match properly', () => {

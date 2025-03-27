@@ -36,33 +36,32 @@ export default class TaskExecutor {
       taskLogObj["randomizationResult"] = {};
       taskLogObj["executionResult"] = {};
       taskLogObj["activationReasoning"] = [];
+      taskLogObj["isActivated"] = true;
 
-      // step 1: isTimezoneSet
+      // step 1: is user info ready
       // this is very much like a pre-condition, but just a system-enforce one.
-      if (taskSpec.ignoreTimezone == false) {
-        const isTimeZoneSetResult = UserInfoHelper.isPropertySet(
-          userInfo,
-          "timezone"
-        );
 
-        taskLogObj["activationReasoning"].push({
-          phase: "timezone-set",
-          result: isTimeZoneSetResult,
-          recordList: [],
-        });
+      const [isUserInfoReadyResult, userInfoEvaluationRecordList] =
+        TaskExecutor.isUserInfoReadyForUser(taskSpec, userInfo);
 
-        if (!isTimeZoneSetResult) {
-          taskLogObj["isActivated"] = false;
-          if (taskSpec["preActivationLogging"]) {
-            taskResultList.push(taskLogObj);
-          }
-          continue;
+      taskLogObj["activationReasoning"].push({
+        phase: "user-info",
+        result: isUserInfoReadyResult,
+        recordList: userInfoEvaluationRecordList,
+      });
+
+      taskLogObj["isActivated"] = isUserInfoReadyResult;
+
+      if (!taskLogObj["isActivated"]) {
+        if (taskSpec["preActivationLogging"]) {
+          taskResultList.push(taskLogObj);
         }
+        continue;
       }
 
       // TO DO: disable for now, should enable later
       // step 2: group membership
-      /*
+      
       let [isGroupResult, groupEvaluationRecordList] =
         TaskExecutor.isGroupForUser(taskSpec.group, userInfo);
 
@@ -72,15 +71,15 @@ export default class TaskExecutor {
         recordList: groupEvaluationRecordList,
       });
 
-      if (!isGroupResult) {
-        taskLogObj["isActivated"] = false;
+      taskLogObj["isActivated"] = isGroupResult;
 
+      if (!taskLogObj["isActivated"]) {
         if (taskSpec["preActivationLogging"]) {
           taskResultList.push(taskLogObj);
         }
         continue;
       }
-      */
+      
 
       // step 3: checkpoint (time)
       const [isCheckPointResult, checkPointEvaluationRecordList] =
@@ -96,8 +95,9 @@ export default class TaskExecutor {
         recordList: checkPointEvaluationRecordList,
       });
 
-      if (!isCheckPointResult) {
-        taskLogObj["isActivated"] = false;
+      taskLogObj["isActivated"] = isCheckPointResult;
+
+      if (!taskLogObj["isActivated"]) {
         if (taskSpec["preActivationLogging"]) {
           taskResultList.push(taskLogObj);
         }
@@ -1188,6 +1188,27 @@ export default class TaskExecutor {
     };
   }
 
+  static async isUserInfoReadyForUser(taskSpec, userInfo) {
+    let result = true;
+    let logList = [];
+
+    if (taskSpec.ignoreTimezone == false) {
+      const isTimeZoneSetResult = UserInfoHelper.isPropertySet(
+        userInfo,
+        "timezone"
+      );
+
+      result = isTimeZoneSetResult;
+
+      logList.push({
+        target: "timezone-set",
+        result: isTimeZoneSetResult,
+      });
+    }
+
+    return [result, logList];
+  }
+
   static async isPreConditionMetForUser(conditionSpec, userInfo, dateTime) {
     console.log(
       `${this.name} isPreConditionMetForUser[${
@@ -1807,17 +1828,24 @@ export default class TaskExecutor {
       });
     } else if (groupSpec.type == "group") {
       let groupMatched = false;
-      Object.keys(groupSpec.membership).forEach((groupName, index) => {
-        if (groupSpec.membership[groupName].includes(userInfo[groupName])) {
+
+      const membershipList = Object.keys(groupSpec.membership);
+      for(let i = 0; i < membershipList.length; i++) {
+        const groupName = membershipList[i];
+        if (groupSpec.membership[groupName].includes(userInfo["groupMembership"][groupName])) {
           groupMatched = true;
         }
 
         evaluationReportList.push({
-          step: `group-group-${index}`,
+          step: `group-${i}`,
           target: { key: groupName, value: groupSpec.membership[groupName] },
           source: userInfo[groupName],
         });
-      });
+
+        if(groupMatched) {
+          break;
+        }
+      }
 
       result = groupMatched;
     }
@@ -1948,7 +1976,10 @@ export default class TaskExecutor {
 
         // now, use target time to match the cron expression
         const cronExpressionString = checkPoint.reference.value;
-        checkPointResult = DateTimeHelper.matchCronExpreesionAndDate(cronExpressionString, targetTime.toJSDate());
+        checkPointResult = DateTimeHelper.matchCronExpreesionAndDate(
+          cronExpressionString,
+          targetTime.toJSDate()
+        );
 
         // wait, but this is exact match, up to the seconds, even...
 

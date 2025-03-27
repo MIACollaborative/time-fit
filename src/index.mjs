@@ -39,7 +39,7 @@ async function myGetTaskList() {
                   weekIndexList: [1, 2, 3, 4, 5, 6, 7],                  
                 },
                 timeStringType: "fixed", // fixed or preference
-                timeString: "12:00 AM", // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
+                timeString: "01:32 PM", // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
               }
             },
             offset: {

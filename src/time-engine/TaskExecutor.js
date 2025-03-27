@@ -9,7 +9,6 @@ export default class TaskExecutor {
 
   constructor() {}
 
-  // registerCheckPointPreferenceTimeStringFunction
   static registerCheckPointPreferenceTimeStringExtractionFunction(func) {
     TaskExecutor.checheckPointPreferenceTimeStringExtractionFunction = func;
   }
@@ -1927,7 +1926,7 @@ export default class TaskExecutor {
               userInfo,
               checkPoint,
               preferenceString,
-              date
+              now
             );
         }
 

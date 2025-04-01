@@ -10,7 +10,6 @@ export default class TaskExecutor {
   taskSpec;
   static checkPointPreferenceTimeStringExtractionFunction;
   static actionTypeMap = {};
-  static registerAction;
 
   constructor() {}
   
@@ -50,7 +49,7 @@ export default class TaskExecutor {
       // this is very much like a pre-condition, but just a system-enforce one.
 
       const [isUserInfoReadyResult, userInfoEvaluationRecordList] =
-        TaskExecutor.isUserInfoReadyForUser(taskSpec, userInfo);
+        await TaskExecutor.isUserInfoReadyForUser(taskSpec, userInfo);
 
       taskLogObj["activationReasoning"].push({
         phase: "user-info",

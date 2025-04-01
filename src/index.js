@@ -119,7 +119,7 @@ TimeEngine.registerGetTaskListFunction(myGetTaskList);
 TimeEngine.registerCheckPointPreferenceTimeStringExtractionFunction(extractPreferenceTimeStringForUser);
 
 
-// Register a ction
+// Register an action
 TimeEngine.registerAction("printHello", HelloAction);
 
 // Start the time engine

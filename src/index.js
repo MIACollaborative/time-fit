@@ -35,6 +35,7 @@ async function myGetTaskList() {
             type: "relative", // absolute vs. relative (with offset)
             reference: {
               type: "spec", //"spec" or "cron"
+              // value: "0 12 * * 5",
               value: {
                 dateCriteria: {
                   weekIndexList: [1, 2, 3, 4, 5, 6, 7],                  
@@ -60,6 +61,7 @@ async function myGetTaskList() {
         },
         list: [], //["test1", "test2"] // user name list, only matter if type is "list"
       },
+      // outcomes
       randomization: {
         enabled: false, // true or false
         outcome: [

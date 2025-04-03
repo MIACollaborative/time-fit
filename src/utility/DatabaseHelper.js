@@ -20,6 +20,19 @@ export default class DatabaseHelper {
     return await prisma.users.findMany();
   }
 
+  static async myGetUserList() {
+    const users = await DatabaseHelper.getUsers();
+    const userList = users.map((userInfo) => {
+      return exclude(userInfo, [
+        "password",
+        "hash",
+        "accessToken",
+        "refreshToken",
+      ]);
+    });
+    return userList;
+  }
+
   static async getTasksSortedByPriority(sorting="asc") {
     return await prisma.task.findMany({
         where: { enabled: true },

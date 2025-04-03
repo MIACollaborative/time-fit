@@ -2,19 +2,6 @@ import TimeEngine from "./time-engine/TimeEngine.js";
 import DatabaseHelper from "./utility/DatabaseHelper.js";
 import HelloAction from "./action-collection/HelloAction.js";
 
-async function myGetUserList() {
-  const users = await DatabaseHelper.getUsers();
-  const userList = users.map((userInfo) => {
-    return exclude(userInfo, [
-      "password",
-      "hash",
-      "accessToken",
-      "refreshToken",
-    ]);
-  });
-  return userList;
-}
-
 async function myGetTaskList() {
   // ideal version
   //const tasks = await DatabaseHelper.getTasksSortedByPriority("asc");
@@ -80,46 +67,8 @@ async function myGetTaskList() {
   return tasks;
 }
 
-async function extractPreferenceTimeStringForUser(
-  userInfo,
-  checkPoint,
-  preferenceTimeStringName,
-  date
-) {
-  const datetime = DateTime.fromJSDate(date);
-  const localTimeForUser = GeneralUtility.getLocalTime(datetime, userInfo.timezone);
-  const localWeekIndex = localTimeForUser.weekday;
-
-  let referenceTimePropertyName = "";
-
-  // TO DO: this part is very application specific, need to refactor this out
-  if (preferenceTimeStringName == "wakeupTime") {
-    if (localWeekIndex <= 5) {
-      referenceTimePropertyName = "weekdayWakeup";
-    } else {
-      referenceTimePropertyName = "weekendWakeup";
-    }
-  } else if (preferenceTimeStringName == "bedTime") {
-    if (localWeekIndex <= 5) {
-      referenceTimePropertyName = "weekdayBed";
-    } else {
-      referenceTimePropertyName = "weekendBed";
-    }
-  } else {
-    referenceTimePropertyName = checkPoint.reference.value;
-  }
-
-  return userInfo[referenceTimePropertyName];
-}
-
-// Register a function to get user list (so developers can decide whether user list needs to be retrieve every time or not)
-TimeEngine.registerGetUserListFunction(myGetUserList);
 // Register a function to get task list (so developers can decide whether task list needs to be retrieve every time or not)
 TimeEngine.registerGetTaskListFunction(myGetTaskList);
-
-// Register a function to check preference time string
-TimeEngine.registerCheckPointPreferenceTimeStringExtractionFunction(extractPreferenceTimeStringForUser);
-
 
 // Register an action
 TimeEngine.registerAction("printHello", HelloAction);

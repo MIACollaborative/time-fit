@@ -1,3 +1,4 @@
+import prisma from "./prisma.js";
 export default class UserInfoHelper {
   constructor() {}
   static isPropertySet(userInfo, propertyName) {
@@ -6,4 +7,27 @@ export default class UserInfoHelper {
     }
     return userInfo[propertyName] != undefined;
   }
+
+  static async getUserInfoByUsername(username){
+    const theUser = await prisma.users.findFirst({
+        where: {
+            username: username,
+        }
+    });
+    return theUser;
+}
+
+  static async updateUserInfo(userInfo, propertyValueObject){
+
+    const updateResult = await prisma.users.update({
+        where: {
+            username: userInfo.username,
+        },
+        data: {
+            ...propertyValueObject
+        },
+    });
+
+    return updateResult;
+}
 }

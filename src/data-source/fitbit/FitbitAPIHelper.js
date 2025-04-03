@@ -1,35 +1,22 @@
+// TO DO: use fetch instead of axios
 import axios from "axios";
-import GeneralUtility from "./GeneralUtility.mjs";
-
-
-/*
-import pkg from "luxon";
-const { DataTime } = pkg;
-*/
-
-import { DateTime } from "luxon";
-
-//import prisma from "./prisma";
 
 const basicToken = "MjM4MjlYOjA0ZTIwYzZkY2U0YTg1MjcyZWJkOTljZjQ3M2UzODA5";
-export default class FitbitHelper {
-  //client;
 
-  constructor() {
-    //this.client = new MongoClient(uri);
-  }
+export default class FitbitAPIHelper {
 
-  testConnection() {
-    console.log(`FitbitHelper.testConnection`);
-  }
+  static FITBIT_INTRADAY_DATA_TYPE_ACTIVITY_SUMMARY = "activity-summary";
+  static FITBIT_INTRADAY_DATA_TYPE_HEART = "activity-heart";
+  static FITBIT_INTRADAY_DATA_TYPE_STEP = "activity-step";
+
+
+  constructor() {}
 
   static async getAuthorizationInformation(authCode) {
     return axios({
       method: "post",
       url: "https://api.fitbit.com/oauth2/token",
-      // `headers` are custom headers to be sent
       headers: {
-        // now sure where this comes from?
         Authorization: `Basic ${basicToken}`,
         "Content-Type": "application/x-www-form-urlencoded",
       },
@@ -40,13 +27,10 @@ export default class FitbitHelper {
         code: authCode,
       },
     }).then((response) => {
-      //console.log(response.data);
+
       console.log(response.status);
       console.log(response.statusText);
-      //console.log(response.headers);
-      //console.log(response.config);
-
-      let data = response.data;
+      const data = response.data;
       return data;
     });
   }
@@ -69,19 +53,9 @@ export default class FitbitHelper {
   }
 
   static async refreshToken(refreshToken) {
-    console.log(`${this.name}.refreshToken: refreshToken: ${refreshToken}`);
-
-    /*
-    curl -X POST "https://api.fitbit.com/oauth2/token" \
--H "accept: application/json" \
--H "authorization: Basic <basic_token>" \
--d "grant_type=refresh_token&refresh_token=<refresh_token>"
-    */
-
     return axios({
       method: "post",
       url: `https://api.fitbit.com/oauth2/token`,
-      // `headers` are custom headers to be sent
       headers: {
         Authorization: `Basic ${basicToken}`,
         Accept: `application/json`,
@@ -156,57 +130,11 @@ export default class FitbitHelper {
   }
 
   static async myIntrospectToken(accessToken, inspectToken) {
-    console.log(
-      `${this.name}.myIntrospectToken: inspectToken: ${inspectToken}`
-    );
-
-    // Active Response
-    // {"active":true,"scope":"{PROFILE=READ, ACTIVITY=READ, SETTINGS=READ}","client_id":"23829X","user_id":"4SW9W9","token_type":"access_token","exp":1651145502000,"iat":1651116702000}
-
-    // Error Response
-    /*
- {
-  "message": "Request failed with status code 401",
-  "name": "Error",
-  "stack": "Error: Request failed with status code 401\n    at createError (/home/patrickretset/walktojoy-next/node_modules/axios/lib/core/createError.js:16:15)\n    at settle (/home/patrickretset/walktojoy-next/node_modules/axios/lib/core/settle.js:17:12)\n    at IncomingMessage.handleStreamEnd (/home/patrickretset/walktojoy-next/node_modules/axios/lib/adapters/http.js:322:11)\n    at IncomingMessage.emit (node:events:532:35)\n    at endReadableNT (node:internal/streams/readable:1346:12)\n    at processTicksAndRejections (node:internal/process/task_queues:83:21)",
-  "config": {
-    "transitional": {
-      "silentJSONParsing": true,
-      "forcedJSONParsing": true,
-      "clarifyTimeoutError": false
-    },
-    "transformRequest": [
-      null
-    ],
-    "transformResponse": [
-      null
-    ],
-    "timeout": 0,
-    "xsrfCookieName": "XSRF-TOKEN",
-    "xsrfHeaderName": "X-XSRF-TOKEN",
-    "maxContentLength": -1,
-    "maxBodyLength": -1,
-    "headers": {
-      "Accept": "application/json",
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzgyOVgiLCJzdWIiOiI5Qks0Q1MiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc2V0IHJhY3QgcnBybyIsImV4cCI6MTY0NzU2MDI0MiwiaWF0IjoxNjQ3NTMxNDQyfQ.vMTJyOAA8zM0-MLnwXjaJgGDKZ87evefBL0qrtORkoQ",
-      "User-Agent": "axios/0.26.1",
-      "Content-Length": 241
-    },
-    "method": "post",
-    "url": "https://api.fitbit.com/1.1/oauth2/introspect",
-    "data": "token=eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzgyOVgiLCJzdWIiOiI5Qks0Q1MiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc2V0IHJhY3QgcnBybyIsImV4cCI6MTY0NzU2MDI0MiwiaWF0IjoxNjQ3NTMxNDQyfQ.vMTJyOAA8zM0-MLnwXjaJgGDKZ87evefBL0qrtORkoQ"
-  },
-  "status": 401
-}
-*/
-
-    let introspectTokenResult = await FitbitHelper.introspectToken(
+    const introspectTokenResult = await FitbitAPIHelper.introspectToken(
       accessToken,
       inspectToken
     )
     .then((responseData) => {
-        console.log(`Access token active?: ${responseData.active}`);
         return {type: "response", result: responseData};
       })
       .catch((error) => {
@@ -346,10 +274,10 @@ export default class FitbitHelper {
 
     let endpointURL = "";
 
-    if (fitbitIntradayDataType == GeneralUtility.FITBIT_INTRADAY_DATA_TYPE_HEART){
+    if (fitbitIntradayDataType == FitbitAPIHelper.FITBIT_INTRADAY_DATA_TYPE_HEART){
       endpointURL = `https://api.fitbit.com/1/user/${encodedId}/activities/heart/date/${dateTimeStart.toISODate()}/${dateTimeEnd.toISODate()}/${detailLevel}.json`;
     }
-    else if (fitbitIntradayDataType == GeneralUtility.FITBIT_INTRADAY_DATA_TYPE_STEP){
+    else if (fitbitIntradayDataType == FitbitAPIHelper.FITBIT_INTRADAY_DATA_TYPE_STEP){
       endpointURL = `https://api.fitbit.com/1/user/${encodedId}/activities/steps/date/${dateTimeStart.toISODate()}/${dateTimeEnd.toISODate()}/${detailLevel}.json`;
     }
 

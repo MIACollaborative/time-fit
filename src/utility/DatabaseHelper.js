@@ -43,4 +43,11 @@ export default class DatabaseHelper {
         ],
       });
   }
+
+  static async insertFitbitUpdateList(updateList){
+    const createResult = await prisma.fitbit_update.createMany({
+        data: updateList
+    });
+    return createResult;
+}
 }

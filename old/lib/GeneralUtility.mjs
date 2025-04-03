@@ -1,44 +1,52 @@
 import { DateTime, Interval } from "luxon";
-import voca from 'voca';
-import { getDiff } from 'json-difference'
+import voca from "voca";
+import { getDiff } from "json-difference";
 
 function replacer(key, value) {
-    if (typeof value === "Date") {
-        return value.toString();
-    }
-    return value;
+  if (typeof value === "Date") {
+    return value.toString();
+  }
+  return value;
 }
 export default class GeneralUtility {
-    //client;
+  //client;
 
-    static FITBIT_INTRADAY_DATA_TYPE_ACTIVITY_SUMMARY = "activity-summary";
-    static FITBIT_INTRADAY_DATA_TYPE_HEART = "activity-heart";
-    static FITBIT_INTRADAY_DATA_TYPE_STEP = "activity-step";
+  static FITBIT_INTRADAY_DATA_TYPE_ACTIVITY_SUMMARY = "activity-summary";
+  static FITBIT_INTRADAY_DATA_TYPE_HEART = "activity-heart";
+  static FITBIT_INTRADAY_DATA_TYPE_STEP = "activity-step";
 
-    static unitList = ["year", "month", "day", "hour", "minute", "second", "millisecond"];
+  static unitList = [
+    "year",
+    "month",
+    "day",
+    "hour",
+    "minute",
+    "second",
+    "millisecond",
+  ];
 
-    static systemUser = {
-        username: "system-user",
-        //password String
-        //hash String @unique
+  static systemUser = {
+    username: "system-user",
+    //password String
+    //hash String @unique
 
-        // additional user information
-        preferredName: "System User",
-        phone: "",
-        timezone: "America/Detroit",
+    // additional user information
+    preferredName: "System User",
+    phone: "",
+    timezone: "America/Detroit",
 
-        // for study management
-        phase: "intervention",
+    // for study management
+    phase: "intervention",
 
-        // for group assignment
-        /*
+    // for group assignment
+    /*
         gif: true,
         salience: true,
         modification: true,
         */
 
-        // for Fitbit
-        /*
+    // for Fitbit
+    /*
         fitbitId String?
         fitbitDisplayName String?
         fitbitFullName String?
@@ -46,43 +54,135 @@ export default class GeneralUtility {
         refreshToken String?
         */
 
-        // for user preference
-        /*
+    // for user preference
+    /*
         weekdayWakeup DateTime?
         weekdayBed DateTime?
         weekendWakeup DateTime?
         weekendBed DateTime?
         */
-    };
+  };
 
-    static fitbitUpdateSampleList = [
-        { "collectionType": "activities", "date": "2022-05-28", "ownerId": "4SW9W9", "ownerType": "user", "subscriptionId": "1" },
-        { "collectionType": "activities", "date": "2022-05-28", "ownerId": "4SW9W9", "ownerType": "user", "subscriptionId": "1" },
-        { "collectionType": "activities", "date": "2022-05-28", "ownerId": "4SW9W9", "ownerType": "user", "subscriptionId": "1" },
-        { "collectionType": "activities", "date": "2022-05-28", "ownerId": "4SW9W9", "ownerType": "user", "subscriptionId": "1" },
-        { "collectionType": "activities", "date": "2022-05-28", "ownerId": "4SW9W9", "ownerType": "user", "subscriptionId": "1" },
-        { "collectionType": "activities", "date": "2022-05-28", "ownerId": "4SW9W9", "ownerType": "user", "subscriptionId": "1" },
-        { "collectionType": "activities", "date": "2021-12-14", "ownerId": "9BK4CS", "ownerType": "user", "subscriptionId": "9BK4CS-activities-3" },
-        { "collectionType": "activities", "date": "2022-05-01", "ownerId": "9BK4CS", "ownerType": "user", "subscriptionId": "9BK4CS-activities-3" },
-        { "collectionType": "activities", "date": "2021-12-21", "ownerId": "9BK4CS", "ownerType": "user", "subscriptionId": "9BK4CS-activities-3" },
+  static fitbitUpdateSampleList = [
+    {
+      collectionType: "activities",
+      date: "2022-05-28",
+      ownerId: "4SW9W9",
+      ownerType: "user",
+      subscriptionId: "1",
+    },
+    {
+      collectionType: "activities",
+      date: "2022-05-28",
+      ownerId: "4SW9W9",
+      ownerType: "user",
+      subscriptionId: "1",
+    },
+    {
+      collectionType: "activities",
+      date: "2022-05-28",
+      ownerId: "4SW9W9",
+      ownerType: "user",
+      subscriptionId: "1",
+    },
+    {
+      collectionType: "activities",
+      date: "2022-05-28",
+      ownerId: "4SW9W9",
+      ownerType: "user",
+      subscriptionId: "1",
+    },
+    {
+      collectionType: "activities",
+      date: "2022-05-28",
+      ownerId: "4SW9W9",
+      ownerType: "user",
+      subscriptionId: "1",
+    },
+    {
+      collectionType: "activities",
+      date: "2022-05-28",
+      ownerId: "4SW9W9",
+      ownerType: "user",
+      subscriptionId: "1",
+    },
+    {
+      collectionType: "activities",
+      date: "2021-12-14",
+      ownerId: "9BK4CS",
+      ownerType: "user",
+      subscriptionId: "9BK4CS-activities-3",
+    },
+    {
+      collectionType: "activities",
+      date: "2022-05-01",
+      ownerId: "9BK4CS",
+      ownerType: "user",
+      subscriptionId: "9BK4CS-activities-3",
+    },
+    {
+      collectionType: "activities",
+      date: "2021-12-21",
+      ownerId: "9BK4CS",
+      ownerType: "user",
+      subscriptionId: "9BK4CS-activities-3",
+    },
+  ];
 
-    ];
+  static responseSampleList = [
+    {
+      participantId: "test2",
+      responseId: "R_wYqbwGbXs6tZzhL",
+      dateTime: "2022-05-24T08:41:00Z",
+      surveyId: "SV_cACIS909SMXMUp8",
+      surveyLink: "https://umich.qualtrics.com/jfe/form/SV_cACIS909SMXMUp8",
+      surveyParamsString: "study_code=test2",
+      content: "huh?",
+    },
+    {
+      participantId: "test1",
+      responseId: "R_XMRDYnIbnI8GpOh",
+      dateTime: "2022-06-22T01:52:00Z",
+      surveyId: "SV_6QJa9e00C4gywQu",
+      surveyLink: "https://umich.qualtrics.com/jfe/form/SV_6QJa9e00C4gywQu",
+      surveyParamsString: "study_code=test1",
+      content: "Stay the same",
+    },
+    {
+      participantId: "test1",
+      responseId: "R_2uX8jjqLRFDQ4m8",
+      dateTime: "2022-06-22T01:54:00Z",
+      surveyId: "SV_cACIS909SMXMUp8",
+      surveyLink: "https://umich.qualtrics.com/jfe/form/SV_cACIS909SMXMUp8",
+      surveyParamsString: "study_code=test1",
+      content: "listen to music",
+    },
+    {
+      participantId: "test1",
+      responseId: "R_12JXBJDX1pinp5W",
+      dateTime: "2022-06-22T01:57:00Z",
+      surveyId: "SV_bBoOhje0dSNbZgq",
+      surveyLink: "https://umich.qualtrics.com/jfe/form/SV_bBoOhje0dSNbZgq",
+      surveyParamsString: "study_code=test1",
+      content: "bring a friend",
+    },
+    {
+      participantId: "test1",
+      responseId: "R_12JXBJDX1pitest",
+      dateTime: "2022-06-22T01:57:00Z",
+      surveyId: "SV_81aWO5sJPDhGZNA",
+      surveyLink: "https://umich.qualtrics.com/jfe/form/SV_81aWO5sJPDhGZNA",
+      surveyParamsString: "study_code=test1",
+      content: "test",
+    },
+  ];
 
-    static responseSampleList = [{ "participantId": "test2", "responseId": "R_wYqbwGbXs6tZzhL", "dateTime": "2022-05-24T08:41:00Z", "surveyId": "SV_cACIS909SMXMUp8", "surveyLink": "https://umich.qualtrics.com/jfe/form/SV_cACIS909SMXMUp8", "surveyParamsString": "study_code=test2", "content": "huh?" },
-    { "participantId": "test1", "responseId": "R_XMRDYnIbnI8GpOh", "dateTime": "2022-06-22T01:52:00Z", "surveyId": "SV_6QJa9e00C4gywQu", "surveyLink": "https://umich.qualtrics.com/jfe/form/SV_6QJa9e00C4gywQu", "surveyParamsString": "study_code=test1", "content": "Stay the same" },
-    { "participantId": "test1", "responseId": "R_2uX8jjqLRFDQ4m8", "dateTime": "2022-06-22T01:54:00Z", "surveyId": "SV_cACIS909SMXMUp8", "surveyLink": "https://umich.qualtrics.com/jfe/form/SV_cACIS909SMXMUp8", "surveyParamsString": "study_code=test1", "content": "listen to music" },
-    { "participantId": "test1", "responseId": "R_12JXBJDX1pinp5W", "dateTime": "2022-06-22T01:57:00Z", "surveyId": "SV_bBoOhje0dSNbZgq", "surveyLink": "https://umich.qualtrics.com/jfe/form/SV_bBoOhje0dSNbZgq", "surveyParamsString": "study_code=test1", "content": "bring a friend" },
-    { "participantId": "test1", "responseId": "R_12JXBJDX1pitest", "dateTime": "2022-06-22T01:57:00Z", "surveyId": "SV_81aWO5sJPDhGZNA", "surveyLink": "https://umich.qualtrics.com/jfe/form/SV_81aWO5sJPDhGZNA", "surveyParamsString": "study_code=test1", "content": "test" }];
+  constructor() {}
 
-    constructor() {
+  static usTimeZoneOffetInfoList = [
+    { name: "America/New_York", offset: -240, offsetLabel: "GMT -4" },
 
-    }
-
-    static usTimeZoneOffetInfoList = [
-        { name: 'America/New_York', offset: -240, offsetLabel: 'GMT -4' },
-
-
-        /*
+    /*
         { name: 'America/Detroit', offset: -240, offsetLabel: 'GMT -4' },
         {
             name: 'America/Kentucky/Louisville',
@@ -125,8 +225,8 @@ export default class GeneralUtility {
             offsetLabel: 'GMT -4'
         },
         */
-        { name: 'America/Chicago', offset: -300, offsetLabel: 'GMT -5' },
-        /*
+    { name: "America/Chicago", offset: -300, offsetLabel: "GMT -5" },
+    /*
         {
             name: 'America/Indiana/Tell_City',
             offset: -300,
@@ -150,409 +250,472 @@ export default class GeneralUtility {
             offsetLabel: 'GMT -5'
         },
         */
-        { name: 'America/Denver', offset: -360, offsetLabel: 'GMT -6' },
-        /*{ name: 'America/Boise', offset: -360, offsetLabel: 'GMT -6' },*/
-        /* { name: 'America/Phoenix', offset: -420, offsetLabel: 'GMT -7' }, */
-        { name: 'America/Los_Angeles', offset: -420, offsetLabel: 'GMT -7' },
-        { name: 'America/Anchorage', offset: -480, offsetLabel: 'GMT -8' },
-        /*
+    { name: "America/Denver", offset: -360, offsetLabel: "GMT -6" },
+    /*{ name: 'America/Boise', offset: -360, offsetLabel: 'GMT -6' },*/
+    /* { name: 'America/Phoenix', offset: -420, offsetLabel: 'GMT -7' }, */
+    { name: "America/Los_Angeles", offset: -420, offsetLabel: "GMT -7" },
+    { name: "America/Anchorage", offset: -480, offsetLabel: "GMT -8" },
+    /*
         { name: 'America/Juneau', offset: -480, offsetLabel: 'GMT -8' },
         { name: 'America/Sitka', offset: -480, offsetLabel: 'GMT -8' },
         { name: 'America/Metlakatla', offset: -480, offsetLabel: 'GMT -8' },
         { name: 'America/Yakutat', offset: -480, offsetLabel: 'GMT -8' },
         { name: 'America/Nome', offset: -480, offsetLabel: 'GMT -8' },
         */
-        { name: 'America/Adak', offset: -540, offsetLabel: 'GMT -9' },
-        { name: 'Pacific/Honolulu', offset: -600, offsetLabel: 'GMT -10' },
-        { name: 'Brazil/Rio de Janeiro', offset: -180, offsetLabel: 'GMT -3' },
-        { name: 'Canada/St. Johns', offset: -150, offsetLabel: 'GMT -2.5' },
-        { name: 'United Kingdom/London', offset: -0, offsetLabel: 'GMT -0' },
-        { name: 'France/Paris', offset: +60, offsetLabel: 'GMT +1' },
-        { name: 'South Africa/Cape Town', offset: +120, offsetLabel: 'GMT +2' },
-        { name: 'Kenya/Nairobi', offset: +180, offsetLabel: 'GMT +3' },
-        { name: 'Iran/Tehran', offset: +210, offsetLabel: 'GMT +3.5' },
-        { name: 'United Arab Emirates/Dubai', offset: +240, offsetLabel: 'GMT +4' },
-        { name: 'Afghanistan/Kabul', offset: +270, offsetLabel: 'GMT +4.5' },
-        { name: 'Pakistan/Islamabad', offset: +300, offsetLabel: 'GMT +5' },
-        { name: 'India/Mumbai', offset: +330, offsetLabel: 'GMT +5.5' },
-        { name: 'Thailand/Bangkok', offset: +420, offsetLabel: 'GMT +7' },
-        { name: 'China/Beijing', offset: +480, offsetLabel: 'GMT +8' },
-        { name: 'South Korea/Seoul', offset: +540, offsetLabel: 'GMT +9' },
-        { name: 'Australia/Brisbane', offset: +600, offsetLabel: 'GMT +10' },
-        { name: 'South Australia/Adelaide', offset: +630, offsetLabel: 'GMT +10.5' },
-        { name: 'Australia/Sydney', offset: +660, offsetLabel: 'GMT +11' },
-        { name: 'New Zealand/Auckland', offset: +780, offsetLabel: 'GMT +13' },
-    ]
+    { name: "America/Adak", offset: -540, offsetLabel: "GMT -9" },
+    { name: "Pacific/Honolulu", offset: -600, offsetLabel: "GMT -10" },
+    { name: "Brazil/Rio de Janeiro", offset: -180, offsetLabel: "GMT -3" },
+    { name: "Canada/St. Johns", offset: -150, offsetLabel: "GMT -2.5" },
+    { name: "United Kingdom/London", offset: -0, offsetLabel: "GMT -0" },
+    { name: "France/Paris", offset: +60, offsetLabel: "GMT +1" },
+    { name: "South Africa/Cape Town", offset: +120, offsetLabel: "GMT +2" },
+    { name: "Kenya/Nairobi", offset: +180, offsetLabel: "GMT +3" },
+    { name: "Iran/Tehran", offset: +210, offsetLabel: "GMT +3.5" },
+    { name: "United Arab Emirates/Dubai", offset: +240, offsetLabel: "GMT +4" },
+    { name: "Afghanistan/Kabul", offset: +270, offsetLabel: "GMT +4.5" },
+    { name: "Pakistan/Islamabad", offset: +300, offsetLabel: "GMT +5" },
+    { name: "India/Mumbai", offset: +330, offsetLabel: "GMT +5.5" },
+    { name: "Thailand/Bangkok", offset: +420, offsetLabel: "GMT +7" },
+    { name: "China/Beijing", offset: +480, offsetLabel: "GMT +8" },
+    { name: "South Korea/Seoul", offset: +540, offsetLabel: "GMT +9" },
+    { name: "Australia/Brisbane", offset: +600, offsetLabel: "GMT +10" },
+    {
+      name: "South Australia/Adelaide",
+      offset: +630,
+      offsetLabel: "GMT +10.5",
+    },
+    { name: "Australia/Sydney", offset: +660, offsetLabel: "GMT +11" },
+    { name: "New Zealand/Auckland", offset: +780, offsetLabel: "GMT +13" },
+  ];
 
-    static getTSVStringFromObjectList(objectList) {
-        let csvString = "";
+  static getTSVStringFromObjectList(objectList) {
+    let csvString = "";
 
-        if (objectList.length == 0) {
-            return csvString;
-        }
-        // prepare the csv string
-        let headerList = Object.keys(objectList[0]);
-        let headerString = headerList.join("\t");
-        csvString += headerString + "\n";
-
-        // now the content
-        objectList.forEach((info) => {
-            let contentList = headerList.map((columnName) => {
-                //return info[columnName];
-                return JSON.stringify(info[columnName]);
-            });
-
-            let contentString = contentList.join("\t");
-            csvString += contentString + "\n";
-        });
-
-        return csvString;
+    if (objectList.length == 0) {
+      return csvString;
     }
+    // prepare the csv string
+    let headerList = Object.keys(objectList[0]);
+    let headerString = headerList.join("\t");
+    csvString += headerString + "\n";
 
-    static getCSVStringFromObjectList(objectList) {
-        let csvString = "";
+    // now the content
+    objectList.forEach((info) => {
+      let contentList = headerList.map((columnName) => {
+        //return info[columnName];
+        return JSON.stringify(info[columnName]);
+      });
 
-        if (objectList.length == 0) {
-            return csvString;
-        }
-        // prepare the csv string
-        let headerList = Object.keys(objectList[0]);
-        let headerString = headerList.join(",");
-        csvString += headerString + "\n";
+      let contentString = contentList.join("\t");
+      csvString += contentString + "\n";
+    });
 
-        // now the content
-        objectList.forEach((info) => {
-            let contentList = headerList.map((columnName) => {
-                //return info[columnName];
-                return `"${JSON.stringify(info[columnName])}"`;
-            });
+    return csvString;
+  }
 
-            let contentString = contentList.join(",");
-            csvString += contentString + "\n";
-        });
+  static getCSVStringFromObjectList(objectList) {
+    let csvString = "";
 
-        return csvString;
+    if (objectList.length == 0) {
+      return csvString;
     }
+    // prepare the csv string
+    let headerList = Object.keys(objectList[0]);
+    let headerString = headerList.join(",");
+    csvString += headerString + "\n";
 
-    static getObjectAsJSONDiff(oldObj, newObj) {
-        let oldDocument = JSON.parse(JSON.stringify(oldObj));
-        let newDocument = JSON.parse(JSON.stringify(newObj));
-        return getDiff(oldDocument, newDocument, true);
-    }
+    // now the content
+    objectList.forEach((info) => {
+      let contentList = headerList.map((columnName) => {
+        //return info[columnName];
+        return `"${JSON.stringify(info[columnName])}"`;
+      });
 
-    static getLocalTime(datetime, timezone) {
-        return datetime.setZone(timezone);
-    }
+      let contentString = contentList.join(",");
+      csvString += contentString + "\n";
+    });
 
-    static syncToFirstDateTimeBeforeUnit(datetime1, datetime2, unitString) {
+    return csvString;
+  }
 
-        let unitIndex = GeneralUtility.unitList.indexOf(unitString);
+  static getObjectAsJSONDiff(oldObj, newObj) {
+    let oldDocument = JSON.parse(JSON.stringify(oldObj));
+    let newDocument = JSON.parse(JSON.stringify(newObj));
+    return getDiff(oldDocument, newDocument, true);
+  }
 
-        /*
+  static getLocalTime(datetime, timezone) {
+    return datetime.setZone(timezone);
+  }
+
+  static syncToFirstDateTimeBeforeUnit(datetime1, datetime2, unitString) {
+    let unitIndex = GeneralUtility.unitList.indexOf(unitString);
+
+    /*
         let datetime1 = DateTime.fromJSDate(date1);
         let datetime2 = DateTime.fromJSDate(date2);
         */
 
-        let newDateTime2 = DateTime.fromObject(datetime2.toObject());
+    let newDateTime2 = DateTime.fromObject(datetime2.toObject());
 
+    for (let i = 0; i < this.unitList.length; i++) {
+      let curUnit = this.unitList[i];
 
-        for (let i = 0; i < this.unitList.length; i++) {
-            let curUnit = this.unitList[i];
+      if (i < unitIndex) {
+        let unitsString = `${unitString}s`;
 
-            if (i < unitIndex) {
-
-                let unitsString = `${unitString}s`;
-
-                let option = { [curUnit]: datetime1.get(curUnit) };
-                console.log(`curUnit set : ${JSON.stringify(option)}`);
-                newDateTime2 = newDateTime2.set(option);
-            }
-        }
-
-        //console.log(`${this.name}.zeroAfterUnit before return: ${newDateTime}`);
-
-        return [datetime1, newDateTime2];
+        let option = { [curUnit]: datetime1.get(curUnit) };
+        console.log(`curUnit set : ${JSON.stringify(option)}`);
+        newDateTime2 = newDateTime2.set(option);
+      }
     }
 
-    static matchSqureBracketPlaceholder(message) {
-        var reString = `\\[[^\\[\\]]*\\]`;
+    //console.log(`${this.name}.zeroAfterUnit before return: ${newDateTime}`);
 
-        var re = new RegExp(reString, "g");
+    return [datetime1, newDateTime2];
+  }
 
-        const found = message.matchAll(re);
+  static matchSqureBracketPlaceholder(message) {
+    var reString = `\\[[^\\[\\]]*\\]`;
 
-        let matchList = [...found].flat();
+    var re = new RegExp(reString, "g");
 
-        console.log(JSON.stringify(matchList));
+    const found = message.matchAll(re);
 
-        return matchList;
+    let matchList = [...found].flat();
+
+    console.log(JSON.stringify(matchList));
+
+    return matchList;
+  }
+
+  static getLastWeekAsInterval(nowDateTime = DateTime.now()) {
+    //  Interval#start and Interval#end
+    let start = nowDateTime.minus({ days: 7 }).startOf("week");
+    let end = nowDateTime.minus({ days: 7 }).endOf("week");
+
+    return Interval.fromDateTimes(start, end);
+  }
+
+  static filterFitbitWalkActivityListByDuration(
+    walkList,
+    minDurationInSeconds = 10 * 60
+  ) {
+    return walkList.filter((record) => {
+      return record.duration / 1000 >= minDurationInSeconds;
+    });
+  }
+
+  static getWeekdayOrWeekend(datetime) {
+    console.log(`getWeekdayOrWeekend: ${datetime.weekday}`);
+    if (datetime.weekday < 6) {
+      return "weekday";
+    } else {
+      return "weekend";
+    }
+  }
+
+  static setToReferenceDateAndSeconds(datetime, referenceDateTime) {
+    return datetime.set({
+      year: referenceDateTime.year,
+      month: referenceDateTime.month,
+      day: referenceDateTime.day,
+      second: referenceDateTime.second,
+      millisecond: referenceDateTime.millisecond,
+    });
+  }
+
+  static convertToUTCWithUTCDate(datetimeString, referenceUTC) {
+    console.log(
+      `convertToUTCWithUTCDate DateTime.fromISO(datetimeString).toUTC(): ${DateTime.fromISO(
+        datetimeString
+      ).toUTC()}`
+    );
+    return DateTime.fromISO(datetimeString)
+      .toUTC()
+      .set({
+        year: referenceUTC.year,
+        month: referenceUTC.month,
+        day: referenceUTC.day,
+        second: referenceUTC.second,
+        millisecond: referenceUTC.millisecond,
+      });
+  }
+
+  static diffDateTime(datetimeA, datetimeB, unit) {
+    return datetimeB.diff(datetimeA, unit);
+  }
+
+  static operateDateTime(dateTime, offset, operator) {
+    let result = undefined;
+    switch (operator) {
+      case "plus":
+        result = dateTime.plus(offset);
+        break;
+      case "minus":
+        result = dateTime.minus(offset);
+        break;
+      default:
+        break;
     }
 
-    static getLastWeekAsInterval(nowDateTime = DateTime.now()) {
-        //  Interval#start and Interval#end
-        let start = nowDateTime.minus({ days: 7 }).startOf("week");
-        let end = nowDateTime.minus({ days: 7 }).endOf("week");
+    return result;
+  }
 
-        return Interval.fromDateTimes(start, end);
+  static generateStartOrEndDateTimeByReference(
+    targetDateTime,
+    userInfo,
+    timeDefinition,
+    startOrEnd = "start"
+  ) {
+    let resultDateTime;
+
+    let startEndOfUnit = "no";
+    let startEndUnit = "day";
+
+    if (timeDefinition != undefined) {
+      switch (timeDefinition.reference) {
+        case "now":
+          break;
+        case "today":
+          startEndOfUnit = startOrEnd;
+          break;
+        case "activateAtDate":
+          startEndOfUnit = startOrEnd;
+          break;
+        case "joinAtDate":
+          startEndOfUnit = startOrEnd;
+          break;
+        case "completeAtDate":
+          startEndOfUnit = startOrEnd;
+          break;
+        default:
+          break;
+      }
+
+      resultDateTime = GeneralUtility.generateDateTimeByReference(
+        targetDateTime,
+        userInfo,
+        timeDefinition.reference,
+        startEndOfUnit,
+        startEndUnit
+      );
+      resultDateTime = GeneralUtility.operateDateTime(
+        resultDateTime,
+        timeDefinition.offset.value,
+        timeDefinition.offset.type
+      );
+    } else {
+      switch (startOrEnd) {
+        case "start":
+          resultDateTime = DateTime.utc(2000);
+          break;
+        case "end":
+          resultDateTime = targetDateTime; //.toUTC();
+          break;
+        default:
+          break;
+      }
     }
 
-    static filterFitbitWalkActivityListByDuration(walkList, minDurationInSeconds = 10 * 60) {
-        return walkList.filter((record) => {
-            return record.duration / 1000 >= minDurationInSeconds;
-        });
+    console.log(
+      `${this.name} generateStartOrEndDateTimeByReference: ${resultDateTime}`
+    );
+    return resultDateTime;
+  }
+
+  static generateDateTimeByReference(
+    targetDateTime,
+    userInfo,
+    reference,
+    startEndOfUnit = "no",
+    startEndUnit = "day"
+  ) {
+    console.log(
+      `${this.name} generateDateTimeByReference: ${targetDateTime},${userInfo.username},${reference}, ${startEndOfUnit},${startEndUnit}`
+    );
+    let resultDateTime = undefined;
+
+    console.log(
+      `${this.name} generateDateTimeByReference: userInfo.timezone: ${userInfo.timezone}`
+    );
+    switch (reference) {
+      case "now":
+        resultDateTime = targetDateTime; //.toUTC();// DateTime.utc();
+        break;
+      case "today":
+        // I need to use datetime
+        // Step 1: convert to a participant's local time
+        resultDateTime = targetDateTime; //.startOf("day").toUTC();
+        break;
+      case "activateAtDate":
+        resultDateTime = GeneralUtility.getLocalTime(
+          DateTime.fromISO(userInfo.activateAt),
+          userInfo.timezone
+        ); //.startOf("day");
+        break;
+      case "joinAtDate":
+        console.log(
+          `${this.name} generateDateTimeByReference: userInfo.joinAt: ${
+            userInfo.joinAt
+          }, type: ${typeof userInfo.joinAt}`
+        );
+        resultDateTime = GeneralUtility.getLocalTime(
+          DateTime.fromISO(userInfo.joinAt),
+          userInfo.timezone
+        );
+        break;
+      case "completeAtDate":
+        resultDateTime = GeneralUtility.getLocalTime(
+          DateTime.fromISO(userInfo.completeAt),
+          userInfo.timezone
+        );
+        break;
+      default:
+        break;
     }
 
-    static getWeekdayOrWeekend(datetime) {
-        console.log(`getWeekdayOrWeekend: ${datetime.weekday}`);
-        if (datetime.weekday < 6) {
-            return "weekday";
-        }
-        else {
-            return "weekend";
-        }
+    console.log(
+      `${this.name} generateDateTimeByReference: before startEndOfUnit: ${resultDateTime}`
+    );
+
+    switch (startEndOfUnit) {
+      case "start":
+        resultDateTime = resultDateTime.startOf(startEndUnit);
+        break;
+      case "end":
+        // I need to use datetime
+        // Step 1: convert to a participant's local time
+        resultDateTime = resultDateTime.endOf(startEndUnit);
+        break;
+      default:
+        break;
     }
 
-    static setToReferenceDateAndSeconds(datetime, referenceDateTime) {
-        return datetime.set({ year: referenceDateTime.year, month: referenceDateTime.month, day: referenceDateTime.day, second: referenceDateTime.second, millisecond: referenceDateTime.millisecond });
-    }
+    console.log(`${this.name} generateDateTimeByReference: ${resultDateTime}`);
+    return resultDateTime;
+  }
 
+  static extractSurveyLinkFromAction(actionInfo) {
+    let surveyURL = "";
 
-    static convertToUTCWithUTCDate(datetimeString, referenceUTC) {
-        console.log(`convertToUTCWithUTCDate DateTime.fromISO(datetimeString).toUTC(): ${DateTime.fromISO(datetimeString).toUTC()}`);
-        return DateTime.fromISO(datetimeString).toUTC().set({ year: referenceUTC.year, month: referenceUTC.month, day: referenceUTC.day, second: referenceUTC.second, millisecond: referenceUTC.millisecond });
-    }
-
-    static diffDateTime(datetimeA, datetimeB, unit) {
-        return datetimeB.diff(datetimeA, unit);
-    }
-
-    static operateDateTime(dateTime, offset, operator) {
-        let result = undefined;
-        switch (operator) {
-            case "plus":
-                result = dateTime.plus(offset);
-                break;
-            case "minus":
-                result = dateTime.minus(offset);
-                break;
-            default:
-                break;
-
-        }
-
-        return result;
-    }
-
-    static generateStartOrEndDateTimeByReference(targetDateTime, userInfo, timeDefinition, startOrEnd = "start") {
-        console.log(`${this.name} generateStartOrEndDateTimeByReference: ${targetDateTime}, ${JSON.stringify(timeDefinition)}`);
-        let resultDateTime;
-
-        let startEndOfUnit = "no";
-        let startEndUnit = "day";
-
-
-
-        if (timeDefinition != undefined) {
-            switch (timeDefinition.reference) {
-                case "now":
-                    break;
-                case "today":
-                    startEndOfUnit = startOrEnd;
-                    break;
-                case "activateAtDate":
-                    startEndOfUnit = startOrEnd;
-                    break;
-                case "joinAtDate":
-                    startEndOfUnit = startOrEnd;
-                    break;
-                case "completeAtDate":
-                    startEndOfUnit = startOrEnd;
-                    break;
-                default:
-                    break;
-            }
-
-            resultDateTime = GeneralUtility.generateDateTimeByReference(targetDateTime, userInfo, timeDefinition.reference, startEndOfUnit, startEndUnit);
-            resultDateTime = GeneralUtility.operateDateTime(resultDateTime, timeDefinition.offset.value, timeDefinition.offset.type);
-        }
-        else {
-            switch (startOrEnd) {
-                case "start":
-                    resultDateTime = DateTime.utc(2000);
-                    break;
-                case "end":
-                    resultDateTime = targetDateTime; //.toUTC();
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        console.log(`${this.name} generateStartOrEndDateTimeByReference: ${resultDateTime}`);
-        return resultDateTime;
-    }
-
-    static generateDateTimeByReference(targetDateTime, userInfo, reference, startEndOfUnit = "no", startEndUnit = "day") {
-        console.log(`${this.name} generateDateTimeByReference: ${targetDateTime},${userInfo.username},${reference}, ${startEndOfUnit},${startEndUnit}`);
-        let resultDateTime = undefined;
-
-        console.log(`${this.name} generateDateTimeByReference: userInfo.timezone: ${userInfo.timezone}`);
-        switch (reference) {
-            case "now":
-                resultDateTime = targetDateTime; //.toUTC();// DateTime.utc();
-                break;
-            case "today":
-                // I need to use datetime
-                // Step 1: convert to a participant's local time
-                resultDateTime = targetDateTime; //.startOf("day").toUTC();
-                break;
-            case "activateAtDate":
-                resultDateTime = GeneralUtility.getLocalTime(DateTime.fromISO(userInfo.activateAt), userInfo.timezone); //.startOf("day");
-                break;
-            case "joinAtDate":
-                console.log(`${this.name} generateDateTimeByReference: userInfo.joinAt: ${userInfo.joinAt}, type: ${typeof userInfo.joinAt}`);
-                resultDateTime = GeneralUtility.getLocalTime(DateTime.fromISO(userInfo.joinAt), userInfo.timezone);
-                break;
-            case "completeAtDate":
-                resultDateTime = GeneralUtility.getLocalTime(DateTime.fromISO(userInfo.completeAt), userInfo.timezone);
-                break;
-            default:
-                break;
-        }
-
-        console.log(`${this.name} generateDateTimeByReference: before startEndOfUnit: ${resultDateTime}`);
-
-        switch (startEndOfUnit) {
-            case "start":
-                resultDateTime = resultDateTime.startOf(startEndUnit);
-                break;
-            case "end":
-                // I need to use datetime
-                // Step 1: convert to a participant's local time
-                resultDateTime = resultDateTime.endOf(startEndUnit);
-                break;
-            default:
-                break;
-        }
-
-        console.log(`${this.name} generateDateTimeByReference: ${resultDateTime}`);
-        return resultDateTime;
-    }
-
-
-
-
-    static extractSurveyLinkFromAction(actionInfo) {
-        let surveyURL = "";
-
-        if (actionInfo["surveyType"] != undefined && actionInfo["surveyType"].length > 0) {
-            if (actionInfo["surveyType"] == "surveyLink") {
-                surveyURL = actionInfo["surveyLink"];
-            }
-            /*
+    if (
+      actionInfo["surveyType"] != undefined &&
+      actionInfo["surveyType"].length > 0
+    ) {
+      if (actionInfo["surveyType"] == "surveyLink") {
+        surveyURL = actionInfo["surveyLink"];
+      }
+      /*
             else if( actionInfo["surveyType"] == "surveyLabel"){
                 let surveyLabel = actionInfo["surveyLabel"];
                 let survey
                 surveyURL = actionInfo["surveyLink"];
             }
             */
-        }
-
-        return surveyURL;
     }
 
-    static async getUserMessageFromGroupWithLowestFrequency(username, groupName) {
-        //let resultList = [];
+    return surveyURL;
+  }
 
-        let frequencyDict = await GeneralUtility.getUserMessageFromGroupCountDict(username, groupName);
+  static async getUserMessageFromGroupWithLowestFrequency(username, groupName) {
+    //let resultList = [];
 
-        //console.log(`getUserMessageFromGroupWithLowestFrequency.frequencyDict: ${JSON.stringify(frequencyDict)}`);
+    let frequencyDict = await GeneralUtility.getUserMessageFromGroupCountDict(
+      username,
+      groupName
+    );
 
-        let frequencyList = Object.keys(frequencyDict).map((messageLabel) => {
-            return {
-                label: messageLabel,
-                info: frequencyDict[messageLabel].info,
-                frequency: frequencyDict[messageLabel].count
-            };
-        });
+    //console.log(`getUserMessageFromGroupWithLowestFrequency.frequencyDict: ${JSON.stringify(frequencyDict)}`);
 
-        //console.log(`frequencyList: ${JSON.stringify(frequencyList)}`);
+    let frequencyList = Object.keys(frequencyDict).map((messageLabel) => {
+      return {
+        label: messageLabel,
+        info: frequencyDict[messageLabel].info,
+        frequency: frequencyDict[messageLabel].count,
+      };
+    });
 
-        frequencyList.sort((a, b) => {
-            return a.frequency - b.frequency;
-        });
+    //console.log(`frequencyList: ${JSON.stringify(frequencyList)}`);
 
-        let lowestFrequency = frequencyList[0].frequency;
+    frequencyList.sort((a, b) => {
+      return a.frequency - b.frequency;
+    });
 
-        let lowFrequencyList = frequencyList.filter((item) => {
-            return item.frequency == lowestFrequency;
-        });
+    let lowestFrequency = frequencyList[0].frequency;
 
+    let lowFrequencyList = frequencyList.filter((item) => {
+      return item.frequency == lowestFrequency;
+    });
 
-        return lowFrequencyList;
-    }
+    return lowFrequencyList;
+  }
 
-    static generateCompositeIDForFitbitUpdate(aList = []) {
-        return aList.join("_");
-    }
+  static generateCompositeIDForFitbitUpdate(aList = []) {
+    return aList.join("_");
+  }
 
-    static removeFitbitUpdateDuplicate(updateList, includeStatus = false) {
-        console.log(`${this.name} removeFitbitUpdateDuplicate: updateList.length: ${updateList.length}`);
-        let compositeIDMap = {};
+  static removeFitbitUpdateDuplicate(updateList, includeStatus = false) {
+    console.log(
+      `${this.name} removeFitbitUpdateDuplicate: updateList.length: ${updateList.length}`
+    );
+    let compositeIDMap = {};
 
+    let filteredList = updateList.filter((item) => {
+      let idComponentList = [item.ownerId, item.collectionType, item.date];
 
+      if (includeStatus) {
+        idComponentList.push(item.status);
+      }
+      let compositeId =
+        GeneralUtility.generateCompositeIDForFitbitUpdate(idComponentList);
 
+      //console.log(`compositeId: ${compositeId}`);
+      if (compositeIDMap[compositeId] == undefined) {
+        compositeIDMap[compositeId] = true;
+        //console.log(`First time: compositeId: ${compositeId}`);
+        return true;
+      } else {
+        // run into the same signature before
+        //console.log(`Not the first time: compositeId: ${compositeId}`)
+        return false;
+      }
+    });
+    //console.log(`${this.name} removeFitbitUpdateDuplicate: filteredList: ${filteredList}`);
 
-        let filteredList = updateList.filter((item) => {
-            let idComponentList = [item.ownerId, item.collectionType, item.date];
+    return filteredList;
+  }
 
-            if (includeStatus) {
-                idComponentList.push(item.status);
-            }
-            let compositeId = GeneralUtility.generateCompositeIDForFitbitUpdate(idComponentList);
+  static isRequestFromLocalhost(req) {
+    let ip = GeneralUtility.getIPFromRequest(req);
 
-            //console.log(`compositeId: ${compositeId}`);
-            if (compositeIDMap[compositeId] == undefined) {
-                compositeIDMap[compositeId] = true;
-                //console.log(`First time: compositeId: ${compositeId}`);
-                return true;
-            }
-            else {
-                // run into the same signature before
-                //console.log(`Not the first time: compositeId: ${compositeId}`)
-                return false;
-            }
-        });
-        //console.log(`${this.name} removeFitbitUpdateDuplicate: filteredList: ${filteredList}`);
+    let ipSplit = ip.split(":");
 
-        return filteredList;
-    }
+    // check the last one
+    return ipSplit[ipSplit.length - 1] == "127.0.0.1";
+  }
 
-    static isRequestFromLocalhost(req) {
-        let ip = GeneralUtility.getIPFromRequest(req);
+  static getIPFromRequest(req) {
+    let forwarded = req.headers["x-forwarded-for"];
+    console.log(
+      `getIPFromRequest: req.headers["x-forwarded-for"]: ${forwarded}`
+    );
+    console.log(
+      `getIPFromRequest:  req.connection.remoteAddress: ${req.connection.remoteAddress}`
+    );
+    let ip = forwarded
+      ? forwarded.split(/, /)[0]
+      : req.connection.remoteAddress;
 
-        let ipSplit = ip.split(":");
+    return ip;
+  }
 
-        // check the last one
-        return ipSplit[ipSplit.length - 1] == "127.0.0.1";
-    }
+  static extractUserInfoCache(userInfo) {
+    const { id, password, hash, accessToken, refreshToken, ...rest } = userInfo;
 
-    static getIPFromRequest(req) {
-        let forwarded = req.headers["x-forwarded-for"];
-        console.log(`getIPFromRequest: req.headers["x-forwarded-for"]: ${forwarded}`);
-        console.log(`getIPFromRequest:  req.connection.remoteAddress: ${req.connection.remoteAddress}`);
-        let ip = forwarded ? forwarded.split(/, /)[0] : req.connection.remoteAddress;
+    return { ...rest };
 
-        return ip;
-    }
-
-    static extractUserInfoCache(userInfo) {
-
-        const { id, password, hash, accessToken, refreshToken, ...rest } = userInfo;
-
-        return { ...rest };
-
-        /*
+    /*
         model users {
             id  String  @id @default(auto()) @map("_id") @db.ObjectId
             username String @unique
@@ -592,212 +755,228 @@ export default class GeneralUtility {
             updatedAt DateTime? @updatedAt
           }
         */
+  }
 
-    }
+  static convertRandomizationResultToString(rResult) {
+    let result = "";
 
-    static convertRandomizationResultToString(rResult) {
-        let result = "";
-
-        switch (rResult.type) {
-            case "noAction":
-                result = `noAction`;
-                break;
-            default:
-                if (rResult.theChoice != undefined) {
-                    result = `chance: ${rResult.theChoice.chance}, random: ${rResult.randomNumber}`;
-                }
-                else {
-                    result = "";
-                }
-                break;
+    switch (rResult.type) {
+      case "noAction":
+        result = `noAction`;
+        break;
+      default:
+        if (rResult.theChoice != undefined) {
+          result = `chance: ${rResult.theChoice.chance}, random: ${rResult.randomNumber}`;
+        } else {
+          result = "";
         }
-
-        return result;
+        break;
     }
 
-    static extractOutcomeToString(theChoice) {
-        let result = "";
-        let excludeNameList = ["type"];
+    return result;
+  }
 
-        if (theChoice != undefined) {
-            result = `[${theChoice.chance}]${theChoice.action.type} -`;
-            Object.keys(theChoice.action).forEach((propertyName) => {
-                if (!excludeNameList.includes(propertyName)) {
-                    if (theChoice.action[propertyName] == undefined) {
-                        ;
-                    }
-                    else if (typeof theChoice.action[propertyName] != "string") {
-                        result = result + ` ${propertyName}:${theChoice.action[propertyName]}`;
-                    }
-                    else if (typeof theChoice.action[propertyName] == "string" && theChoice.action[propertyName].length > 0) {
-                        result = result + ` ${propertyName}:${theChoice.action[propertyName]}`;
-                    }
-                }
-            });
+  static extractOutcomeToString(theChoice) {
+    let result = "";
+    let excludeNameList = ["type"];
+
+    if (theChoice != undefined) {
+      result = `[${theChoice.chance}]${theChoice.action.type} -`;
+      Object.keys(theChoice.action).forEach((propertyName) => {
+        if (!excludeNameList.includes(propertyName)) {
+          if (theChoice.action[propertyName] == undefined) {
+          } else if (typeof theChoice.action[propertyName] != "string") {
+            result =
+              result + ` ${propertyName}:${theChoice.action[propertyName]}`;
+          } else if (
+            typeof theChoice.action[propertyName] == "string" &&
+            theChoice.action[propertyName].length > 0
+          ) {
+            result =
+              result + ` ${propertyName}:${theChoice.action[propertyName]}`;
+          }
         }
-
-
-
-
-
-        return result;
+      });
     }
 
-    static convertExecutionResultToString(eResult) {
-        let result = "";
+    return result;
+  }
 
-        // {"type":"twilio","value":{"body":"Hello Pei-Yao, it's your bed time. Here is a random survey for you. https://umich.qualtrics.com/jfe/form/SV_cACIS909SMXMUp8?study_code=test1","numSegments":"0","direction":"outbound-api","from":null,"to":"+17342773256","dateUpdated":"2022-04-14T02:47:11.000Z","price":null,"errorMessage":null,"uri":"/2010-04-01/Accounts/AC74873bd3ac4b62dbe6ef1d44f6ee2a99/Messages/SM6ca91344dfa04ef4891715a3615a7002.json","accountSid":"AC74873bd3ac4b62dbe6ef1d44f6ee2a99","numMedia":"0","status":"accepted","messagingServiceSid":"MG05ede0540932555ae0e1b9b88876a30f","sid":"SM6ca91344dfa04ef4891715a3615a7002","dateSent":null,"dateCreated":"2022-04-14T02:47:11.000Z","errorCode":null,"priceUnit":null,"apiVersion":"2010-04-01","subresourceUris":{"media":"/2010-04-01/Accounts/AC74873bd3ac4b62dbe6ef1d44f6ee2a99/Messages/SM6ca91344dfa04ef4891715a3615a7002/Media.json"}}}
+  static convertExecutionResultToString(eResult) {
+    let result = "";
 
-        switch (eResult.type) {
-            case "noAction":
-                result = `noAction`;
-                break;
-            default:
-                if (eResult.type != undefined && eResult.value != undefined) {
-                    result = `type: ${eResult.type}, status: ${eResult.value.status}, errorMessage: ${eResult.value.errorMessage}`;
-                }
-                break;
+    // {"type":"twilio","value":{"body":"Hello Pei-Yao, it's your bed time. Here is a random survey for you. https://umich.qualtrics.com/jfe/form/SV_cACIS909SMXMUp8?study_code=test1","numSegments":"0","direction":"outbound-api","from":null,"to":"+17342773256","dateUpdated":"2022-04-14T02:47:11.000Z","price":null,"errorMessage":null,"uri":"/2010-04-01/Accounts/AC74873bd3ac4b62dbe6ef1d44f6ee2a99/Messages/SM6ca91344dfa04ef4891715a3615a7002.json","accountSid":"AC74873bd3ac4b62dbe6ef1d44f6ee2a99","numMedia":"0","status":"accepted","messagingServiceSid":"MG05ede0540932555ae0e1b9b88876a30f","sid":"SM6ca91344dfa04ef4891715a3615a7002","dateSent":null,"dateCreated":"2022-04-14T02:47:11.000Z","errorCode":null,"priceUnit":null,"apiVersion":"2010-04-01","subresourceUris":{"media":"/2010-04-01/Accounts/AC74873bd3ac4b62dbe6ef1d44f6ee2a99/Messages/SM6ca91344dfa04ef4891715a3615a7002/Media.json"}}}
+
+    switch (eResult.type) {
+      case "noAction":
+        result = `noAction`;
+        break;
+      default:
+        if (eResult.type != undefined && eResult.value != undefined) {
+          result = `type: ${eResult.type}, status: ${eResult.value.status}, errorMessage: ${eResult.value.errorMessage}`;
         }
-
-        return result;
+        break;
     }
 
-    static extractUserKeyAttributesToString(userInfo) {
+    return result;
+  }
 
-        if (userInfo == null) {
-            return "";
-        }
-
-        let result = `gif: ${userInfo.gif}, salience: ${userInfo.salience}, modification: ${userInfo.modification}, weekdayWakeup: ${userInfo.weekdayWakeup}, weekendWakeup: ${userInfo.weekendWakeup}, timesonze: ${userInfo.timezone}`;
-        return result;
+  static extractUserKeyAttributesToString(userInfo) {
+    if (userInfo == null) {
+      return "";
     }
 
-    static doesFitbitInfoExist(userInfo) {
+    let result = `gif: ${userInfo.gif}, salience: ${userInfo.salience}, modification: ${userInfo.modification}, weekdayWakeup: ${userInfo.weekdayWakeup}, weekendWakeup: ${userInfo.weekendWakeup}, timesonze: ${userInfo.timezone}`;
+    return result;
+  }
 
-        if (userInfo == null) {
-            return false;
-        }
-
-        return userInfo.fitbitId != null && userInfo.fitbitId.length > 0 && userInfo.accessToken != null && userInfo.accessToken.length > 0 && userInfo.refreshToken != null && userInfo.refreshToken.length > 0
-
+  static doesFitbitInfoExist(userInfo) {
+    if (userInfo == null) {
+      return false;
     }
 
-    static async sendTwilioMessage(phone, messageBody, mediaUrlList = []) {
-        console.log(`GeneralUtility.sendTwilioMessage: ${phone} - ${messageBody}`);
+    return (
+      userInfo.fitbitId != null &&
+      userInfo.fitbitId.length > 0 &&
+      userInfo.accessToken != null &&
+      userInfo.accessToken.length > 0 &&
+      userInfo.refreshToken != null &&
+      userInfo.refreshToken.length > 0
+    );
+  }
 
-        const result = await fetch("/api/twilio?function_name=send_message", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                phone,
-                messageBody,
-                mediaUrlList: mediaUrlList.length > 0 ? mediaUrlList : null
-            }),
-        }).then((r) => {
-            return r.json();
-        });
+  static async sendTwilioMessage(phone, messageBody, mediaUrlList = []) {
+    console.log(`GeneralUtility.sendTwilioMessage: ${phone} - ${messageBody}`);
 
-        console.log(`GeneralUtility.sendTwilioMessage: result: ${result}`);
+    const result = await fetch("/api/twilio?function_name=send_message", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        phone,
+        messageBody,
+        mediaUrlList: mediaUrlList.length > 0 ? mediaUrlList : null,
+      }),
+    }).then((r) => {
+      return r.json();
+    });
 
-        return result;
+    console.log(`GeneralUtility.sendTwilioMessage: result: ${result}`);
+
+    return result;
+  }
+
+  static isPreferredNameSet(userInfo) {
+    if (userInfo == null) {
+      return false;
     }
 
-    static isPreferredNameSet(userInfo) {
+    return (
+      userInfo.preferredName != undefined && userInfo.preferredName.length > 0
+    );
+  }
 
-        if (userInfo == null) {
-            return false;
-        }
-
-        return userInfo.preferredName != undefined && userInfo.preferredName.length > 0;
+  static isWakeBedTimeSet(userInfo) {
+    if (userInfo == null) {
+      return false;
     }
 
-    static isWakeBedTimeSet(userInfo) {
+    return (
+      userInfo.weekdayWakeup != undefined &&
+      userInfo.weekdayBed != undefined &&
+      userInfo.weekendWakeup != undefined &&
+      userInfo.weekendBed != undefined
+    );
+  }
 
-        if (userInfo == null) {
-            return false;
-        }
-
-        return userInfo.weekdayWakeup != undefined && userInfo.weekdayBed != undefined && userInfo.weekendWakeup != undefined && userInfo.weekendBed != undefined;
+  static isFitbitReminderTurnOff(userInfo) {
+    if (userInfo == null) {
+      return false;
     }
 
-    static isFitbitReminderTurnOff(userInfo) {
+    return (
+      userInfo.fitbitReminderTurnOff != undefined &&
+      userInfo.fitbitReminderTurnOff
+    );
+  }
 
-        if (userInfo == null) {
-            return false;
-        }
-
-        return userInfo.fitbitReminderTurnOff != undefined && userInfo.fitbitReminderTurnOff;
+  static isWalkToJoySaveToContacts(userInfo) {
+    if (userInfo == null) {
+      return false;
     }
 
-    static isWalkToJoySaveToContacts(userInfo) {
+    return (
+      userInfo.saveWalkToJoyToContacts != undefined &&
+      userInfo.saveWalkToJoyToContacts
+    );
+  }
 
-        if (userInfo == null) {
-            return false;
-        }
-
-        return userInfo.saveWalkToJoyToContacts != undefined && userInfo.saveWalkToJoyToContacts;
+  static isWalkSetTo10(userInfo) {
+    if (userInfo == null) {
+      return false;
     }
 
-    static isWalkSetTo10(userInfo) {
+    return userInfo.autoWalkTo10 != undefined && userInfo.autoWalkTo10;
+  }
 
-        if (userInfo == null) {
-            return false;
-        }
-
-        return userInfo.autoWalkTo10 != undefined && userInfo.autoWalkTo10;
+  static isTimezoneSet(userInfo) {
+    if (userInfo == null) {
+      return false;
     }
 
-    static isTimezoneSet(userInfo) {
+    return userInfo.timezone != undefined;
+  }
 
-        if (userInfo == null) {
-            return false;
-        }
+  static isUserInfoPropertyValueMatched(userInfo, propertyValueObject) {
+    let result = true;
 
-        return userInfo.timezone != undefined;
+    Object.keys(propertyValueObject).forEach((propertyName) => {
+      if (userInfo[propertyName] != propertyValueObject[propertyName]) {
+        result = false;
+      }
+    });
+
+    return result;
+  }
+  static extractUserInfoPropertyValueMatched(userInfo, propertyValueObject) {
+    let resultInfo = {};
+
+    Object.keys(propertyValueObject).forEach((propertyName) => {
+      resultInfo[propertyName] = userInfo[propertyName];
+    });
+
+    return resultInfo;
+  }
+
+  static reduceBooleanArray(bArray, operator) {
+    let result = true;
+
+    let initialValue = bArray.length > 0 ? bArray[0] : false;
+
+    switch (operator) {
+      case "and":
+        result = bArray.reduce(
+          (previousValue, currentValue) => previousValue && currentValue,
+          initialValue
+        );
+        break;
+      case "or":
+        result = bArray.reduce(
+          (previousValue, currentValue) => previousValue || currentValue,
+          initialValue
+        );
+        break;
+      case "not any":
+        result = !bArray.reduce(
+          (previousValue, currentValue) => previousValue || currentValue,
+          initialValue
+        );
+        break;
+      default:
+        break;
     }
 
-    static isUserInfoPropertyValueMatched(userInfo, propertyValueObject) {
-        let result = true;
-
-        Object.keys(propertyValueObject).forEach((propertyName) => {
-            if (userInfo[propertyName] != propertyValueObject[propertyName]) {
-                result = false;
-            }
-        });
-
-        return result;
-    }
-    static extractUserInfoPropertyValueMatched(userInfo, propertyValueObject) {
-        let resultInfo = {};
-
-        Object.keys(propertyValueObject).forEach((propertyName) => {
-            resultInfo[propertyName] = userInfo[propertyName];
-        });
-
-        return resultInfo;
-    }
-
-    static reduceBooleanArray(bArray, operator) {
-        let result = true;
-
-        let initialValue = bArray.length > 0 ? bArray[0] : false;
-
-        switch (operator) {
-            case "and":
-                result = bArray.reduce((previousValue, currentValue) => previousValue && currentValue, initialValue);
-                break;
-            case "or":
-                result = bArray.reduce((previousValue, currentValue) => previousValue || currentValue, initialValue);
-                break;
-            case "not any":
-                result = !bArray.reduce((previousValue, currentValue) => previousValue || currentValue, initialValue);
-                break;
-            default:
-                break;
-        }
-
-        return result;
-    }
+    return result;
+  }
 }

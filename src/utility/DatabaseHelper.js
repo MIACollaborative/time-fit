@@ -12,8 +12,8 @@ export default class DatabaseHelper {
 
   static async insertTaskLogList(tasklogList) {
     return await prisma.taskLog.createMany({
-        data: tasklogList,
-      });
+      data: tasklogList,
+    });
   }
 
   static async getUsers() {
@@ -33,21 +33,14 @@ export default class DatabaseHelper {
     return userList;
   }
 
-  static async getTasksSortedByPriority(sorting="asc") {
+  static async getTasksSortedByPriority(sorting = "asc") {
     return await prisma.task.findMany({
-        where: { enabled: true },
-        orderBy: [
-          {
-            priority: sorting,
-          },
-        ],
-      });
-  }
-
-  static async insertFitbitUpdateList(updateList){
-    const createResult = await prisma.fitbit_update.createMany({
-        data: updateList
+      where: { enabled: true },
+      orderBy: [
+        {
+          priority: sorting,
+        },
+      ],
     });
-    return createResult;
-}
+  }
 }

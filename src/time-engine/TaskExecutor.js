@@ -256,48 +256,10 @@ export default class TaskExecutor {
         break;
 
       case "messageLabelToResearchInvestigator":
-        // find the message through messageLabel
-        messageInfo = await DatabaseUtility.findMessageByLabel(
-          theAction.messageLabel
-        );
-        console.log(
-          `executeActionForUser messageInfo: ${JSON.stringify(messageInfo)}`
-        );
-
-        // for logging
-        record.messageLabel = messageInfo.label;
-
-        surveyURL = await GeneralUtility.extractSurveyLinkFromAction(theAction);
-
-        console.log(`executeActionForUser surveyURL: ${surveyURL}`);
-
-        messageBody = await DatabaseUtility.composeUserMessageForTwilio(
+        record.executionResult = await MessageLabelAction.execute(theAction, {
           userInfo,
-          messageInfo,
-          surveyURL
-        );
-
-        if (messageInfo.gif != undefined) {
-          gifURL = `${process.env.ASSET_HOST_URL}/image/gif/${messageInfo.gif}.gif`;
-        }
-
-        console.log(`messageBody: ${messageBody}`);
-        console.log(`Gif url: ${gifURL}`);
-
-        record.executionResult = {
-          type: "twilio",
-          value: await TwilioHelper.sendMessage(
-            process.env.RESEARCH_INVESTIGATOR_PHONE,
-            messageBody,
-            gifURL.length > 0 ? [gifURL] : []
-          ),
-        };
-
-        console.log(
-          `executeActionForUser record.executionResult: ${JSON.stringify(
-            record.executionResult
-          )}`
-        );
+          phone: process.env.RESEARCH_INVESTIGATOR_PHONE,
+        });
         break;
       case "generateManualFitbitUpdate":
         let dateList = [];

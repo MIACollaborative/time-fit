@@ -1,6 +1,8 @@
 import TimeEngine from "./time-engine/TimeEngine.js";
 import DatabaseHelper from "./utility/DatabaseHelper.js";
 import HelloAction from "./action-collection/HelloAction.js";
+import MessageLabelAction from "./action-collection/MessageLabelAction.js";
+import MessageGroupAction from "./action-collection/MessageGroupAction.js";
 
 async function myGetTaskList() {
   // ideal version
@@ -72,6 +74,8 @@ TimeEngine.registerGetTaskListFunction(myGetTaskList);
 
 // Register an action
 TimeEngine.registerAction("printHello", HelloAction);
+TimeEngine.registerAction("messageLabel", MessageLabelAction);
+TimeEngine.registerAction("messageGroup", MessageGroupAction);
 
 // Start the time engine
 TimeEngine.start();

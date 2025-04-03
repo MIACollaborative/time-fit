@@ -7,7 +7,7 @@ export default class TimeEngine {
   static lastDate = undefined;
 
   static getUserListFunction = undefined;
-  static getTaskListFunction = undefined;
+  static getTaskListFunction = DatabaseHelper.getTasksSortedByPriority;
   static insertEventFunction = undefined;
   static insertTaskLogListFunction = undefined;
   static checkPointPreferenceTimeStringExtractionFunction = undefined;

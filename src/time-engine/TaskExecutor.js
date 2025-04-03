@@ -5,7 +5,8 @@ import RandomizationHelper from "../utility/RandomizationHelper.js";
 import HelloAction from "../action-collection/HelloAction.js";
 import MessageLabelAction from "../action-collection/MessageLabelAction.js";
 import MessageGroupAction from "../action-collection/MessageGroupAction.js";
-
+import GenerateFitbitManualUpdateAction from "../action-collection/GenerateFitbitManualUpdateAction.js";
+import RetrieveFitbitDataAction from "../action-collection/RetrieveFitbitDataAction.js";
 export default class TaskExecutor {
   taskSpec;
   static checkPointPreferenceTimeStringExtractionFunction;
@@ -235,206 +236,40 @@ export default class TaskExecutor {
     console.log(`theAction.type: ${theAction.type}`);
 
     // the ideal version
-    // record.executionResult = actionTypeMap[theAction.type].execute(theAction, { userInfo });
+    // record.executionResult = actionTypeMap[theAction.type].execute(theAction, { userInfo, datetime });
 
 
     switch (theAction.type) {
       case "printHello":
         record.executionResult = await HelloAction.execute(theAction, {
-          userInfo,
+          userInfo, datetime
         });
         break;
       case "messageLabel":
         record.executionResult = await MessageLabelAction.execute(theAction, {
-          userInfo,
+          userInfo, datetime
         });
         break;
       case "messageGroup":
         record.executionResult = await MessageGroupAction.execute(theAction, {
-          userInfo,
+          userInfo, datetime
         });
         break;
-
       case "messageLabelToResearchInvestigator":
         record.executionResult = await MessageLabelAction.execute(theAction, {
-          userInfo,
+          userInfo, datetime,
           phone: process.env.RESEARCH_INVESTIGATOR_PHONE,
         });
         break;
       case "generateManualFitbitUpdate":
-        let dateList = [];
-
-        // now, generate a list of FitbitUpdates
-        // 1. one for the (-1) date
-        // 2. one for the (-7) date
-        dateList.push(datetime.minus({ days: 1 }).startOf("day"));
-        dateList.push(datetime.minus({ days: 2 }).startOf("day"));
-        dateList.push(datetime.minus({ days: 3 }).startOf("day"));
-
-        let proxyUpdateList = [];
-        let collectionType = "activities";
-        let ownerType = "walktojoy";
-        console.log(`userInfo: ${JSON.stringify(userInfo, null, 2)}`);
-
-        if (userInfo.fitbitId != undefined) {
-          for (let i = 0; i < dateList.length; i++) {
-            let dateInfo = dateList[i];
-            let proxyFitbitUpdate = {
-              collectionType: collectionType,
-              date: dateInfo.toFormat("yyyy-MM-dd"),
-              ownerId: userInfo.fitbitId,
-              ownerType: ownerType,
-              subscriptionId: `${userInfo.fitbitId}-${collectionType}-${ownerType}`,
-            };
-
-            let isWithinScope =
-              await DatabaseUtility.isFitbitUpdateDateWithinAppropriateScope(
-                proxyFitbitUpdate
-              );
-
-            if (isWithinScope) {
-              proxyUpdateList.push(proxyFitbitUpdate);
-            }
-          }
-        }
-
-        // insert updates to theFitbit update table
-        let insertProxyUpdateResult = {};
-
-        // version 2
-        try {
-          if (proxyUpdateList.length > 0) {
-            insertProxyUpdateResult =
-              await DatabaseUtility.insertFitbitUpdateList(proxyUpdateList);
-          }
-
-          resultErrorMessage = `Attempt to insert: ${
-            proxyUpdateList.length
-          }, Insert: ${
-            proxyUpdateList.length > 0 ? insertProxyUpdateResult.count : 0
-          }`;
-          resultStatus = "success";
-          resultBody = JSON.stringify(insertProxyUpdateResult);
-        } catch (error) {
-          console.error(error);
-          resultStatus = "failed";
-          resultErrorMessage = error.message;
-          resultBody = `[${error.code}] ${error.stack}`;
-        }
-
-        record.executionResult = {
-          type: "generate-manual-fitbit-update",
-          value: {
-            status: resultStatus,
-            errorMessage: resultErrorMessage,
-            body: resultBody,
-          },
-        };
-
-        console.log(
-          `executeActionForUser record.executionResult: ${JSON.stringify(
-            record.executionResult
-          )}`
-        );
+        record.executionResult = await GenerateFitbitManualUpdateAction.execute(theAction, {
+          userInfo, datetime
+        });
         break;
       case "retrieveFitbitData":
-        // Step 1: calculate the start date
-        let nowDate = datetime; //DateTime.now();
-        let targetDate = nowDate;
-        let dateString;
-        let numOfDays = 1;
-        // Step 1.1: determine number of days
-        switch (theAction.dataPeriod) {
-          case "1d":
-            numOfDays = 1;
-            break;
-          case "7d":
-            numOfDays = 7;
-            break;
-          default:
-            numOfDays = 1;
-            break;
-        }
-        if (theAction.retrievalStartDate.reference == "today") {
-          // the only case being supported for now
-          if (theAction.retrievalStartDate.offset.type == "minus") {
-            targetDate = nowDate
-              .minus(theAction.retrievalStartDate.offset.value)
-              .startOf("day");
-          } else {
-            targetDate = nowDate
-              .plus(theAction.retrievalStartDate.offset.value)
-              .startOf("day");
-          }
-
-          dateString = targetDate.toFormat("yyyy-MM-dd");
-        }
-
-        // version 1: manually call it
-
-        const summaryResult =
-          await DatabaseUtility.queryAndStoreFitbitActivitySummaryAtTargetDateForUser(
-            userInfo,
-            targetDate,
-            true,
-            numOfDays,
-            false
-          );
-        const heartrateResult =
-          await DatabaseUtility.queryAndStoreFitbitHeartRateAtTargetDateForUser(
-            userInfo,
-            targetDate,
-            true,
-            numOfDays,
-            false
-          );
-
-        resultStatus =
-          summaryResult.value == "success" && heartrateResult.value == "success"
-            ? "success"
-            : "failed";
-
-        // eResult.value.errorMessage
-        resultErrorMessage = "";
-        if (summaryResult.value == "failed") {
-          resultErrorMessage += `${summaryResult.data}`;
-        }
-        if (heartrateResult.value == "failed") {
-          resultErrorMessage += `${heartrateResult.data}`;
-        }
-
-        // result = `type: ${eResult.type}, status: ${eResult.value.status}, errorMessage: ${eResult.value.errorMessage}`;
-
-        record.executionResult = {
-          type: "fitbit",
-          value: {
-            status: resultStatus,
-            errorMessage: resultErrorMessage,
-            body: [
-              {
-                value: summaryResult.value,
-                ownerId: userInfo.fitbitId,
-                dataType:
-                  GeneralUtility.FITBIT_INTRADAY_DATA_TYPE_ACTIVITY_SUMMARY,
-                dateTime: dateString,
-                dataPeriod: theAction.dataPeriod,
-              },
-              {
-                value: heartrateResult.value,
-                ownerId: userInfo.fitbitId,
-                dataType: "activities-heart",
-                dateTime: dateString,
-                dataPeriod: theAction.dataPeriod,
-              },
-            ],
-          },
-        };
-
-        console.log(
-          `executeActionForUser record.executionResult: ${JSON.stringify(
-            record.executionResult
-          )}`
-        );
+        record.executionResult = await RetrieveFitbitDataAction.execute(theAction, {
+          userInfo, datetime
+        });
         break;
       case "processFitbitUpdate":
         console.log(

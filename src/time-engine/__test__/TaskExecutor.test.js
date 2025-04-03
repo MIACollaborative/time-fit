@@ -440,9 +440,9 @@ describe('group-membership', () => {
 
 describe('randomize choice', () => {
   test('First choice when no randomization', () => {
-    const mockRandomization1 = {
-      enabled: false,
-      outcome: [
+    const mockOutcomes1 = {
+      randomizationEnabled: false,
+      outcomeList: [
         {
           chance: 0.5,
           action: {
@@ -460,12 +460,12 @@ describe('randomize choice', () => {
 
     // use TaskExecutor.obtainChoiceWithRandomization to check
     for (let i = 0; i < 100; i++) {
-      expect(TaskExecutor.obtainChoiceWithRandomization(mockRandomization1)["theChoice"].action.type == "printHello").toBe(true);
+      expect(TaskExecutor.obtainChoiceWithRandomization(mockOutcomes1)["theChoice"].action.type == "printHello").toBe(true);
     }
 
     const mockRandomization2 = {
-      enabled: true, // true or false
-      outcome: [
+      randomizationEnabled: true, // true or false
+      outcomeList: [
         {
           chance: 1.0,
           action: {
@@ -489,8 +489,8 @@ describe('randomize choice', () => {
 
     // create another mockRandomization that has 0.5 chance for each
     const mockRandomization3 = {
-      enabled: true, // true or false
-      outcome: [
+      randomizationEnabled: true, // true or false
+      outcomeList: [
         {
           chance: 0.5,
           action: {

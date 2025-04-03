@@ -141,7 +141,7 @@ export default class TaskExecutor {
 
       // step 5: execute action
       const chanceChoice = TaskExecutor.obtainChoiceWithRandomization(
-        taskSpec.randomization
+        taskSpec.outcomes
       );
       const randomNumber = chanceChoice.randomNumber;
       const theAction = chanceChoice.theChoice.action;
@@ -183,15 +183,15 @@ export default class TaskExecutor {
     return taskResultList;
   }
 
-  static obtainChoiceWithRandomization(randomizationSpec) {
+  static obtainChoiceWithRandomization(outcomesSpec) {
     console.log(
-      `obtainChoiceWithRandomization: ${JSON.stringify(randomizationSpec)}`
+      `obtainChoiceWithRandomization: ${JSON.stringify(outcomesSpec)}`
     );
 
-    if (randomizationSpec.enabled == false) {
+    if (outcomesSpec.randomizationEnabled == false) {
       return {
         randomNumber: 0,
-        theChoice: randomizationSpec["outcome"][0],
+        theChoice: outcomesSpec["outcomeList"][0],
       };
     }
 
@@ -199,7 +199,7 @@ export default class TaskExecutor {
     // now, scan everything in the outcome list and use the "chance" to do the randomization
 
     const { randomNumber, theChoice } = TaskExecutor.randomizeSelection(
-      randomizationSpec.outcome
+      outcomesSpec.outcomeList
     );
 
     return { randomNumber, theChoice };

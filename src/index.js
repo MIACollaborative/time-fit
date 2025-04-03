@@ -49,9 +49,9 @@ async function myGetTaskList() {
         list: [], //["test1", "test2"] // user name list, only matter if type is "list"
       },
       // outcomes
-      randomization: {
-        enabled: false, // true or false
-        outcome: [
+      outcomes: {
+        randomizationEnabled: false, // true or false
+        outcomeList: [
           {
             chance: 1.0,
             action: {

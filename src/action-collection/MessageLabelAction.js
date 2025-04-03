@@ -29,7 +29,7 @@ export default class MessageLabelAction {
     return {
       type: "twilio",
       value: await TwilioHelper.sendMessage(
-        !params.phone ? params.phone : userInfo.phone,
+        !actionInfo.phone ? actionInfo.phone : userInfo.phone,
         messageBody,
         gifURL.length > 0 ? [gifURL] : []
       ),

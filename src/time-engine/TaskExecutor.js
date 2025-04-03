@@ -239,8 +239,7 @@ export default class TaskExecutor {
         break;
       case "messageLabelToResearchInvestigator":
         record.executionResult = await MessageLabelAction.execute(theAction, {
-          userInfo, datetime,
-          phone: process.env.RESEARCH_INVESTIGATOR_PHONE,
+          userInfo, datetime
         });
         break;
       case "generateManualFitbitUpdate":

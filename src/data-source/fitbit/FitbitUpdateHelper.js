@@ -1,8 +1,15 @@
 import DateTimeHelper from "../../utility/DateTimeHelper";
 import FitbitDataHelper from "./FitbitDataHelper";
-
+import prisma from "../../utility/prisma";
 export default class FitbitUpdateHelper {
   constructor() {}
+
+  static async insertFitbitUpdateList(updateList) {
+    const createResult = await prisma.fitbit_update.createMany({
+      data: updateList,
+    });
+    return createResult;
+  }
 
   static async updateFitbitUpdateStatusWithSameSignatureBeforeTime(fUpdate, oldStatus="notification", newStatus="processed", timestamp){
     const updateOlderList = await prisma.fitbit_update.updateMany({

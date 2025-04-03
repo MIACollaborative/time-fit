@@ -1,4 +1,4 @@
-import DatabaseHelper from "../utility/DatabaseHelper";
+import FitbitUpdateHelper from "../data-source/fitbit/FitbitUpdateHelper";
 import DateTimeHelper from "../utility/DateTimeHelper";
 
 export default class GenerateFitbitManualUpdateAction {
@@ -79,7 +79,7 @@ export default class GenerateFitbitManualUpdateAction {
     // version 2
     try {
       if (proxyUpdateList.length > 0) {
-        insertProxyUpdateResult = await DatabaseHelper.insertFitbitUpdateList(
+        insertProxyUpdateResult = await FitbitUpdateHelper.insertFitbitUpdateList(
           proxyUpdateList
         );
       }

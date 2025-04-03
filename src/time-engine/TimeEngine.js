@@ -25,6 +25,40 @@ export default class TimeEngine {
   constructor() {}
 
   static async start() {
+    // Register a function to get user list (so developers can decide whether user list needs to be retrieve every time or not)
+    TimeEngine.registerGetUserListFunction(DatabaseHelper.myGetUserList);
+    TimeEngine.registerCheckPointPreferenceTimeStringExtractionFunction((
+      userInfo,
+      checkPoint,
+      preferenceTimeStringName,
+      date
+    ) => {
+      const datetime = DateTime.fromJSDate(date);
+      const localTimeForUser = GeneralUtility.getLocalTime(datetime, userInfo.timezone);
+      const localWeekIndex = localTimeForUser.weekday;
+    
+      let referenceTimePropertyName = "";
+    
+      // TO DO: this part is very application specific, need to refactor this out
+      if (preferenceTimeStringName == "wakeupTime") {
+        if (localWeekIndex <= 5) {
+          referenceTimePropertyName = "weekdayWakeup";
+        } else {
+          referenceTimePropertyName = "weekendWakeup";
+        }
+      } else if (preferenceTimeStringName == "bedTime") {
+        if (localWeekIndex <= 5) {
+          referenceTimePropertyName = "weekdayBed";
+        } else {
+          referenceTimePropertyName = "weekendBed";
+        }
+      } else {
+        referenceTimePropertyName = checkPoint.reference.value;
+      }
+    
+      return userInfo[referenceTimePropertyName];
+    });
+    
     TimeEngine.registerInsertEventFunction(DatabaseHelper.insertEvent);
     TimeEngine.registerInsertTaskLogListFunction(DatabaseHelper.insertTaskLogList);
 

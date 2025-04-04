@@ -1,4 +1,4 @@
-import FitbitUpdateHelper from "../data-source/fitbit/FitbitUpdateHelper";
+import FitbitUpdateHelper from "../helper/FitbitUpdateHelper.js";
 
 export default class ProcessFitbitUpdateAction {
   type = "processFitbitUpdate";

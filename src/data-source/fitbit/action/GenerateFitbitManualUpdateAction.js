@@ -1,5 +1,5 @@
-import FitbitUpdateHelper from "../data-source/fitbit/FitbitUpdateHelper";
-import DateTimeHelper from "../utility/DateTimeHelper";
+import FitbitUpdateHelper from "../helper/FitbitUpdateHelper.js";
+import DateTimeHelper from "../../../helper/DateTimeHelper.js";
 
 export default class GenerateFitbitManualUpdateAction {
   constructor() {}

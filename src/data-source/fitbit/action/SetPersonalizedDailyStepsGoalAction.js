@@ -1,7 +1,7 @@
-import RandomizationHelper from '../utility/RandomizationHelper';
-import FitbitDataHelper from '../data-source/fitbit/FitbitDataHelper';
-import UserInfoHelper from '../utility/UserInfoHelper';
-import FitbitAPIHelper from '../data-source/fitbit/FitbitAPIHelper';
+import RandomizationHelper from '../../../helper/RandomizationHelper.js';
+import FitbitDataHelper from '../helper/FitbitDataHelper.js';
+import UserInfoHelper from '../../../helper/UserInfoHelper.js';
+import FitbitAPIHelper from '../helper/FitbitAPIHelper.js';
 
 export default class SetPersonalizedDailyStepsGoalAction {
   constructor() {}

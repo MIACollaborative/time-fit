@@ -1,5 +1,5 @@
-import MessageHelper from "../utility/MessageHelper.js";
-import TwilioHelper from "../utility/TwilioHelper.js";
+import MessageHelper from "../helper/MessageHelper.js";
+import TwilioHelper from "../helper/TwilioHelper.js";
 
 export default class MessageLabelAction {
   constructor() {}

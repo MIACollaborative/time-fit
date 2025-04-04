@@ -1,4 +1,5 @@
-import FitbitAPIHelper from "../data-source/fitbit/FitbitAPIHelper";
+import FitbitAPIHelper from "../helper/FitbitAPIHelper.js";
+
 
 export default class UpdateStepsGoalToFitbitServerAction {
   constructor() {}

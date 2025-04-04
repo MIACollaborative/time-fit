@@ -1,6 +1,7 @@
-import DateTimeHelper from "../../utility/DateTimeHelper.js";
-import DataRecordHelper from "../DataRecordHelper.js";
+import DateTimeHelper from "../../../helper/DateTimeHelper.js";
 import FitbitAPIHelper from "./FitbitAPIHelper.js";
+import prisma from "../../../helper/prisma.js";
+import DataRecordHelper from "../../DataRecordHelper.js";
 
 export default class FitbitDataHelper {
   constructor() {}

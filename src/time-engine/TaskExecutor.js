@@ -2,19 +2,26 @@ import { DateTime, Interval } from "luxon";
 import UserInfoHelper from "../helper/UserInfoHelper.js";
 import DateTimeHelper from "../helper/DateTimeHelper.js";
 import RandomizationHelper from "../helper/RandomizationHelper.js";
+import BooleanHelper from "../helper/BooleanHelper.js";
+import PersonCondition from "../condition-collection/PersonCondition.js";
 export default class TaskExecutor {
   taskSpec;
   static checkPointPreferenceTimeStringExtractionFunction;
   static actionTypeMap = {};
+  static conditionTypeMap = {};
 
   constructor() {}
-  
+
   static registerCheckPointPreferenceTimeStringExtractionFunction(func) {
     TaskExecutor.checkPointPreferenceTimeStringExtractionFunction = func;
   }
 
   static registerAction(name, actionClass) {
     TaskExecutor.actionTypeMap[name] = actionClass;
+  }
+
+  static registerCondition(name, conditionClass) {
+    TaskExecutor.conditionTypeMap[name] = conditionClass;
   }
 
   static async executeTaskForUserListForDate(taskSpec, userList, date) {
@@ -62,7 +69,6 @@ export default class TaskExecutor {
         continue;
       }
 
-      // TO DO: disable for now, should enable later
       // step 2: group membership
 
       let [isGroupResult, groupEvaluationRecordList] =
@@ -193,10 +199,12 @@ export default class TaskExecutor {
   }
 
   static async executeActionForUser(theAction, userInfo, datetime) {
-    
     const record = {
       action: theAction,
-      executionResult: TaskExecutor.actionTypeMap[theAction.type].execute(theAction, { userInfo, datetime })
+      executionResult: TaskExecutor.actionTypeMap[theAction.type].execute(
+        theAction,
+        { userInfo, datetime }
+      ),
     };
 
     return record;
@@ -248,14 +256,6 @@ export default class TaskExecutor {
   }
 
   static async isPreConditionMetForUser(conditionSpec, userInfo, dateTime) {
-    console.log(
-      `${this.name} isPreConditionMetForUser[${
-        this.taskSpec != undefined
-          ? this.taskSpec.label
-          : "[testing] no taskSpec"
-      }] for ${userInfo.username}`
-    );
-
     let result = true;
 
     if (
@@ -301,15 +301,13 @@ export default class TaskExecutor {
     let conditionEvaluationResultList = [];
 
     for (let i = 0; i < conditionSpec.conditionList.length; i++) {
-      let condition = conditionSpec.conditionList[i];
-      let [checkResult, recordInfo] =
+      const condition = conditionSpec.conditionList[i];
+      const [checkResult, recordInfo] =
         await TaskExecutor.checkOneConditionForUser(
           condition,
           userInfo,
           dateTime
         );
-      console.log(`checkResult: ${checkResult}, recordInfo: ${recordInfo}\n`);
-
       conditionEvaluationResultList.push(checkResult);
 
       // this is the part that provides the structure for a condition evaluation record
@@ -324,527 +322,30 @@ export default class TaskExecutor {
     result = true;
     // now, check conditionRelationship to see if it is and/or (all or one)
 
-    result = GeneralUtility.reduceBooleanArray(
+    result = BooleanHelper.reduceBooleanArray(
       conditionEvaluationResultList,
       conditionSpec.conditionRelationship
-    );
-    console.log(
-      `${this.name} isPreConditionMetForUser[${
-        userInfo.username
-      }]: result: ${result}, resultList: ${conditionEvaluationResultList}, resultReocrdList: ${JSON.stringify(
-        evaluationReportList,
-        null,
-        2
-      )}`
     );
 
     return [result, evaluationReportList];
   }
 
   static async checkOneConditionForUser(condition, userInfo, dateTime) {
-    console.log(
-      `${this.name} checkOneConditionForUser[${
-        this.taskSpec != undefined
-          ? this.taskSpec.label
-          : "[testing] no taskSpec"
-      }] type: ${condition.type}`
-    );
     let result = true;
-    let startDate = undefined;
-    let endDate = undefined;
-    let messageLabel = undefined;
-    let wearingLowerBoundMinutes = undefined;
-    let wearingDayLowerBoundCount = undefined;
-    let aggregatedMinutes = undefined;
-
     let recordInfo = {};
 
-    //console.log(`${this.name} checkOneConditionForUser dateTime: ${dateTime}`);
-    let dateTimeUTC = dateTime.toUTC();
-    //console.log(`${this.name} checkOneConditionForUser dateTimeUTC: ${dateTimeUTC}`);
-    let localTimeForUser = DateTimeHelper.getLocalTime(
-      dateTimeUTC,
-      userInfo.timezone
-    );
-    console.log(
-      `${this.name} checkOneConditionForUser localTimeForUser: ${localTimeForUser}`
-    );
-
-    switch (condition.type) {
-      case "person":
-        result = GeneralUtility.isUserInfoPropertyValueMatched(
-          userInfo,
-          condition.criteria
-        );
-        recordInfo.userInfoPartial =
-          GeneralUtility.extractUserInfoPropertyValueMatched(
-            userInfo,
-            condition.criteria
-          );
-        break;
-      case "surveyFilledByThisPerson":
-        startDate = undefined;
-        endDate = undefined;
-
-        /*
-                    start:{
-                        reference: "now", 
-                        offset: {type: "plus", value: {hours: 0}}
-                    }
-                */
-
-        startDate = GeneralUtility.generateStartOrEndDateTimeByReference(
-          localTimeForUser,
-          userInfo,
-          condition.criteria.period.start,
-          "start"
-        );
-        /*
-                if (condition.criteria.period.start != undefined) {
-                    switch (condition.criteria.period.start.reference) {
-                        case "now":
-                            startDate = localTimeForUser.toUTC();// DateTime.utc();
-                            break;
-                        case "today":
-                            // I need to use datetime
-                            // Step 1: convert to a participant's local time
-                            startDate = localTimeForUser.startOf("day").toUTC();
-                            break;                            
-                        default:
-                            break;
-                    }
-                    startDate = GeneralUtility.operateDateTime(startDate, condition.criteria.period.start.offset.value, condition.criteria.period.start.offset.type);
-                }
-                else {
-                    // use a very early time: year 2000
-                    startDate = DateTime.utc(2000);
-                }
-                */
-
-        console.log(
-          `${this.name} checkOneConditionForUser[${
-            this.taskSpec != undefined
-              ? this.taskSpec.label
-              : "[testing] no taskSpec"
-          }] startDate: ${startDate}`
-        );
-
-        endDate = GeneralUtility.generateStartOrEndDateTimeByReference(
-          localTimeForUser,
-          userInfo,
-          condition.criteria.period.end,
-          "end"
-        );
-        /*
-                if (condition.criteria.period.end != undefined) {
-                    switch (condition.criteria.period.end.reference) {
-                        case "now":
-                            endDate = localTimeForUser.toUTC();// DateTime.utc();
-                            break;
-                        case "today":
-                            endDate = localTimeForUser.endOf("day").toUTC();
-                            break;
-                        default:
-                            break;
-                    }
-                    endDate = GeneralUtility.operateDateTime(endDate, condition.criteria.period.end.offset.value, condition.criteria.period.end.offset.type);
-                }
-                else {
-                    // use now
-                    endDate = localTimeForUser.toUTC();// DateTime.utc();
-                }
-                */
-
-        console.log(
-          `${this.name} checkOneConditionForUser[${
-            this.taskSpec != undefined
-              ? this.taskSpec.label
-              : "[testing] no taskSpec"
-          }] endDate: ${endDate}`
-        );
-
-        let surveyFillResultList = [];
-        let surveyResponseTimeListMap = {};
-
-        for (let i = 0; i < condition.criteria.idList.length; i++) {
-          let surveyId = condition.criteria.idList[i];
-          let responseList =
-            await DatabaseUtility.findSurveyResponseDuringPeriod(
-              surveyId,
-              startDate,
-              endDate
-            );
-
-          console.log(
-            `findSurveyResponoseDuringPeriod responseList: ${responseList}`
-          );
-
-          console.log(
-            `findSurveyResponoseDuringPeriod responseList.length > 0: ${
-              responseList.length > 0
-            }`
-          );
-
-          // now, filter by the person
-          responseList = responseList.filter((responseInfo) => {
-            return responseInfo.participantId == userInfo.username;
-          });
-
-          surveyResponseTimeListMap[surveyId] = responseList.map(
-            (responseInfo) => {
-              return responseInfo.dateTime;
-            }
-          );
-
-          console.log(
-            `findSurveyResponoseDuringPeriod by this person responseList.length > 0: ${
-              responseList.length > 0
-            }`
-          );
-
-          surveyFillResultList.push(responseList.length > 0);
-        }
-
-        recordInfo.surveyResponseTimeListMap = surveyResponseTimeListMap;
-
-        result = GeneralUtility.reduceBooleanArray(
-          surveyFillResultList,
-          condition.criteria.idRelationship
-        );
-        break;
-      case "messageSentDuringPeriod":
-        startDate = undefined;
-        endDate = undefined;
-
-        messageLabel = startDate =
-          GeneralUtility.generateStartOrEndDateTimeByReference(
-            localTimeForUser,
-            userInfo,
-            condition.criteria.period.start,
-            "start"
-          );
-
-        console.log(
-          `${this.name} checkOneConditionForUser[${
-            this.taskSpec != undefined
-              ? this.taskSpec.label
-              : "[testing] no taskSpec"
-          }] startDate: ${startDate}`
-        );
-
-        endDate = GeneralUtility.generateStartOrEndDateTimeByReference(
-          localTimeForUser,
-          userInfo,
-          condition.criteria.period.end,
-          "end"
-        );
-
-        console.log(
-          `${this.name} checkOneConditionForUser[${
-            this.taskSpec != undefined
-              ? this.taskSpec.label
-              : "[testing] no taskSpec"
-          }] endDate: ${endDate}`
-        );
-
-        // now query the database to find out whether actionResult with a messageLabel exist during this period
-
-        let taskLogList =
-          await DatabaseUtility.findTaskLogWithMessageLabelDuringPeriod(
-            condition.criteria.messageLabel,
-            startDate,
-            endDate
-          );
-
-        console.log(
-          `messageSentDuringPeriod taskLogList.length: ${taskLogList.length}`
-        );
-
-        console.log(
-          `messageSentDuringPeriod taskLogList.length > 0: ${
-            taskLogList.length > 0
-          }`
-        );
-
-        // now, filter by the person, and messageLabel
-        taskLogList = taskLogList.filter((taskLogInfo) => {
-          return taskLogInfo.username == userInfo.username;
-        });
-
-        recordInfo.messageSentCount = taskLogList.length;
-        recordInfo.messageSentTimeList = taskLogList.map((taskLogInfo) => {
-          return taskLogInfo.createdAt;
-        });
-
-        console.log(
-          `messageSentDuringPeriod (${condition.criteria.messageLabel}) for [${userInfo.username}] taskLogList.length: ${taskLogList.length}`
-        );
-
-        console.log(
-          `messageSentDuringPeriod (${condition.criteria.messageLabel}) for [${
-            userInfo.username
-          }] taskLogList.length > 0: ${taskLogList.length > 0}`
-        );
-
-        result = taskLogList.length > 0;
-        break;
-      case "hasFitbitUpdateForPersonByDateRange":
-        startDate = undefined;
-        endDate = undefined;
-
-        startDate = GeneralUtility.generateStartOrEndDateTimeByReference(
-          localTimeForUser,
-          userInfo,
-          condition.criteria.period.start,
-          "start"
-        );
-
-        endDate = GeneralUtility.generateStartOrEndDateTimeByReference(
-          localTimeForUser,
-          userInfo,
-          condition.criteria.period.end,
-          "end"
-        );
-
-        let updateList = [];
-
-        if (userInfo.fitbitId != undefined && userInfo.fitbitId.length > 0) {
-          updateList =
-            await DatabaseUtility.getUserFitbitUpdateDuringPeriodByIdAndOwnerType(
-              userInfo.fitbitId,
-              startDate,
-              endDate,
-              "user"
-            );
-        }
-
-        console.log(
-          `${this.name} checkOneConditionForUser type: ${condition.type}: start: ${startDate}, end: ${endDate}, updateList.length: ${updateList.length}`
-        );
-
-        recordInfo.fitbitUpdateCount = updateList.length;
-        recordInfo.fitbitUpdateTimeList = updateList.map((itemInfo) => {
-          return itemInfo.createdAt;
-        });
-
-        result = updateList.length > 0;
-        break;
-      case "hasHeartRateIntradayMinutesAboveThresholdForPersonByDateRange":
-        startDate = undefined;
-        endDate = undefined;
-
-        wearingLowerBoundMinutes = condition.criteria.wearingLowerBoundMinutes;
-        wearingDayLowerBoundCount =
-          condition.criteria.wearingDayLowerBoundCount;
-
-        // reuse idRelationship... not the ideal case
-
-        let resultAggregator = condition.criteria.idRelationship;
-
-        startDate = GeneralUtility.generateStartOrEndDateTimeByReference(
-          localTimeForUser,
-          userInfo,
-          condition.criteria.period.start,
-          "start"
-        );
-        endDate = GeneralUtility.generateStartOrEndDateTimeByReference(
-          localTimeForUser,
-          userInfo,
-          condition.criteria.period.end,
-          "end"
-        );
-
-        // version 2: move it to function
-        let minsList = [];
-        if (userInfo.fitbitId != undefined && userInfo.fitbitId.length > 0) {
-          minsList =
-            await DatabaseUtility.getUserFitbitWearingMinutesPerDayListDuringPeriod(
-              userInfo.fitbitId,
-              startDate,
-              endDate
-            );
-        }
-        let resultList = minsList.map((x) => {
-          return x >= wearingLowerBoundMinutes;
-        });
-
-        recordInfo.minsList = minsList;
-        recordInfo.resultList = resultList;
-
-        console.log(
-          `${this.name} checkOneConditionForUser type: ${condition.type}: start: ${startDate},  end: ${endDate}, wearingLowerBoundMinutes: ${wearingLowerBoundMinutes}, idRelationship: ${resultAggregator}`
-        );
-
-        console.log(
-          `${this.name} checkOneConditionForUser minsList: ${minsList}`
-        );
-        console.log(
-          `${this.name} checkOneConditionForUser resultList: ${resultList}`
-        );
-
-        if (wearingDayLowerBoundCount == undefined) {
-          // require all days in range
-          result = GeneralUtility.reduceBooleanArray(
-            resultList,
-            resultAggregator
-          );
-        } else {
-          // having wearingDayLowerBoundCount will ignore resultAggregator
-          result =
-            resultList.filter((x) => x).length >= wearingDayLowerBoundCount; // GeneralUtility.reduceBooleanArray(resultList, resultAggregator);
-        }
-
-        console.log(`${this.name} checkOneConditionForUser result: ${result}`);
-
-        break;
-
-      case "hasTaskLogErrorByDateRange":
-        startDate = undefined;
-        endDate = undefined;
-
-        startDate = GeneralUtility.generateStartOrEndDateTimeByReference(
-          localTimeForUser,
-          userInfo,
-          condition.criteria.period.start,
-          "start"
-        );
-        endDate = GeneralUtility.generateStartOrEndDateTimeByReference(
-          localTimeForUser,
-          userInfo,
-          condition.criteria.period.end,
-          "end"
-        );
-
-        // generic
-        let errorList = await DatabaseUtility.getTaskLogWithErrorDuringPeriod(
-          startDate,
-          endDate
-        );
-
-        console.log(
-          `${this.name} checkOneConditionForUser type: ${
-            condition.type
-          }: start: ${startDate}, end: ${endDate}, errorList: ${JSON.stringify(
-            errorList,
-            null,
-            2
-          )}`
-        );
-
-        recordInfo.errorCount = errorList.length;
-        recordInfo.errorTaskLogIdList = errorList.map((taskLogInfo) => {
-          return taskLogInfo.id;
-        });
-
-        result = errorList.length > 0;
-        break;
-      case "timeInPeriod":
-        /*
-                {
-	
-                    type: timeInPeriod,
-                    
-                    criteria: {
-                        
-                        start:{
-                        
-                            reference: "activateAtDate",
-                            // Need to make sure that the minute and seconds do not get in the way of calculatioon
-                            offset: {type: "plus", value: {days: 7}}
-                            
-                        },
-                    
-                        end:{
-                        
-                            reference: "joinAt",
-                            
-                            offset: {type: "plus", value: {hours: 0}}
-                            
-                        }
-                    
-                    }
-                
-                }
-                */
-
-        startDate = undefined;
-        endDate = undefined;
-
-        startDate = GeneralUtility.generateStartOrEndDateTimeByReference(
-          localTimeForUser,
-          userInfo,
-          condition.criteria.period.start,
-          "start"
-        );
-
-        console.log(
-          `${this.name} checkOneConditionForUser[${
-            this.taskSpec != undefined
-              ? this.taskSpec.label
-              : "[testing] no taskSpec"
-          }] startDate: ${startDate}`
-        );
-
-        endDate = GeneralUtility.generateStartOrEndDateTimeByReference(
-          localTimeForUser,
-          userInfo,
-          condition.criteria.period.end,
-          "end"
-        );
-
-        // default to be inclusive
-        // version 2: with "period"
-        if (
-          condition.criteria.period.end.inclusive == undefined ||
-          (condition.criteria.period.end.inclusive != undefined &&
-            condition.criteria.period.end.inclusive == true)
-        ) {
-          // inclusive
-          endDate = endDate.plus({ milliseconds: 1 });
-        }
-
-        console.log(
-          `${this.name} checkOneConditionForUser[${
-            this.taskSpec != undefined
-              ? this.taskSpec.label
-              : "[testing] no taskSpec"
-          }] endDate: ${endDate}`
-        );
-
-        // now, need to check if dateTime is in between this start and endDate
-        // add one milliseconds so that the end time is included
-
-        console.log(`dateTimeUTC: ${dateTimeUTC}`);
-
-        console.log(`startDate: ${startDate}, endDate: ${endDate}`);
-
-        let validInterval = Interval.fromDateTimes(startDate, endDate);
-
-        console.log(`validInterval: ${validInterval}`);
-
-        let containDateTime = validInterval.contains(dateTime.toUTC());
-
-        console.log(`containDateTime: ${containDateTime}`);
-
-        recordInfo.dateTime = dateTime;
-        recordInfo.validInterval = validInterval;
-
-        result = containDateTime;
-        break;
-      default:
-        break;
-    }
-
-    console.log(
-      `${this.name} checkOneConditionForUser type: ${condition.type}: ${result} (opposite: ${condition.opposite})`
-    );
-
+    let conditionCompositeResult = await TaskExecutor.conditionTypeMap[condition.type].execute(condition, {
+      userInfo,
+      datetime,
+    });
+
+    recordInfo = conditionCompositeResult.recordInfo;
     if (condition.opposite != undefined && condition.opposite == true) {
-      result = !result;
+      result = !conditionCompositeResult.result;
+    } else {
+      result = conditionCompositeResult.result;
     }
-    console.log(
-      `${this.name} checkOneConditionForUser (before return) result: ${result} (opposite: ${condition.opposite})`
-    );
+
     return [result, recordInfo];
   }
 
@@ -985,16 +486,15 @@ export default class TaskExecutor {
         targetTime = targetTime.set({ second: 0, millisecond: 0 });
         const upToMinuteNow = nowUTC.set({ second: 0, millisecond: 0 });
 
-        const diffDateTime = DateTimeHelper.diffDateTime(targetTime, upToMinuteNow, [
-          "minutes",
-          "seconds",
-        ]);
-        
+        const diffDateTime = DateTimeHelper.diffDateTime(
+          targetTime,
+          upToMinuteNow,
+          ["minutes", "seconds"]
+        );
+
         const diffObj = diffDateTime.toObject();
 
-        if (
-          diffObj.minutes != 0
-        ) {
+        if (diffObj.minutes != 0) {
           checkPointResult = false;
         } else {
           checkPointResult = true;

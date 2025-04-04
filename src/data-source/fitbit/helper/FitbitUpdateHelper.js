@@ -11,35 +11,39 @@ export default class FitbitUpdateHelper {
     return createResult;
   }
 
-  static async updateFitbitUpdateStatusWithSameSignatureBeforeTime(fUpdate, oldStatus="notification", newStatus="processed", timestamp){
+  static async updateFitbitUpdateStatusWithSameSignatureBeforeTime(
+    fUpdate,
+    oldStatus = "notification",
+    newStatus = "processed",
+    timestamp
+  ) {
     const updateOlderList = await prisma.fitbit_update.updateMany({
-        where: {
-            status: oldStatus,
-            ownerId: fUpdate.ownerId,
-            collectionType: fUpdate.collectionType,
-            date: fUpdate.date,
-            createdAt: {
-                lte: timestamp
-            },
+      where: {
+        status: oldStatus,
+        ownerId: fUpdate.ownerId,
+        collectionType: fUpdate.collectionType,
+        date: fUpdate.date,
+        createdAt: {
+          lte: timestamp,
         },
-        data: {
-            status: newStatus,
-        },
+      },
+      data: {
+        status: newStatus,
+      },
     });
 
     return updateOlderList;
-}
+  }
 
-  static async isFitbitUpdateDateWithinAppropriateScope(fitbitUpdate){
-
+  static async isFitbitUpdateDateWithinAppropriateScope(fitbitUpdate) {
     const aUser = await prisma.users.findFirst({
-        where: {
-            fitbitId: fitbitUpdate.ownerId
-        }
+      where: {
+        fitbitId: fitbitUpdate.ownerId,
+      },
     });
 
-    if( aUser == undefined){
-        return false;
+    if (aUser == undefined) {
+      return false;
     }
 
     const userInfo = aUser; //JSON.parse(JSON.stringify(aUser, replacer));
@@ -50,28 +54,49 @@ export default class FitbitUpdateHelper {
 
     const now = DateTime.now();
 
-    const startTimeSpec = userInfo["joinAt"] != undefined? {
-        reference: "joinAtDate",
-        offset: { type: "plus", value: { hours: 0 } }
-    }: undefined;
+    const startTimeSpec =
+      userInfo["joinAt"] != undefined
+        ? {
+            reference: "joinAtDate",
+            offset: { type: "plus", value: { hours: 0 } },
+          }
+        : undefined;
 
-    if(startTimeSpec == undefined){
-        // if you have not join the study for that date, this Fitbit update should be not processed.
-        result = false;
-        return result;
+    if (startTimeSpec == undefined) {
+      // if you have not join the study for that date, this Fitbit update should be not processed.
+      result = false;
+      return result;
     }
 
-    const endTimeSpec = userInfo["completeAt"] != undefined? {
-        reference:  "completeAtDate",
-        offset: { type: "plus", value: { hours: 0 } }
-    }: undefined;
-    
-    const startDate = DateTimeHelper.generateStartOrEndDateTimeByReference(now, userInfo, startTimeSpec, "start");
-    const endDate = DateTimeHelper.generateStartOrEndDateTimeByReference(now, userInfo, endTimeSpec, "end");
-    const result = DateTimeHelper.isDateStringWithinInterval(dateString, timezone, startDate, endDate);
+    const endTimeSpec =
+      userInfo["completeAt"] != undefined
+        ? {
+            reference: "completeAtDate",
+            offset: { type: "plus", value: { hours: 0 } },
+          }
+        : undefined;
+
+    const startDate = DateTimeHelper.generateStartOrEndDateTimeByReference(
+      now,
+      userInfo,
+      startTimeSpec,
+      "start"
+    );
+    const endDate = DateTimeHelper.generateStartOrEndDateTimeByReference(
+      now,
+      userInfo,
+      endTimeSpec,
+      "end"
+    );
+    const result = DateTimeHelper.isDateStringWithinInterval(
+      dateString,
+      timezone,
+      startDate,
+      endDate
+    );
 
     return result;
-}
+  }
 
   static removeFitbitUpdateDuplicate(updateList, includeStatus = false) {
     let compositeIDMap = {};
@@ -127,5 +152,27 @@ export default class FitbitUpdateHelper {
     const updateList = await prisma.fitbit_update.findMany(queryObj);
 
     return updateList;
+  }
+
+  static async getUserFitbitUpdateDuringPeriodByIdAndOwnerType(
+    fitbitId,
+    startDateTime,
+    endDateTime,
+    ownerType = "user",
+    collectionType = "activities"
+  ) {
+    const recordList = await prisma.fitbit_update.findMany({
+      where: {
+        ownerId: fitbitId,
+        ownerType: ownerType,
+        collectionType: collectionType,
+        createdAt: {
+          gte: startDateTime.toISO(),
+          lte: endDateTime.toISO(),
+        },
+      },
+    });
+
+    return recordList;
   }
 }

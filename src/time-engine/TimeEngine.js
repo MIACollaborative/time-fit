@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import TaskExecutor from "./TaskExecutor.js";
-import DatabaseHelper from "../utility/DatabaseHelper.js";
+import DatabaseHelper from "../helper/DatabaseHelper.js";
 
 export default class TimeEngine {
   static scheduler = undefined;

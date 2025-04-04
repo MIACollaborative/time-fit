@@ -1,6 +1,6 @@
-import DateTimeHelper from "../../utility/DateTimeHelper";
-import FitbitDataHelper from "./FitbitDataHelper";
-import prisma from "../../utility/prisma";
+import DateTimeHelper from "../../../helper/DateTimeHelper.js";
+import FitbitDataHelper from "./FitbitDataHelper.js";
+import prisma from "../../../helper/prisma.js";
 export default class FitbitUpdateHelper {
   constructor() {}
 

@@ -4,8 +4,8 @@ export default class DataRecordHelper {
   constructor() {}
 
   static getObjectAsJSONDiff(oldObj, newObj) {
-    let oldDocument = JSON.parse(JSON.stringify(oldObj));
-    let newDocument = JSON.parse(JSON.stringify(newObj));
+    const oldDocument = JSON.parse(JSON.stringify(oldObj));
+    const newDocument = JSON.parse(JSON.stringify(newObj));
     return getDiff(oldDocument, newDocument, true);
   }
 }

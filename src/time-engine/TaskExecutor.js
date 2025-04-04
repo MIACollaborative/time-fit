@@ -1,14 +1,14 @@
 import { DateTime, Interval } from "luxon";
-import UserInfoHelper from "../utility/UserInfoHelper.js";
-import DateTimeHelper from "../utility/DateTimeHelper.js";
-import RandomizationHelper from "../utility/RandomizationHelper.js";
+import UserInfoHelper from "../helper/UserInfoHelper.js";
+import DateTimeHelper from "../helper/DateTimeHelper.js";
+import RandomizationHelper from "../helper/RandomizationHelper.js";
 import HelloAction from "../action-collection/HelloAction.js";
 import MessageLabelAction from "../action-collection/MessageLabelAction.js";
 import MessageGroupAction from "../action-collection/MessageGroupAction.js";
-import GenerateFitbitManualUpdateAction from "../action-collection/GenerateFitbitManualUpdateAction.js";
-import ProcessFitbitUpdateAction from "../action-collection/ProcessFitbitUpdateAction.js";
-import SetPersonalizedDailyStepsGoalAction from "../action-collection/SetPersonalizedDailyStepsGoalAction.js";
-import UpdateStepsGoalToFitbitServerAction from "../action-collection/UpdateStepsGoalToFitbitServerAction.js";
+import GenerateFitbitManualUpdateAction from "../data-source/fitbit/action/GenerateFitbitManualUpdateAction.js";
+import ProcessFitbitUpdateAction from "../data-source/fitbit/action/ProcessFitbitUpdateAction.js";
+import SetPersonalizedDailyStepsGoalAction from "../data-source/fitbit/action/SetPersonalizedDailyStepsGoalAction.js";
+import UpdateStepsGoalToFitbitServerAction from "../data-source/fitbit/action/UpdateStepsGoalToFitbitServerAction.js";
 import ActivateParticipantAction from "../action-collection/ActivateParticipantAction.js";
 import NoAction from "../action-collection/NoAction.js";
 export default class TaskExecutor {
@@ -211,68 +211,11 @@ export default class TaskExecutor {
   }
 
   static async executeActionForUser(theAction, userInfo, datetime) {
-    let record = {
-      executionResult: null,
+    
+    const record = {
+      action: theAction,
+      executionResult: actionTypeMap[theAction.type].execute(theAction, { userInfo, datetime })
     };
-
-    record.action = theAction;
-
-    // the ideal version
-    // record.executionResult = actionTypeMap[theAction.type].execute(theAction, { userInfo, datetime });
-
-
-    switch (theAction.type) {
-      case "printHello":
-        record.executionResult = await HelloAction.execute(theAction, {
-          userInfo, datetime
-        });
-        break;
-      case "messageLabel":
-        record.executionResult = await MessageLabelAction.execute(theAction, {
-          userInfo, datetime
-        });
-        break;
-      case "messageGroup":
-        record.executionResult = await MessageGroupAction.execute(theAction, {
-          userInfo, datetime
-        });
-        break;
-      case "messageLabelToResearchInvestigator":
-        record.executionResult = await MessageLabelAction.execute(theAction, {
-          userInfo, datetime
-        });
-        break;
-      case "generateManualFitbitUpdate":
-        record.executionResult = await GenerateFitbitManualUpdateAction.execute(theAction, {
-          userInfo, datetime
-        });
-        break;
-      case "processFitbitUpdate":
-        record.executionResult = await ProcessFitbitUpdateAction.execute(theAction, {
-          userInfo, datetime
-        });
-        break;
-      case "activateParticipant":
-        record.executionResult = await ActivateParticipantAction.execute(theAction, {
-          userInfo, datetime
-        });
-        break;
-      case "setPersonalizedDailyStepsGoal":
-        record.executionResult = await SetPersonalizedDailyStepsGoalAction.execute(theAction, {
-          userInfo, datetime
-        });
-        break;
-      case "updateStepsGoalToFitbitServer":
-        record.executionResult = await UpdateStepsGoalToFitbitServerAction.execute(theAction, {
-          userInfo, datetime
-        });
-        break;
-      default:
-        record.executionResult = await NoAction.execute(theAction, {
-          userInfo, datetime
-        });
-        break;
-    }
 
     return record;
   }

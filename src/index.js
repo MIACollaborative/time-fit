@@ -1,8 +1,14 @@
 import TimeEngine from "./time-engine/TimeEngine.js";
-import DatabaseHelper from "./utility/DatabaseHelper.js";
 import HelloAction from "./action-collection/HelloAction.js";
 import MessageLabelAction from "./action-collection/MessageLabelAction.js";
 import MessageGroupAction from "./action-collection/MessageGroupAction.js";
+import GenerateFitbitManualUpdateAction from "./data-source/fitbit/action/GenerateFitbitManualUpdateAction.js";
+import ProcessFitbitUpdateAction from "./data-source/fitbit/action/ProcessFitbitUpdateAction.js";
+import ActivateParticipantAction from "./action-collection/ActivateParticipantAction.js";
+import SetPersonalizedDailyStepsGoalAction from "./data-source/fitbit/action/SetPersonalizedDailyStepsGoalAction.js";
+import UpdateStepsGoalToFitbitServerAction from "./data-source/fitbit/action/UpdateStepsGoalToFitbitServerAction.js";
+import NoAction from "./action-collection/NoAction.js";
+
 
 async function myGetTaskList() {
   // ideal version
@@ -76,6 +82,13 @@ TimeEngine.registerGetTaskListFunction(myGetTaskList);
 TimeEngine.registerAction("printHello", HelloAction);
 TimeEngine.registerAction("messageLabel", MessageLabelAction);
 TimeEngine.registerAction("messageGroup", MessageGroupAction);
+TimeEngine.registerAction("messageLabelToResearchInvestigator", MessageLabelAction);
+TimeEngine.registerAction("generateManualFitbitUpdate", GenerateFitbitManualUpdateAction);
+TimeEngine.registerAction("processFitbitUpdate", ProcessFitbitUpdateAction);
+TimeEngine.registerAction("activateParticipant", ActivateParticipantAction);
+TimeEngine.registerAction("setPersonalizedDailyStepsGoal", SetPersonalizedDailyStepsGoalAction);
+TimeEngine.registerAction("updateStepsGoalToFitbitServer", UpdateStepsGoalToFitbitServerAction);
+TimeEngine.registerAction("noAction", NoAction);
 
 // Start the time engine
 TimeEngine.start();

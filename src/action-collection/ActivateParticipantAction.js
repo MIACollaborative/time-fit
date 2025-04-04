@@ -1,4 +1,4 @@
-import UserInfoHelper from "../utility/UserInfoHelper";
+import UserInfoHelper from "../helper/UserInfoHelper.js";
 
 export default class ActivateParticipantAction {
   constructor() {}

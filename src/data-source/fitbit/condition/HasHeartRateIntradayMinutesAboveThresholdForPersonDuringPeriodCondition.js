@@ -1,7 +1,6 @@
 import BooleanHelper from "../../../helper/BooleanHelper";
 import DateTimeHelper from "../../../helper/DateTimeHelper";
 import FitbitDataHelper from "../helper/FitbitDataHelper";
-import FitbitUpdateHelper from "../helper/FitbitUpdateHelper";
 
 export default class HasHeartRateIntradayMinutesAboveThresholdForPersonDuringPeriodCondition {
   constructor() {}

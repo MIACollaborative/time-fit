@@ -8,6 +8,8 @@ import ActivateParticipantAction from "./action-collection/ActivateParticipantAc
 import SetPersonalizedDailyStepsGoalAction from "./data-source/fitbit/action/SetPersonalizedDailyStepsGoalAction.js";
 import UpdateStepsGoalToFitbitServerAction from "./data-source/fitbit/action/UpdateStepsGoalToFitbitServerAction.js";
 import NoAction from "./action-collection/NoAction.js";
+import PersonCondition from "./condition-collection/PersonCondition.js";
+import TimeInPeriodCondition from "./condition-collection/TimeInPeriodCondition.js";
 
 
 async function myGetTaskList() {
@@ -89,6 +91,15 @@ TimeEngine.registerAction("activateParticipant", ActivateParticipantAction);
 TimeEngine.registerAction("setPersonalizedDailyStepsGoal", SetPersonalizedDailyStepsGoalAction);
 TimeEngine.registerAction("updateStepsGoalToFitbitServer", UpdateStepsGoalToFitbitServerAction);
 TimeEngine.registerAction("noAction", NoAction);
+
+// register all conditions
+TimeEngine.registerCondition("person", PersonCondition);
+TimeEngine.registerCondition("timeInPeriod", TimeInPeriodCondition);
+TimeEngine.registerCondition("surveyFilledByThisPerson", SurveyFilledByThisPersonCondition);
+TimeEngine.registerCondition("hasTaskLogErrorDuringPeriod", HasTaskLogErrorDuringPeriodCondition);
+TimeEngine.registerCondition("HasHeartRateIntradayMinutesAboveThresholdForPersonDuringPeriod", HasHeartRateIntradayMinutesAboveThresholdForPersonDuringPeriodCondition);
+TimeEngine.registerCondition("hasFitbitUpdateForPersonDuringPeriod", HasFitbitUpdateForPersonDuringPeriodCondition);
+TimeEngine.registerCondition("hasMessageSentDuringPeriod", HasMessageSentDuringPeriodCondition);
 
 // Start the time engine
 TimeEngine.start();

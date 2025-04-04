@@ -189,24 +189,15 @@ export default class TaskExecutor {
   }
 
   static obtainChoiceWithRandomization(outcomesSpec) {
-    console.log(
-      `obtainChoiceWithRandomization: ${JSON.stringify(outcomesSpec)}`
-    );
-
     if (outcomesSpec.randomizationEnabled == false) {
       return {
         randomNumber: 0,
         theChoice: outcomesSpec["outcomeList"][0],
       };
     }
-
-    // if not, then we need to do randomization
-    // now, scan everything in the outcome list and use the "chance" to do the randomization
-
     const { randomNumber, theChoice } = TaskExecutor.randomizeSelection(
       outcomesSpec.outcomeList
     );
-
     return { randomNumber, theChoice };
   }
 

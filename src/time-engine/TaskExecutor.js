@@ -2,15 +2,6 @@ import { DateTime, Interval } from "luxon";
 import UserInfoHelper from "../helper/UserInfoHelper.js";
 import DateTimeHelper from "../helper/DateTimeHelper.js";
 import RandomizationHelper from "../helper/RandomizationHelper.js";
-import HelloAction from "../action-collection/HelloAction.js";
-import MessageLabelAction from "../action-collection/MessageLabelAction.js";
-import MessageGroupAction from "../action-collection/MessageGroupAction.js";
-import GenerateFitbitManualUpdateAction from "../data-source/fitbit/action/GenerateFitbitManualUpdateAction.js";
-import ProcessFitbitUpdateAction from "../data-source/fitbit/action/ProcessFitbitUpdateAction.js";
-import SetPersonalizedDailyStepsGoalAction from "../data-source/fitbit/action/SetPersonalizedDailyStepsGoalAction.js";
-import UpdateStepsGoalToFitbitServerAction from "../data-source/fitbit/action/UpdateStepsGoalToFitbitServerAction.js";
-import ActivateParticipantAction from "../action-collection/ActivateParticipantAction.js";
-import NoAction from "../action-collection/NoAction.js";
 export default class TaskExecutor {
   taskSpec;
   static checkPointPreferenceTimeStringExtractionFunction;
@@ -166,7 +157,7 @@ export default class TaskExecutor {
 
       taskLogObj["isActivated"] = true;
       taskLogObj["userInfoCache"] =
-        GeneralUtility.extractUserInfoCache(userInfo);
+        UserInfoHelper.extractUserInfoCache(userInfo);
 
       console.log(
         `executeTaskForUserListForDate.compositeResult: ${JSON.stringify(
@@ -205,7 +196,7 @@ export default class TaskExecutor {
     
     const record = {
       action: theAction,
-      executionResult: actionTypeMap[theAction.type].execute(theAction, { userInfo, datetime })
+      executionResult: TaskExecutor.actionTypeMap[theAction.type].execute(theAction, { userInfo, datetime })
     };
 
     return record;
@@ -941,7 +932,7 @@ export default class TaskExecutor {
         evaluationReportList.push({
           step: `checkpoint-${i}-dayofweek`,
           target: weekIndexList,
-          souce: localWeekIndex,
+          source: localWeekIndex,
         });
 
         if (!weekIndexList.includes(localWeekIndex)) {
@@ -992,19 +983,17 @@ export default class TaskExecutor {
         }
 
         targetTime = targetTime.set({ second: 0, millisecond: 0 });
+        const upToMinuteNow = nowUTC.set({ second: 0, millisecond: 0 });
 
-        const diffDateTime = DateTimeHelper.diffDateTime(targetTime, nowUTC, [
+        const diffDateTime = DateTimeHelper.diffDateTime(targetTime, upToMinuteNow, [
           "minutes",
           "seconds",
         ]);
-
+        
         const diffObj = diffDateTime.toObject();
 
-        const secondsThreshold = 20;
-
         if (
-          diffObj.minutes != 0 ||
-          Math.abs(diffObj.seconds) >= secondsThreshold
+          diffObj.minutes != 0
         ) {
           checkPointResult = false;
         } else {
@@ -1044,177 +1033,12 @@ export default class TaskExecutor {
       evaluationReportList.push({
         step: `checkpoint-${i}-time`,
         target: targetTime,
-        souce: nowUTC,
+        source: nowUTC,
       });
 
       if (checkPointResult == true) {
         result = true;
         break;
-      }
-    }
-
-    console.log(`isCheckPointForUser: ${result}`);
-
-    return [result, evaluationReportList];
-
-    if (checkPoints.reference.type == "fixed") {
-      const hourMinuteString = checkPoints.reference.value;
-      const timeString = `${localTimeForUser.toFormat(
-        "D"
-      )}, ${hourMinuteString}`;
-      const syncedReferenceTime = DateTime.fromFormat(timeString, "f", {
-        zone: userInfo.timezone,
-      });
-
-      targetTime = syncedReferenceTime;
-    } else if (checkPoints.reference.type == "preference") {
-      let referenceTimePropertyName = "";
-
-      // TO DO: this part is very application specific, need to refactor this out
-      if (checkPoints.reference.value == "wakeupTime") {
-        if (localWeekIndex <= 5) {
-          referenceTimePropertyName = "weekdayWakeup";
-        } else {
-          referenceTimePropertyName = "weekendWakeup";
-        }
-      } else if (checkPoints.reference.value == "bedTime") {
-        if (localWeekIndex <= 5) {
-          referenceTimePropertyName = "weekdayBed";
-        } else {
-          referenceTimePropertyName = "weekendBed";
-        }
-      } else {
-        referenceTimePropertyName = checkPoints.reference.value;
-      }
-
-      const timeString = `${localTimeForUser.toFormat("D")}, ${DateTime.fromISO(
-        userInfo[referenceTimePropertyName],
-        { zone: userInfo.timezone }
-      ).toFormat("t")}`;
-
-      // new
-      const syncedReferenceTime = DateTime.fromFormat(timeString, "f", {
-        zone: userInfo.timezone,
-      });
-      targetTime = syncedReferenceTime;
-    }
-
-    if (checkPoints.type == "relative") {
-      if (checkPoints.offset.type == "plus") {
-        targetTime = targetTime.plus(checkPoints.offset.value);
-      } else if (checkPoints.offset.type == "minus") {
-        targetTime = targetTime.minus(checkPoints.offset.value);
-      }
-    }
-
-    // print target time before repeat
-    console.log(
-      `isCheckPointForUser: targetTime (before repeat): ${targetTime}`
-    );
-    // v2
-    // ['months', 'days', 'hours']
-    // do this so that minutes will be an integer, all the additional errors can be embodied by the seconds
-    diffDateTime = GeneralUtility.diffDateTime(targetTime, nowUTC, [
-      "minutes",
-      "seconds",
-    ]);
-
-    // v1
-    // diffDateTime = GeneralUtility.diffDateTime(targetTime, nowUTC, "minutes");
-
-    if (checkPoints.repeat == undefined) {
-      //diffDateTime = GeneralUtility.diffDateTime(targetTime, nowUTC, "minutes");
-      evaluationReportList.push({
-        step: "checkpoint-time-no-repeat",
-        target: targetTime,
-        souce: nowUTC,
-      });
-
-      //console.log(`isCheckPoint diffDateTime: ${diffDateTime}, minutes: ${diffObj.minutes}, hours: ${diffObj.minutes / 60}`);
-      console.log(
-        `isCheckPoint diffDateTime: ${diffDateTime}, seconds: ${
-          diffObj.seconds
-        }, minutes: ${diffObj.minutes}, hours: ${diffObj.minutes / 60}`
-      );
-
-      if (
-        diffObj.minutes != 0 ||
-        Math.abs(diffObj.seconds) >= secondsThreshold
-      ) {
-        result = false;
-      } else {
-        result = true;
-      }
-    } else {
-      // ok, we need to consider repeatable version of the task
-      // Step 1, check if nowUTC is within the range?
-
-      let intervalStart = targetTime;
-      let intervalEnd = targetTime;
-
-      // print both
-      console.log(
-        `isCheckPoint: intervalStart: ${intervalStart}, intervalEnd: ${intervalEnd}`
-      );
-      // before
-      if (checkPoints.repeat.range.before != undefined) {
-        intervalStart = targetTime.minus(
-          checkPoints.repeat.range.before.distance
-        );
-      }
-
-      // after
-      if (checkPoints.repeat.range.after != undefined) {
-        intervalEnd = targetTime.plus(checkPoints.repeat.range.after.distance);
-      }
-
-      // add a millisecond just so that the interval is inclusive of both ends
-      intervalEnd = intervalEnd.plus({ milliseconds: 1 });
-
-      // prit both
-      console.log(
-        `isCheckPoint: intervalStart: ${intervalStart}, intervalEnd: ${intervalEnd}`
-      );
-
-      // now check if the current time is within the interval
-      let correctStartEndInterval = Interval.fromDateTimes(
-        intervalStart,
-        intervalEnd
-      );
-
-      console.log(
-        `isCheckPoint: correctStartEndInterval: ${correctStartEndInterval}`
-      );
-      let containDateTime = correctStartEndInterval.contains(nowUTC);
-
-      // ok, even if it contains the timestamp, I still need to verify the distance between nowUTC and whether it is the
-
-      let isMultiplier =
-        diffObj.minutes % checkPoints.repeat.interval.minutes == 0 &&
-        diffObj.seconds < secondsThreshold;
-
-      console.log(
-        `isCheckPoint diffDateTime: ${diffDateTime}, seconds: ${diffObj.seconds}, minutes: ${diffObj.minutes}, small interval: ${checkPoints.repeat.interval.minutes}, containDateTime: ${containDateTime}, duration is the multiplier of small interval: ${isMultiplier}`
-      );
-
-      evaluationReportList.push({
-        step: "checkpoint-time-repeat",
-        target: {
-          interval: correctStartEndInterval,
-          diffDateTime: diffDateTime,
-          diffMinutes: diffObj.minutes,
-          diffSeconds: diffObj.seconds,
-        },
-        souce: {
-          time: nowUTC,
-          intervalMinutes: checkPoints.repeat.interval.minutes,
-        },
-      });
-
-      if (containDateTime && isMultiplier) {
-        result = true;
-      } else {
-        result = false;
       }
     }
 

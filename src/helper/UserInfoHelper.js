@@ -8,26 +8,30 @@ export default class UserInfoHelper {
     return userInfo[propertyName] != undefined;
   }
 
-  static async getUserInfoByUsername(username){
+  static async getUserInfoByUsername(username) {
     const theUser = await prisma.users.findFirst({
-        where: {
-            username: username,
-        }
+      where: {
+        username: username,
+      },
     });
     return theUser;
-}
+  }
 
-  static async updateUserInfo(userInfo, propertyValueObject){
+  static extractUserInfoCache(userInfo) {
+    const { id, password, hash, accessToken, refreshToken, ...rest } = userInfo;
+    return { ...rest };
+  }
 
+  static async updateUserInfo(userInfo, propertyValueObject) {
     const updateResult = await prisma.users.update({
-        where: {
-            username: userInfo.username,
-        },
-        data: {
-            ...propertyValueObject
-        },
+      where: {
+        username: userInfo.username,
+      },
+      data: {
+        ...propertyValueObject,
+      },
     });
 
     return updateResult;
-}
+  }
 }

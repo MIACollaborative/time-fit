@@ -19,13 +19,13 @@ export default class HasHeartRateIntradayMinutesAboveThresholdForPersonDuringPer
 
     const resultAggregator = condition.criteria.idRelationship;
 
-    const startDate = GeneralUtility.generateStartOrEndDateTimeByReference(
+    const startDate = DateTimeHelper.generateStartOrEndDateTimeByReference(
       localTimeForUser,
       userInfo,
       condition.criteria.period.start,
       "start"
     );
-    const endDate = GeneralUtility.generateStartOrEndDateTimeByReference(
+    const endDate = DateTimeHelper.generateStartOrEndDateTimeByReference(
       localTimeForUser,
       userInfo,
       condition.criteria.period.end,

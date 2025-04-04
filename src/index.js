@@ -1,18 +1,14 @@
 import TimeEngine from "./time-engine/TimeEngine.js";
-import DatabaseHelper from "./utility/DatabaseHelper.js";
+import HelloAction from "./action-collection/HelloAction.js";
+import MessageLabelAction from "./action-collection/MessageLabelAction.js";
+import MessageGroupAction from "./action-collection/MessageGroupAction.js";
+import GenerateFitbitManualUpdateAction from "./data-source/fitbit/action/GenerateFitbitManualUpdateAction.js";
+import ProcessFitbitUpdateAction from "./data-source/fitbit/action/ProcessFitbitUpdateAction.js";
+import ActivateParticipantAction from "./action-collection/ActivateParticipantAction.js";
+import SetPersonalizedDailyStepsGoalAction from "./data-source/fitbit/action/SetPersonalizedDailyStepsGoalAction.js";
+import UpdateStepsGoalToFitbitServerAction from "./data-source/fitbit/action/UpdateStepsGoalToFitbitServerAction.js";
+import NoAction from "./action-collection/NoAction.js";
 
-async function myGetUserList() {
-  const users = await DatabaseHelper.getUsers();
-  const userList = users.map((userInfo) => {
-    return exclude(userInfo, [
-      "password",
-      "hash",
-      "accessToken",
-      "refreshToken",
-    ]);
-  });
-  return userList;
-}
 
 async function myGetTaskList() {
   // ideal version
@@ -34,12 +30,13 @@ async function myGetTaskList() {
             type: "relative", // absolute vs. relative (with offset)
             reference: {
               type: "spec", //"spec" or "cron"
+              // value: "0 12 * * 5",
               value: {
                 dateCriteria: {
                   weekIndexList: [1, 2, 3, 4, 5, 6, 7],                  
                 },
                 timeStringType: "fixed", // fixed or preference
-                timeString: "01:32 PM", // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
+                timeString: "02:02 PM", // (if preference) (wakeupTime, bedTime, createdAt) -> need to support wakeupTime
               }
             },
             offset: {
@@ -59,9 +56,10 @@ async function myGetTaskList() {
         },
         list: [], //["test1", "test2"] // user name list, only matter if type is "list"
       },
-      randomization: {
-        enabled: false, // true or false
-        outcome: [
+      // outcomes
+      outcomes: {
+        randomizationEnabled: false, // true or false
+        outcomeList: [
           {
             chance: 1.0,
             action: {
@@ -77,45 +75,20 @@ async function myGetTaskList() {
   return tasks;
 }
 
-async function extractPreferenceTimeStringForUser(
-  userInfo,
-  checkPoint,
-  preferenceTimeStringName,
-  date
-) {
-  const datetime = DateTime.fromJSDate(date);
-  const localTimeForUser = GeneralUtility.getLocalTime(datetime, userInfo.timezone);
-  const localWeekIndex = localTimeForUser.weekday;
-
-  let referenceTimePropertyName = "";
-
-  // TO DO: this part is very application specific, need to refactor this out
-  if (preferenceTimeStringName == "wakeupTime") {
-    if (localWeekIndex <= 5) {
-      referenceTimePropertyName = "weekdayWakeup";
-    } else {
-      referenceTimePropertyName = "weekendWakeup";
-    }
-  } else if (preferenceTimeStringName == "bedTime") {
-    if (localWeekIndex <= 5) {
-      referenceTimePropertyName = "weekdayBed";
-    } else {
-      referenceTimePropertyName = "weekendBed";
-    }
-  } else {
-    referenceTimePropertyName = checkPoint.reference.value;
-  }
-
-  return userInfo[referenceTimePropertyName];
-}
-
-// Register a function to get user list (so developers can decide whether user list needs to be retrieve every time or not)
-TimeEngine.registerGetUserListFunction(myGetUserList);
 // Register a function to get task list (so developers can decide whether task list needs to be retrieve every time or not)
 TimeEngine.registerGetTaskListFunction(myGetTaskList);
 
-// Register a function to check preference time string
-TimeEngine.registerCheckPointPreferenceTimeStringExtractionFunction(extractPreferenceTimeStringForUser);
+// Register an action
+TimeEngine.registerAction("printHello", HelloAction);
+TimeEngine.registerAction("messageLabel", MessageLabelAction);
+TimeEngine.registerAction("messageGroup", MessageGroupAction);
+TimeEngine.registerAction("messageLabelToResearchInvestigator", MessageLabelAction);
+TimeEngine.registerAction("generateManualFitbitUpdate", GenerateFitbitManualUpdateAction);
+TimeEngine.registerAction("processFitbitUpdate", ProcessFitbitUpdateAction);
+TimeEngine.registerAction("activateParticipant", ActivateParticipantAction);
+TimeEngine.registerAction("setPersonalizedDailyStepsGoal", SetPersonalizedDailyStepsGoalAction);
+TimeEngine.registerAction("updateStepsGoalToFitbitServer", UpdateStepsGoalToFitbitServerAction);
+TimeEngine.registerAction("noAction", NoAction);
 
 // Start the time engine
 TimeEngine.start();

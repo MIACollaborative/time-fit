@@ -204,10 +204,12 @@ model message {
 
   // for message
   label String @unique
+  content  String
+
   group String
   groupIndex Int
-  interventionMessage  String?
-  walkMessage String?
+  
+  //walkMessage String?
   gif String?
   timeOfDay String?
   topic String?

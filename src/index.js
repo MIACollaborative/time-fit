@@ -81,6 +81,7 @@ async function myGetTaskList() {
 TimeEngine.registerGetTaskListFunction(myGetTaskList);
 
 // Register an action
+// TO DO: ideal version: TimeEngine.registerActionPack([something]);
 TimeEngine.registerAction("printHello", HelloAction);
 TimeEngine.registerAction("messageLabel", MessageLabelAction);
 TimeEngine.registerAction("messageGroup", MessageGroupAction);
@@ -93,6 +94,7 @@ TimeEngine.registerAction("updateStepsGoalToFitbitServer", UpdateStepsGoalToFitb
 TimeEngine.registerAction("noAction", NoAction);
 
 // register all conditions
+// TO DO: ideal version: TimeEngine.registerConditionPack([something]);
 TimeEngine.registerCondition("person", PersonCondition);
 TimeEngine.registerCondition("timeInPeriod", TimeInPeriodCondition);
 TimeEngine.registerCondition("surveyFilledByThisPerson", SurveyFilledByThisPersonCondition);

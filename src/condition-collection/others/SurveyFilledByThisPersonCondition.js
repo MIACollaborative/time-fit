@@ -1,6 +1,6 @@
-import BooleanHelper from "../helper/BooleanHelper";
-import DateTimeHelper from "../helper/DateTimeHelper";
-import SurveyResponseHelper from "../helper/SurveyResponseHelper";
+import BooleanHelper from "../../helper/BooleanHelper";
+import DateTimeHelper from "../../helper/DateTimeHelper";
+import SurveyResponseHelper from "../../helper/SurveyResponseHelper";
 
 export default class SurveyFilledByThisPersonCondition {
   constructor() {}
@@ -49,12 +49,14 @@ export default class SurveyFilledByThisPersonCondition {
       surveyFillResultList.push(filteredResponseList.length > 0);
     }
 
-    recordInfo.surveyResponseTimeListMap = surveyResponseTimeListMap;
-
     result = BooleanHelper.reduceBooleanArray(
       surveyFillResultList,
       condition.criteria.idRelationship
     );
+
+    const recordInfo = {
+      surveyResponseTimeListMap: surveyResponseTimeListMap,
+    };
 
     return {
       result,

@@ -37,11 +37,12 @@ export default class HasFitbitUpdateForPersonDuringPeriodCondition {
         );
     }
 
-    recordInfo.fitbitUpdateCount = updateList.length;
-
-    recordInfo.fitbitUpdateTimeList = updateList.map((itemInfo) => {
-      return itemInfo.createdAt;
-    });
+    const recordInfo = {
+      fitbitUpdateCount: updateList.length,
+      fitbitUpdateTimeList: updateList.map((itemInfo) => {
+        return itemInfo.createdAt;
+      }),
+    };
 
     result = updateList.length > 0;
     return {

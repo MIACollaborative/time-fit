@@ -2,6 +2,7 @@ import UserInfoHelper from "../helper/UserInfoHelper";
 
 export default class PersonCondition {
   constructor() {}
+  
   static async execute(condition, params) {
     const { userInfo, datetime } = params;
 

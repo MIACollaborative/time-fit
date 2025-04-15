@@ -6,7 +6,7 @@ export default class HasFitbitUpdateForPersonDuringPeriodCondition {
   static async execute(condition, params) {
     const { userInfo, datetime } = params;
     const dateTimeUTC = datetime.toUTC();
-    const localTimeForUser = DateTimeHelper.getLocalTime(
+    const localTimeForUser = DateTimeHelper.getLocalDateTime(
       dateTimeUTC,
       userInfo.timezone
     );
@@ -35,6 +35,8 @@ export default class HasFitbitUpdateForPersonDuringPeriodCondition {
         );
     }
 
+    const result = updateList.length > 0;
+
     const recordInfo = {
       fitbitUpdateCount: updateList.length,
       fitbitUpdateTimeList: updateList.map((itemInfo) => {
@@ -42,7 +44,6 @@ export default class HasFitbitUpdateForPersonDuringPeriodCondition {
       }),
     };
 
-    result = updateList.length > 0;
     return {
       result,
       recordInfo,

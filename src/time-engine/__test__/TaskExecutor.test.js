@@ -173,7 +173,6 @@ describe('checkpoint-preference', () => {
       preferenceTimeStringName,
       date
     ) => {
-      console.log(`${preferenceTimeStringName}: ` + userInfo.preference["wakeup"]);
       return userInfo.preference["wakeup"];
     };
 

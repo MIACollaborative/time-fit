@@ -1,5 +1,5 @@
-import DateTimeHelper from "../helper/DateTimeHelper";
-import TaskLogHelper from "../helper/TaskLogHelper";
+import DateTimeHelper from "../../helper/DateTimeHelper";
+import TaskLogHelper from "../../helper/TaskLogHelper";
 
 export default class HasTaskLogErrorDuringPeriodCondition {
   constructor() {}
@@ -28,10 +28,12 @@ export default class HasTaskLogErrorDuringPeriodCondition {
       endDate
     );
 
-    recordInfo.errorCount = errorList.length;
-    recordInfo.errorTaskLogIdList = errorList.map((taskLogInfo) => {
-      return taskLogInfo.id;
-    });
+    const recordInfo = {
+      errorCount: errorList.length,
+      errorTaskLogIdList: errorList.map((taskLogInfo) => {
+        return taskLogInfo.id;
+      }),
+    };
 
     result = errorList.length > 0;
 

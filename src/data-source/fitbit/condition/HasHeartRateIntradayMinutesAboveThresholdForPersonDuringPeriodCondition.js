@@ -46,8 +46,10 @@ export default class HasHeartRateIntradayMinutesAboveThresholdForPersonDuringPer
       return x >= wearingLowerBoundMinutes;
     });
 
-    recordInfo.minsList = minsList;
-    recordInfo.resultList = resultList;
+    const recordInfo = {
+      minsList: minsList,
+      resultList: resultList,
+    };
 
     if (wearingDayLowerBoundCount == undefined) {
       // require all days in range

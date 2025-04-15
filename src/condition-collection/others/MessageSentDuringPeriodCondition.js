@@ -1,5 +1,5 @@
-import DateTimeHelper from "../helper/DateTimeHelper";
-import TaskLogHelper from "../helper/TaskLogHelper";
+import DateTimeHelper from "../../helper/DateTimeHelper";
+import TaskLogHelper from "../../helper/TaskLogHelper";
 
 export default class MessageSentDuringPeriodCondition {
   constructor() {}
@@ -42,10 +42,13 @@ export default class MessageSentDuringPeriodCondition {
       return taskLogInfo.username == userInfo.username;
     });
 
-    recordInfo.messageSentCount = filteredTaskLogList.length;
-    recordInfo.messageSentTimeList = filteredTaskLogList.map((taskLogInfo) => {
-      return taskLogInfo.createdAt;
-    });
+    const recordInfo = {
+      messageSentCount: filteredTaskLogList.length,
+      messageSentTimeList: filteredTaskLogList.map((taskLogInfo) => {
+        return taskLogInfo.createdAt;
+      }),
+    };
+
     result = filteredTaskLogList.length > 0;
 
     return {

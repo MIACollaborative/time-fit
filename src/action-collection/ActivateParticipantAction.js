@@ -7,7 +7,7 @@ export default class ActivateParticipantAction {
 
     const result = await UserInfoHelper.updateUserInfo(userInfo, {
       phase: actionInfo.phase,
-      activateAt: DateTime.utc().toISO(),
+      activateAt: datetime.toISO(),
     });
 
     resultStatus = "success";

@@ -86,8 +86,6 @@ describe("fitbit heart rate intraday minutes above threshold during period", () 
         datetime: mockDateTimeStart,
       });
 
-    console.log(compositeResult);
-
       expect(compositeResult).toEqual({
         result: true,
         recordInfo: {

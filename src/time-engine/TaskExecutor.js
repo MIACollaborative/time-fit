@@ -92,9 +92,6 @@ export default class TaskExecutor {
       // step 3: checkpoint (time)
       const [isCheckPointResult, checkPointEvaluationRecordList] =
         TaskExecutor.isCheckPointForUser(taskSpec.checkPoints, userInfo, date);
-      console.log(
-        `isCheckPointResult: user[${userInfo.username}]: ${isCheckPointResult}`
-      );
 
       taskLogObj["activationReasoning"].push({
         phase: "checkpoints",
@@ -121,10 +118,6 @@ export default class TaskExecutor {
           userInfo,
           datetime
         );
-
-      console.log(
-        `isPreConditionMetForUser [${userInfo.username}]: ${checkResult} - ${conditionEvaluationRecordList}`
-      );
 
       taskLogObj["activationReasoning"].push({
         phase: "precondition",
@@ -424,8 +417,7 @@ export default class TaskExecutor {
       );
 
       if (checkPoint.reference.type == "spec") {
-        // print type
-        console.log(`checkPoint.reference.type: ${checkPoint.reference.type}`);
+
         const weekIndexList =
           checkPoint.reference.value.dateCriteria.weekIndexList;
         const localWeekIndex = localTimeForUser.weekday;
@@ -459,9 +451,6 @@ export default class TaskExecutor {
             );
         }
 
-        // print hourMinuteString
-        console.log(`hourMinuteString: ${hourMinuteString}`);
-
         const timeString = `${localTimeForUser.toFormat(
           "D"
         )}, ${hourMinuteString}`;
@@ -469,11 +458,8 @@ export default class TaskExecutor {
           zone: userInfo.timezone,
         });
 
-        // print syncedReferenceTime
-        console.log(`syncedReferenceTime: ${syncedReferenceTime}`);
         targetTime = syncedReferenceTime;
-        // print targetTime
-        console.log(`isCheckPointForUser: targetTime: ${targetTime}`);
+
         // now, see if there is an offset. If so, add it.
         if (checkPoint.type == "relative") {
           if (checkPoint.offset.type == "plus") {
@@ -500,8 +486,6 @@ export default class TaskExecutor {
           checkPointResult = true;
         }
       } else if (checkPoint.reference.type == "cron") {
-        // print type
-        console.log(`checkPoint.reference.type: ${checkPoint.reference.type}`);
         targetTime = localTimeForUser;
 
         // if there is offset, reverse it.
@@ -528,8 +512,6 @@ export default class TaskExecutor {
         // https://github.com/bradymholt/cronstrue
       }
 
-      // print targetTime
-      console.log(`isCheckPointForUser: targetTime: ${targetTime}`);
       evaluationReportList.push({
         step: `checkpoint-${i}-time`,
         target: targetTime,
@@ -541,8 +523,6 @@ export default class TaskExecutor {
         break;
       }
     }
-
-    console.log(`isCheckPointForUser: ${result}`);
 
     return [result, evaluationReportList];
   }

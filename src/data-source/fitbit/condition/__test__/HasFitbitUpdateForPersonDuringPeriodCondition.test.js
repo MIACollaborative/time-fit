@@ -1,6 +1,7 @@
 import HasFitbitUpdateForPersonDuringPeriodCondition from "../HasFitbitUpdateForPersonDuringPeriodCondition";
 import FitbitUpdateHelper from "../../helper/FitbitUpdateHelper";
 import { DateTime } from "luxon";
+import { jest } from '@jest/globals';
 
 describe("fitbit udpate during period", () => {
   test("time between activate and complete", async () => {
@@ -93,13 +94,13 @@ describe("fitbit udpate during period", () => {
         }
     ]);
 
-    const mockGetUserFitbitUpdateDuringPeriodByIdAndOwnerTypeSpy = jest.spyOn(FitbitUpdateHelper.prototype, "getUserFitbitUpdateDuringPeriodByIdAndOwnerType").mockImplementation(mockGetUserFitbitUpdateDuringPeriodByIdAndOwnerType);
+    const mockGetUserFitbitUpdateDuringPeriodByIdAndOwnerTypeSpy = jest.spyOn(FitbitUpdateHelper, "getUserFitbitUpdateDuringPeriodByIdAndOwnerType").mockImplementation(mockGetUserFitbitUpdateDuringPeriodByIdAndOwnerType);
 
 
     const compositeResult =
-      await HasFitbitUpdateForPersonDuringPeriodCondition.execute(condition, {
+      await HasFitbitUpdateForPersonDuringPeriodCondition.execute(mockCondition, {
         userInfo: mockUserInfo,
-        datetime: mockDateTime,
+        datetime: mockDateTimeStart,
       });
 
       expect(compositeResult).toEqual({

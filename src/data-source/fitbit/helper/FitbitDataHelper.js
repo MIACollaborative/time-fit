@@ -644,4 +644,40 @@ static async getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(fitbitId, 
 
     return refreshResult;
   }
+
+  static async getUserFitbitWearingMinutesPerDayListDuringPeriod(fitbitId, startDateTime, endDateTime){
+    let minsList = [];
+
+    let curDateTime = startDateTime;
+
+    while( DateTimeHelper.diffDateTime(curDateTime, endDateTime, "seconds").toObject().seconds >= 0){
+        const aggregatedMinutes = await FitbitDataHelper.getUserFitbitHeartRateIntradayMinutesByIdAndDate(fitbitId, curDateTime);
+        minsList.push(aggregatedMinutes);
+        curDateTime = DateTimeHelper.operateDateTime(curDateTime, {"days": 1}, "plus");
+    }
+    return minsList;
+}
+
+static async getUserFitbitHeartRateIntradayMinutesByIdAndDate(fitbitId, startDateTime){
+
+  let timeString = startDateTime.toFormat('yyyy-MM-dd');
+
+  const record = await prisma.fitbit_data.findFirst({
+      where:{
+          ownerId: fitbitId,
+          dataType: GeneralUtility.FITBIT_INTRADAY_DATA_TYPE_HEART,
+          dateTime: timeString,
+      },
+  });
+
+  let minutesTotal = 0;
+
+  if(record != undefined){
+      // version 2: use intraday
+      const heartRateDataSet = record["content"]["activities-heart-intraday"]["dataset"];
+      minutesTotal += heartRateDataSet.length;
+  }
+
+  return minutesTotal;
+}
 }

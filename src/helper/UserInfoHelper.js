@@ -17,6 +17,28 @@ export default class UserInfoHelper {
     return theUser;
   }
 
+  static isUserInfoPropertyValueMatched(userInfo, propertyValueObject) {
+    let result = true;
+
+    Object.keys(propertyValueObject).forEach((propertyName) => {
+      if (userInfo[propertyName] != propertyValueObject[propertyName]) {
+        result = false;
+      }
+    });
+
+    return result;
+  }
+
+  static extractUserInfoPropertyValueMatched(userInfo, propertyValueObject) {
+    let resultInfo = {};
+
+    Object.keys(propertyValueObject).forEach((propertyName) => {
+      resultInfo[propertyName] = userInfo[propertyName];
+    });
+
+    return resultInfo;
+  }
+
   static extractUserInfoCache(userInfo) {
     const { id, password, hash, accessToken, refreshToken, ...rest } = userInfo;
     return { ...rest };

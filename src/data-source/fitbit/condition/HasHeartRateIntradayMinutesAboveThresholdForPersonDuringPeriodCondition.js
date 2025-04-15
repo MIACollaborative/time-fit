@@ -7,7 +7,7 @@ export default class HasHeartRateIntradayMinutesAboveThresholdForPersonDuringPer
   static async execute(condition, params) {
     const { userInfo, datetime } = params;
     const dateTimeUTC = datetime.toUTC();
-    const localTimeForUser = DateTimeHelper.getLocalTime(
+    const localTimeForUser = DateTimeHelper.getLocalDateTime(
       dateTimeUTC,
       userInfo.timezone
     );
@@ -22,17 +22,14 @@ export default class HasHeartRateIntradayMinutesAboveThresholdForPersonDuringPer
     const startDate = DateTimeHelper.generateStartOrEndDateTimeByReference(
       localTimeForUser,
       userInfo,
-      condition.criteria.period.start,
-      "start"
+      condition.criteria.period.start
     );
     const endDate = DateTimeHelper.generateStartOrEndDateTimeByReference(
       localTimeForUser,
       userInfo,
-      condition.criteria.period.end,
-      "end"
+      condition.criteria.period.end
     );
 
-    // version 2: move it to function
     let minsList = [];
     if (userInfo.fitbitId != undefined && userInfo.fitbitId.length > 0) {
       minsList =
@@ -42,6 +39,7 @@ export default class HasHeartRateIntradayMinutesAboveThresholdForPersonDuringPer
           endDate
         );
     }
+    
     const resultList = minsList.map((x) => {
       return x >= wearingLowerBoundMinutes;
     });
@@ -51,6 +49,7 @@ export default class HasHeartRateIntradayMinutesAboveThresholdForPersonDuringPer
       resultList: resultList,
     };
 
+    let result = false;
     if (wearingDayLowerBoundCount == undefined) {
       // require all days in range
       result = BooleanHelper.reduceBooleanArray(resultList, resultAggregator);

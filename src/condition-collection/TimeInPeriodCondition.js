@@ -11,6 +11,7 @@ export default class TimeInPeriodCondition {
     );
 
     // v2
+    /*
     const sampleCriteria = {
       start: {
         reference: "activateAt",
@@ -26,6 +27,7 @@ export default class TimeInPeriodCondition {
         offset: { type: "plus", value: { days: 14 } },
       },
     };
+    */
 
     const startDateTime = DateTimeHelper.generateStartOrEndDateTimeByReference(
       localTimeForUser,

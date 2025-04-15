@@ -8,6 +8,8 @@ import ActivateParticipantAction from "./action-collection/ActivateParticipantAc
 import SetPersonalizedDailyStepsGoalAction from "./data-source/fitbit/action/SetPersonalizedDailyStepsGoalAction.js";
 import UpdateStepsGoalToFitbitServerAction from "./data-source/fitbit/action/UpdateStepsGoalToFitbitServerAction.js";
 import NoAction from "./action-collection/NoAction.js";
+import UserInfoCondition from "./condition-collection/UserInfoCondition.js";
+import TimeInPeriodCondition from "./condition-collection/TimeInPeriodCondition.js";
 
 
 async function myGetTaskList() {
@@ -79,6 +81,7 @@ async function myGetTaskList() {
 TimeEngine.registerGetTaskListFunction(myGetTaskList);
 
 // Register an action
+// TO DO: ideal version: TimeEngine.registerActionPack([something]);
 TimeEngine.registerAction("printHello", HelloAction);
 TimeEngine.registerAction("messageLabel", MessageLabelAction);
 TimeEngine.registerAction("messageGroup", MessageGroupAction);
@@ -89,6 +92,16 @@ TimeEngine.registerAction("activateParticipant", ActivateParticipantAction);
 TimeEngine.registerAction("setPersonalizedDailyStepsGoal", SetPersonalizedDailyStepsGoalAction);
 TimeEngine.registerAction("updateStepsGoalToFitbitServer", UpdateStepsGoalToFitbitServerAction);
 TimeEngine.registerAction("noAction", NoAction);
+
+// register all conditions
+// TO DO: ideal version: TimeEngine.registerConditionPack([something]);
+TimeEngine.registerCondition("userInfo", UserInfoCondition);
+TimeEngine.registerCondition("timeInPeriod", TimeInPeriodCondition);
+TimeEngine.registerCondition("surveyFilledByThisPerson", SurveyFilledByThisPersonCondition);
+TimeEngine.registerCondition("hasTaskLogErrorDuringPeriod", HasTaskLogErrorDuringPeriodCondition);
+TimeEngine.registerCondition("HasHeartRateIntradayMinutesAboveThresholdForPersonDuringPeriod", HasHeartRateIntradayMinutesAboveThresholdForPersonDuringPeriodCondition);
+TimeEngine.registerCondition("hasFitbitUpdateForPersonDuringPeriod", HasFitbitUpdateForPersonDuringPeriodCondition);
+TimeEngine.registerCondition("hasMessageSentDuringPeriod", HasMessageSentDuringPeriodCondition);
 
 // Start the time engine
 TimeEngine.start();

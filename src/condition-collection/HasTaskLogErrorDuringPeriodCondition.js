@@ -14,14 +14,12 @@ export default class HasTaskLogErrorDuringPeriodCondition {
     const startDate = DateTimeHelper.generateStartOrEndDateTimeByReference(
       localTimeForUser,
       userInfo,
-      condition.criteria.period.start,
-      "start"
+      condition.criteria.period.start
     );
     const endDate = DateTimeHelper.generateStartOrEndDateTimeByReference(
       localTimeForUser,
       userInfo,
-      condition.criteria.period.end,
-      "end"
+      condition.criteria.period.end
     );
 
     // generic

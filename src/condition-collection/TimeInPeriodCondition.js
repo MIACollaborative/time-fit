@@ -5,73 +5,58 @@ export default class TimeInPeriodCondition {
   static async execute(condition, params) {
     const { userInfo, datetime } = params;
     const dateTimeUTC = datetime.toUTC();
-    const localTimeForUser = DateTimeHelper.getLocalTime(
+    const localTimeForUser = DateTimeHelper.getLocalDateTime(
       dateTimeUTC,
       userInfo.timezone
     );
 
-    /*
-    {
+    // v2
+    const sampleCriteria = {
+      start: {
+        reference: "activateAt",
+        startOrEnd: "start", // start, end, no
+        startEndUnit: "day",
+        offset: { type: "plus", value: { days: 7 } },
+      },
 
-        type: timeInPeriod,
-        
-        criteria: {
-            
-            start:{
-            
-                reference: "activateAtDate",
-                // Need to make sure that the minute and seconds do not get in the way of calculatioon
-                offset: {type: "plus", value: {days: 7}}
-                
-            },
-        
-            end:{
-            
-                reference: "joinAt",
-                
-                offset: {type: "plus", value: {hours: 0}}
-                
-            }
-        
-        }
-    
-    }
-    */
+      end: {
+        reference: "activateAt",
+        startOrEnd: "end", // start, end, no
+        startEndUnit: "day",
+        offset: { type: "plus", value: { days: 14 } },
+      },
+    };
 
-    const startDate = DateTimeHelper.generateStartOrEndDateTimeByReference(
+    const startDateTime = DateTimeHelper.generateStartOrEndDateTimeByReference(
       localTimeForUser,
       userInfo,
-      condition.criteria.period.start,
-      "start"
+      condition.criteria.period.start
     );
 
-    let endDate = DateTimeHelper.generateStartOrEndDateTimeByReference(
+    let endDateTime = DateTimeHelper.generateStartOrEndDateTimeByReference(
       localTimeForUser,
       userInfo,
-      condition.criteria.period.end,
-      "end"
+      condition.criteria.period.end
     );
 
     // default to be inclusive
-    if (
-      condition.criteria.period.end.inclusive == undefined ||
-      (condition.criteria.period.end.inclusive != undefined &&
-        condition.criteria.period.end.inclusive == true)
-    ) {
+    const inclusive = condition.criteria.period.inclusive;
+    if (inclusive == undefined || inclusive == true) {
       // inclusive
-      endDate = endDate.plus({ milliseconds: 1 });
+      endDateTime = endDateTime.plus({ milliseconds: 1 });
     }
 
-    const containDateTime = DateTimeHelper.isDateTimeInInterval(
+    const result = DateTimeHelper.isDatTimeWithinInterval(
       dateTimeUTC,
-      startDate,
-      endDate
+      startDateTime,
+      endDateTime
     );
 
-    recordInfo.dateTime = datetime;
-    recordInfo.validInterval = validInterval;
-
-    result = containDateTime;
+    const recordInfo = {
+      datetime: datetime,
+      startDateTime: startDateTime,
+      endDateTime: endDateTime,
+    };
 
     return {
       result,

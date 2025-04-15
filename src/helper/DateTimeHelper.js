@@ -2,6 +2,7 @@ import { CronExpressionParser } from "cron-parser";
 import { DateTime, Interval } from "luxon";
 export default class DateTimeHelper {
   constructor() {}
+
   static getLocalDateTime(datetime, timezone) {
     return datetime.setZone(timezone);
   }
@@ -25,60 +26,37 @@ export default class DateTimeHelper {
     const result = validInterval.contains(targetDate);
     return result;
   }
+
+  static isDatTimeWithinInterval(dateTime, startDateTime, endDateTime) {
+    const validInterval = Interval.fromDateTimes(startDateTime, endDateTime);
+    const result = validInterval.contains(dateTime);
+    return result;
+  }
+
   static generateStartOrEndDateTimeByReference(
     targetDateTime,
     userInfo,
-    timeDefinition,
-    startOrEnd = "start"
+    timeDefinition
   ) {
     let resultDateTime;
+    const startEndOfUnit = timeDefinition.startOrEnd;
+    const startEndUnit = timeDefinition.startEndUnit;
 
-    let startEndOfUnit = "no";
-    let startEndUnit = "day";
+    resultDateTime = DateTimeHelper.generateDateTimeByReference(
+      targetDateTime,
+      userInfo,
+      timeDefinition.reference,
+      startEndOfUnit,
+      startEndUnit
+    );
 
-    if (timeDefinition != undefined) {
-      switch (timeDefinition.reference) {
-        case "now":
-          break;
-        case "today":
-          startEndOfUnit = startOrEnd;
-          break;
-        case "activateAtDate":
-          startEndOfUnit = startOrEnd;
-          break;
-        case "joinAtDate":
-          startEndOfUnit = startOrEnd;
-          break;
-        case "completeAtDate":
-          startEndOfUnit = startOrEnd;
-          break;
-        default:
-          break;
-      }
-
-      resultDateTime = DateTimeHelper.generateDateTimeByReference(
-        targetDateTime,
-        userInfo,
-        timeDefinition.reference,
-        startEndOfUnit,
-        startEndUnit
-      );
+    // offset if necessary
+    if (timeDefinition.offset != undefined) {
       resultDateTime = DateTimeHelper.operateDateTime(
         resultDateTime,
         timeDefinition.offset.value,
         timeDefinition.offset.type
       );
-    } else {
-      switch (startOrEnd) {
-        case "start":
-          resultDateTime = DateTime.utc(2000);
-          break;
-        case "end":
-          resultDateTime = targetDateTime; //.toUTC();
-          break;
-        default:
-          break;
-      }
     }
     return resultDateTime;
   }
@@ -96,28 +74,11 @@ export default class DateTimeHelper {
       case "now":
         resultDateTime = targetDateTime;
         break;
-      case "today":
-        resultDateTime = targetDateTime;
-        break;
-      case "activateAtDate":
-        resultDateTime = DateTimeHelper.getLocalDateTime(
-          DateTime.fromISO(userInfo.activateAt),
-          userInfo.timezone
-        );
-        break;
-      case "joinAtDate":
-        resultDateTime = DateTimeHelper.getLocalDateTime(
-          DateTime.fromISO(userInfo.joinAt),
-          userInfo.timezone
-        );
-        break;
-      case "completeAtDate":
-        resultDateTime = DateTimeHelper.getLocalDateTime(
-          DateTime.fromISO(userInfo.completeAt),
-          userInfo.timezone
-        );
-        break;
       default:
+        resultDateTime = DateTimeHelper.getLocalDateTime(
+          DateTime.fromISO(userInfo[reference]),
+          userInfo.timezone
+        );
         break;
     }
 

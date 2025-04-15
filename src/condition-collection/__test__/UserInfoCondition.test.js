@@ -1,4 +1,4 @@
-import PersonCondition from "../PersonCondition";
+import UserInfoCondition from "../UserInfoCondition";
 import { DateTime } from "luxon";
 
 describe('person info match', () => {
@@ -19,7 +19,7 @@ describe('person info match', () => {
       },
     };
 
-    const compositeResult = await PersonCondition.execute(condition, {
+    const compositeResult = await UserInfoCondition.execute(condition, {
       userInfo: mockUserInfo,
       datetime: DateTime.now(),
     });
@@ -48,7 +48,7 @@ describe('person info not match', () => {
       },
     };
     
-    const compositeResult = await PersonCondition.execute(condition, {
+    const compositeResult = await UserInfoCondition.execute(condition, {
       userInfo: mockUserInfo,
       datetime: DateTime.now(),
     });

@@ -3,7 +3,7 @@ import UserInfoHelper from "../helper/UserInfoHelper.js";
 import DateTimeHelper from "../helper/DateTimeHelper.js";
 import RandomizationHelper from "../helper/RandomizationHelper.js";
 import BooleanHelper from "../helper/BooleanHelper.js";
-import PersonCondition from "../condition-collection/PersonCondition.js";
+import UserInfoCondition from "../condition-collection/UserInfoCondition.js";
 export default class TaskExecutor {
   taskSpec;
   static checkPointPreferenceTimeStringExtractionFunction;

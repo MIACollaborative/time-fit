@@ -1,6 +1,6 @@
 import UserInfoHelper from "../helper/UserInfoHelper";
 
-export default class PersonCondition {
+export default class UserInfoCondition {
   constructor() {}
   
   static async execute(condition, params) {

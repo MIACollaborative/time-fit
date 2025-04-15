@@ -57,8 +57,10 @@ export default class FitbitUpdateHelper {
     const startTimeSpec =
       userInfo["joinAt"] != undefined
         ? {
-            reference: "joinAtDate",
+            reference: "joinAt",
             offset: { type: "plus", value: { hours: 0 } },
+            startOrEnd: "start",
+            startEndUnit: "day",
           }
         : undefined;
 
@@ -71,22 +73,22 @@ export default class FitbitUpdateHelper {
     const endTimeSpec =
       userInfo["completeAt"] != undefined
         ? {
-            reference: "completeAtDate",
+            reference: "completeAt",
             offset: { type: "plus", value: { hours: 0 } },
+            startOrEnd: "end",
+            startEndUnit: "day",
           }
         : undefined;
 
     const startDate = DateTimeHelper.generateStartOrEndDateTimeByReference(
       now,
       userInfo,
-      startTimeSpec,
-      "start"
+      startTimeSpec
     );
     const endDate = DateTimeHelper.generateStartOrEndDateTimeByReference(
       now,
       userInfo,
-      endTimeSpec,
-      "end"
+      endTimeSpec
     );
     const result = DateTimeHelper.isDateStringWithinInterval(
       dateString,

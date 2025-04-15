@@ -3,6 +3,12 @@ import prisma from "./prisma.mjs";
 export default class TaskLogHelper {
   constructor() {}
 
+  static async insertTaskLogList(tasklogList) {
+    return await prisma.taskLog.createMany({
+      data: tasklogList,
+    });
+  }
+
   static async getCurrentUserMessageCountDict(username) {
     const results = await prisma.taskLog.groupBy({
       by: ["messageLabel"],

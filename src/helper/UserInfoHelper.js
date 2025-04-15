@@ -1,6 +1,24 @@
 import prisma from "./prisma.js";
 export default class UserInfoHelper {
   constructor() {}
+  static async getUsers() {
+    return await prisma.users.findMany();
+  }
+
+  static async myGetUserList() {
+    const users = await DatabaseHelper.getUsers();
+    const userList = users.map((userInfo) => {
+      return exclude(userInfo, [
+        "password",
+        "hash",
+        "accessToken",
+        "refreshToken",
+      ]);
+    });
+    return userList;
+  }
+
+  
   static isPropertySet(userInfo, propertyName) {
     if (userInfo == null) {
       return false;

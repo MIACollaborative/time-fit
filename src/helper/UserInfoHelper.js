@@ -1,6 +1,7 @@
 import prisma from "./prisma.js";
 export default class UserInfoHelper {
   constructor() {}
+  
   static async getUsers() {
     return await prisma.users.findMany();
   }

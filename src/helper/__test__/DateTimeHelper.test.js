@@ -127,11 +127,34 @@ describe('DateTimeHelper', () => {
   });
 
   test('isDateStringWithinInterval works', () => {
-    const date = DateTime.fromObject({ hour: 12, minute: 10 }).toJSDate();
-    const result = DateTimeHelper.isDateStringWithinInterval(date, "Asia/Tokyo", DateTime.fromObject({ hour: 12, minute: 0 }), DateTime.fromObject({ hour: 12, minute: 20 }));
+    // date string 2024-04-12
+    //  at detroit timezone 
+    const dateString = "2024-04-12";
+    // timezone detroit
+    const timezone = "America/Detroit";
+
+    // between 2024-04-10 and 2024-04-15 in Detroit timezone
+    const result = DateTimeHelper.isDateStringWithinInterval(dateString, timezone, DateTime.fromObject({ year: 2024, month: 4, day: 10 }, { zone: timezone }), DateTime.fromObject({ year: 2024, month: 4, day: 15 }, { zone: timezone }));
     expect(result).toBe(true);
-    
-    
-  });
+
+    // between 2024-04-15 and 2024-04-20
+    const result2 = DateTimeHelper.isDateStringWithinInterval(dateString, timezone, DateTime.fromObject({ year: 2024, month: 4, day: 15 }, { zone: timezone }), DateTime.fromObject({ year: 2024, month: 4, day: 20 }, { zone: timezone }));
+    expect(result2).toBe(false);
+
+    // between 2024-04-09 and 2024-04-16
+    const result3 = DateTimeHelper.isDateStringWithinInterval(dateString, timezone, DateTime.fromObject({ year: 2024, month: 4, day: 9 }, { zone: timezone }), DateTime.fromObject({ year: 2024, month: 4, day: 16 }, { zone: timezone }));
+    expect(result3).toBe(true);
+
+    // between 2024-04-12 and 2024-04-17 in Taipei timezone
+    const timezone2 = "Asia/Taipei";
+    const result4 = DateTimeHelper.isDateStringWithinInterval(dateString, timezone, DateTime.fromObject({ year: 2024, month: 4, day: 12 }, { zone: timezone2 }), DateTime.fromObject({ year: 2024, month: 4, day: 17 }, { zone: timezone2 }));
+    expect(result4).toBe(true);
+
+    // between 2024-04-13 and 2024-04-16 in Taipei timezone
+    const result5 = DateTimeHelper.isDateStringWithinInterval(dateString, timezone, DateTime.fromObject({ year: 2024, month: 4, day: 13 }, { zone: timezone2 }), DateTime.fromObject({ year: 2024, month: 4, day: 16 }, { zone: timezone2 }));
+    expect(result5).toBe(false);
+
+
+    });
 });
 

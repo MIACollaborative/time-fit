@@ -18,12 +18,12 @@ export default class DateTimeHelper {
   static async isDateStringWithinInterval(
     dateString,
     timezone,
-    startDate,
-    endDate
+    startDateTime,
+    endDateTime
   ) {
-    const targetDate = DateTime.fromISO(dateString, { zone: timezone });
-    const validInterval = Interval.fromDateTimes(startDate, endDate);
-    const result = validInterval.contains(targetDate);
+    const targetDateTime = DateTime.fromISO(dateString, { zone: timezone });
+    const validInterval = Interval.fromDateTimes(startDateTime, endDateTime);
+    const result = validInterval.contains(targetDateTime);
     return result;
   }
 

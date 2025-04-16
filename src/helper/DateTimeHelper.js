@@ -17,22 +17,17 @@ export default class DateTimeHelper {
 
   static isDateStringWithinInterval(
     dateString,
-    timezone,
+    dateStringTimezone,
     startDateTime,
     endDateTime
   ) {
-    const targetDateTime = DateTime.fromISO(dateString, { zone: timezone });
-    console.log(targetDateTime);
-    const validInterval = Interval.fromDateTimes(startDateTime, endDateTime);
-    console.log(validInterval);
-    const result = validInterval.contains(targetDateTime);
-    return result;
+    const targetDateTime = DateTime.fromISO(dateString, { zone: dateStringTimezone });
+    return DateTimeHelper.isDatTimeWithinInterval(targetDateTime, startDateTime, endDateTime);
   }
 
   static isDatTimeWithinInterval(dateTime, startDateTime, endDateTime) {
     const validInterval = Interval.fromDateTimes(startDateTime, endDateTime);
     const result = validInterval.contains(dateTime);
-    console.log(result);
     return result;
   }
 

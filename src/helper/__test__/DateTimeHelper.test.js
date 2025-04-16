@@ -156,5 +156,30 @@ describe('DateTimeHelper', () => {
 
 
     });
+
+  test("isDatTimeWithinInterval works", () => {
+    const startDateTime = DateTime.fromObject({ year: 2024, month: 4, day: 10 }, { zone: "America/Detroit" });
+    const endDateTime = DateTime.fromObject({ year: 2024, month: 4, day: 15 }, { zone: "America/Detroit" });
+    const targetDateTime = DateTime.fromObject({ year: 2024, month: 4, day: 12 }, { zone: "America/Detroit" });
+    const result = DateTimeHelper.isDatTimeWithinInterval(targetDateTime, startDateTime, endDateTime);
+    expect(result).toBe(true);
+
+    // 2024-04-12 in Taipei timezone
+    // between 2024-04-10 and 2024-04-12 in Detroit timezone
+    const startDateTime2 = DateTime.fromObject({ year: 2024, month: 4, day: 10 }, { zone: "America/Detroit" }); 
+    const endDateTime2 = DateTime.fromObject({ year: 2024, month: 4, day: 12 }, { zone: "America/Detroit" });
+    const targetDateTime2 = DateTime.fromObject({ year: 2024, month: 4, day: 12 }, { zone: "Asia/Taipei" });
+    const result3 = DateTimeHelper.isDatTimeWithinInterval(targetDateTime2, startDateTime2, endDateTime2);
+    expect(result3).toBe(true);
+    
+    // 2024-04-12 in Detroit timezone
+    // between 2024-04-10 and 2024-04-12 in Taipei timezone
+    const startDateTime3 = DateTime.fromObject({ year: 2024, month: 4, day: 10 }, { zone: "Asia/Taipei" });
+    const endDateTime3 = DateTime.fromObject({ year: 2024, month: 4, day: 12 }, { zone: "Asia/Taipei" });
+    const targetDateTime3 = DateTime.fromObject({ year: 2024, month: 4, day: 12 }, { zone: "America/Detroit" });
+    const result4 = DateTimeHelper.isDatTimeWithinInterval(targetDateTime3, startDateTime3, endDateTime3);
+    expect(result4).toBe(false);
+    
+  });
 });
 

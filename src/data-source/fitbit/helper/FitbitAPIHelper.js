@@ -1,7 +1,7 @@
 // TO DO: use fetch instead of axios
 import axios from "axios";
 
-const basicToken = "***REMOVED***";
+const basicToken = process.env.FITBIT_AUTH_TOKEN;
 
 export default class FitbitAPIHelper {
 

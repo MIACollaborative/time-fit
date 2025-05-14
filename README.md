@@ -72,6 +72,7 @@ DATABASE_URL="mongodb://localhost:27017/walk_to_joy?readPreference=primary&appna
 TWILIO_ACCOUNT_SID=[twilio account id]
 TWILIO_AUTH_TOKEN=[twilio authentication token]
 FITBIT_SUBSCRIPTION_VERIFICATION_CODE=[fitbit subscription verification code]
+FITBIT_AUTH_TOKEN=[fitbit authentication token]
 RESEARCH_INVESTIGATOR_PHONE=[research investigator phone number for SMS]
 
 ```

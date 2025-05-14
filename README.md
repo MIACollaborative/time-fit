@@ -1,6 +1,6 @@
 # TimeFit
 
-A compact framework for constructing time-based Just-In-Time Adaptive Interventions that utilizes Fitbit data for intervention adaptation.
+A compact framework for constructing time-based Just-In-Time Adaptive Interventions (JITAIs) that utilizes Fitbit data for intervention adaptation.
 
 Note: This project is currently undergoing refactoring. A new release with demonstration application examples will be created when this is done.
 

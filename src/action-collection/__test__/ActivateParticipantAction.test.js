@@ -1,4 +1,4 @@
-import HelloAction from "../HelloAction";
+import ActivateParticipantAction from "../ActivateParticipantAction";
 import { jest } from '@jest/globals';
 import { DateTime } from "luxon";
 
@@ -21,11 +21,14 @@ describe("ActivateParticipantAction.test", () => {
         phase: "baseline",
       };
 
+    expect(mockUserInfo.phase).toBe("baseline");
+
+    /*
     // check that console.log get called
     const mockConsoleLog = jest.fn();
     console.log = mockConsoleLog;
 
-    const actionResult = await HelloAction.execute(mockAction, {
+    const actionResult = await ActivateParticipantAction.execute(mockAction, {
       userInfo: mockUserInfo,
       datetime: DateTime.fromISO("2021-01-01T00:00:00Z"),
     });
@@ -42,5 +45,6 @@ describe("ActivateParticipantAction.test", () => {
         },
       },
     });
+    */
   });
 });

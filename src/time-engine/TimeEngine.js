@@ -1,13 +1,15 @@
 import { DateTime } from "luxon";
 import TaskExecutor from "./TaskExecutor.js";
-import DatabaseHelper from "../helper/DatabaseHelper.js";
-
+import TaskHelper from "../helper/TaskHelper.js";
+import UserInfoHelper from "../helper/UserInfoHelper.js";
+import EventHelper from "../helper/EventHelper.js";
+import TaskLogHelper from "../helper/TaskLogHelper.js";
 export default class TimeEngine {
   static scheduler = undefined;
   static lastDate = undefined;
 
   static getUserListFunction = undefined;
-  static getTaskListFunction = DatabaseHelper.getTasksSortedByPriority;
+  static getTaskListFunction = TaskHelper.getTasksSortedByPriority;
   static insertEventFunction = undefined;
   static insertTaskLogListFunction = undefined;
   static checkPointPreferenceTimeStringExtractionFunction = undefined;
@@ -26,7 +28,7 @@ export default class TimeEngine {
 
   static async start() {
     // Register a function to get user list (so developers can decide whether user list needs to be retrieve every time or not)
-    TimeEngine.registerGetUserListFunction(DatabaseHelper.myGetUserList);
+    TimeEngine.registerGetUserListFunction(UserInfoHelper.myGetUserList);
     TimeEngine.registerCheckPointPreferenceTimeStringExtractionFunction((
       userInfo,
       checkPoint,
@@ -59,8 +61,8 @@ export default class TimeEngine {
       return userInfo[referenceTimePropertyName];
     });
     
-    TimeEngine.registerInsertEventFunction(DatabaseHelper.insertEvent);
-    TimeEngine.registerInsertTaskLogListFunction(DatabaseHelper.insertTaskLogList);
+    TimeEngine.registerInsertEventFunction(EventHelper.insertEvent);
+    TimeEngine.registerInsertTaskLogListFunction(TaskLogHelper.insertTaskLogList);
 
     if (!TimeEngine.scheduler) {
       TimeEngine.scheduler  =  setInterval(await TimeEngine.onInterval, 1 * 1000);

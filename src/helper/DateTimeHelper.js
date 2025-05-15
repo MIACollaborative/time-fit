@@ -15,16 +15,14 @@ export default class DateTimeHelper {
     return cronExpression.includesDate(date);
   }
 
-  static async isDateStringWithinInterval(
+  static isDateStringWithinInterval(
     dateString,
-    timezone,
-    startDate,
-    endDate
+    dateStringTimezone,
+    startDateTime,
+    endDateTime
   ) {
-    const targetDate = DateTime.fromISO(dateString, { zone: timezone });
-    const validInterval = Interval.fromDateTimes(startDate, endDate);
-    const result = validInterval.contains(targetDate);
-    return result;
+    const targetDateTime = DateTime.fromISO(dateString, { zone: dateStringTimezone });
+    return DateTimeHelper.isDatTimeWithinInterval(targetDateTime, startDateTime, endDateTime);
   }
 
   static isDatTimeWithinInterval(dateTime, startDateTime, endDateTime) {

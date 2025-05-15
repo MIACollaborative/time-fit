@@ -21,7 +21,7 @@ export default class FitbitAPIHelper {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       params: {
-        clientId: "23829X",
+        clientId: process.env.FITBIT_CLIENT_ID,
         grant_type: "authorization_code",
         redirect_uri: `${process.env.NEXTAUTH_URL}/fitbit-signin`,
         code: authCode,

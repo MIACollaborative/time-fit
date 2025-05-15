@@ -19,7 +19,7 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require("twilio")(accountSid, authToken);
 
-let authCode = "534f174f92c04ef197d1f7ac7c41923b3bff4fc8";
+let authCode = process.env.FITBIT_AUTH_CODE;
 
 axios({
   method: 'post',
@@ -28,11 +28,11 @@ axios({
   // `headers` are custom headers to be sent
   headers: {
     // now sure where this comes from?
-    'Authorization': 'Basic MjM4MjlYOjA0ZTIwYzZkY2U0YTg1MjcyZWJkOTljZjQ3M2UzODA5',
+    'Authorization': `Basic ${process.env.FITBIT_AUTH_TOKEN}`,
     'Content-Type':'application/x-www-form-urlencoded'
   },
   params: {
-    clientId: '23829X',
+    clientId: process.env.FITBIT_CLIENT_ID,
     grant_type: 'authorization_code',
     redirect_uri: `${process.env.NEXTAUTH_URL}/signin`,
     code: authCode

@@ -14,30 +14,6 @@ import FitbitHelper from "../lib/FitbitHelper.mjs";
 import { inspect } from 'util';
 import { Fragment } from "react";
 
-/*
-function replacer(key, value) {
-  if (typeof value === 'Date') {
-    return value.toString();
-  }
-  return value;
-}
-
-export const getServerSideProps = async ({ req }) => {
-  // const token = req.headers.AUTHORIZATION
-  // const userId = await getUserId(token)\
-
-  //const logs = await prisma.log.findMany();
-
-  //const logList = JSON.parse(JSON.stringify(logs, replacer));
-
-  return {
-    props : {  }
-  }
-}
-*/
-
-
-
 export async function getServerSideProps({ query }) {
   const { code, state } = query;
 

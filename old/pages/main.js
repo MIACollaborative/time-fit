@@ -244,7 +244,7 @@ export default function Main({
 
   //let state = `auth-walktojoy-${md5(session.user.name)}`;
 
-  // Tutorial example: https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=23829X&redirect_uri=https%3A%2F%2Fwalktojoy.info%2Ffitbit-signin&scope=activity%20heartrate%20profile%20settings&expires_in=604800
+  // Tutorial example: https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=${process.env.FITBIT_CLIENT_ID}&redirect_uri=https%3A%2F%2Fwalktojoy.info%2Ffitbit-signin&scope=activity%20heartrate%20profile%20settings&expires_in=604800
 
   // long: activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight
   // short: activity%20profile%20settings%20

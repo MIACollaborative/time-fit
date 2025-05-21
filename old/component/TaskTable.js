@@ -1,9 +1,3 @@
-
-/*
-import logger from "../lib/logger";
-
-*/
-
 import React, { useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -98,51 +92,3 @@ export default function TaskTable({ infoList, renderData }) {
     
   )
 }
-
-
-// extra
-
-/*
-const adminUsernameList = [
-  "test1",
-  "test2"
-];
-
-
-export async function getServerSideProps(ctx) {
-  
-  const session = await getSession(ctx);
-  console.log(
-    `main.getServerSideProps: session: ${JSON.stringify(session)}`
-  );
-
-  if(!session){
-    return {
-      props: {},
-    };
-  }
-
-  let userName = session.user.name;
-
-  
-  let responseList = [];
-  let responseInfoList = [];
-
-  if(adminUsernameList.includes(userName)){
-    responseList = await prisma.response.findMany({
-
-        orderBy: [
-            {
-              updatedAt: "desc",
-            },
-          ],
-        });
-      
-        responseInfoList = JSON.parse(JSON.stringify(responseList, replacer));
-    }
-    
-    return {
-      props: {responseInfoList},
-    };
-  }
-*/

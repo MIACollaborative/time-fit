@@ -30,21 +30,6 @@ let userList = await prisma.users.findMany({
 let userInfoList = JSON.parse(JSON.stringify(userList, replacer));
 
 
-/*
-const user = await prisma.users.findFirst({
-    where:{
-        username: "test1"
-    }
-})
-
-let userInfo = JSON.parse(JSON.stringify(user, replacer));
-*/
-
-// 2022.08.31 02:00 PM (EDT)
-//let dateTime = DateTime.fromJSDate(new Date(2022, 7, 31, 14, 0, 0));
-
-// let's create one task that has all the conditions
-
 let oneTask = {
     label: "Testing: all conditions with no action but logs",// we need to manually make sure that it is unique
     enabled: true,

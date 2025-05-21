@@ -4,10 +4,6 @@ import styles from "../styles/Home.module.css";
 import Layout from "../component/Layout";
 
 import TextField from "@mui/material/TextField";
-/*
-import logger from "../lib/logger";
-
-*/
 
 import { inspect } from "util";
 

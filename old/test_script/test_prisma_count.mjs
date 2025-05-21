@@ -10,30 +10,6 @@ if (process.env.NODE_ENV !== "production") {
     dotenv.config();
 }
 
-
-
-
 let username = "test1";
-
-// this gives you the number of taskLog that associated with this particular user.
-/*
-const usersWithCount = await prisma.users.findMany({
-    where: {
-        username: {
-            equals: username,
-        },
-    },
-    include: {
-      _count: {
-        select: { taskLogList: true },
-      },
-    },
-})
-*/
-
-
-
-
-
 
 console.log(`resultDict for ${username}: ${JSON.stringify(await DatabaseUtility.getUserMessageCountDict(username), null, 2)}`);

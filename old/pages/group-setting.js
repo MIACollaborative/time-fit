@@ -1,11 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-/*
-import logger from "../lib/logger";
-
-*/
-
 import { inspect } from 'util';
 
 import Link from 'next/link';
@@ -74,12 +69,6 @@ export default function GroupSetting({ userInfo }) {
     const [gif, setGif] = useState(userInfo.gif != undefined ? userInfo.gif : "");
     const [salience, setSalience] = useState(userInfo.salience != undefined ? userInfo.salience : "");
     const [modification, setModification] = useState(userInfo.modification != undefined ? userInfo.modification : "");
-
-    //logger.logToDB("main", {message: "test"});
-
-    //const [value1, setValue1] = useState('');
-    //const [value2, setValue2] = useState('');
-
 
 
     // status: enum mapping to three possible session states: "loading" | "authenticated" | "unauthenticated"

@@ -96,34 +96,6 @@ function readCSVAndInsert(fileName) {
 
             return {name: zoneName, offset: offset, offsetLabel: `GMT ${offset/60}`};
         });
-        
-
-        console.log(usResults);
-
-        /*
-        let convertedResults = results.map((result) => {
-            return {...result, 
-                gif: result.gif.toLowerCase() == "true",
-                salience: result.salience.toLowerCase() == "true",
-                modification: result.modification.toLowerCase() == "true",
-            }
-        });
-        */
-
-        //insertUsers(convertedResults);
-
-        /*
-        results = results
-        .filter((obj) => {
-          return obj.group != "";
-        })
-        .map((obj) => {
-          const { group, id, ...rest } = obj;
-          let label = `${group}_${id}`;
-          return { label, group, groupIndex: Number(id), ...rest };
-        });
-        */
-
       });
   }
 

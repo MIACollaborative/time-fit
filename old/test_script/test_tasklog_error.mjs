@@ -36,11 +36,6 @@ let taskLogFailedBecuaseTokenList = taskLogFailedList.filter((taskLog) => {
     return v.includes(taskLog.executionResult.value.errorMessage, "Refresh token invalid");
 });
 
-/*
-console.log(
-    `taskLogFailedBecuaseTokenList.length: ${taskLogFailedList.length}`
-);
-*/
 
 let failedTokenListList = taskLogFailedList.map((taskLog) => {
     let errorLogStringList = v.replaceAll(v.replaceAll(taskLog.executionResult.value.errorMessage, "\n", ""), "'", "\"").split("-");

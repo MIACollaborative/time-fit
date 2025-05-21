@@ -1,9 +1,3 @@
-
-/*
-import logger from "../lib/logger";
-
-*/
-
 import React, { useState, Fragment } from 'react';
 import { Button } from '@mui/material';
 import { DateTime } from "luxon";

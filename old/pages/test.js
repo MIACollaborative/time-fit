@@ -2,10 +2,6 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import Layout from '../component/Layout';
-/*
-import logger from "../lib/logger";
-
-*/
 
 import { Button } from "@mui/material";
 
@@ -172,9 +168,3 @@ export default function Dashboard({ userInfo, assetHostURL }) {
         </Layout>
     );
 }
-
-/*
-{tabName == "Task Log By User" ? (
-  <TaskLogGroupByTable infoList={taskLogGroupByInfoList} renderData={!notRenderingList.includes(tabName)} />
-) : null}
-*/

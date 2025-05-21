@@ -1,10 +1,4 @@
 import Layout from '../component/Layout';
-/*
-import logger from "../lib/logger";
-
-*/
-
-
 import { toast } from "react-toastify";
 
 import { Button } from "@mui/material";
@@ -148,11 +142,6 @@ export default function Main({
 
   console.log(`Main.userInfo: ${JSON.stringify(userInfo)}`);
 
-  //logger.logToDB("main", {message: "test"});
-
-  //const [value1, setValue1] = useState('');
-  //const [value2, setValue2] = useState('');
-
   // status: enum mapping to three possible session states: "loading" | "authenticated" | "unauthenticated"
   if (status == "loading") return <div>loading...</div>;
 
@@ -225,13 +214,6 @@ export default function Main({
     router.push("/save-walktojoy-to-contacts");
     return null;
   }
-  /*
-  else if(!isBaselineSurveyCompleted){
-    // baselineSurveyLink
-    return <div>Baseline survey is not completed</div>;
-    return null;
-  }
-  */
 
 
 
@@ -239,21 +221,8 @@ export default function Main({
   console.log(`session: ${JSON.stringify(session)}`);
 
   console.log(`introspectResult: ${JSON.stringify(introspectResult)}`);
-  // username=${session.user.username}
-  //let redirectURL = `${hostURL}/fitbit-signin`;
-
-  //let state = `auth-walktojoy-${md5(session.user.name)}`;
-
-  // Tutorial example: https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=${process.env.FITBIT_CLIENT_ID}&redirect_uri=https%3A%2F%2Fwalktojoy.info%2Ffitbit-signin&scope=activity%20heartrate%20profile%20settings&expires_in=604800
-
-  // long: activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight
-  // short: activity%20profile%20settings%20
-
 
   const fitbitAuthorizeLink = "/fitbit-authorize";
-
-
-  // https://umich.qualtrics.com/jfe/form/SV_81aWO5sJPDhGZNA?study_code=test4
   const baselineSurveyLink = `https://umich.qualtrics.com/jfe/form/SV_81aWO5sJPDhGZNA?study_code=${userInfo.username}`;
 
 
@@ -468,71 +437,3 @@ export default function Main({
 
   );
 }
-
-// style={{ width: "100%" }} color={GeneralUtility.doesFitbitInfoExist(userInfo)? "success":"primary"}
-
-// style={{ width: "100%" }} color={isBaselineSurveyCompleted? "success":"primary"}
-
-/*
-{displaySetting == "all" ||
-!GeneralUtility.isPreferredNameSet(userInfo) ? (
-  <Fragment>
-    <Link href={"/info-edit"}>
-      <Button variant="contained" style={{ width: "100%" }}>
-        Personalize your Experience
-      </Button>
-    </Link>
-    <br />
-    <br />
-  </Fragment>
-) : null}
-
-*/
-
-/*
-          <Fragment>
-              <Link href={"/time-setting"}>
-                <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.isWakeBedTimeSet(userInfo)? "success":"primary"}>
-                  Personalize your Experience
-                </Button>
-              </Link>
-              <br />
-              <br />
-          </Fragment>
-          <Fragment>
-              <Link href={baselineSurveyLink}>
-                <Button variant="contained" style={{ width: "100%" }} color={isBaselineSurveyCompleted? "success":"primary"}>
-                  Complete the Baseline Survey
-                </Button>
-              </Link>
-              <br />
-              <br />
-          </Fragment>
-          <Fragment>
-            <Link href={fitbitSignInLink}>
-              <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.doesFitbitInfoExist(userInfo)? "success":"primary"}>
-                Authorize your Fitbit
-              </Button>
-            </Link>
-            <br />
-            <br />
-          </Fragment>
-          <Fragment>
-            <Link href={'/turn-off-fitbit-reminder'}>
-              <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.isFitbitReminderTurnOff(userInfo)? "success":"primary"}>
-                Turn off Fitbit reminders to move
-              </Button>
-            </Link>
-            <br />
-            <br />
-          </Fragment>
-          <Fragment>
-            <Link href={'/save-walktojoy-to-contacts'}>
-              <Button variant="contained" style={{ width: "100%" }} color={GeneralUtility.isWalkToJoySaveToContacts(userInfo)? "success":"primary"}>
-                Save WalkToJoy to your Contacts
-              </Button>
-            </Link>
-            <br />
-            <br />
-          </Fragment>
-*/

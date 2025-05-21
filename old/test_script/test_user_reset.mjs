@@ -7,10 +7,6 @@ if (process.env.NODE_ENV !== "production") {
     dotenv.config();
 }
 
-
-// insert the fake subscription first
-//const deleteSubs = await prisma.fitbit_subscription.deleteMany({});
-
 async function resetUser(username) {
     let deleteValue = {
         unset: true,

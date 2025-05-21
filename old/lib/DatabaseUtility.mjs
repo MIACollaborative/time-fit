@@ -139,24 +139,6 @@ export default class DatabaseUtility {
             result.surveyReplaced = true;
         }
 
-        // move down to support parameters
-        /*
-        if( result.message.includes("[fitbit_wearing_days_since_join]")){
-            console.log(`DatabaseUtility.replacePlaceholderFromMessage found [fitbit_wearing_days_since_join]`);
-            let now = DateTime.now();
-
-            let startDateTime = GeneralUtility.generateStartOrEndDateTimeByReference(now, userInfo, {reference: "joinAtDate", offset: {value: {minutes: 0}, type: "plus"}}, "start");
-
-            let endDateTime = GeneralUtility.generateStartOrEndDateTimeByReference(now, userInfo, {reference: "now", offset: {value: {minutes: 0}, type: "plus"}}, "end");
-
-            let minsList = await DatabaseUtility.getUserFitbitWearingMinutesPerDayListDuringPeriod(userInfo.fitbitId, startDateTime, endDateTime);
-            let resultList = minsList.map(x => {return x >= wearingLowerBoundMinutes;});
-
-            result.message = voca.replaceAll(result.message, '[fitbit_wearing_days_since_join]', resultList.length); 
-            result.surveyReplaced = true;
-        }
-        */
-
         // this should be generalized, but will deal with it as a special case for now
         let matchList = GeneralUtility.matchSqureBracketPlaceholder(result.message);
 
@@ -397,13 +379,6 @@ export default class DatabaseUtility {
 
 
         let pickedMessage = messageList[randomIndex];
-
-        //console.log(`DatabaseUtility.findMessageByGroup pickedMessage: ${JSON.stringify(pickedMessage)}`);
-
-
-
-        // To Do: support avoidHistory
-
 
 
         return pickedMessage;
@@ -691,21 +666,6 @@ export default class DatabaseUtility {
         //console.log(`${this.name} getUserFitbitWearingDaysDuringPeriod resultList: ${resultList}`);
 
         return minsList;
-
-        /*
-        let result = resultList.filter(x => x).length;
-
-        return result;
-
-        if( wearingDayLowerBoundCount == undefined){
-            // require all days in range
-            result = GeneralUtility.reduceBooleanArray(resultList, resultAggregator);
-        }
-        else {
-            // having wearingDayLowerBoundCount will ignore resultAggregator 
-            result = resultList.filter(x => x).length >= wearingDayLowerBoundCount; // GeneralUtility.reduceBooleanArray(resultList, resultAggregator);
-        }
-        */
     }
 
     static async getUserFitbitHeartRateIntradayMinutesByIdAndDate(fitbitId, startDateTime){

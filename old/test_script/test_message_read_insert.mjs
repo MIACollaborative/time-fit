@@ -64,10 +64,3 @@ function readAndInsertMessage() {
 
 const deleteMessages = await prisma.message.deleteMany({})
 readAndInsertMessage();
-
-//readCSV("./content/Study Messages - GIF Morning.csv");
-//readCSV("./content/Study Messages - GIF Afternoon.csv");
-//readCSV("./content/Study Messages - Non-GIF Morning.csv");
-//readCSV("./content/Study Messages - Non-GIF Afternoon.csv");
-//readCSV("./content/Study Messages - Morning Salience (Editing).csv");
-//readCSV("./content/Study Messages - Notifications (Editing).csv");

@@ -1,12 +1,6 @@
 import Layout from "../component/Layout";
 import md5 from "md5";
-
 import TextField from "@mui/material/TextField";
-/*
-import logger from "../lib/logger";
-
-*/
-
 import GeneralUtility from "../lib/GeneralUtility.mjs";
 
 import Link from "next/link";
@@ -57,8 +51,6 @@ export default function FitbitAuthorize({ userInfo, hostURL }) {
 
   console.log(`FitbitAuthorize.userInfo: ${JSON.stringify(userInfo)}`);
 
-
-  // status: enum mapping to three possible session states: "loading" | "authenticated" | "unauthenticated"
   if (status == "loading") return <div>loading...</div>;
 
   if (!session) {
@@ -105,8 +97,3 @@ export default function FitbitAuthorize({ userInfo, hostURL }) {
     </Layout>
   );
 }
-
-
-/*
-<Button variant="contained" style={{ width: "100%" }} onClick={onSaveClick} >Save</Button>
-*/

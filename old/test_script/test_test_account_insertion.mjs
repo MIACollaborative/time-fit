@@ -63,15 +63,4 @@ timer(initialDelay, interval).pipe(
 
   insertUser(newStudyCodeObj);
 
-
-  /*
-  ServerService.submitOrReplaceInTable("study_code", newStudyCodeObj, false)
-  .then(response => {
-    console.log(`Successfully insert [${newStudyCodeObj.note}]: ${newStudyCodeObj.code}`);
-  })
-  .catch(error => console.error(error))
-  .finally();
-  */
-
-
 });

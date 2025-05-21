@@ -81,13 +81,3 @@ let taskCompositeResultList = await TaskExecutor.executeTaskForUserListForDateti
 
 console.log(`taskCompositeResultList: ${JSON.stringify(taskCompositeResultList)}`);
 
-/*
-if(taskCompositeResultList.length > 0){
-    let insertResult = await prisma.taskLog.createMany({
-        data: taskCompositeResultList
-    });
-    console.log(`insertResult: ${JSON.stringify(insertResult)}`);
-}
-*/
-
-

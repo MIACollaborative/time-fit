@@ -8,14 +8,6 @@ export default function Signout() {
 
     const router = useRouter();
 
-    /*
-    if (!session) {
-        router.push("/");
-        return null;
-    }
-    */
-
-
     return (
         <Layout title={"Walk To Joy"} description={""}>
             <Button 

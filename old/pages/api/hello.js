@@ -1,4 +1,3 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import GeneralUtility from "../../lib/GeneralUtility.mjs";
 
 export default function handler(req, res) {

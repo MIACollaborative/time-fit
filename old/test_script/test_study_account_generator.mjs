@@ -61,27 +61,6 @@ async function writeToCSV(resultList, outputFileName) {
   writer.end();
 }
 
-
-/*
-for(let i = 17; i < 18; i++){
-  let studyCode = `participant${i}`;
-  let hashStudyCode = md5(studyCode);
-  console.log(`[${studyCode}]: ${hashStudyCode}`);
-
-  let newStudyCodeObj = {
-    code: hashStudyCode,
-    note: studyCode
-  };
-
-  ServerService.submitOrReplaceInTable("study_code", newStudyCodeObj, false)
-    .then(response => {
-      console.log(`Successfully insert [${studyCode}]: ${hashStudyCode}`);
-    })
-    .catch(error => console.error(error))
-    .finally();
-}
-*/
-
 function generateGroupAssignmentList(populationSize) {
   console.log(`generateGroupAssignmentList for ${populationSize} participants`);
   let gList = [];
@@ -124,10 +103,6 @@ const saltRounds = 10;
 
 for (let i = startIndex; i < endIndex; i++) {
   let username = `${prefix}${i}`;
-
-  //let hashStudyCode = md5(studyCode);
-  // cryptoRandomString({length: 10, type: 'alphanumeric'});
-  // let hashStudyCode = cryptoRandomString({length: 8, characters: 'ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789'});
   let password = cryptoRandomString({ length: 8, characters: 'abcdefghijkmnpqrstuvwxyz023456789' });
 
   let passwordHash = await bcrypt.hash(password, saltRounds).then((hashPassword) => {

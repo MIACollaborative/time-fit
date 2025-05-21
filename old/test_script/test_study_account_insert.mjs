@@ -11,18 +11,6 @@ import { DateTime } from "luxon";
 import csv from "csv-parser";
 import path from "path";
 
-/*
-async function deleteAccountWithPrefix(prefix){
-  const deleteUsers = await prisma.users.deleteMany({
-    where: {
-      username: {
-        contains: prefix,
-      },
-    },
-  })
-}
-*/
-
 async function insertUser(newStudyCodeObj) {
   const { username, ...rest } = newStudyCodeObj;
 
@@ -87,23 +75,9 @@ function readCSVAndInsert(fileName) {
         });
 
         insertUsers(convertedResults);
-
-        /*
-        results = results
-        .filter((obj) => {
-          return obj.group != "";
-        })
-        .map((obj) => {
-          const { group, id, ...rest } = obj;
-          let label = `${group}_${id}`;
-          return { label, group, groupIndex: Number(id), ...rest };
-        });
-        */
-
       });
   }
 
 let fileName = "test_output/participant_20221202T134212.525.csv";
 
-//deleteAccountWithPrefix("participant");
 readCSVAndInsert(fileName);

@@ -17,25 +17,7 @@ if (process.env.NODE_ENV !== "production") {
     dotenv.config();
 }
 
-/*
-let recordList = await prisma.fitbit_update.findMany({
-    take: 3,
-    orderBy: [
-        {
-            createdAt: 'desc',
-        }
-    ]
-});
-*/
-
 let userList = await prisma.users.findMany({
-    /*
-    where: {
-        username: {
-          contains: "participant11",
-        },
-    },
-    */
 });
 
 

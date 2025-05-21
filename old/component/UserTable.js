@@ -1,9 +1,3 @@
-
-/*
-import logger from "../lib/logger";
-
-*/
-
 import React, { useState } from 'react';
 import { DateTime, Interval } from "luxon";
 import Table from '@mui/material/Table';
@@ -155,51 +149,3 @@ export default function UserTable({ infoList, userInfo, hostURL, renderData }) {
     </Fragment>
   )
 }
-
-
-// extra
-
-/*
-const adminUsernameList = [
-  "test1",
-  "test2"
-];
-
-
-export async function getServerSideProps(ctx) {
-  
-  const session = await getSession(ctx);
-  console.log(
-    `main.getServerSideProps: session: ${JSON.stringify(session)}`
-  );
-
-  if(!session){
-    return {
-      props: {},
-    };
-  }
-
-  let userName = session.user.name;
-
-  
-  let responseList = [];
-  let responseInfoList = [];
-
-  if(adminUsernameList.includes(userName)){
-    responseList = await prisma.response.findMany({
-
-        orderBy: [
-            {
-              updatedAt: "desc",
-            },
-          ],
-        });
-      
-        responseInfoList = JSON.parse(JSON.stringify(responseList, replacer));
-    }
-    
-    return {
-      props: {responseInfoList},
-    };
-  }
-*/

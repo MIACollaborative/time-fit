@@ -17,18 +17,6 @@ if (process.env.NODE_ENV !== "production") {
     dotenv.config();
 }
 
-/*
-let recordList = await prisma.fitbit_update.findMany({
-    take: 3,
-    orderBy: [
-        {
-            createdAt: 'desc',
-        }
-    ]
-});
-*/
-
-
 
 
 let recordList = [
@@ -75,22 +63,6 @@ let recordList = [
 
 for(let i = 0; i < recordList.length; i++){
     let fitbitUpdate = recordList[i];
-
-    /*
-    let aUser = await prisma.users.findFirst({
-        where: {
-            username: "test1"
-        }
-    });
-    
-    let userInfo = JSON.parse(JSON.stringify(aUser, replacer));
-
-
-    let dateString = fitbitUpdate.date;
-    let targetDate = GeneralUtility.getLocalTime(DateTime.fromISO(dateString), userInfo.timezone);
-
-    console.log(`targetDate: [${targetDate}]--------------`);
-    */
     console.log(`[${fitbitUpdate.ownerId}][${fitbitUpdate.date}] ----------------------------------------`);
     let result = await DatabaseUtility.isFitbitUpdateDateWithinAppropriateScope(fitbitUpdate);
     console.log(`${fitbitUpdate.ownerId} - ${fitbitUpdate.date}: shouldUpdate? ${result}`);

@@ -53,16 +53,6 @@ nodeCron.schedule(theExpression.expression, async () => {
   console.log(`execute cron event generation task ${theExpression.label} at ${now}`);
   const t1 = process.hrtime();
 
-  // for testing: 2022-09-19 08:00 PM 000 milliseconds
-  //let now = new Date(2023, 5, 16, 10, 0, 1); //EDT/EST
-  
-  
-  // for real
-  //let now = DateTime.now().toJSDate();
-
-  // ensure that the lasteDate is not the same as now at the minute level
-  //console.log(`lasteDate (before): ${lastDate}`);
-
   if(lastDate !== undefined){
       const lastDateMinute = DateTime.fromJSDate(lastDate).startOf("minute").toJSDate();
       const nowMinute = DateTime.fromJSDate(now).startOf("minute").toJSDate();

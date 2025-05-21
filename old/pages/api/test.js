@@ -23,8 +23,6 @@ export default async function handler(req, res) {
         return
     }
 
-    // Signed in
-    // console.log("Session", JSON.stringify(session, null, 2))
 
     let userName = session.user.name;
 

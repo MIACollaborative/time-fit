@@ -5,8 +5,6 @@ import GeneralUtility from "../lib/GeneralUtility.mjs";
 import DatabaseUtility from "../lib/DatabaseUtility.mjs";
 
 
-
-
 if (process.env.NODE_ENV !== "production") {
   dotenv.config();
 }

@@ -6,10 +6,6 @@ import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
-/*
-import logger from "../lib/logger";
-
-*/
 
 import { inspect } from 'util';
 import GeneralUtility from "../lib/GeneralUtility.mjs";
@@ -80,11 +76,6 @@ export default function TimeSetting({ userInfo }) {
     let nowDateTime = DateTime.now();
 
     const [zoneName, setZoneName] = useState(userInfo.timezone != undefined ? userInfo.timezone : nowDateTime.zoneName);
-    //logger.logToDB("main", {message: "test"});
-
-    //const [value1, setValue1] = useState('');
-    //const [value2, setValue2] = useState('');
-
 
 
     // status: enum mapping to three possible session states: "loading" | "authenticated" | "unauthenticated"

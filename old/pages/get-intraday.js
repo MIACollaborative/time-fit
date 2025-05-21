@@ -1,8 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-
-//import logger from "../lib/logger";
 import prisma from '../lib/prisma';
 
 
@@ -19,7 +17,6 @@ const { DateTime } = require("luxon");
 
 export async function getServerSideProps(ctx) {
     const session = await getSession(ctx);
-  //const { encodedId, accessToken, dateTimeStr } = query;
 
   const user = await prisma.users.findFirst({
     where: { username: session.user.name },
@@ -147,87 +144,3 @@ export default function GetActivitySummary({result, dateString}) {
     </div>
   );
 }
-
-/*
-
-<div>Please do not share your participant ID and token with others.</div>
-
-<div>Participant ID</div>
-        <InputText value={value1} placeholder={"Enter your participant ID"} onChange={(e) => setValue1(e.target.value)} />
-        <Password value={value2} placeholder={"Enter your 8-digit token"} feedback={false} onChange={(e) => setValue2(e.target.value)} toggleMask />
-*/
-
-/*
-<div>
-{
-  logList.map((log, index) => {
-    return <div key={index}>
-      <div>{log.type}</div>
-      <div>{log.createdAt}</div>
-      <div>{JSON.stringify(log.content)}</div>
-    </div>;
-  })
-}
-</div>
-*/
-
-/*
-      <footer className={styles.footer}>
-        <div>
-          WalkToJoy Study
-        </div>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <div>School of Information</div>
-        <div>University of Michigan</div>
-          
-        </a>
-      </footer>
-
-
-Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-
-
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-
-<div className={styles.grid}>
-<a href="https://nextjs.org/docs" className={styles.card}>
-  <h2>Documentation &rarr;</h2>
-  <p>Find in-depth information about Next.js features and API.</p>
-</a>
-
-<a href="https://nextjs.org/learn" className={styles.card}>
-  <h2>Learn &rarr;</h2>
-  <p>Learn about Next.js in an interactive course with quizzes!</p>
-</a>
-
-<a
-  href="https://github.com/vercel/next.js/tree/canary/examples"
-  className={styles.card}
->
-  <h2>Examples &rarr;</h2>
-  <p>Discover and deploy boilerplate example Next.js projects.</p>
-</a>
-
-<a
-  href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-  className={styles.card}
->
-  <h2>Deploy &rarr;</h2>
-  <p>
-    Instantly deploy your Next.js site to a public URL with Vercel.
-  </p>
-</a>
-</div>
-*/

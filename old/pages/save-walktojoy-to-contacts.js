@@ -4,10 +4,6 @@ import styles from "../styles/Home.module.css";
 import Layout from "../component/Layout";
 
 import TextField from "@mui/material/TextField";
-/*
-import logger from "../lib/logger";
-
-*/
 
 import { inspect } from "util";
 
@@ -55,15 +51,6 @@ export async function getServerSideProps(ctx) {
 export default function TurnOffFitbitReminder({ userInfo }) {
   const { data: session, status } = useSession();
   const router = useRouter();
-
-  /*
-  const [preferredName, setPreferredName] = useState(
-    userInfo.preferredName != undefined ? userInfo.preferredName : ""
-  );
-  const [phone, setPhone] = useState(
-    userInfo.phone != undefined ? userInfo.phone : ""
-  );
-  */
 
   // status: enum mapping to three possible session states: "loading" | "authenticated" | "unauthenticated"
   if (status == "loading") return <div>loading...</div>;
@@ -153,12 +140,3 @@ export default function TurnOffFitbitReminder({ userInfo }) {
       </Layout>
   );
 }
-
-/* 
-<div style="display: none;">
-<div>1. Create a new contact on your phone foor the phoone number your received from teh WalkToJoy study.</div>
-<div>2. Save the number as "WalkToJoy."</div>
-<br />
-<br />
-</div>
-*/

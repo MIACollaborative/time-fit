@@ -20,16 +20,6 @@ let userList = await prisma.users.findMany({
 
 let userInfoList = JSON.parse(JSON.stringify(userList, replacer));
 
-/*
-let userInfo = await prisma.users.findFirst({
-    where: {
-        username: "test1"
-    }
-});
-
-userInfo = JSON.parse(JSON.stringify(userInfo, replacer));
-*/
-
 let referenceDateStr = "today";
 
 let sampleConditionObj = {
@@ -122,12 +112,6 @@ let sampleConditionObj = {
     ]
 };
 
-// checkOneConditionForUser(condition, userInfo, dateTime)
-
-
-
-
-//let result = await TaskExecutor.checkOneConditionForUser(sampleCondition, userInfo, DateTime.utc());
 
 let checkResultList = [];
 
@@ -146,13 +130,3 @@ for (let i = 0; i < checkResultList.length; i++) {
     console.log(`[Test Record]: ${checkResult} -  ${JSON.stringify(conditionEvaluationRecordList, null, 2)}`);
 
 }
-
-/*
-for (let i = 0; i < userInfoList.length; i++) {
-    let userInfo = userInfoList[i];
-    let checkResult = checkResultList[i];
-
-    console.log(`[Test] for ${userInfo.username}: result: ${checkResult}`);
-
-}
-*/

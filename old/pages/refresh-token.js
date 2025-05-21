@@ -1,9 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-//import logger from "../lib/logger";
-//import prisma from '../lib/prisma';
-
 import prisma from "../lib/prisma";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -15,49 +12,6 @@ import FitbitHelper from "../lib/FitbitHelper.mjs";
 import { inspect } from 'util';
 
 const { DateTime } = require("luxon");
-//import pkg from 'luxon';
-//const {DataTime} = pkg;
-
-/*
-function replacer(key, value) {
-  if (typeof value === 'Date') {
-    return value.toString();
-  }
-  return value;
-}
-*/
-
-/*
-
-
-
-
-
-
-async function updateFitbitProfile(hashCode, fitbitId, fitbitDisplayName, fitbitFullName) {
-  console.log(`updateFitbitId, hashCode: ${hashCode}`);
-  console.log(`updateFitbitId, fitbitId: ${fitbitId}`);
-  console.log(`updateFitbitId, fitbitDisplayName: ${fitbitDisplayName}`);
-  console.log(`updateFitbitId, fitbitFullName: ${fitbitFullName}`);
-
-  const firstUser = await prisma.users.findFirst({
-    where: { hash: hashCode },
-  });
-
-  console.log(`firstUser: ${JSON.stringify(firstUser)}`);
-
-  const updateUser = await prisma.users.update({
-    where: { username: firstUser.username },
-    data: {
-      fitbitId: fitbitId,
-      fitbitDisplayName: fitbitDisplayName,
-      fitbitFullName: fitbitFullName
-    },
-  });
-
-  console.log(`updateUser: ${JSON.stringify(updateUser)}`);
-}
-*/
 
 
 function avoidCircular(obj) {
@@ -133,23 +87,6 @@ export async function getServerSideProps(ctx) {
                 )}`
             );
 
-            /*
-            if(responseData.status == 400){
-                // cannot auth: Bad Request
-                // I supposed this mean we need to authenticate again
-            }
-            */
-
-
-            /*
-            {
-              "access_token": "eyJhbGciOiJIUzI1...",
-              "expires_in": 28800,
-              "refresh_token": "c643a63c072f0f05478e9d18b991db80ef6061e...",
-              "token_type": "Bearer",
-              "user_id": "GGNJL9"
-            }
-            */
 
             let newAccessToken = responseData.access_token;
 
@@ -252,87 +189,3 @@ export default function RefreshToken({ result }) {
         </div>
     );
 }
-
-/*
-
-<div>Please do not share your participant ID and token with others.</div>
-
-<div>Participant ID</div>
-        <InputText value={value1} placeholder={"Enter your participant ID"} onChange={(e) => setValue1(e.target.value)} />
-        <Password value={value2} placeholder={"Enter your 8-digit token"} feedback={false} onChange={(e) => setValue2(e.target.value)} toggleMask />
-*/
-
-/*
-<div>
-{
-  logList.map((log, index) => {
-    return <div key={index}>
-      <div>{log.type}</div>
-      <div>{log.createdAt}</div>
-      <div>{JSON.stringify(log.content)}</div>
-    </div>;
-  })
-}
-</div>
-*/
-
-/*
-      <footer className={styles.footer}>
-        <div>
-          WalkToJoy Study
-        </div>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <div>School of Information</div>
-        <div>University of Michigan</div>
-          
-        </a>
-      </footer>
-
-
-Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-
-
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-
-<div className={styles.grid}>
-<a href="https://nextjs.org/docs" className={styles.card}>
-  <h2>Documentation &rarr;</h2>
-  <p>Find in-depth information about Next.js features and API.</p>
-</a>
-
-<a href="https://nextjs.org/learn" className={styles.card}>
-  <h2>Learn &rarr;</h2>
-  <p>Learn about Next.js in an interactive course with quizzes!</p>
-</a>
-
-<a
-  href="https://github.com/vercel/next.js/tree/canary/examples"
-  className={styles.card}
->
-  <h2>Examples &rarr;</h2>
-  <p>Discover and deploy boilerplate example Next.js projects.</p>
-</a>
-
-<a
-  href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-  className={styles.card}
->
-  <h2>Deploy &rarr;</h2>
-  <p>
-    Instantly deploy your Next.js site to a public URL with Vercel.
-  </p>
-</a>
-</div>
-*/

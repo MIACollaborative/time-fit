@@ -4,8 +4,6 @@ import MongoDBHelper from "../utilities/MongoDBHelper.mjs";
 
 const databaseName = "walk_to_joy";
 
-//const mHelper = new MongoDBHelper();
-
 MongoDBHelper.getData(databaseName, "logs").then((response) => {
   var writer = csvWriter({ sendHeaders: true });
   writer.pipe(fs.createWriteStream("./test_output.csv"));

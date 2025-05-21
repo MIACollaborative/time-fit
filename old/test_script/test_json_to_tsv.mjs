@@ -18734,5 +18734,3 @@ fs.writeFile(`./test_output/json_to_csv_${dateString}.tsv`, csvString, function(
     console.log("The file was saved!");
 }); 
 
-// Or
-//fs.writeFileSync('/tmp/test-sync', 'Hey there!');

@@ -32,24 +32,6 @@ export default class MyHelper {
                       )}`
                   );
       
-                  /*
-                  if(responseData.status == 400){
-                      // cannot auth: Bad Request
-                      // I supposed this mean we need to authenticate again
-                  }
-                  */
-      
-      
-                  /*
-                  {
-                    "access_token": "eyJhbGciOiJIUzI1...",
-                    "expires_in": 28800,
-                    "refresh_token": "c643a63c072f0f05478e9d18b991db80ef6061e...",
-                    "token_type": "Bearer",
-                    "user_id": "GGNJL9"
-                  }
-                  */
-      
                   let newAccessToken = refreshData.access_token;
       
                   // If you followed the Authorization Code Flow, you were issued a refresh token. You can use your refresh token to get a new access token in case the one that you currently have has expired. Enter or paste your refresh token below. Also make sure you enteryour data in section 1 and 3 since it's used to refresh your access token.

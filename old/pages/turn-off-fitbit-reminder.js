@@ -4,10 +4,6 @@ import styles from "../styles/Home.module.css";
 import Layout from "../component/Layout";
 
 import TextField from "@mui/material/TextField";
-/*
-import logger from "../lib/logger";
-
-*/
 
 import { inspect } from "util";
 
@@ -56,15 +52,6 @@ export async function getServerSideProps(ctx) {
 export default function TurnOffFitbitReminder({ userInfo }) {
   const { data: session, status } = useSession();
   const router = useRouter();
-
-  /*
-  const [preferredName, setPreferredName] = useState(
-    userInfo.preferredName != undefined ? userInfo.preferredName : ""
-  );
-  const [phone, setPhone] = useState(
-    userInfo.phone != undefined ? userInfo.phone : ""
-  );
-  */
 
   // status: enum mapping to three possible session states: "loading" | "authenticated" | "unauthenticated"
   if (status == "loading") return <div>loading...</div>;
@@ -156,17 +143,3 @@ export default function TurnOffFitbitReminder({ userInfo }) {
     </Layout>
   );
 }
-
-/*
-<div style="width: 100%; display: block;">
-<Image src={'/image/svg/turn-off-fitbit-reminders.svg'} alt="Reminder note" layout="responsive" />
-</div>
-*/
-
-/*
-<div style="display:none;">
-<div>1. Open your Fitbit app on your phone.</div>
-<div>2. Open the Today tab, (icon) tap the hourly activity tile.</div>
-<div>3. Tap the gear icon, (icon) turn Reminders to move off.</div>
-</div>
-*/

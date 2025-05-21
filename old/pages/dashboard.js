@@ -2,15 +2,8 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import Layout from '../component/Layout';
-/*
-import logger from "../lib/logger";
-
-*/
-
 import { Button } from "@mui/material";
-
 import { inspect } from "util";
-
 import Link from "next/link";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -122,46 +115,6 @@ export async function getServerSideProps(ctx) {
     gte: nowDate.minus({ weeks: 2 }).startOf("day").toISO(),
     lte: nowDate.toISO()
   };
-  /*
-  createdAt: {
-    gte: startDate.toISO(),
-    lte: endDate.toISO()
-  }
-  */
-
-  /*
-  console.log(`dashboard.getServerSideProps: find userList`);
-  if (adminUsernameList.includes(userName)) {
-    userList = await prisma.users.findMany({
-      orderBy: [
-        {
-          createdAt: "asc",
-        },
-      ],
-      //take: queryLimit
-    });
-
-    userInfoList = JSON.parse(JSON.stringify(userList, replacer));
-  }
-  */
-
-  /*
-  console.log(`dashboard.getServerSideProps: find responseList`);
-  if (adminUsernameList.includes(userName)) {
-    responseList = await prisma.response.findMany({
-
-      orderBy: [
-        {
-          updatedAt: "desc",
-        },
-
-      ],
-      //take: queryLimit
-    });
-
-    responseInfoList = JSON.parse(JSON.stringify(responseList, replacer));
-  }
-  */
 
   console.log(`dashboard.getServerSideProps: find fitbitSubscriptionList`);
   if (adminUsernameList.includes(userName)) {
@@ -187,76 +140,6 @@ export async function getServerSideProps(ctx) {
     }
   }
 
-
-  /*
-  console.log(`dashboard.getServerSideProps: find fitbitNotificationList`);
-  if (adminUsernameList.includes(userName)) {
-    // v2: try filter
-    fitbitNotificationList = await prisma.fitbit_update.findMany({
-      where: {
-        createdAt: sevenDaysConstraint
-      },
-      orderBy: [
-        {
-          //date: "desc",
-          createdAt: "desc",
-        },
-      ],
-      //take: queryLimit * 2
-    });
-    fitbitNotificationInfoList = JSON.parse(JSON.stringify(fitbitNotificationList, replacer));
-  }
-  */
-
-  /*
-  console.log(`dashboard.getServerSideProps: find fitbitDataList`);
-  if (adminUsernameList.includes(userName)) {
-    fitbitDataList = await prisma.fitbit_data.findMany({
-      where: {
-        createdAt: sevenDaysConstraint
-      },
-      include: {
-        owner: true,
-      },
-      orderBy: [
-        {
-          updatedAt: "desc",
-        }
-      ],
-      //take: queryLimit
-    });
-
-    if (fitbitDataList) {
-      // Process the retrieved subscriptions
-      fitbitDataInfoList = JSON.parse(JSON.stringify(fitbitDataList, replacer));
-    } else {
-      // Handle the case when no subscriptions are found
-      // ...
-    }
-
-
-  }
-  */
-
-  /*
-  console.log(`dashboard.getServerSideProps: find updateDiffList`);
-  if (adminUsernameList.includes(userName)) {
-    updateDiffList = await prisma.update_diff.findMany({
-      where: {
-        createdAt: sevenDaysConstraint
-      },
-      orderBy: [
-        {
-          createdAt: "desc",
-        },
-      ],
-      //take: queryLimit
-    });
-
-    updateDiffInfoList = JSON.parse(JSON.stringify(updateDiffList, replacer));
-  }
-  */
-
   console.log(`dashboard.getServerSideProps: find taskList`);
   if (adminUsernameList.includes(userName)) {
     taskList = await prisma.task.findMany({
@@ -277,87 +160,6 @@ export async function getServerSideProps(ctx) {
 
     taskInfoList = JSON.parse(JSON.stringify(taskList, replacer));
   }
-
-  /*
-  console.log(`dashboard.getServerSideProps: find taskLogList`);
-  if (adminUsernameList.includes(userName)) {
-    taskLogList = await prisma.taskLog.findMany({
-      where:{
-        createdAt: sevenDaysConstraint
-      },
-
-      orderBy: [
-        {
-          updatedAt: "desc",
-        },
-      ],
-      //take: queryLimit
-    });
-
-    taskLogInfoList = JSON.parse(JSON.stringify(taskLogList, replacer));
-  }
-  */
-
-  /*
-  console.log(`dashboard.getServerSideProps: find taskLogInvestigatorList`);
-  if (adminUsernameList.includes(userName)) {
-    taskLogInvestigatorList = await prisma.taskLog.findMany({
-      where: {
-        taskLabel: { contains: "investigator" },
-        createdAt: sevenDaysConstraint
-      },
-      orderBy: [
-        {
-          updatedAt: "desc",
-        },
-      ],
-      //take: queryLimit
-    });
-
-    taskLogInvestigatorInfoList = JSON.parse(JSON.stringify(taskLogInvestigatorList, replacer));
-  }
-  */
-
-  //console.log(`dashboard.getServerSideProps: find taskLogGroupByInfoList`);
-  // wil enable once I test the groupby feature
-
-  /*
-  if (adminUsernameList.includes(userName)) {
-    // temporary disable 
-    taskLogGroupByInfoList = [];
-    
-    taskLogGroupByList = await prisma.taskLog.groupBy({
-      by: ["username", "messageLabel"],
-      _count: {
-        messageLabel: true,
-      },
-      orderBy: [
-        {
-          username: "asc",
-        },
-      ],
-      //take: queryLimit
-    });
-    taskLogGroupByInfoList = JSON.parse(JSON.stringify(taskLogGroupByList, replacer));
-
-  }
-  */
-
-
-  /*
-  console.log(`dashboard.getServerSideProps: find messageList`);
-  if (adminUsernameList.includes(userName)) {
-    messageList = await prisma.message.findMany({
-      orderBy: [
-        {
-          updatedAt: "desc",
-        },
-      ]
-    });
-
-    messageInfoList = JSON.parse(JSON.stringify(messageList, replacer));
-  }
-  */
 
   let assetHostURL = `${process.env.ASSET_HOST_URL}`;
 
@@ -402,26 +204,6 @@ export default function Dashboard({ fitbitSubscriptionInfoList, taskInfoList,  u
   const handleTabChange = (event, newTabName) => {
     setTabName(newTabName);
   };
-
-  /*
-  async function queryTaskLogs(functionName, startDate, endDate) {
-    const result = await fetch(`/api/task-log?function_name=${functionName}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        limit: 0,
-        startDate: DateTime.fromJSDate(startDate).toISO(),
-        endDate: DateTime.fromJSDate(endDate).toISO()
-      }),
-    }).then((r) => {
-      return r.json();
-    });
-    return result;
-  }
-  */
-
 
 
   let nowDate = DateTime.now();
@@ -587,26 +369,7 @@ export default function Dashboard({ fitbitSubscriptionInfoList, taskInfoList,  u
     return null;
   }
 
-  // Function for getting taskLog
-
-
-
-
-
   console.log(`session: ${JSON.stringify(session)}`);
-
-  //console.log(`userInfoList: ${JSON.stringify(userInfoList)}`);
-
-  //console.log(`fitbitDataInfoList: ${JSON.stringify(fitbitDataInfoList)}`);
-
-  /*
-  <ToggleButton
-  value="Task Log By User"
-  aria-label="centered"
->
-  Task Log By User
-</ToggleButton>
-*/
 
   return (
     <Layout title={"Walk To Joy"} description={""}>
@@ -716,9 +479,3 @@ export default function Dashboard({ fitbitSubscriptionInfoList, taskInfoList,  u
     </Layout>
   );
 }
-
-/*
-{tabName == "Task Log By User" ? (
-  <TaskLogGroupByTable infoList={taskLogGroupByInfoList} renderData={!notRenderingList.includes(tabName)} />
-) : null}
-*/

@@ -1,4 +1,4 @@
-import UserInfoHelper from "../helper/UserInfoHelper";
+import UserInfoHelper from "../helper/UserInfoHelper.js";
 
 export default class UserInfoCondition {
   constructor() {}

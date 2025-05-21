@@ -97,11 +97,13 @@ TimeEngine.registerAction("noAction", NoAction);
 // TO DO: ideal version: TimeEngine.registerConditionPack([something]);
 TimeEngine.registerCondition("userInfo", UserInfoCondition);
 TimeEngine.registerCondition("timeInPeriod", TimeInPeriodCondition);
+/*
 TimeEngine.registerCondition("surveyFilledByThisPerson", SurveyFilledByThisPersonCondition);
 TimeEngine.registerCondition("hasTaskLogErrorDuringPeriod", HasTaskLogErrorDuringPeriodCondition);
 TimeEngine.registerCondition("HasHeartRateIntradayMinutesAboveThresholdForPersonDuringPeriod", HasHeartRateIntradayMinutesAboveThresholdForPersonDuringPeriodCondition);
 TimeEngine.registerCondition("hasFitbitUpdateForPersonDuringPeriod", HasFitbitUpdateForPersonDuringPeriodCondition);
 TimeEngine.registerCondition("hasMessageSentDuringPeriod", HasMessageSentDuringPeriodCondition);
+*/
 
 // Start the time engine
 TimeEngine.start();

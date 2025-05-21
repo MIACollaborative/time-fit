@@ -1,4 +1,4 @@
-import DateTimeHelper from "../helper/DateTimeHelper";
+import DateTimeHelper from "../helper/DateTimeHelper.js";
 
 export default class TimeInPeriodCondition {
   constructor() {}

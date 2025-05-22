@@ -24,8 +24,8 @@ export default class HasTaskLogErrorDuringPeriodCondition {
 
     // generic
     const errorList = await TaskLogHelper.getTaskLogWithErrorDuringPeriod(
-      startDate,
-      endDate
+      startDate.toJSDate(),
+      endDate.toJSDate()
     );
 
     const recordInfo = {

@@ -272,18 +272,19 @@ model taskLog {
   activationReasoning Json[]
 
 
-  // for action
+  // for choice
   randomizationResult Json
 
-  // for message, possibly none if no action or action that does not invovle message
-  message    message?    @relation(fields: [messageLabel], references: [label])
-  messageLabel String?
+  // for action
 
+  // the label of the action that was executed (assigned by developers)
+  actionLabel String?
+  actionInfo Json?
   
   // for execution
   executionResult Json?
   
   // for time
-  createdAt DateTime? @default(now())
+  createdAt DateTime? @default(now()ß
   updatedAt DateTime? @updatedAt
 }

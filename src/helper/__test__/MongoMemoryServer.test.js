@@ -7,11 +7,10 @@ let mongod;
 let prisma;
 
 beforeAll(async () => {
-  
-
-  console.log("beforeAll: Starting MongoDB Memory Server as a replica set...");
   try {
-    mongod  = await MongoMemoryReplSet.create({ replSet: { count: 1, name: "repl1"} });
+    mongod = await MongoMemoryReplSet.create({
+      replSet: { count: 1, name: "repl1" },
+    });
     const databaseName = "test";
 
     const uri = mongod.getUri();
@@ -19,14 +18,15 @@ beforeAll(async () => {
     process.env.DATABASE_URL = `${uri}`; // Add a unique db name per instance if needed
     // replace /? with /${databaseName}?
     // replace 127.0.0.1 with localhost
-    process.env.DATABASE_URL = process.env.DATABASE_URL.replace(`/?`, `/${databaseName}?`);
+    process.env.DATABASE_URL = process.env.DATABASE_URL.replace(
+      `/?`,
+      `/${databaseName}?`
+    );
 
-    console.log(`beforeAll: DATABASE_URL set to ${process.env.DATABASE_URL}`);
-    
+
     // Optional: Run Prisma migrations (if you have them)
     // This ensures your schema is applied to the in-memory database
     // Ensure your schema.prisma points to env("DATABASE_URL")
-
 
     // expect something like: DATABASE_URL="mongodb://localhost:27017/time_fit?"
     /*
@@ -38,19 +38,16 @@ beforeAll(async () => {
     console.log("beforeAll: prisma db push completed.");
     */
 
-
     prisma = await reinitPrismaClient({
       datasources: {
-        db: { // 'db' should match the name of your datasource in schema.prisma
+        db: {
+          // 'db' should match the name of your datasource in schema.prisma
           url: process.env.DATABASE_URL,
         },
       },
     });
 
-    console.log("beforeAll: Connecting Prisma Client...");
-
     await prisma.$connect();
-    console.log("beforeAll: Prisma Client connected.");
   } catch (error) {
     console.error("beforeAll failed:", error);
     if (mongod) {
@@ -91,11 +88,8 @@ describe("insertEvent", () => {
       content: { foo: "bar" },
     };
 
-    // version 2: EventHelper
-    const result = await EventHelper.insertEvent(event);
-    // version 1: prisma: works!
-    //const result = await prisma.event.create({ data: event });
-    
+    const result = await prisma.event.create({ data: event });
+
     expect(result).toHaveProperty("id");
     expect(result.type).toBe("test");
     expect(result.content).toEqual({ foo: "bar" });
@@ -106,7 +100,9 @@ describe("insertEvent", () => {
     expect(found).not.toBeNull();
     expect(found.type).toBe("test");
     expect(found.content).toEqual({ foo: "bar" });
+  });
 
-    console.log(`Initial test done!!!`);
+  it("should throw if required fields are missing", async () => {
+    await expect(EventHelper.insertEvent({})).rejects.toThrow();
   });
 });

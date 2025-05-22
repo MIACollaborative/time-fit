@@ -1,10 +1,11 @@
-import prisma from "./prisma.js";
+import {getPrismaClient} from "./prisma.js";
 import RandomizationHelper from "./RandomizationHelper.js";
 
 export default class MessageHelper {
   constructor() {}
 
   static async findMessageByLabel(mLabel) {
+    const prisma = getPrismaClient();
     const message = await prisma.message.findFirst({
       where: { label: mLabel },
     });
@@ -12,6 +13,7 @@ export default class MessageHelper {
   }
 
   static async findMessageByGroup(gGroupName) {
+    const prisma = getPrismaClient();
     const messageList = await prisma.message.findMany({
       where: { group: gGroupName },
       orderBy: [

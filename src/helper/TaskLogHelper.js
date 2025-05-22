@@ -1,15 +1,17 @@
-import prisma from "./prisma.js";
+import {getPrismaClient} from "./prisma.js";
 
 export default class TaskLogHelper {
   constructor() {}
 
   static async insertTaskLogList(tasklogList) {
+    const prisma = getPrismaClient();
     return await prisma.taskLog.createMany({
       data: tasklogList,
     });
   }
 
   static async getCurrentUserMessageCountDict(username) {
+    const prisma = getPrismaClient();
     const results = await prisma.taskLog.groupBy({
       by: ["messageLabel"],
       where: {
@@ -39,7 +41,8 @@ export default class TaskLogHelper {
     messageLabel,
     startDate,
     endDate,
-    limit = 0
+    sorting = "desc",
+    limit = -1
   ) {
     let queryObj = {
       where: {
@@ -51,21 +54,23 @@ export default class TaskLogHelper {
       },
       orderBy: [
         {
-          createdAt: "desc",
+          createdAt: sorting,
         },
       ],
     };
 
-    if (limit > 0) {
+    if (limit >= 0) {
       queryObj["take"] = limit;
     }
 
+    const prisma = getPrismaClient();
     const itemList = await prisma.taskLog.findMany(queryObj);
 
     return itemList;
   }
 
   static async getTaskLogWithErrorDuringPeriod(startDateTime, endDateTime) {
+    const prisma = getPrismaClient();
     const recordList = await prisma.taskLog.findMany({
       where: {
         createdAt: {

@@ -23,9 +23,7 @@ export default class ObjectHelper {
       // print the property name and value
       console.log(propertyName, propertyValueObject[propertyName]);
 
-      if (object[propertyName] == undefined) {
-        result = false;
-      } else if (typeof propertyValueObject[propertyName] === "object") {
+      if (object[propertyName] !== null && typeof propertyValueObject[propertyName] === "object") {
         console.log("it is an object", object[propertyName], propertyValueObject[propertyName]);
         result =
           result &&

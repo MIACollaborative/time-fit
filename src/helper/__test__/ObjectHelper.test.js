@@ -82,6 +82,7 @@ describe('ObjectHelper', () => {
         number: 123, 
         boolean: true, 
         nullValue: null,
+        undefinedValue: undefined,
         object: { key: 'value' }
       };
       
@@ -90,6 +91,7 @@ describe('ObjectHelper', () => {
         number: 123,
         boolean: true,
         nullValue: null,
+        undefinedValue: undefined,
         object: { key: 'value' }
       };
       

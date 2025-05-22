@@ -24,8 +24,6 @@ beforeAll(async () => {
       `/${databaseName}?`
     );
 
-    console.log(`beforeAll: DATABASE_URL set to ${process.env.DATABASE_URL}`);
-
     // Optional: Run Prisma migrations (if you have them)
     // This ensures your schema is applied to the in-memory database
     // Ensure your schema.prisma points to env("DATABASE_URL")

@@ -20,11 +20,10 @@ export default class ObjectHelper {
     let result = true;
 
     Object.keys(propertyValueObject).forEach((propertyName) => {
-      // print the property name and value
-      console.log(propertyName, propertyValueObject[propertyName]);
-
-      if (object[propertyName] !== null && typeof propertyValueObject[propertyName] === "object") {
-        console.log("it is an object", object[propertyName], propertyValueObject[propertyName]);
+      if (
+        object[propertyName] !== null &&
+        typeof propertyValueObject[propertyName] === "object"
+      ) {
         result =
           result &&
           ObjectHelper.isObjectPropertyValueMatched(
@@ -33,7 +32,6 @@ export default class ObjectHelper {
           );
       } else {
         if (object[propertyName] !== propertyValueObject[propertyName]) {
-          console.log(object[propertyName], propertyValueObject[propertyName]);
           result = false;
         }
       }

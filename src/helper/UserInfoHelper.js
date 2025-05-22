@@ -1,5 +1,5 @@
 import ObjectHelper from "./ObjectHelper";
-import {getPrismaClient} from "./prisma.js";
+import { getPrismaClient } from "./prisma.js";
 export default class UserInfoHelper {
   constructor() {}
 

@@ -1,4 +1,4 @@
-import UserInfoHelper from "../helper/UserInfoHelper.js";
+import ObjectHelper from "../helper/ObjectHelper.js";
 
 export default class UserInfoCondition {
   constructor() {}
@@ -6,13 +6,13 @@ export default class UserInfoCondition {
   static async execute(condition, params) {
     const { userInfo, datetime } = params;
 
-    const result = UserInfoHelper.isUserInfoPropertyValueMatched(
+    const result = ObjectHelper.isObjectPropertyValueMatched(
       userInfo,
       condition.criteria
     );
 
     const recordInfo = {
-      userInfoPartial: UserInfoHelper.extractUserInfoPropertyValueMatched(
+      userInfoPartial: ObjectHelper.extractObjectPropertyValueMatched(
         userInfo,
         condition.criteria
       ),

@@ -1,15 +1,16 @@
-import prisma from "./prisma.js";
+import ObjectHelper from "./ObjectHelper";
+import {getPrismaClient} from "./prisma.js";
 export default class UserInfoHelper {
   constructor() {}
-  
+
   static async getUsers() {
-    return await prisma.users.findMany();
+    return await getPrismaClient().users.findMany();
   }
 
   static async myGetUserList() {
-    const users = await DatabaseHelper.getUsers();
+    const users = await UserInfoHelper.getUsers();
     const userList = users.map((userInfo) => {
-      return exclude(userInfo, [
+      return ObjectHelper.exclude(userInfo, [
         "password",
         "hash",
         "accessToken",
@@ -19,43 +20,13 @@ export default class UserInfoHelper {
     return userList;
   }
 
-  
-  static isPropertySet(userInfo, propertyName) {
-    if (userInfo == null) {
-      return false;
-    }
-    return userInfo[propertyName] != undefined;
-  }
-
   static async getUserInfoByUsername(username) {
-    const theUser = await prisma.users.findFirst({
+    const theUser = await getPrismaClient().users.findFirst({
       where: {
         username: username,
       },
     });
     return theUser;
-  }
-
-  static isUserInfoPropertyValueMatched(userInfo, propertyValueObject) {
-    let result = true;
-
-    Object.keys(propertyValueObject).forEach((propertyName) => {
-      if (userInfo[propertyName] != propertyValueObject[propertyName]) {
-        result = false;
-      }
-    });
-
-    return result;
-  }
-
-  static extractUserInfoPropertyValueMatched(userInfo, propertyValueObject) {
-    let resultInfo = {};
-
-    Object.keys(propertyValueObject).forEach((propertyName) => {
-      resultInfo[propertyName] = userInfo[propertyName];
-    });
-
-    return resultInfo;
   }
 
   static extractUserInfoCache(userInfo) {
@@ -64,7 +35,7 @@ export default class UserInfoHelper {
   }
 
   static async updateUserInfo(userInfo, propertyValueObject) {
-    const updateResult = await prisma.users.update({
+    const updateResult = await getPrismaClient().users.update({
       where: {
         username: userInfo.username,
       },

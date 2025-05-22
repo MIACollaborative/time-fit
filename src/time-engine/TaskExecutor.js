@@ -1,9 +1,8 @@
 import { DateTime, Interval } from "luxon";
-import UserInfoHelper from "../helper/UserInfoHelper.js";
 import DateTimeHelper from "../helper/DateTimeHelper.js";
 import RandomizationHelper from "../helper/RandomizationHelper.js";
 import BooleanHelper from "../helper/BooleanHelper.js";
-import UserInfoCondition from "../condition-collection/UserInfoCondition.js";
+import ObjectHelper from "../helper/ObjectHelper.js";
 export default class TaskExecutor {
   taskSpec;
   static checkPointPreferenceTimeStringExtractionFunction;
@@ -232,7 +231,7 @@ export default class TaskExecutor {
     let logList = [];
 
     if (taskSpec.ignoreTimezone == false) {
-      const isTimeZoneSetResult = UserInfoHelper.isPropertySet(
+      const isTimeZoneSetResult = ObjectHelper.isPropertySet(
         userInfo,
         "timezone"
       );

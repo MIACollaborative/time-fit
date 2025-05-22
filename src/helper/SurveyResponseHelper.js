@@ -1,4 +1,4 @@
-import prisma from "./prisma.mjs";
+import {getPrismaClient} from "./prisma.js";
 
 export default class SurveyResponseHelper {
   constructor() {}
@@ -7,7 +7,8 @@ export default class SurveyResponseHelper {
     surveyId,
     startDate,
     endDate,
-    limit = 0
+    sort = "desc",
+    limit = -1
   ) {
     let queryObj = {
       where: {
@@ -19,15 +20,16 @@ export default class SurveyResponseHelper {
       },
       orderBy: [
         {
-          dateTime: "desc",
+          dateTime: sort,
         },
       ],
     };
 
-    if (limit > 0) {
+    if (limit >= 0) {
       queryObj["take"] = limit;
     }
-
+    
+    const prisma = getPrismaClient();
     const responseList = await prisma.response.findMany(queryObj);
 
     return responseList;

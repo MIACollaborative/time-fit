@@ -7,12 +7,11 @@ let mongod;
 let prisma;
 
 beforeAll(async () => {
-  console.log("beforeAll: Starting MongoDB Memory Server as a replica set...");
   try {
     mongod = await MongoMemoryReplSet.create({
       replSet: { count: 1, name: "repl1" },
     });
-    const databaseName = "test";
+    const databaseName = "test_events";
 
     const uri = mongod.getUri();
     // Set the DATABASE_URL environment variable for Prisma
@@ -47,10 +46,7 @@ beforeAll(async () => {
       },
     });
 
-    console.log("beforeAll: Connecting Prisma Client...");
-
     await prisma.$connect();
-    console.log("beforeAll: Prisma Client connected.");
   } catch (error) {
     console.error("beforeAll failed:", error);
     if (mongod) {
@@ -106,8 +102,6 @@ describe("insertEvent", () => {
     expect(found).not.toBeNull();
     expect(found.type).toBe("test");
     expect(found.content).toEqual({ foo: "bar" });
-
-    console.log(`Initial test done!!!`);
   });
 
   it("should throw if required fields are missing", async () => {

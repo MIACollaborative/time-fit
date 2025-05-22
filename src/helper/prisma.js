@@ -12,7 +12,6 @@ let prismaInstance = null;
  */
 function getPrismaClient(options) {
   if (!prismaInstance) {
-    console.log('Initializing new PrismaClient instance...');
     prismaInstance = new PrismaClient(options);
     // You might want to connect here or let the first query do it.
     // prismaInstance.$connect().catch(e => console.error("Failed to connect initial Prisma instance", e));
@@ -29,22 +28,18 @@ function getPrismaClient(options) {
  */
 async function reinitPrismaClient(newOptions) {
   if (prismaInstance) {
-    console.log('Disconnecting existing PrismaClient instance...');
     try {
       await prismaInstance.$disconnect();
-      console.log('Existing PrismaClient instance disconnected.');
     } catch (error) {
       console.error('Error disconnecting existing PrismaClient instance:', error);
       // Decide if you want to proceed or throw, depending on severity
     }
   }
 
-  console.log('Re-initializing PrismaClient instance...');
   prismaInstance = new PrismaClient(newOptions);
   // Optionally, connect the new instance immediately
   try {
     // await prismaInstance.$connect(); // Uncomment if you want to connect immediately
-    console.log('New PrismaClient instance initialized.');
   } catch (error) {
     console.error('Error connecting new PrismaClient instance:', error);
     // throw error; // Or handle as needed

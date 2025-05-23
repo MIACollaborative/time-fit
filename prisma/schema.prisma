@@ -11,32 +11,31 @@ datasource db {
 }
 
 model log {
-  id  String  @id @default(auto()) @map("_id") @db.ObjectId
-  type String
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  type      String
   createdAt DateTime @default(now())
-  content  Json
+  content   Json
 }
 
-
 model users {
-  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
   username String @unique
   password String
-  hash String @unique
+  hash     String @unique
 
   // additional user information
   preferredName String?
-  phone String?
-  timezone String?
+  phone         String?
+  timezone      String?
 
   // for study management
-  phase String @default("baseline") // baseline vs. intervention vs. complete
-  joinAt DateTime?
-  activateAt DateTime?
-  completeAt DateTime?
-  fitbitReminderTurnOff Boolean? @default(false)
-  saveWalkToJoyToContacts Boolean? @default(false)
-  autoWalkTo10 Boolean? @default(false)
+  phase                   String    @default("baseline") // baseline vs. intervention vs. complete
+  joinAt                  DateTime?
+  activateAt              DateTime?
+  completeAt              DateTime?
+  fitbitReminderTurnOff   Boolean?  @default(false)
+  saveWalkToJoyToContacts Boolean?  @default(false)
+  autoWalkTo10            Boolean?  @default(false)
 
   // for group assignment
   //gif Boolean? @default(false)
@@ -45,33 +44,31 @@ model users {
   groupMembership Json?
 
   // reference other collections
-  taskLogList  taskLog[]
-
+  taskLogList taskLog[]
 
   // for Fitbit
-  fitbitId String? @unique
+  fitbitId          String? @unique
   fitbitDisplayName String?
-  fitbitFullName String?
-  accessToken String?
-  refreshToken String?
+  fitbitFullName    String?
+  accessToken       String?
+  refreshToken      String?
 
   // for Fitbit data and subscription
   fitbitSubscriptionList fitbit_subscription[]
-  fitbitUpdateList fitbit_update[]
-  fitbitDataList fitbit_data[]
-  
+  fitbitUpdateList       fitbit_update[]
+  fitbitDataList         fitbit_data[]
 
   // for survey response
   responseList response[]
 
   // for user preference
   weekdayWakeup DateTime?
-  weekdayBed DateTime?
+  weekdayBed    DateTime?
   weekendWakeup DateTime?
-  weekendBed DateTime?
+  weekendBed    DateTime?
 
   // for goal setting
-  dailyStepsGoal Int?
+  dailyStepsGoal     Int?
   dailyStepsGoalMeta Json?
 
   // for time
@@ -80,29 +77,26 @@ model users {
 }
 
 model event {
-  id  String  @id @default(auto()) @map("_id") @db.ObjectId
-  type String
-  content  Json
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  type      String
+  content   Json
   createdAt DateTime @default(now())
 }
 
-
 model response {
-  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   // for survey response
-  participantId String
-  responseId String? // optional mostly for baackward compatibility
-  dateTime DateTime?
-  surveyId String?
-  surveyLink String
+  participantId      String
+  responseId         String? // optional mostly for baackward compatibility
+  dateTime           DateTime?
+  surveyId           String?
+  surveyLink         String
   surveyParamsString String?
-  content  String
+  content            String
 
   // connect to users collection
-  participant    users    @relation(fields: [participantId], references: [fitbitId])
-
-
+  participant users @relation(fields: [participantId], references: [fitbitId])
 
   // for time
   createdAt DateTime? @default(now())
@@ -110,19 +104,18 @@ model response {
 }
 
 model fitbit_data {
-
-  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   // for easy categorization
-  dataType String
-  ownerId String
-  dateTime String
-  compositeId String @unique // as a unique identifier for query
+  dataType     String
+  ownerId      String
+  dateTime     String
+  compositeId  String @unique // as a unique identifier for query
   lastModified String
-  content Json
+  content      Json
 
   // connect to users collection
-  owner    users    @relation(fields: [ownerId], references: [fitbitId], onDelete: NoAction, onUpdate: NoAction)
+  owner users @relation(fields: [ownerId], references: [fitbitId], onDelete: NoAction, onUpdate: NoAction)
 
   // for standard time
   createdAt DateTime? @default(now())
@@ -130,32 +123,27 @@ model fitbit_data {
 }
 
 model fitbit_update {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  id  String  @id @default(auto()) @map("_id") @db.ObjectId
-
-  
   // for subscription notification from Fitbit
   collectionType String
-  date String
-  ownerId String
-  ownerType String
-  subscriptionId String  @unique
-
+  date           String
+  ownerId        String
+  ownerType      String
+  subscriptionId String @unique
 
   // connect to users collection
-  owner    users    @relation(fields: [ownerId], references: [fitbitId], onDelete: NoAction, onUpdate: NoAction)
+  owner users @relation(fields: [ownerId], references: [fitbitId], onDelete: NoAction, onUpdate: NoAction)
 
   // connect to fibit_stream collection
-  stream    fitbit_subscription    @relation(fields: [subscriptionId], references: [subscriptionId])
+  stream fitbit_subscription @relation(fields: [subscriptionId], references: [subscriptionId])
 
   // for query data: notification -> processed
   status String @default("notification")
 
   // for security logging
-  ip String?
+  ip       String?
   validity Boolean?
-
-  
 
   // for time
   createdAt DateTime? @default(now())
@@ -163,20 +151,17 @@ model fitbit_update {
 }
 
 model fitbit_subscription {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  id  String  @id @default(auto()) @map("_id") @db.ObjectId
-
-  
   // for subscription notification from Fitbit
   collectionType String
-  ownerId String
-  ownerType String
-  subscriberId String
+  ownerId        String
+  ownerType      String
+  subscriberId   String
   subscriptionId String @unique
 
-
   // connect to users collection
-  owner    users    @relation(fields: [ownerId], references: [fitbitId], onDelete: NoAction, onUpdate: NoAction)
+  owner users @relation(fields: [ownerId], references: [fitbitId], onDelete: NoAction, onUpdate: NoAction)
 
   // connect to fitbit_update collection
   updateList fitbit_update[]
@@ -187,12 +172,11 @@ model fitbit_subscription {
 }
 
 model update_diff {
-
-  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   collectionName String
-  documentId String  @db.ObjectId
-  documentDiff Json
+  documentId     String @db.ObjectId
+  documentDiff   Json
 
   // for time
   createdAt DateTime? @default(now())
@@ -200,25 +184,24 @@ model update_diff {
 }
 
 model message {
-  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   // for message
-  label String @unique
-  content  String
+  label   String @unique
+  content String
 
-  group String
+  group      String
   groupIndex Int
-  
+
   //walkMessage String?
-  gif String?
-  timeOfDay String?
-  topic String?
+  gif           String?
+  timeOfDay     String?
+  topic         String?
   sampleMessage String?
-  note String?
+  note          String?
 
   // reference other collections
-  taskLogList  taskLog[]
-
+  taskLogList taskLog[]
 
   // for time
   createdAt DateTime? @default(now())
@@ -226,39 +209,38 @@ model message {
 }
 
 model task {
-  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   // for task
-  label String @unique
-  index Int?
-  enabled Boolean? @default(false)
-  priority Int? @default(1)
+  label                  String   @unique
+  index                  Int?
+  enabled                Boolean? @default(false)
+  priority               Int?     @default(1)
   participantIndependent Boolean? @default(false)
-  preActivationLogging Boolean? @default(false)
-  ignoreTimezone Boolean? @default(false)
-  checkPoint Json
-  group Json
-  randomization Json
-  preCondition Json?
+  preActivationLogging   Boolean? @default(false)
+  ignoreTimezone         Boolean? @default(false)
+  checkPoint             Json
+  group                  Json
+  randomization          Json
+  preCondition           Json?
 
   // reference other collections
-  taskLogList  taskLog[]
+  taskLogList taskLog[]
 
   // for time
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
 }
 
-
 model taskLog {
-  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   // for task
-  task    task    @relation(fields: [taskLabel], references: [label])
+  task      task   @relation(fields: [taskLabel], references: [label])
   taskLabel String
 
   // for user
-  user    users    @relation(fields: [username], references: [username])
+  user     users  @relation(fields: [username], references: [username])
   username String
 
   // caching user info
@@ -268,9 +250,8 @@ model taskLog {
   preConditionResult Json?
 
   // for tracking of decision rule/ task activation
-  isActivated  Boolean    @default(true)
+  isActivated         Boolean @default(true)
   activationReasoning Json[]
-
 
   // for choice
   randomizationResult Json
@@ -279,12 +260,14 @@ model taskLog {
 
   // the label of the action that was executed (assigned by developers)
   actionLabel String?
-  actionInfo Json?
-  
+  actionInfo  Json?
+
   // for execution
   executionResult Json?
-  
+
   // for time
-  createdAt DateTime? @default(now()ß
+  createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
+  message   message?  @relation(fields: [messageId], references: [id])
+  messageId String?   @db.ObjectId
 }

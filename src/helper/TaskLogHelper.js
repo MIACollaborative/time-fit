@@ -5,6 +5,9 @@ export default class TaskLogHelper {
 
   static async insertTaskLogList(tasklogList) {
     const prisma = getPrismaClient();
+    if(tasklogList.length == 0){
+      return {count: 0};
+    }
     return await prisma.taskLog.createMany({
       data: tasklogList,
     });

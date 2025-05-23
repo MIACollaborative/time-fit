@@ -28,6 +28,6 @@ export default class TaskLogHelper {
       );
     });
 
-    return recordList;
+    return filteredRecordList;
   }
 }

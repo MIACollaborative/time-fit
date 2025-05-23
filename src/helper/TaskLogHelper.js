@@ -1,76 +1,25 @@
-import prisma from "./prisma.mjs";
+import { getPrismaClient } from "./prisma.js";
 
 export default class TaskLogHelper {
   constructor() {}
 
   static async insertTaskLogList(tasklogList) {
+    const prisma = getPrismaClient();
+    if(tasklogList.length == 0){
+      return {count: 0};
+    }
     return await prisma.taskLog.createMany({
       data: tasklogList,
     });
   }
 
-  static async getCurrentUserMessageCountDict(username) {
-    const results = await prisma.taskLog.groupBy({
-      by: ["messageLabel"],
-      where: {
-        username: {
-          equals: username,
-        },
-      },
-      _count: {
-        messageLabel: true,
-      },
-    });
-
-    const resultList = JSON.parse(JSON.stringify(results, replacer));
-
-    let resultDict = {};
-
-    resultList.forEach((result) => {
-      if (result["messageLabel"] != null) {
-        resultDict[result["messageLabel"]] = result["_count"]["messageLabel"];
-      }
-    });
-
-    return resultDict;
-  }
-
-  static async findTaskLogWithMessageLabelDuringPeriod(
-    messageLabel,
-    startDate,
-    endDate,
-    limit = 0
-  ) {
-    let queryObj = {
-      where: {
-        messageLabel: messageLabel,
-        createdAt: {
-          gte: startDate.toISO(),
-          lte: endDate.toISO(),
-        },
-      },
-      orderBy: [
-        {
-          createdAt: "desc",
-        },
-      ],
-    };
-
-    if (limit > 0) {
-      queryObj["take"] = limit;
-    }
-
-    const itemList = await prisma.taskLog.findMany(queryObj);
-
-    return itemList;
-  }
-
-  static async getTaskLogWithErrorDuringPeriod(startDateTime, endDateTime) {
+  static async getTaskLogWithErrorDuringPeriod(startDate, endDate) {
+    const prisma = getPrismaClient();
     const recordList = await prisma.taskLog.findMany({
       where: {
         createdAt: {
-          gte: startDateTime.toISO(),
-          lte: endDateTime.toISO(),
+          gte: startDate.toISOString(),
+          lte: endDate.toISOString(),
         },
       },
     });
@@ -82,6 +31,6 @@ export default class TaskLogHelper {
       );
     });
 
-    return recordList;
+    return filteredRecordList;
   }
 }

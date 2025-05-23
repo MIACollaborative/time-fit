@@ -77,6 +77,10 @@ export default class TimeEngine {
     TaskExecutor.registerAction(name, actionClass);
   }
 
+  static registerCondition(name, conditionClass) {
+    TaskExecutor.conditionTypeMap[name] = conditionClass;
+  }
+
 
   static registerGetUserListFunction(func){
     TimeEngine.getUserListFunction = func;

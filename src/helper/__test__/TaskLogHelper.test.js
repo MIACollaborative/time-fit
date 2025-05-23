@@ -215,8 +215,8 @@ describe("TaskLogHelper", () => {
       const endDate = DateTime.utc(2022, 6, 23);
 
       const errorLogs = await TaskLogHelper.getTaskLogWithErrorDuringPeriod(
-        startDate,
-        endDate
+        startDate.toJSDate(),
+        endDate.toJSDate()
       );
 
       expect(errorLogs).toHaveLength(1);
@@ -230,8 +230,8 @@ describe("TaskLogHelper", () => {
       const endDate = DateTime.utc(2022, 7, 31);
 
       const errorLogs = await TaskLogHelper.getTaskLogWithErrorDuringPeriod(
-        startDate,
-        endDate
+        startDate.toJSDate(),
+        endDate.toJSDate()
       );
 
       expect(errorLogs).toHaveLength(0);
@@ -242,8 +242,8 @@ describe("TaskLogHelper", () => {
       const endDate = DateTime.utc(2022, 6, 30);
 
       const errorLogs = await TaskLogHelper.getTaskLogWithErrorDuringPeriod(
-        startDate,
-        endDate
+        startDate.toJSDate(),
+        endDate.toJSDate()
       );
 
       expect(errorLogs).toHaveLength(1);

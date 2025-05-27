@@ -27,7 +27,7 @@ We use yarn as our package manager.
 Yarn: https://yarnpkg.com/
 
 ### Install MongoDB
-Instructions: (download MongoDB community edition)[https://www.mongodb.com/docs/manual/administration/install-community/]
+Instructions: [download MongoDB community edition](https://www.mongodb.com/docs/manual/administration/install-community/)
 
 ### Create folder for storing data
 
@@ -51,7 +51,7 @@ mongod  --port 27017 --dbpath "c:\data\db" --replSet rs0 --bind_ip localhost
 ```
 ### Install MongoDB GUI
 
-Downlaod (MongoDB compass)[https://www.mongodb.com/products/compass] (community edition) for database GUI (or use command line if you prefer)
+Downlaod [MongoDB compass](https://www.mongodb.com/products/compass) for database GUI (or use command line if you prefer)
 
 ### Create Collections
 

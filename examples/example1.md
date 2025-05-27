@@ -6,7 +6,6 @@ You can run this example by running the following command in the project folder:
 
 ```
 yarn example1
-
 ```
 
 
@@ -25,7 +24,6 @@ In TimeFit, the TimeEngine is the main entry point of the framework. It is respo
 
 ```javascript
 import TimeEngine from "../time-engine/TimeEngine.js";
-
 ```
 ### Step 2: Register an action that will send you a desktop notification
 
@@ -39,14 +37,12 @@ Third, register this action to the engine and give it a label, "take-a-break-mes
 ```javascript
 import DesktopNotificationAction from "../action-collection/DesktopNotificationAction.js";
 
-
 const newAction = new DesktopNotificationAction(
   "TimeFit",
   "It's 30 minutes already. Take a break from your screen!"
 );
 
 TimeEngine.registerAction("take-a-break-message", newAction);
-
 ```
 
 ### Step 3: Register a new task that will be executed periodically (every 30 minutes)
@@ -61,7 +57,6 @@ TimeEngine.registerOneCronSystemActionTask(
   "*/30 * * * 1-5",
   "take-a-break-message"
 );
-
 ```
 
 ### Step 4: Run the app

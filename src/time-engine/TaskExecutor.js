@@ -3,6 +3,8 @@ import DateTimeHelper from "../helper/DateTimeHelper.js";
 import RandomizationHelper from "../helper/RandomizationHelper.js";
 import BooleanHelper from "../helper/BooleanHelper.js";
 import ObjectHelper from "../helper/ObjectHelper.js";
+import UserInfoHelper from "../helper/UserInfoHelper.js";
+
 export default class TaskExecutor {
   taskSpec;
   static checkPointPreferenceTimeStringExtractionFunction;

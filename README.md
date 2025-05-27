@@ -2,23 +2,23 @@
 
 ## Project Description
 
-A compact framework for constructing time-based Just-In-Time Adaptive Interventions (JITAIs) that utilizes Fitbit data for intervention adaptation.
+A compact framework for constructing time-based Just-In-Time Adaptive Interventions (JITAIs) that utilize the time of day and/or Fitbit data for intervention adaptation.
 
-Note: This project is currently undergoing refactoring. A new release with demonstration application examples will be created when this is done.
+Note: This project is periodically updated. Watch the repository for updates.
 
 ## Citation
 
 If you use this software, please cite it as below.
 ```
 
-Hung, P-Y, & Newman, MW. (2025). TimeFit (Version 0.0.1) [Computer software]. https://github.com/MIACollaborative/time-fit
+Hung, P-Y, & Newman, M. W. (2025). TimeFit (Version 0.0.1) [Computer software]. https://github.com/MIACollaborative/time-fit
 
 ```
 
 
 ## Getting Started
 
-The current recommended way to use this framework is to download or fork the repository and write your own application. We plan to release it as a package on npm in the future.
+The current recommended way to use this framework is to fork the repository and write your own application in the /src/apps folder.
 
 ### Install the basics
 
@@ -27,7 +27,7 @@ We use yarn as our package manager.
 Yarn: https://yarnpkg.com/
 
 ### Install MongoDB
-Instructions: https://www.mongodb.com/docs/manual/administration/install-community/
+Instructions: (download MongoDB community edition)[https://www.mongodb.com/docs/manual/administration/install-community/]
 
 ### Create folder for storing data
 
@@ -51,12 +51,11 @@ mongod  --port 27017 --dbpath "c:\data\db" --replSet rs0 --bind_ip localhost
 ```
 ### Install MongoDB GUI
 
-Downlaod MongoDB compass for database GUI (or use commandline if you prefer)
-https://www.mongodb.com/products/compass
+Downlaod (MongoDB compass)[https://www.mongodb.com/products/compass] (community edition) for database GUI (or use command line if you prefer)
 
 ### Create Collections
 
-You can create collections through MongoDB compass or commandline.
+You can create collections through MongoDB compass or command line.
 
 * create a database named "time_fit" 
 
@@ -68,8 +67,6 @@ Please reference /prisma/schema.prisma for a list of collections (everythign tha
 ### Configure environment settings
 
 Create a file named ".env" in the root of the project folder with the following content:
-
-.env 
 
 ```bash
 

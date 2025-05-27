@@ -4,6 +4,7 @@ import TaskHelper from "../helper/TaskHelper.js";
 import UserInfoHelper from "../helper/UserInfoHelper.js";
 import EventHelper from "../helper/EventHelper.js";
 import TaskLogHelper from "../helper/TaskLogHelper.js";
+
 export default class TimeEngine {
   static scheduler = undefined;
   static lastDate = undefined;
@@ -137,10 +138,10 @@ export default class TimeEngine {
   static async executeTask(now) {
 
     const taskList = await TimeEngine.getTaskListFunction();
+    console.log(`Executing ${taskList.length} tasks at ${now}`);
     for (let i = 0; i < taskList.length; i++) {
       let task = taskList[i];
 
-      // if task is not active, skip
       if (!task.enabled) {
         continue;
       }

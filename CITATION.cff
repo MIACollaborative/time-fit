@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Hung"
+  given-names: "Pei-Yao"
+  orcid: "https://orcid.org/0000-0002-7415-901X"
+- family-names: "Newman"
+  given-names: "Mark W."
+  orcid: "https://orcid.org/0000-0001-7186-1383"
+title: "TimeFit"
+version: 1.0.0
+doi: 
+date-released: 2025-05-27
+url: "https://github.com/MIACollaborative/time-fit"

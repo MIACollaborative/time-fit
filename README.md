@@ -1,5 +1,7 @@
 # TimeFit
 
+## Project Description
+
 A compact framework for constructing time-based Just-In-Time Adaptive Interventions (JITAIs) that utilizes Fitbit data for intervention adaptation.
 
 Note: This project is currently undergoing refactoring. A new release with demonstration application examples will be created when this is done.
@@ -7,7 +9,11 @@ Note: This project is currently undergoing refactoring. A new release with demon
 
 ## Getting Started
 
+The current recommended way to use this framework is to download or fork the repository and write your own application. We plan to release it as a package on npm in the future.
+
 ### Install the basics
+
+We use yarn as our package manager.
 
 Yarn: https://yarnpkg.com/
 
@@ -23,15 +29,12 @@ On Windows, create \data\db under the c disk, or c:\data\db.
 
 ### Run MongoDB
 
-
 In command line/terminal:
 
 ```bash
 
 # Mac: create ~/data/mdata folder first, and then run the following command in the terminal:
 mongod --port 27017 --dbpath ~/data/mdata --replSet rs0 --bind_ip localhost
-
-
 
 # Windows: create C:\datea\db  folder first, and then run the following command in the terminal:
 mongod  --port 27017 --dbpath "c:\data\db" --replSet rs0 --bind_ip localhost
@@ -46,7 +49,7 @@ https://www.mongodb.com/products/compass
 
 You can create collections through MongoDB compass or commandline.
 
-* create a database named "walk_to_joy" 
+* create a database named "time_fit" 
 
 Please reference /prisma/schema.prisma for a list of collections (everythign that starts with "model XYZ") to create within the database:
 * log
@@ -61,35 +64,18 @@ Create a file named ".env" in the root of the project folder with the following 
 
 ```bash
 
-# Environment variables declared in this file are automatically made available to Prisma.
-# See the documentation for more detail: https://pris.ly/d/prisma-schema#accessing-environment-variables-from-the-schema
+# mongodb connection string
+DATABASE_URL="mongodb://localhost:27017/time_fit?readPreference=primary&appname=MongoDB%20Compass&ssl=false&retryWrites=false"
 
-# Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server, MongoDB (Preview) and CockroachDB (Preview).
-# See the documentation for all the connection string options: https://pris.ly/d/connection-strings
-
-DATABASE_URL="mongodb://localhost:27017/walk_to_joy?readPreference=primary&appname=MongoDB%20Compass&ssl=false&retryWrites=false"
-
+# for using Twilio service to send SMS/MMS
 TWILIO_ACCOUNT_SID=[twilio account id]
 TWILIO_AUTH_TOKEN=[twilio authentication token]
+
+# for integration with Fitbit API
 FITBIT_SUBSCRIPTION_VERIFICATION_CODE=[fitbit subscription verification code]
 FITBIT_CLIENT_ID=[fitbit client id]
 FITBIT_AUTH_TOKEN=[fitbit authentication token]
 FITBIT_AUTH_CODE=[fitbit authorization code]
-RESEARCH_INVESTIGATOR_PHONE=[research investigator phone number for SMS]
-
-```
-
-Create a file named ".env.local" in the root of the project folder with the following content:
-
-.env.local
-
-```bash
-
-NEXTAUTH_URL=http://localhost:3000
-
-# might be able to ignore... since we aren't using it specifically anymore?
-NEXTAUTH_SECRET=[the secret]
-
 ```
 
 ### Install dependency
@@ -114,38 +100,17 @@ npx prisma generate
 
 ```
 
-### Run the development server:
+### Run the default sample application
 
 In a temrinal:
 
 ```bash
-npm run dev
 
-# or
 yarn dev
 
 ```
 
-### Start the cron job (each minute)
+# License
 
-In a temrinal:
+This project is open-sourced under the BSD 3-Clause License, allowing for free use, distribution, and modification with attribution.
 
-```bash
-npm run cron
-
-# or
-yarn cron
-
-```
-
-## For Production
-
-If using pm2, do the following:
-
-```bash
-
-pm2 start npm --name nextapp --time --max-memory-restart 1G --cron-restart="40 * * * *" -- run start
-
-pm2 start npm --name cron --time  -- run cron
-
-```

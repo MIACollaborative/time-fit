@@ -4,6 +4,7 @@ import TaskHelper from "../helper/TaskHelper.js";
 import UserInfoHelper from "../helper/UserInfoHelper.js";
 import EventHelper from "../helper/EventHelper.js";
 import TaskLogHelper from "../helper/TaskLogHelper.js";
+import TaskGeneratorHelper from "../helper/TaskGeneratorHelper.js";
 
 export default class TimeEngine {
   static scheduler = undefined;
@@ -11,6 +12,7 @@ export default class TimeEngine {
 
   static getUserListFunction = undefined;
   static getTaskListFunction = TaskHelper.getTasksSortedByPriority;
+  static taskList = [];
   static insertEventFunction = undefined;
   static insertTaskLogListFunction = undefined;
   static checkPointPreferenceTimeStringExtractionFunction = undefined;
@@ -85,6 +87,20 @@ export default class TimeEngine {
 
   static registerGetUserListFunction(func){
     TimeEngine.getUserListFunction = func;
+  }
+
+  static registerOneCronSystemActionTask(taskLabel, cronExpression, actionLabel){
+    const newTask = TaskGeneratorHelper.generateCronActionTask(
+          "take-a-break",
+          //"*/30 * * * 1-5", // every 30 minutes on week days
+          "* * * * *", // every minutes
+          "take-a-break-message"
+    );
+    TimeEngine.taskList.push(newTask);
+    const myGetTaskList = () => {
+      return TimeEngine.taskList;
+    }
+    TimeEngine.registerGetTaskListFunction(myGetTaskList);
   }
 
   static registerGetTaskListFunction(func){

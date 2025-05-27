@@ -6,6 +6,15 @@ A compact framework for constructing time-based Just-In-Time Adaptive Interventi
 
 Note: This project is currently undergoing refactoring. A new release with demonstration application examples will be created when this is done.
 
+## Citation
+
+If you use this software, please cite it as below.
+```
+
+Hung, P-Y, & Newman, MW. (2025). TimeFit (Version 0.0.1) [Computer software]. https://github.com/MIACollaborative/time-fit
+
+```
+
 
 ## Getting Started
 
@@ -67,15 +76,16 @@ Create a file named ".env" in the root of the project folder with the following 
 # mongodb connection string
 DATABASE_URL="mongodb://localhost:27017/time_fit?readPreference=primary&appname=MongoDB%20Compass&ssl=false&retryWrites=false"
 
-# for using Twilio service to send SMS/MMS
-TWILIO_ACCOUNT_SID=[twilio account id]
-TWILIO_AUTH_TOKEN=[twilio authentication token]
-
 # for integration with Fitbit API
 FITBIT_SUBSCRIPTION_VERIFICATION_CODE=[fitbit subscription verification code]
 FITBIT_CLIENT_ID=[fitbit client id]
 FITBIT_AUTH_TOKEN=[fitbit authentication token]
 FITBIT_AUTH_CODE=[fitbit authorization code]
+
+# for using Twilio service to send SMS/MMS
+TWILIO_ACCOUNT_SID=[twilio account id]
+TWILIO_AUTH_TOKEN=[twilio authentication token]
+
 ```
 
 ### Install dependency
@@ -106,11 +116,16 @@ In a temrinal:
 
 ```bash
 
-yarn dev
+yarn index
 
 ```
 
-# License
+## Usage examples
 
-This project is open-sourced under the BSD 3-Clause License, allowing for free use, distribution, and modification with attribution.
+[Example 1: Nudge users to take a break every 30 minutes during week days](examples/example1.md)
+
+
+## License
+
+This project is open-sourced under the [BSD 3-Clause License](LICENSE.txt), allowing for free use, distribution, and modification with attribution.
 

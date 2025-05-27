@@ -8,7 +8,7 @@ authors:
   given-names: "Mark W."
   orcid: "https://orcid.org/0000-0001-7186-1383"
 title: "TimeFit"
-version: 1.0.0
+version: 0.0.1
 doi: 
 date-released: 2025-05-27
 url: "https://github.com/MIACollaborative/time-fit"

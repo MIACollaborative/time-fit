@@ -3,7 +3,7 @@ import notifier from "node-notifier";
 export default class DesktopNotificationHelper {
   constructor() {}
 
-  async sendNotification(title, message) {
+  static async sendNotification(title, message) {
     return await notifier.notify(
       {
         title: title,

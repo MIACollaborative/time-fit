@@ -12,7 +12,20 @@ yarn example1
 
 ## How to
 
-Modify your index.js as follow
+Here is the step by step guide to create this example.
+
+### Create the app
+
+Create my-app1.js in the /src/apps folder.
+
+### Step 1: Import TimeEngine
+
+```javascript
+import TimeEngine from "./time-engine/TimeEngine.js";
+```
+
+
+
 
 ```
 import TimeEngine from "./time-engine/TimeEngine.js";
@@ -74,4 +87,8 @@ TimeEngine.start();
 ```
 
 
+### Run the app
 
+```bash
+node ./src/apps/my-app1.js
+```

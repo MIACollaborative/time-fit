@@ -10,6 +10,8 @@ const newAction = new DesktopNotificationAction(
 TimeEngine.registerAction("take-a-break-message", newAction);
 
 // TO DO: simplify the following event further
+// TimeEngine.registerOneCronSystemActionTask
+
 async function myGetTaskList() {
   const tasks = [
     TaskGeneratorHelper.generateCronActionTask(

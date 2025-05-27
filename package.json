@@ -13,6 +13,7 @@
     "json-difference": "^1.16.1",
     "luxon": "^3.6.0",
     "mongodb-memory-server": "^10.1.4",
+    "node-notifier": "^10.0.1",
     "seedrandom": "^3.0.5",
     "twilio": "^5.5.1",
     "voca": "^1.4.1"

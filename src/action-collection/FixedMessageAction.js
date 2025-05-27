@@ -1,9 +1,9 @@
 export default class FixedMessageAction {
-  static message = "";
+message = "";
   constructor(msg) {
     this.message = msg;
   }
-  static async execute(actionInfo, params) {
+  async execute(actionInfo, params) {
     return {
       type: "console",
       value: FixedMessageAction.message,

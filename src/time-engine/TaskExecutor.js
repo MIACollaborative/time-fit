@@ -28,9 +28,7 @@ export default class TaskExecutor {
   static async executeTaskForUserListForDate(taskSpec, userList, date) {
     const datetime = DateTime.fromJSDate(date);
 
-    console.log(
-      `executeTaskForUserListForDate taskSpec.enabled: ${taskSpec.enabled} for ${taskSpec.label}`
-    );
+
 
     // just for reference in other part of the class.
     this.taskSpec = taskSpec;

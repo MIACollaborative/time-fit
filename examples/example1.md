@@ -25,8 +25,6 @@ import TimeEngine from "./time-engine/TimeEngine.js";
 ```
 
 
-
-
 ```
 import TimeEngine from "./time-engine/TimeEngine.js";
 import HelloAction from "./action-collection/HelloAction.js";

@@ -113,9 +113,9 @@ export default class TimeEngine {
     const now = DateTime.now().toJSDate();
 
     // for testing
-    await TimeEngine.processClock(now);
+    //await TimeEngine.processClock(now);
 
-    /*
+    
     if (TimeEngine.lastDate !== undefined) {
       const lastDateMinute = DateTime.fromJSDate(TimeEngine.lastDate)
         .startOf("minute")
@@ -129,8 +129,7 @@ export default class TimeEngine {
       } else {
         // Skipping event generation as lastDate and now are the same at the minute level
       }
-    } 
-    */
+    }
 
     TimeEngine.lastDate = now;
   }

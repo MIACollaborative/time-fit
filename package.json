@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "index": "node ./src/index.js",
-    "example1": "node ./src/apps/take-a-break.js",
+    "example1": "node ./src/apps/take-a-break/index.js",
+    "example2": "node ./src/apps/fitbit-break/index.js",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "dependencies": {

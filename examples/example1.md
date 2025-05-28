@@ -15,7 +15,7 @@ Here is the step by step guide to create this example.
 
 ### Create the app
 
-Create my-app1.js in the /src/apps folder.
+Create a folder called my-app1 under /apps and create an index.js file inside the /apps/my-app1 folder.
 
 ### Step 1: Import TimeEngine
 
@@ -68,4 +68,4 @@ TimeEngine.start();
 ```
 
 ### References
-- Complete code example: [take-a-break.js](../src/apps/take-a-break.js)
+- Complete code example: [take-a-break.js](../apps/take-a-break/index.js)

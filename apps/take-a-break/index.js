@@ -1,5 +1,5 @@
-import TimeEngine from "../../time-engine/TimeEngine.js";
-import DesktopNotificationAction from "../../action-collection/DesktopNotificationAction.js";
+import TimeEngine from "../../lib/time-engine/TimeEngine.js";
+import DesktopNotificationAction from "../../lib/action-collection/DesktopNotificationAction.js";
 
 // create a register an action
 const newAction = new DesktopNotificationAction(

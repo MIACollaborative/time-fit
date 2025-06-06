@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import { ZodError } from "zod";
 import { signInSchema } from "./lib/zod";
 import bcrypt from "bcrypt";
+import UserInfoHelper from "@time-fit/helper/UserInfoHelper.js";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -19,9 +20,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             credentials
           );
 
-          const user = await prisma.users.findFirst({
-            where: { username: username },
-          });
+          const user = await UserInfoHelper.getUserInfoByUsername(username);
 
           if (user == null) {
             console.log(`No such user`);

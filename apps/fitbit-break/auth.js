@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { ZodError } from "zod";
 import { signInSchema } from "./lib/zod";
 import bcrypt from "bcrypt";
 import UserInfoHelper from "@time-fit/helper/UserInfoHelper.js";
@@ -42,10 +41,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           // return user object with their profile data
           return user;
         } catch (error) {
+            return null;
+
+        /*
           if (error instanceof ZodError) {
             console.log(`Zod error: ${error.message}`);
             return null;
           }
+            */
         }
       },
     }),

@@ -1,4 +1,4 @@
-import { object, string } from "zod"
+import { object, string } from "zod";
  
 export const signInSchema = object({
   username: string({ required_error: "Username is required" })

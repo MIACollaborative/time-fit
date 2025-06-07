@@ -1,4 +1,4 @@
-import { signIn } from "@/auth"
+import { signIn } from "@/test-auth"
  
 export function SignIn() {
   return (

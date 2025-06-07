@@ -1,0 +1,28 @@
+id,group,interventionMessage,topic,note
+1,prompt,Welcome to the WalkToJoy study [name]! We greatly appreciate your contribution. Please take a moment to complete the Baseline survey on the WalkToJoy app.,Onboarding/Baseline survey ,"adherence reminder after 24hours, 48hours"
+2,investigator,[PID] has not completed the baseline survey for 5 days. Give this person a call.,Phone call reminder to investigator,IF didn't complete baseline survey for 5 consecutive days
+3,prompt,"Hello, this is WalkToJoy study. We will be communicating with you using this number. Please check your email for instructions on how to Enroll into our study!",welcome to study,
+4,prompt,Great job completing your walks this past week! Please take a moment to complete your Weekly check-in survey: <link> .,Weekly check-in survey,For intervention week 2-6
+5,prompt,Pat yourself on the back for completing your walks this past week! Please take a moment to complete your first Weekly check-in survey: <link> .,FIRST Weekly check-in survey,For intervention week 1
+6,prompt-re,"Knock knock. Hi [name], please complete your Weekly check-in survey: <link> .",Weekly check-in survey,"After 24hours, 48 hours"
+7,prompt-re,Uh-oh. We have lost connection with your Fitbit. Please open your Fitbit app to sync your device.,Fitbit syncing,No new data received from Fitbit app for 2 consecutive days: x3 days at wakeup+2hr
+8,prompt-re,Knock knock. We haven't been detecting much activity on your Fitbit device. Please make sure to wear your Fitbit for at least 8 hours each day. :),Fitbit wearing,Non-worn days for 2 consecutive days: x3 days at wakeup+1hour
+9,prompt,"[name], this is a friendly reminder that you will be moving onto the intervention phase starting tomorrow. Happy walking!",activation to intervention,
+10,prompt,"Remember to enhance your walking experience on your upcoming walks. Here is what you said you would try this week: ""[response|SV_bBoOhje0dSNbZgq:SV_cACIS909SMXMUp8|last]"".",Planned Walk reminder,Tuesday/Thursday
+11,prompt,"[name], it's time to reflect on today's walk(s). Please take a moment to complete this survey: <link> .",(NO LONGER USED) Salience Follow-up,
+12,,,,
+13,prompt,"[name], it's time to reflect on today's walk(s). Please take a moment to answer a few short questions on today's overall walking experience: <link> .",End-of-day & intervention End-of-day,
+14,prompt-re,"[name], this is a friendly reminder to complete your end-of-day survey this evening. Happy walking!",End-of-day & intervention End-of-day,Didn't fill out survey for 2 consecutive days: x2 days at 12PM
+15,prompt,"[name], here is your weekly summary for this past week: You have walked [7-day-average-steps] steps on average each day, and went for a total of [7-day-walks-over-10mins] sustained walks for over 10 minutes this past week. Keep up the good work!",Data Summary,
+16,prompt,"[name], it's time to plan for your walks for this week: <link> .",Planning survey,
+17,prompt-re,"Hey [name], this is a friendly reminder to plan for your walks for this week: [survey_link_from_tasks|intervention_planning_1:intervention_planning_2-6|last].",Planning survey reminder,After 8 hours
+18,,,,
+19,investigator,[PID] has accumulated 6 consecutive days of Fitbit non-worn days. Give this person a call.,Phone call reminder to investigator,IF non-worn days for 6 consecutive days
+20,investigator,[PID] has missed for 5 consecutive days of End-of-day survey. Give this person a call.,Phone call reminder to investigator,IF missed end-of-day survey for 5 consecutive days
+21,prompt,Congratulations! You have reached the end of the WalkToJoy journey. Please take a moment to report on your overall experience: <link> .,Post-study survey,"Fixed Sunday 8:30 PM, send x3 until following Tuesday"
+22,prompt,Thank you [name] for completing the WalkToJoy study. We greatly appreciate your contribution to our research. Your compensation will be communicated via email as well as information on an optional interview. Happy walking!,End of study,Send message once participant completes the post-study survey
+23,investigator,[PID] has completed their study. Follow up with this person with compensation and interview information.,End of study notification to investigator,Send message once participant completes the post-study survey
+24,prompt,"[name], please complete the Baseline Survey before the upcoming Monday to be activated into the intervention phase. Find the link to survey here: https://walktojoy.info/",Baseline remaining task reminder,
+25,prompt,"FOR TESTING: You have accumulated 6 consecutive days of Fitbit non-worn days this past week, and the investigator has been notified!",TEST,
+26,prompt,"[name], you have worn your Fitbit for [fitbit_wearing_days_since_join|480|3] days since joining the study. To start receiving messages this upcoming Monday, please make sure to wear your Fitbit for more than 8 hours each day. You need at least 3 full days before moving into the active phase!",Baseline remaining task reminder,
+27,investigator,A task error was generated in the past hour. Please check the dashboard for more details.,,

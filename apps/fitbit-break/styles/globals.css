@@ -1,0 +1,36 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.project-text {
+  color: #E87667
+}
+
+.project-button {
+  background-color: #E87667 !important;
+  width: 100%;
+}
+
+.project-button-complete {
+  background-color: #21B98A !important;
+  width: 100%;
+}
+
+.project-button-incomplete {
+  color: #4A4A4A !important;
+  background-color: #E2E2E2 !important;
+  width: 100%;
+}

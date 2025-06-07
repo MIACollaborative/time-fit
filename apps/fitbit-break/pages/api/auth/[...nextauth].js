@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
-import prisma from "../../../lib/prisma.mjs";
 import UserInfoHelper from "@time-fit/helper/UserInfoHelper.js";
 
 export default NextAuth.default({
@@ -31,12 +30,6 @@ export default NextAuth.default({
         //const user = { id: 1, name: "J Smith", email: "jsmith@example.com", username: "test1", password: "test1" };
 
         const user = await UserInfoHelper.getUserInfoByUsername(credentials.username);
-
-        /*
-        const user = await prisma.users.findFirst({
-          where: { username: credentials.username }
-        });
-        */
 
         if (user == null) {
           console.log(`No such user`);

@@ -2,14 +2,7 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import Layout from "../component/Layout";
-
 import TextField from "@mui/material/TextField";
-/*
-import logger from "../lib/logger";
-
-*/
-
-import { inspect } from "util";
 
 import Link from "next/link";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
@@ -17,8 +10,9 @@ import { useRouter } from "next/router";
 import React, { Fragment, useState } from "react";
 import Button from '@mui/material/Button';
 import Divider from "@mui/material/Divider";
-import prisma from "../lib/prisma.mjs";
+import UserInfoHelper from "@time-fit/helper/UserInfoHelper.js";
 import { DateTime } from "luxon";
+import ObjectHelper from "@time-fit/helper/ObjectHelper.js";
 
 function replacer(key, value) {
   if (typeof value === "Date") {
@@ -39,13 +33,11 @@ export async function getServerSideProps(ctx) {
 
   let userName = session.user.name;
 
-  const uniqueUser = await prisma.users.findFirst({
-    where: { username: userName },
-  });
+  const uniqueUser = await UserInfoHelper.getUserInfoByUsername(userName);
 
   console.log(`main.getServerSideProps: user: ${JSON.stringify(uniqueUser)}`);
 
-  const userInfo = JSON.parse(JSON.stringify(uniqueUser, replacer));
+  const userInfo = JSON.parse(JSON.stringify(uniqueUser, ObjectHelper.convertDateToString));
 
   return {
     props: { userInfo },

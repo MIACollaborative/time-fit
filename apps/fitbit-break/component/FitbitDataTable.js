@@ -16,7 +16,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import ObjectListExortToolbar from './ObjectListExortToolbar.js';
-function replacer(key, value) {
+function replacer(key, value) { 
   if (typeof value === "Date") {
     return value.toString();
   }

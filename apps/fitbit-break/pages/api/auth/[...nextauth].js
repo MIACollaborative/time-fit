@@ -3,10 +3,10 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import prisma from "../../../lib/prisma.mjs";
 
-export default NextAuth({
+export default NextAuth.default({
   // Configure one or more authentication providers
   providers: [
-    CredentialsProvider({
+    CredentialsProvider.default({
       // The name to display on the sign in form (e.g. "Sign in with...")
       name: "ParticipantID",
       // The credentials is used to generate a suitable form on the sign in page.

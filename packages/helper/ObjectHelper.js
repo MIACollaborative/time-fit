@@ -50,10 +50,12 @@ export default class ObjectHelper {
     return resultInfo;
   }
 
-  static convertDateToString(value) {
+  static convertDateToString(key, value) {
+
     if (typeof value === "Date") {
-        return value.toString();
+      return value.toString();
     }
+    
     return value;
-}
+  }
 }

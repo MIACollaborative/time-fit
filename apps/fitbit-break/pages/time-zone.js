@@ -26,7 +26,7 @@ export async function getServerSideProps(ctx) {
         };
     }
 
-    let userName = session.user.name;
+    const userName = session.user.name;
 
 
     const uniqueUser = await UserInfoHelper.getUserInfoByUsername(userName);
@@ -35,16 +35,27 @@ export async function getServerSideProps(ctx) {
         `main.getServerSideProps: user: ${JSON.stringify(uniqueUser)}`
     );
 
+    const extractedUser = UserInfoHelper.extractUserInfoCache(uniqueUser);
 
-    const userInfo = JSON.parse(JSON.stringify(uniqueUser, ObjectHelper.convertDateToString));
+    console.log(
+        `main.getServerSideProps: extractedUser: ${JSON.stringify(extractedUser)}`
+    );
 
+    const userInfo = JSON.parse(JSON.stringify(extractedUser, ObjectHelper.convertDateToString));
+
+    console.log(
+        `main.getServerSideProps: userInfo: ${JSON.stringify(userInfo)}`
+    );
     return {
-        props: { userInfo },
+        props: { userInfo: userInfo },
     };
 }
 
 
 export default function TimeSetting({ userInfo }) {
+
+    // print userInfo
+    console.log(`userInfo: ${JSON.stringify(userInfo)}`);
 
     const { data: session, status } = useSession();
     const router = useRouter();
@@ -69,6 +80,13 @@ export default function TimeSetting({ userInfo }) {
     }
 
     console.log(`session: ${JSON.stringify(session)}`);
+
+    // print all state variables
+    console.log(`weekdayWakeup: ${weekdayWakeup}`);
+    console.log(`weekdayBed: ${weekdayBed}`);
+    console.log(`weekendWakeup: ${weekendWakeup}`);
+    console.log(`weekendBed: ${weekendBed}`);
+    console.log(`zoneName: ${zoneName}`);
 
     async function updateTimePreference(username, dayWake, dayBed, endWake, endBed, timezone) {
         console.log(`TimSetting.updateTimePreference: ${username}`);
@@ -132,7 +150,6 @@ export default function TimeSetting({ userInfo }) {
                 >
                     {
                         TimeZoneHelper.usTimeZoneOffetInfoList.map((zoneInfo, index) => {
-                            console.log(`zoneInfo.name: ${zoneInfo.name}`);
                             return <MenuItem value={zoneInfo.name} key={index}>{zoneInfo.name} ({zoneInfo.offsetLabel})</MenuItem>;
                         })
                     }

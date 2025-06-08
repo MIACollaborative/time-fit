@@ -1,41 +1,21 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
 import Layout from '../component/Layout';
 import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
-
-import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
-/*
-import logger from "../lib/logger";
-
-*/
-
-import { inspect } from 'util';
-import GeneralUtility from "../lib/GeneralUtility.mjs";
-import Link from 'next/link';
-import { useSession, signIn, signOut, getSession } from "next-auth/react"
+import Select from '@mui/material/Select';
+import { useSession } from "next-auth/react"
 import { useRouter } from 'next/router'
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import Divider from "@mui/material/Divider";
-import prisma from '../lib/prisma.mjs';
+import { authOptions } from "./api/auth/[...nextauth]"
+import { getServerSession } from "next-auth/next"
+import UserInfoHelper from "@time-fit/helper/UserInfoHelper";
+import TimeZoneHelper from '@time-fit/helper/TimeZoneHelper';
+import ObjectHelper from '@time-fit/helper/ObjectHelper';
 
 const { DateTime } = require("luxon");
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { getListItemSecondaryActionClassesUtilityClass } from '@mui/material';
-
-
-function replacer(key, value) {
-    if (typeof value === "Date") {
-        return value.toString();
-    }
-    return value;
-}
 
 export async function getServerSideProps(ctx) {
-
-    const session = await getSession(ctx);
+    const session = await getServerSession(ctx.req, ctx.res, authOptions);
     console.log(
         `main.getServerSideProps: session: ${JSON.stringify(session)}`
     );
@@ -49,16 +29,14 @@ export async function getServerSideProps(ctx) {
     let userName = session.user.name;
 
 
-    const uniqueUser = await prisma.users.findFirst({
-        where: { username: userName },
-    });
-
+    const uniqueUser = await UserInfoHelper.getUserInfoByUsername(userName);
+    
     console.log(
         `main.getServerSideProps: user: ${JSON.stringify(uniqueUser)}`
     );
 
 
-    const userInfo = JSON.parse(JSON.stringify(uniqueUser, replacer));
+    const userInfo = JSON.parse(JSON.stringify(uniqueUser, ObjectHelper.convertDateToString));
 
     return {
         props: { userInfo },
@@ -80,11 +58,6 @@ export default function TimeSetting({ userInfo }) {
     let nowDateTime = DateTime.now();
 
     const [zoneName, setZoneName] = useState(userInfo.timezone != undefined ? userInfo.timezone : nowDateTime.zoneName);
-    //logger.logToDB("main", {message: "test"});
-
-    //const [value1, setValue1] = useState('');
-    //const [value2, setValue2] = useState('');
-
 
 
     // status: enum mapping to three possible session states: "loading" | "authenticated" | "unauthenticated"
@@ -158,7 +131,7 @@ export default function TimeSetting({ userInfo }) {
                     onChange={handleTimeZoneChange}
                 >
                     {
-                        GeneralUtility.usTimeZoneOffetInfoList.map((zoneInfo, index) => {
+                        TimeZoneHelper.usTimeZoneOffetInfoList.map((zoneInfo, index) => {
                             console.log(`zoneInfo.name: ${zoneInfo.name}`);
                             return <MenuItem value={zoneInfo.name} key={index}>{zoneInfo.name} ({zoneInfo.offsetLabel})</MenuItem>;
                         })

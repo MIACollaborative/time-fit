@@ -1,4 +1,5 @@
-import { getSession } from "next-auth/react";
+import { authOptions } from "./auth/[...nextauth]";
+import { getServerSession } from "next-auth";
 import cryptoRandomString from "crypto-random-string";
 import bcrypt from "bcrypt";
 import UserInfoHelper from "@time-fit/helper/UserInfoHelper.js";
@@ -7,7 +8,7 @@ import ObjectHelper from "@time-fit/helper/ObjectHelper.js";
 const adminUsernameList = ["test1", "test2", "test3", "test4"];
 
 export default async function handler(req, res) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   console.log(`user - session: ${JSON.stringify(session)}`);
   if (!session) {
     res.status(401).json({});
@@ -34,7 +35,7 @@ export default async function handler(req, res) {
       const { weekdayWakeup, weekdayBed, weekendWakeup, weekendBed, timezone } =
         req.body;
       const updateUser = await UserInfoHelper.updateUserInfo(
-        { username: username },
+        { username: sessionUserName },
         {
           weekdayWakeup,
           weekdayBed,
@@ -52,7 +53,7 @@ export default async function handler(req, res) {
       console.log(`typeof salience: ${typeof salience}`);
       console.log(`typeof modification: ${typeof modification}`);
       const updateGroupUser = await UserInfoHelper.updateUserInfo(
-        { username: username },
+        { username: sessionUserName },
         {
           groupMembership: {
             gif,
@@ -64,22 +65,23 @@ export default async function handler(req, res) {
       res.status(200).json({ result: "success" });
       return;
     case "update_info":
+      console.log(`user - rest: ${JSON.stringify(rest)}`);
       const { password, ...pRest } = rest;
       if (password != undefined) {
         if (adminUsernameList.includes(sessionUserName)) {
           const aUser = await UserInfoHelper.updateUserInfo(
-            { username: username },
+            { username: sessionUserName },
             rest
           );
         } else {
           const aUser = await UserInfoHelper.updateUserInfo(
-            { username: username },
+            { username: sessionUserName },
             pRest
           );
         }
       } else {
         const aUser = await UserInfoHelper.updateUserInfo(
-          { username: username },
+          { username: sessionUserName },
           rest
         );
       }
@@ -114,7 +116,7 @@ export default async function handler(req, res) {
 
       if (adminUsernameList.includes(sessionUserName)) {
         const resetUser = await UserInfoHelper.updateUserInfo(
-          { username: username },
+          { username: sessionUserName },
           {
             preferredName: deleteValue,
             phone: deleteValue,
@@ -143,7 +145,7 @@ export default async function handler(req, res) {
       return;
     case "get_info":
       const user = await UserInfoHelper.getUserInfoByUsername({
-        username: username,
+        username: sessionUserName,
       });
       const userInfo = JSON.parse(JSON.stringify(user, ObjectHelper.convertDateToString));
       res.status(200).json({ result: userInfo });

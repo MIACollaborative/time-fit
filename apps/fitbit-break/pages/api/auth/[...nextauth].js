@@ -3,10 +3,10 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import UserInfoHelper from "@time-fit/helper/UserInfoHelper.js";
 
-export default NextAuth.default({
+export const authOptions = {
   // Configure one or more authentication providers
   providers: [
-    CredentialsProvider.default({
+    CredentialsProvider({
       // The name to display on the sign in form (e.g. "Sign in with...")
       name: "ParticipantID",
       // The credentials is used to generate a suitable form on the sign in page.
@@ -93,4 +93,6 @@ export default NextAuth.default({
     signingKey: "lXSW+g0cDZ4Y19NvZPrsDzIFF787vhRluTWC5igNxKY=",
   },
   */
-});
+};
+
+export default NextAuth(authOptions);

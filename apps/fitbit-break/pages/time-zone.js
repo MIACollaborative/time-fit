@@ -16,9 +16,6 @@ const { DateTime } = require("luxon");
 
 export async function getServerSideProps(ctx) {
     const session = await getServerSession(ctx.req, ctx.res, authOptions);
-    console.log(
-        `main.getServerSideProps: session: ${JSON.stringify(session)}`
-    );
 
     if (!session) {
         return {
@@ -28,24 +25,10 @@ export async function getServerSideProps(ctx) {
 
     const userName = session.user.name;
 
-
-    const uniqueUser = await UserInfoHelper.getUserInfoByUsername(userName);
-    
-    console.log(
-        `main.getServerSideProps: user: ${JSON.stringify(uniqueUser)}`
-    );
-
+    const uniqueUser = await UserInfoHelper.getUserInfoByUsername(userName);    
     const extractedUser = UserInfoHelper.extractUserInfoCache(uniqueUser);
-
-    console.log(
-        `main.getServerSideProps: extractedUser: ${JSON.stringify(extractedUser)}`
-    );
-
     const userInfo = JSON.parse(JSON.stringify(extractedUser, ObjectHelper.convertDateToString));
-
-    console.log(
-        `main.getServerSideProps: userInfo: ${JSON.stringify(userInfo)}`
-    );
+    
     return {
         props: { userInfo: userInfo },
     };

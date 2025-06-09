@@ -45,7 +45,7 @@ export default function FitbitAuthorize({ userInfo, hostURL }) {
 
   const redirectURL = `${hostURL}/fitbit-signin`;
 
-  const state = `auth-timefit-${md5(session.user.name)}`;
+  const state = `auth-walktojoy-${md5(session.user.name)}`;
 
   // Tutorial example: https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=process.env.FITBIT_CLIENT_ID&redirect_uri=https%3A%2F%2Fwalktojoy.info%2Ffitbit-signin&scope=activity%20heartrate%20profile%20settings&expires_in=604800
 

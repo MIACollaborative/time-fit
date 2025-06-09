@@ -8,6 +8,7 @@ import UserInfoHelper from "@time-fit/helper/UserInfoHelper";
 import { authOptions } from "./api/auth/[...nextauth]";
 
 
+
 export async function getServerSideProps(ctx) {
   const session = await getServerSession(ctx.req, ctx.res, authOptions);
   console.log(`main.getServerSideProps: session: ${JSON.stringify(session)}`);

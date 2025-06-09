@@ -46,4 +46,19 @@ export default class UserInfoHelper {
 
     return updateResult;
   }
+
+  static doesFitbitInfoExist(userInfo) {
+    if (userInfo == null) {
+      return false;
+    }
+
+    return (
+      userInfo.fitbitId != null &&
+      userInfo.fitbitId.length > 0 &&
+      userInfo.accessToken != null &&
+      userInfo.accessToken.length > 0 &&
+      userInfo.refreshToken != null &&
+      userInfo.refreshToken.length > 0
+    );
+  }
 }

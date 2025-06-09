@@ -45,15 +45,15 @@ export default function FitbitAuthorize({ userInfo, hostURL }) {
 
   const redirectURL = `${hostURL}/fitbit-signin`;
 
-  const state = `auth-walktojoy-${md5(session.user.name)}`;
+  const state = `auth-timefit-${md5(session.user.name)}`;
 
   // Tutorial example: https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=process.env.FITBIT_CLIENT_ID&redirect_uri=https%3A%2F%2Fwalktojoy.info%2Ffitbit-signin&scope=activity%20heartrate%20profile%20settings&expires_in=604800
 
   // long: activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight
   // short: activity%20profile%20settings%20
 
-  const scope = "activity%20heartrate%20profile%20settings";
-
+  const scope = ["activity", "heartrate", "profile", "settings"].join("%20");
+  
   const fitbitSignInLink = `https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=${process.env.FITBIT_CLIENT_ID}&redirect_uri=${encodeURIComponent(
     redirectURL
   )}&state=${state}&scope=${scope}&expires_in=604800`;

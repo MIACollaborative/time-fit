@@ -1,42 +1,17 @@
-
 import styles from "../styles/Home.module.css";
 import Layout from "../component/Layout";
-//import logger from "../lib/logger";
-
-import prisma from "../lib/prisma";
-
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
-import LinearProgress  from "@mui/material/LinearProgress";
-import Button from '@mui/material/Button';
+import LinearProgress from "@mui/material/LinearProgress";
+import Button from "@mui/material/Button";
 import FitbitHelper from "../lib/FitbitHelper.mjs";
-import { inspect } from 'util';
+import { inspect } from "util";
 import { Fragment } from "react";
 
-/*
-function replacer(key, value) {
-  if (typeof value === 'Date') {
-    return value.toString();
-  }
-  return value;
-}
+import UserInfoHelper from "@time-fit/helper/UserInfoHelper";
 
-export const getServerSideProps = async ({ req }) => {
-  // const token = req.headers.AUTHORIZATION
-  // const userId = await getUserId(token)\
-
-  //const logs = await prisma.log.findMany();
-
-  //const logList = JSON.parse(JSON.stringify(logs, replacer));
-
-  return {
-    props : {  }
-  }
-}
-*/
-
-
+import prisma from "../lib/prisma";
 
 export async function getServerSideProps({ query }) {
   const { code, state } = query;
@@ -49,70 +24,86 @@ export async function getServerSideProps({ query }) {
     console.log(`updateToken, hashCode: ${hashCode}`);
     console.log(`updateToken, accessToken: ${accessToken}`);
     console.log(`updateToken, refreshToken: ${refreshToken}`);
-    const firstUser = await prisma.users.findFirst({
-      where: { hash: hashCode },
-    });
-  
+
+    const firstUser = await UserInfoHelper.getUserInfoByPropertyValue(
+      "hash",
+      hashCode
+    );
+
     console.log(`firstUser: ${JSON.stringify(firstUser)}`);
-  
-    const updateUser = await prisma.users.update({
-      where: { username: firstUser.username },
-      data: {
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-      },
+
+    const updateUser = UserInfoHelper.updateUserInfo(firstUser, {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     });
-  
+
     console.log(`updateUser: ${JSON.stringify(updateUser)}`);
   }
-  
-  
-  async function updateFitbitProfile(hashCode, fitbitId, fitbitDisplayName, fitbitFullName) {
+
+  async function updateFitbitProfile(
+    hashCode,
+    fitbitId,
+    fitbitDisplayName,
+    fitbitFullName
+  ) {
     console.log(`updateFitbitId, hashCode: ${hashCode}`);
     console.log(`updateFitbitId, fitbitId: ${fitbitId}`);
     console.log(`updateFitbitId, fitbitDisplayName: ${fitbitDisplayName}`);
     console.log(`updateFitbitId, fitbitFullName: ${fitbitFullName}`);
-  
-    const firstUser = await prisma.users.findFirst({
-      where: { hash: hashCode },
-    });
-  
+
+    const firstUser = await UserInfoHelper.getUserInfoByPropertyValue(
+      "hash",
+      hashCode
+    );
+
     console.log(`firstUser: ${JSON.stringify(firstUser)}`);
-  
-    const updateUser = await prisma.users.update({
-      where: { username: firstUser.username },
-      data: {
-        fitbitId: fitbitId,
-        fitbitDisplayName: fitbitDisplayName,
-        fitbitFullName: fitbitFullName
-      },
+
+    const updateUser = await UserInfoHelper.updateUserInfo(firstUser, {
+      fitbitId: fitbitId,
+      fitbitDisplayName: fitbitDisplayName,
+      fitbitFullName: fitbitFullName,
     });
-  
+
     console.log(`updateUser: ${JSON.stringify(updateUser)}`);
   }
 
-  const user = await prisma.users.findFirst({
-    where: { hash: hashCode },
-  });
+  async function updateFitbitProfile(
+    hashCode,
+    fitbitId,
+    fitbitDisplayName,
+    fitbitFullName
+  ) {
+    console.log(`updateFitbitId, hashCode: ${hashCode}`);
+    console.log(`updateFitbitId, fitbitId: ${fitbitId}`);
+    console.log(`updateFitbitId, fitbitDisplayName: ${fitbitDisplayName}`);
+    console.log(`updateFitbitId, fitbitFullName: ${fitbitFullName}`);
+
+    const firstUser = await UserInfoHelper.getUserInfoByPropertyValue(
+      "hash",
+      hashCode
+    );
+
+    console.log(`firstUser: ${JSON.stringify(firstUser)}`);
+
+    const updateUser = await UserInfoHelper.updateUserInfo(firstUser, {
+      fitbitId: fitbitId,
+      fitbitDisplayName: fitbitDisplayName,
+      fitbitFullName: fitbitFullName,
+    });
+
+    console.log(`updateUser: ${JSON.stringify(updateUser)}`);
+  }
+
+  const user = await UserInfoHelper.getUserInfoByPropertyValue(
+    "hash",
+    hashCode
+  );
 
   let accessToken = "";
   let refreshToken = "";
 
   const authResult = await FitbitHelper.getAuthorizationInformation(authCode)
     .then((responseData) => {
-      console.log(
-        `FitbitHelper.getAuthorizationInformation: ${JSON.stringify(
-          responseData
-        )}`
-      );
-
-      /*
-      if(responseData.status == 400){
-          // cannot auth: Bad Request
-          // I supposed this mean we need to authenticate again
-      }
-      */
-
       accessToken = responseData.access_token;
 
       // If you followed the Authorization Code Flow, you were issued a refresh token. You can use your refresh token to get a new access token in case the one that you currently have has expired. Enter or paste your refresh token below. Also make sure you enteryour data in section 1 and 3 since it's used to refresh your access token.
@@ -121,9 +112,7 @@ export async function getServerSideProps({ query }) {
       // To Do: ideally, store both
       updateToken(hashCode, accessToken, refreshToken);
 
-      return {value: "success", stage: "authentication"};
-
-      //res.status(200).json({ message: "authentication success" });
+      return { value: "success", stage: "authentication" };
     })
     .catch((error) => {
       if (error.response) {
@@ -151,200 +140,118 @@ export async function getServerSideProps({ query }) {
       }
       //res.status(error.response.status).json({ response: inspect(error.response.data) });
 
-      return {value: "failed", stage: "authentication", data: inspect(error.response.data)};
+      return {
+        value: "failed",
+        stage: "authentication",
+        data: inspect(error.response.data),
+      };
     });
 
-    let fitbitId = "";
+  let fitbitId = "";
 
-    const profileResult = await FitbitHelper.getProfile(accessToken)
-      .then((responseData) => {
-        let rUser = responseData.user;
+  const profileResult = await FitbitHelper.getProfile(accessToken)
+    .then((responseData) => {
+      const rUser = responseData.user;
 
-        let fId = rUser.encodedId;
-        fitbitId = fId;
-        let fDisplayName = rUser.displayName;
-        let fFullName = rUser.fullName;
+      const fId = rUser.encodedId;
+      fitbitId = fId;
+      const fDisplayName = rUser.displayName;
+      const fFullName = rUser.fullName;
 
-        updateFitbitProfile(hashCode, fId, fDisplayName, fFullName);
+      updateFitbitProfile(hashCode, fId, fDisplayName, fFullName);
 
-
-        return {value: "success", stage: "profile"};
-
-      })
-      .catch((error) => {
-        console.log();
-        return {value: "failed", stage: "profile"};
-      })
+      return { value: "success", stage: "profile" };
+    })
+    .catch((error) => {
+      console.log(error);
+      return { value: "failed", stage: "profile" };
+    });
 
   return {
-    props: { result: {authResult, profileResult}, fitbitId},
+    props: { result: { authResult, profileResult }, fitbitId },
   };
 }
 
-export default function FitbitSignin({result, fitbitId}) {
+export default function FitbitSignin({ result, fitbitId }) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [isFitbitLoading, setFitbitLoading] = useState(false);
 
   useEffect(() => {
-    setFitbitLoading(true)
-    fetch('/api/manage-fitbit-subscription?function_name=create_subscriptions', {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fitbitId: fitbitId
-      }),
-    })
+    setFitbitLoading(true);
+    fetch(
+      "/api/manage-fitbit-subscription?function_name=create_subscriptions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fitbitId: fitbitId,
+        }),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
-        setFitbitLoading(false)
-      })
+        setFitbitLoading(false);
+      });
   }, []);
 
   if (status == "loading") return <div>loading...</div>;
-  if (!session){
-    router.push('/');
+  if (!session) {
+    router.push("/");
     return null;
   }
 
   console.log(`session: ${JSON.stringify(session)}`);
 
+  const combinedResult =
+    result.authResult.value == "success" &&
+    result.profileResult.value == "success";
 
-  let combinedResult = result.authResult.value == "success" && result.profileResult.value == "success";
-
-  if(!combinedResult){
+  if (!combinedResult) {
     let message = "";
 
-    if(result.authResult.value == "failed"){
+    if (result.authResult.value == "failed") {
       message += "Fail to authenticate!\n";
     }
 
-    if(result.profileResult.value == "failed"){
+    if (result.profileResult.value == "failed") {
       message += "Fail to retrieve profile information.!\n";
     }
   }
 
-
-
   return (
     <Layout title={"Walk To Joy"} description={""}>
-        
-        <div>
-        {
-          combinedResult? <h1 className={styles.title}>Fitbit authorized success!</h1>: <h1 className={styles.title}>Fitbit connection failed!</h1>
-        }
-        </div>
-        <div>
-        {
-          !combinedResult? <div>{message}</div>:null
-        }
-        </div>
+      <div>
+        {combinedResult ? (
+          <h1 className={styles.title}>Fitbit authorized success!</h1>
+        ) : (
+          <h1 className={styles.title}>Fitbit connection failed!</h1>
+        )}
+      </div>
+      <div>{!combinedResult ? <div>{message}</div> : null}</div>
 
-        <div>
-          {
-            isFitbitLoading? <Fragment>
-              <div>Give us a few seconds to wrap things up!</div>
-              <LinearProgress></LinearProgress>
-            </Fragment>: null
-          }
-          
+      <div>
+        {isFitbitLoading ? (
+          <Fragment>
+            <div>Give us a few seconds to wrap things up!</div>
+            <LinearProgress></LinearProgress>
+          </Fragment>
+        ) : null}
+      </div>
 
-        </div>
-
-        <Button variant="contained" 
+      <Button
+        variant="contained"
         className="project-button"
-        disabled={isFitbitLoading} onClick={(event) => {
-            router.push("/main");
-            return;
-          }} >Done</Button>
-
-
+        disabled={isFitbitLoading}
+        onClick={(event) => {
+          router.push("/main");
+          return;
+        }}
+      >
+        Done
+      </Button>
     </Layout>
   );
 }
-
-/*
-
-<div>Please do not share your participant ID and token with others.</div>
-
-<div>Participant ID</div>
-        <InputText value={value1} placeholder={"Enter your participant ID"} onChange={(e) => setValue1(e.target.value)} />
-        <Password value={value2} placeholder={"Enter your 8-digit token"} feedback={false} onChange={(e) => setValue2(e.target.value)} toggleMask />
-*/
-
-/*
-<div>
-{
-  logList.map((log, index) => {
-    return <div key={index}>
-      <div>{log.type}</div>
-      <div>{log.createdAt}</div>
-      <div>{JSON.stringify(log.content)}</div>
-    </div>;
-  })
-}
-</div>
-*/
-
-/*
-      <footer className={styles.footer}>
-        <div>
-          WalkToJoy Study
-        </div>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <div>School of Information</div>
-        <div>University of Michigan</div>
-          
-        </a>
-      </footer>
-
-
-Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-
-
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-
-<div className={styles.grid}>
-<a href="https://nextjs.org/docs" className={styles.card}>
-  <h2>Documentation &rarr;</h2>
-  <p>Find in-depth information about Next.js features and API.</p>
-</a>
-
-<a href="https://nextjs.org/learn" className={styles.card}>
-  <h2>Learn &rarr;</h2>
-  <p>Learn about Next.js in an interactive course with quizzes!</p>
-</a>
-
-<a
-  href="https://github.com/vercel/next.js/tree/canary/examples"
-  className={styles.card}
->
-  <h2>Examples &rarr;</h2>
-  <p>Discover and deploy boilerplate example Next.js projects.</p>
-</a>
-
-<a
-  href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-  className={styles.card}
->
-  <h2>Deploy &rarr;</h2>
-  <p>
-    Instantly deploy your Next.js site to a public URL with Vercel.
-  </p>
-</a>
-</div>
-*/

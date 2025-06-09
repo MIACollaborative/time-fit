@@ -21,9 +21,13 @@ export default class UserInfoHelper {
   }
 
   static async getUserInfoByUsername(username) {
+    return await UserInfoHelper.getUserInfoByPropertyValue("username", username);
+  }
+
+  static async getUserInfoByPropertyValue(property, value) {
     const theUser = await getPrismaClient().users.findFirst({
       where: {
-        username: username,
+        [property]: value,
       },
     });
     return theUser;

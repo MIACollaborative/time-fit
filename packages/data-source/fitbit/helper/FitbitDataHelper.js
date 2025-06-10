@@ -1,4 +1,3 @@
-
 import DateTimeHelper from "../../../helper/DateTimeHelper.js";
 import UserInfoHelper from "../../helper/UserInfoHelper.js";
 import UpdateDiffHelper from "../../helper/UpdateDiffHelper.js";
@@ -743,5 +742,33 @@ export default class FitbitDataHelper {
     }
 
     return minutesTotal;
+  }
+
+  static async getUserFitbitActivityListOfCategoryDuringPeriodById(
+    fitbitId,
+    category = "Walk",
+    startDateString,
+    endDateString
+  ) {
+    const recordList =
+      await FitbitDataHelper.getUserFitbitActivityDataDuringPeriodById(
+        fitbitId,
+        startDateString,
+        endDateString
+      );
+
+    let activityList = [];
+
+    recordList.forEach((record) => {
+      if (record.content.activities.length > 0) {
+        activityList = activityList.concat(record.content.activities);
+      }
+    });
+
+    const activityListByCategory = activityList.filter((item) => {
+      return item.activityParentName == category;
+    });
+
+    return activityListByCategory;
   }
 }

@@ -5,8 +5,8 @@ export default class SurveyResponseHelper {
 
   static async insertSurveyResponseList(surveyResponseList) {
     const prisma = getPrismaClient();
-    if(surveyResponseList.length == 0){
-      return {count: 0};
+    if (surveyResponseList.length == 0) {
+      return { count: 0 };
     }
     return await prisma.response.createMany({
       data: surveyResponseList,
@@ -45,9 +45,7 @@ export default class SurveyResponseHelper {
     return responseList;
   }
 
-  static async findSurveyResponsesByCriteria(
-    criteria
-  ) {
+  static async findSurveyResponsesByCriteria(criteria) {
     const prisma = getPrismaClient();
     const responseList = await prisma.response.findMany(criteria);
     return responseList;
@@ -70,5 +68,38 @@ export default class SurveyResponseHelper {
     });
 
     return filteredResponseList.length > 0;
+  }
+
+  static async getSurveyResponseFromPersonDuringPeriod(
+    surveyId,
+    participantId,
+    startDate,
+    endDate,
+    limit = 0
+  ) {
+
+    let queryObj = {
+      where: {
+        surveyId: surveyId,
+        participantId: participantId,
+        dateTime: {
+          gte: startDate.toISO(),
+          lte: endDate.toISO(),
+        },
+      },
+      orderBy: [
+        {
+          dateTime: "desc",
+        },
+      ],
+    };
+
+    if (limit > 0) {
+      queryObj["take"] = limit;
+    }
+
+    const responseList = await SurveyResponseHelper.findSurveyResponsesByCriteria(queryObj);
+
+    return responseList;
   }
 }

@@ -5,6 +5,7 @@ import FitbitHelper from "./FitbitHelper.mjs";
 import GeneralUtility from "./GeneralUtility.mjs";
 import { inspect } from 'util';
 import v from "voca";
+import FitbitStatisticsHelper from "@time-fit/data-source/fitbit/helper/FitbitStatisticsHelper";
 
 function replacer(key, value) {
     if (typeof value === "Date") {
@@ -110,10 +111,10 @@ export default class DatabaseUtility {
 
         if( result.message.includes("[7-day-average-steps]")){
             console.log(`DatabaseUtility.replacePlaceholderFromMessage found [7-day-average-steps]`);
-            let lastWeekInterval = GeneralUtility.getLastWeekAsInterval();
+            const lastWeekInterval = GeneralUtility.getLastWeekAsInterval();
             
-            let value = await DatabaseUtility.getUserFitbitAverageDailyStepsDuringPeriodById(userInfo.fitbitId, lastWeekInterval.start.toISODate(), lastWeekInterval.end.toISODate());
-            let restrictedValue = value.toFixed(1);
+            const value = await FitbitStatisticsHelper.getUserFitbitAverageDailyStepsDuringPeriodById(userInfo.fitbitId, lastWeekInterval.start.toISODate(), lastWeekInterval.end.toISODate());
+            const restrictedValue = value.toFixed(1);
             result.message = voca.replaceAll(result.message, '[7-day-average-steps]', restrictedValue); 
             result.surveyReplaced = true;
         }

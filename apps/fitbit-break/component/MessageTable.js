@@ -74,10 +74,6 @@ export default function MessageTable({ infoList, userInfo, assetHostURL, renderD
           >
             <TableCell align="right"><Button variant="contained" onClick={(event) => {
               let messageInfo = row;
-
-
-              //let messageBody = GeneralUtility.composeUserMessageForTwilio(userInfo, messageInfo, "");
-
               let composePromise = fetch("/api/message-composer?function_name=compose_message", {
                 method: "POST",
                 headers: {

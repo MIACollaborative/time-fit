@@ -1,6 +1,6 @@
-import prisma from "../../lib/prisma";
-import FitbitHelper from "../../lib/FitbitHelper.mjs";
-import { inspect } from 'util' 
+import { inspect } from 'util';
+import UserInfoHelper from "@time-fit/helper/UserInfoHelper";
+import FitbitHelper from "@time-fit/data-source/fitbit/helper/FitbitHelper.js";
 
 export default async function handler(req, res) {
   const { code, state } = req.query;
@@ -13,59 +13,25 @@ export default async function handler(req, res) {
     console.log(`updateToken, hashCode: ${hashCode}`);
     console.log(`updateToken, accessToken: ${accessToken}`);
     console.log(`updateToken, refreshToken: ${refreshToken}`);
-    const firstUser = await prisma.users.findFirst({
-      where: { hash: hashCode },
+
+    const updateUser = await UserInfoHelper.updateUserInfoByPropertyValue("hash", hashCode, {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
     });
-
-    console.log(`firstUser: ${JSON.stringify(firstUser)}`);
-
-    const updateUser = await prisma.users.update({
-      where: { username: firstUser.username },
-      data: {
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-      },
-    });
-
-    console.log(`updateUser: ${JSON.stringify(updateUser)}`);
   }
 
-  let authCode = code;
-  let stateSplit = state.split("-");
-  let hashCode = stateSplit[2];
+  const authCode = code;
+  const stateSplit = state.split("-");
+  const hashCode = stateSplit[2];
 
-  console.log(`hash: ${hashCode}`);
-
-  const user = await prisma.users.findFirst({
-    where: { hash: hashCode },
-  });
+  const user = await UserInfoHelper.getUserInfoByPropertyValue("hash", hashCode);
 
   return FitbitHelper.getAuthorizationInformation(authCode)
     .then((responseData) => {
-      console.log(
-        `FitbitHelper.getAuthorizationInformation: ${JSON.stringify(
-          responseData
-        )}`
-      );
-
-      /*
-      if(responseData.status == 400){
-          // cannot auth: Bad Request
-          // I supposed this mean we need to authenticate again
-      }
-      */
-
-      let accessToken = responseData.access_token;
-
-      // If you followed the Authorization Code Flow, you were issued a refresh token. You can use your refresh token to get a new access token in case the one that you currently have has expired. Enter or paste your refresh token below. Also make sure you enteryour data in section 1 and 3 since it's used to refresh your access token.
-      let refreshToken = responseData.refresh_token;
-
-      // To Do: ideally, store both
+      const accessToken = responseData.access_token;
+      const refreshToken = responseData.refresh_token;
       updateToken(hashCode, accessToken, refreshToken);
-
       res.status(200).json({ message: "authentication success" });
-      //return {message: "authentication success"}; //res.status(200).end();
-      //return {username: user.username, accessToken, refreshToken };
     })
     .catch((error) => {
       if (error.response) {

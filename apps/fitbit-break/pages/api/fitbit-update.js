@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./auth/[...nextauth]";
-import UpdateDiffHelper from "../../lib/UpdateDiffHelper.mjs";
+import UpdateDiffHelper from "@time-fit/data-source/fitbit/helper/UpdateDiffHelper.js";
 import { DateTime } from "luxon";
 
 const adminUsernameList = ["test1", "test2", "test3", "test4"];

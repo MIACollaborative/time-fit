@@ -1,10 +1,10 @@
-import prisma from "../../lib/prisma" 
-import { getSession } from "next-auth/react";
+import { authOptions } from "./auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
+import LogHelper from "@time-fit/helper/LogHelper";
 
 export default async function handler(req, res) {
-  const session = await getSession({ req })
+  const session = await getServerSession(req, res, authOptions);
     if (!session) {
-      // Not Signed in
       res.status(401).json({});
       res.end();
       return
@@ -17,12 +17,12 @@ export default async function handler(req, res) {
 
   switch (function_name) {
     case "logToDB":
-      const aLog = await prisma.log.create({
-        data: {
+      const aLog = await LogHelper.insertLogList([
+        {
           type: type,
           content: content,
         },
-      });
+      ]);
       res.status(200).json({ result: aLog });
       return;
     default:

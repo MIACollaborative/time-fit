@@ -11,4 +11,14 @@ export default class UpdateDiffHelper {
     return responseList;
   }
 
+  static async insertUpdateDiffList(updateDiffList) {
+    const prisma = getPrismaClient();
+    if(updateDiffList.length == 0){
+      return {count: 0};
+    }
+    return await prisma.update_diff.createMany({
+      data: updateDiffList,
+    });
+  }
+
 }

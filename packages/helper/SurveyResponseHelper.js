@@ -3,6 +3,16 @@ import { getPrismaClient } from "./prisma.js";
 export default class SurveyResponseHelper {
   constructor() {}
 
+  static async insertSurveyResponseList(surveyResponseList) {
+    const prisma = getPrismaClient();
+    if(surveyResponseList.length == 0){
+      return {count: 0};
+    }
+    return await prisma.response.createMany({
+      data: surveyResponseList,
+    });
+  }
+
   static async findSurveyResponseDuringPeriod(
     surveyId,
     startDate,

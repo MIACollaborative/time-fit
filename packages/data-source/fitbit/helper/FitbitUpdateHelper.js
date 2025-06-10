@@ -1,7 +1,7 @@
 import DateTimeHelper from "../../../helper/DateTimeHelper.js";
-import FitbitDataHelper from "./FitbitDataHelper.js";
 import UserInfoHelper from "../../../helper/UserInfoHelper.js";
 import { getPrismaClient } from "../../../helper/prisma.js";
+import FitbitDataHelper from "./FitbitDataHelper.js";
 
 export default class FitbitUpdateHelper {
   constructor() {}
@@ -19,8 +19,6 @@ export default class FitbitUpdateHelper {
     });
     return createResult;s
   }
-
-
 
   static async updateFitbitUpdateStatusWithSameSignatureBeforeTime(
     fUpdate,

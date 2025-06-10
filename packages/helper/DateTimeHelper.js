@@ -21,8 +21,14 @@ export default class DateTimeHelper {
     startDateTime,
     endDateTime
   ) {
-    const targetDateTime = DateTime.fromISO(dateString, { zone: dateStringTimezone });
-    return DateTimeHelper.isDatTimeWithinInterval(targetDateTime, startDateTime, endDateTime);
+    const targetDateTime = DateTime.fromISO(dateString, {
+      zone: dateStringTimezone,
+    });
+    return DateTimeHelper.isDatTimeWithinInterval(
+      targetDateTime,
+      startDateTime,
+      endDateTime
+    );
   }
 
   static isDatTimeWithinInterval(dateTime, startDateTime, endDateTime) {
@@ -108,5 +114,12 @@ export default class DateTimeHelper {
     }
 
     return result;
+  }
+
+  static getLastWeekAsIntervalFromDateTime(nowDateTime = DateTime.now()) {
+    const start = nowDateTime.minus({ days: 7 }).startOf("week");
+    const end = nowDateTime.minus({ days: 7 }).endOf("week");
+
+    return Interval.fromDateTimes(start, end);
   }
 }

@@ -9,24 +9,6 @@ export default class MessageGroupAction {
     );
     const messageBody = messageInfo.content;
 
-    // TO DO: too specific. comment out for now.
-    /*
-      // for logging
-      record.messageLabel = messageInfo.label;
-
-      surveyURL = GeneralUtility.extractSurveyLinkFromAction(theAction);
-      console.log(`executeActionForUser surveyURL: ${surveyURL}`);
-
-      messageBody = await DatabaseUtility.composeUserMessageForTwilio(
-        userInfo,
-        messageInfo,
-        surveyURL
-      );
-      if (messageInfo.gif != undefined) {
-        gifURL = `${process.env.ASSET_HOST_URL}/image/gif/${messageInfo.gif}.gif`;
-      }
-    */
-
     return {
       type: "twilio",
       value: await TwilioHelper.sendMessage(

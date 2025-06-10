@@ -10,34 +10,26 @@ import { inspect } from "util";
 import { Fragment } from "react";
 
 import UserInfoHelper from "@time-fit/helper/UserInfoHelper";
+import FitbitAPIHelper from "@time-fit/data-source/fitbit/helper/FitbitAPIHelper";
 
-import prisma from "../lib/prisma";
 
 export async function getServerSideProps({ query }) {
   const { code, state } = query;
 
-  let authCode = code;
-  let stateSplit = state.split("-");
-  let hashCode = stateSplit[2];
+  const authCode = code;
+  const stateSplit = state.split("-");
+  const hashCode = stateSplit[2];
 
   async function updateToken(hashCode, accessToken, refreshToken) {
-    console.log(`updateToken, hashCode: ${hashCode}`);
-    console.log(`updateToken, accessToken: ${accessToken}`);
-    console.log(`updateToken, refreshToken: ${refreshToken}`);
-
     const firstUser = await UserInfoHelper.getUserInfoByPropertyValue(
       "hash",
       hashCode
     );
 
-    console.log(`firstUser: ${JSON.stringify(firstUser)}`);
-
-    const updateUser = UserInfoHelper.updateUserInfo(firstUser, {
+    const updateUser = await UserInfoHelper.updateUserInfo(firstUser, {
       accessToken: accessToken,
       refreshToken: refreshToken,
     });
-
-    console.log(`updateUser: ${JSON.stringify(updateUser)}`);
   }
 
   async function updateFitbitProfile(
@@ -46,25 +38,16 @@ export async function getServerSideProps({ query }) {
     fitbitDisplayName,
     fitbitFullName
   ) {
-    console.log(`updateFitbitId, hashCode: ${hashCode}`);
-    console.log(`updateFitbitId, fitbitId: ${fitbitId}`);
-    console.log(`updateFitbitId, fitbitDisplayName: ${fitbitDisplayName}`);
-    console.log(`updateFitbitId, fitbitFullName: ${fitbitFullName}`);
-
     const firstUser = await UserInfoHelper.getUserInfoByPropertyValue(
       "hash",
       hashCode
     );
-
-    console.log(`firstUser: ${JSON.stringify(firstUser)}`);
 
     const updateUser = await UserInfoHelper.updateUserInfo(firstUser, {
       fitbitId: fitbitId,
       fitbitDisplayName: fitbitDisplayName,
       fitbitFullName: fitbitFullName,
     });
-
-    console.log(`updateUser: ${JSON.stringify(updateUser)}`);
   }
 
   async function updateFitbitProfile(
@@ -73,25 +56,16 @@ export async function getServerSideProps({ query }) {
     fitbitDisplayName,
     fitbitFullName
   ) {
-    console.log(`updateFitbitId, hashCode: ${hashCode}`);
-    console.log(`updateFitbitId, fitbitId: ${fitbitId}`);
-    console.log(`updateFitbitId, fitbitDisplayName: ${fitbitDisplayName}`);
-    console.log(`updateFitbitId, fitbitFullName: ${fitbitFullName}`);
-
     const firstUser = await UserInfoHelper.getUserInfoByPropertyValue(
       "hash",
       hashCode
     );
-
-    console.log(`firstUser: ${JSON.stringify(firstUser)}`);
 
     const updateUser = await UserInfoHelper.updateUserInfo(firstUser, {
       fitbitId: fitbitId,
       fitbitDisplayName: fitbitDisplayName,
       fitbitFullName: fitbitFullName,
     });
-
-    console.log(`updateUser: ${JSON.stringify(updateUser)}`);
   }
 
   const user = await UserInfoHelper.getUserInfoByPropertyValue(
@@ -102,7 +76,7 @@ export async function getServerSideProps({ query }) {
   let accessToken = "";
   let refreshToken = "";
 
-  const authResult = await FitbitHelper.getAuthorizationInformation(authCode)
+  const authResult = await FitbitAPIHelper.getAuthorizationInformation(authCode)
     .then((responseData) => {
       accessToken = responseData.access_token;
 
@@ -149,7 +123,7 @@ export async function getServerSideProps({ query }) {
 
   let fitbitId = "";
 
-  const profileResult = await FitbitHelper.getProfile(accessToken)
+  const profileResult = await FitbitAPIHelper.getProfile(accessToken)
     .then((responseData) => {
       const rUser = responseData.user;
 
@@ -202,8 +176,6 @@ export default function FitbitSignin({ result, fitbitId }) {
     router.push("/");
     return null;
   }
-
-  console.log(`session: ${JSON.stringify(session)}`);
 
   const combinedResult =
     result.authResult.value == "success" &&

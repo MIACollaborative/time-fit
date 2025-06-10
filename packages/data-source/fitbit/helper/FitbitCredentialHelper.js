@@ -1,8 +1,8 @@
-import ContentBase from "twilio/lib/rest/ContentBase";
 import FitbitAPIHelper from "./FitbitAPIHelper";
 import { DateTime } from "luxon";
+import UserInfoHelper from "../../helper/UserInfoHelper";
 
-export default class FitbitCredentialsHelper {
+export default class FitbitCredentialHelper {
   constructor() {}
 
   static async ensureTokenValidForUser(
@@ -36,26 +36,15 @@ export default class FitbitCredentialsHelper {
       const diffInSeconds = expiredDate.diff(nowDate, "seconds").toObject()[
         "seconds"
       ];
-      console.log(
-        `${this.name}.ensureTokenValidForUser: time to expire [${diffInSeconds}], threshold: [${minValidthresholdInSeconds}]`
-      );
 
       // token is still valid
       if (autoRefresh == false) {
-        console.log(
-          `${this.name}.ensureTokenValidForUser: autoRefresh: ${autoRefresh}`
-        );
         return { value: "success", data: userInfo };
       } else {
         if (diffInSeconds > minValidthresholdInSeconds) {
-          console.log(
-            `${this.name}.ensureTokenValidForUser: time to expire [${diffInSeconds}] greater than the threshold: [${minValidthresholdInSeconds}] -> don't force refresh`
-          );
           return { value: "success", data: userInfo };
         } else {
-          console.log(
-            `${this.name}.ensureTokenValidForUser: time to expire [${diffInSeconds}] less than the threshold: [${minValidthresholdInSeconds}] -> force refresh`
-          );
+          return { value: "failed", data: introspectResult };
         }
       }
     }
@@ -112,7 +101,7 @@ export default class FitbitCredentialsHelper {
 
     if (refreshResult.value == "success") {
       // need to actually update the token
-      let updatedUserInfo = await DatabaseUtility.updateToken(
+      let updatedUserInfo = await UserInfoHelper.updateToken(
         userInfo.hash,
         refreshResult.data.accessToken,
         refreshResult.data.refreshToken,

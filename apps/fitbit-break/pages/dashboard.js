@@ -17,7 +17,6 @@ import { authOptions } from "./api/auth/[...nextauth]"
 import { getServerSession } from "next-auth/next"
 import { DateTime } from "luxon";
 import ObjectHelper from '@time-fit/helper/ObjectHelper';
-import prisma from "../lib/prisma.mjs";
 import UserInfoHelper from '@time-fit/helper/UserInfoHelper';
 
 
@@ -112,36 +111,26 @@ export async function getServerSideProps(ctx) {
   };
 }
 
-//  userInfoList, taskLogInfoList,messageInfoList, responseInfoList, taskLogGroupByInfoList, updateDiffInfoList,  fitbitDataInfoList, taskLogInvestigatorInfoList,fitbitNotificationInfoList, 
-
 export default function Dashboard({ fitbitSubscriptionInfoList, taskInfoList,  userInfo, assetHostURL }) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [tabName, setTabName] = useState("Users");
 
 
-  // userInfoList
   const [userInfoList, setUserInfoList] = useState([]);
 
-  // fitbitDataInfoList
   const [fitbitDataInfoList, setFitbitDataInfoList] = useState([]);
 
-  // fitbitNotificationInfoList
   const [fitbitNotificationInfoList, setFitbitNotificationInfoList] = useState([]);
 
-  // responseInfoList
   const [responseInfoList, setResponseInfoList] = useState([]);
 
-  // updateDiff
   const [updateDiffInfoList, setUpdateDiffInfoList] = useState([]);
 
-  // messageInfoList
   const [messageInfoList, setMessageInfoList] = useState([]);
 
-  // taskLogInfoList
   const [taskLogInfoList, setTaskLogInfoList] = useState([]);
 
-  // taskLogInvestigatorInfoList
   const [taskLogInvestigatorInfoList, setTaskLogInvestigatorInfoList] = useState([]);
 
   const handleTabChange = (event, newTabName) => {
@@ -151,7 +140,6 @@ export default function Dashboard({ fitbitSubscriptionInfoList, taskInfoList,  u
   const nowDate = DateTime.now();
   const startDate = nowDate.minus({ weeks: 1 }).startOf("day");
 
-  // userInfoList
   useEffect(() => {
     fetch('/api/user?function_name=get', {
       method: "POST",
@@ -166,7 +154,6 @@ export default function Dashboard({ fitbitSubscriptionInfoList, taskInfoList,  u
       })
   }, []);
 
-  // messageInfoList
   useEffect(() => {
     fetch('/api/message?function_name=get', {
       method: "POST",
@@ -181,7 +168,6 @@ export default function Dashboard({ fitbitSubscriptionInfoList, taskInfoList,  u
       })
   }, []);
 
-  // responseInfoList
   useEffect(() => {
     fetch('/api/response?function_name=get', {
       method: "POST",
@@ -196,7 +182,6 @@ export default function Dashboard({ fitbitSubscriptionInfoList, taskInfoList,  u
       })
   }, []);
 
-    // fitbitDataInfoList
     useEffect(() => {
       fetch('/api/fitbit-data?function_name=get', {
         method: "POST",
@@ -214,13 +199,12 @@ export default function Dashboard({ fitbitSubscriptionInfoList, taskInfoList,  u
         })
     }, []);
 
-        // fitbitNotificationInfoList
-        useEffect(() => {
-          fetch('/api/fitbit-update?function_name=get', {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+    useEffect(() => {
+      fetch('/api/fitbit-update?function_name=get', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
             body: JSON.stringify({
               startDate: nowDate.minus({ days: 7 }).startOf("day"), // startDate.toISO(),
               endDate: nowDate.toISO()
@@ -230,9 +214,8 @@ export default function Dashboard({ fitbitSubscriptionInfoList, taskInfoList,  u
             .then((data) => {
               setFitbitNotificationInfoList(data.result)
             })
-        }, []);
+    }, []);
 
-  // updateDiffInfoList
   useEffect(() => {
     fetch('/api/update-diff?function_name=get', {
       method: "POST",
@@ -268,7 +251,6 @@ export default function Dashboard({ fitbitSubscriptionInfoList, taskInfoList,  u
   }, []);
 
 
-  // investigator
   useEffect(() => {
     fetch('/api/task-log?function_name=get_investigator', {
       method: "POST",

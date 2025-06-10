@@ -4,6 +4,16 @@ import FitbitCredentialHelper from "./FitbitCredentialHelper";
 export default class FitbitSubscriptionHelper {
   constructor() {}
 
+  static async getSubscriptionList(orderBy = "desc") {
+    return await getPrismaClient().fitbit_subscription.findMany({
+      orderBy: [
+        {
+          updatedAt: orderBy,
+        },
+      ],
+    });
+  }
+
   static async createSubscriptionsForUser(
     userInfo,
     collectionTypeList = ["activities", "userRevokedAccess"]
@@ -13,11 +23,12 @@ export default class FitbitSubscriptionHelper {
     // validate user token first
     // { value: "success", data: userInfo };
     // { value: "failed", data: inspect(error.response.data) };
-    const validateTokenResult = await FitbitCredentialHelper.ensureTokenValidForUser(
-      userInfo,
-      true,
-      30 * 60
-    );
+    const validateTokenResult =
+      await FitbitCredentialHelper.ensureTokenValidForUser(
+        userInfo,
+        true,
+        30 * 60
+      );
     let updatedUserInfo;
 
     if (validateTokenResult.value == "success") {
@@ -32,12 +43,13 @@ export default class FitbitSubscriptionHelper {
       // version 2: just id and type
       const newSubscriptionId = `${updatedUserInfo.fitbitId}-${cType}`;
 
-      const subscriptionResult = await FitbitAPIHelper.createSubscriptionForFitbitId(
-        updatedUserInfo.fitbitId,
-        cType,
-        newSubscriptionId,
-        updatedUserInfo.accessToken
-      );
+      const subscriptionResult =
+        await FitbitAPIHelper.createSubscriptionForFitbitId(
+          updatedUserInfo.fitbitId,
+          cType,
+          newSubscriptionId,
+          updatedUserInfo.accessToken
+        );
 
       const { subscriptionId, ...rest } = subscriptionResult;
 
@@ -55,6 +67,4 @@ export default class FitbitSubscriptionHelper {
 
     return resultList;
   }
-
-
 }

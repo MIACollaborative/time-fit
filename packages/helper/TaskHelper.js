@@ -2,6 +2,17 @@ import {getPrismaClient} from "./prisma.js";
 export default class TaskHelper {
   constructor() {}
 
+  static async getTasksSortedByCreatedAt(sorting = "asc") {
+    const prisma = getPrismaClient();
+    return await prisma.task.findMany({
+      orderBy: [
+        {
+          createdAt: "asc",
+        },
+      ],
+    });
+  }
+
   static async getTasksSortedByPriority(sorting = "asc") {
     const prisma = getPrismaClient();
     return await prisma.task.findMany({

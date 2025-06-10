@@ -7,7 +7,7 @@ export default class TaskHelper {
     return await prisma.task.findMany({
       orderBy: [
         {
-          createdAt: "asc",
+          createdAt: sorting,
         },
       ],
     });

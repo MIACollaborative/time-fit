@@ -35,6 +35,14 @@ export default class SurveyResponseHelper {
     return responseList;
   }
 
+  static async findSurveyResponsesByCriteria(
+    criteria
+  ) {
+    const prisma = getPrismaClient();
+    const responseList = await prisma.response.findMany(criteria);
+    return responseList;
+  }
+
   static async isSurveyCompletedByPerson(surveyId, personId) {
     const startDate = DateTime.utc(2000);
     const endDate = DateTime.utc();

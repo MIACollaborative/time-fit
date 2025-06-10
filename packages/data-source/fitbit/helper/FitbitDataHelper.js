@@ -1,10 +1,17 @@
 import DateTimeHelper from "../../../helper/DateTimeHelper.js";
 import FitbitAPIHelper from "./FitbitAPIHelper.js";
-import prisma from "../../../helper/prisma.js";
 import DataRecordHelper from "../../DataRecordHelper.js";
+import { getPrismaClient } from "../../../helper/prisma.js";
 
 export default class FitbitDataHelper {
   constructor() {}
+
+  static async findFitbitDataByCriteria(
+    criteria
+  ) {
+    const fitbitDataList = await getPrismaClient().fitbit_data.findMany(criteria);
+    return fitbitDataList;
+  }
 
   static generateCompositeIDForFitbitUpdate(aList = []) {
     return aList.join("_");
@@ -12,7 +19,7 @@ export default class FitbitDataHelper {
 
   static async getUserFitbitActivityDataDuringPeriodById(fitbitId, startDateString, endDateString){
 
-    const recordList = await prisma.fitbit_data.findMany({
+    const recordList = await getPrismaClient().fitbit_data.findMany({
         where:{
             ownerId: fitbitId,
             dataType: GeneralUtility.FITBIT_INTRADAY_DATA_TYPE_ACTIVITY_SUMMARY,
@@ -208,13 +215,13 @@ static async getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(fitbitId, 
         );
         let lastModified = ""; // resultData.activities.length > 0? resultData.activities[0].lastModified: "";
 
-        const oldDocument = await prisma.fitbit_data.findFirst({
+        const oldDocument = await getPrismaClient().fitbit_data.findFirst({
           where: {
             compositeId: compositeId,
           },
         });
 
-        const newDocument = await prisma.fitbit_data.upsert({
+        const newDocument = await getPrismaClient().fitbit_data.upsert({
           where: {
             compositeId: compositeId,
           },
@@ -243,7 +250,7 @@ static async getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(fitbitId, 
             newDocument
           );
         }
-        await prisma.update_diff.create({
+        await getPrismaClient().update_diff.create({
           data: {
             collectionName: "fitbit_data",
             documentId: newDocument.id,
@@ -278,7 +285,7 @@ static async getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(fitbitId, 
     let resultData = {};
 
     // get the user first
-    const userInfo = await prisma.users.findFirst({
+    const userInfo = await getPrismaClient().users.findFirst({
       where: {
         fitbitId: fitbitUpdate.ownerId,
       },
@@ -489,13 +496,13 @@ static async getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(fitbitId, 
             ? resultData.activities[0].lastModified
             : "";
 
-        const oldDocument = await prisma.fitbit_data.findFirst({
+        const oldDocument = await getPrismaClient().fitbit_data.findFirst({
           where: {
             compositeId: compositeId,
           },
         });
 
-        const newDocument = await prisma.fitbit_data.upsert({
+        const newDocument = await getPrismaClient().fitbit_data.upsert({
           where: {
             compositeId: compositeId,
           },
@@ -524,7 +531,7 @@ static async getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(fitbitId, 
             newDocument
           );
         }
-        await prisma.update_diff.create({
+        await getPrismaClient().update_diff.create({
           data: {
             collectionName: "fitbit_data",
             documentId: newDocument.id,
@@ -662,7 +669,7 @@ static async getUserFitbitHeartRateIntradayMinutesByIdAndDate(fitbitId, startDat
 
   let timeString = startDateTime.toFormat('yyyy-MM-dd');
 
-  const record = await prisma.fitbit_data.findFirst({
+  const record = await getPrismaClient().fitbit_data.findFirst({
       where:{
           ownerId: fitbitId,
           dataType: GeneralUtility.FITBIT_INTRADAY_DATA_TYPE_HEART,

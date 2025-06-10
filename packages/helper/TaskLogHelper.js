@@ -1,7 +1,14 @@
 import { getPrismaClient } from "./prisma.js";
-
 export default class TaskLogHelper {
   constructor() {}
+
+  static async getTaskLogByCriteria(
+    criteria
+  ) {
+    const prisma = getPrismaClient();
+    const taskLogList = await prisma.taskLog.findMany(criteria);
+    return taskLogList;
+  }
 
   static async insertTaskLogList(tasklogList) {
     const prisma = getPrismaClient();

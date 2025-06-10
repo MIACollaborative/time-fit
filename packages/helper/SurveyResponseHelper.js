@@ -1,4 +1,4 @@
-import {getPrismaClient} from "./prisma.js";
+import { getPrismaClient } from "./prisma.js";
 
 export default class SurveyResponseHelper {
   constructor() {}
@@ -28,10 +28,29 @@ export default class SurveyResponseHelper {
     if (limit >= 0) {
       queryObj["take"] = limit;
     }
-    
+
     const prisma = getPrismaClient();
     const responseList = await prisma.response.findMany(queryObj);
 
     return responseList;
+  }
+
+  static async isSurveyCompletedByPerson(surveyId, personId) {
+    const startDate = DateTime.utc(2000);
+    const endDate = DateTime.utc();
+
+    const responseList =
+      await SurveyResponseHelper.findSurveyResponseDuringPeriod(
+        surveyId,
+        startDate,
+        endDate,
+        0
+      );
+
+    const filteredResponseList = responseList.filter((responseInfo) => {
+      return responseInfo.participantId == personId;
+    });
+
+    return filteredResponseList.length > 0;
   }
 }

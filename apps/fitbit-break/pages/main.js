@@ -1,37 +1,26 @@
 import Layout from '../component/Layout';
-
 import { toast } from "react-toastify";
-
 import { Button } from "@mui/material";
-
 import { inspect } from "util";
-
 import Link from "next/link";
-import { useSession, signIn, signOut, getSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useState, Fragment } from "react";
 import Divider from "@mui/material/Divider";
-import md5 from "md5";
-import FitbitHelper from "../lib/FitbitHelper";
-import GeneralUtility from "../lib/GeneralUtility";
-import prisma from "../lib/prisma.mjs";
-import DatabaseUtility from "../lib/DatabaseUtility.mjs";
-
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-
+import ObjectHelper from '@time-fit/helper/ObjectHelper';
+import { authOptions } from "./api/auth/[...nextauth]"
+import { getServerSession } from "next-auth/next"
+import UserInfoHelper from '@time-fit/helper/UserInfoHelper';
+import FitbitAPIHelper from '@time-fit/data-source/fitbit/helper/FitbitAPIHelper';
+import SurveyResponseHelper from '@time-fit/helper/SurveyResponseHelper';
+import TwilioHelper from '@time-fit/helper/TwilioHelper';
 
 const adminUsernameList = ["test1", "test2", "test3", "test4"];
 
-function replacer(key, value) {
-  if (typeof value === "Date") {
-    return value.toString();
-  }
-  return value;
-}
-
 export async function getServerSideProps(ctx) {
-  const session = await getSession(ctx);
+  const session = await getServerSession(ctx.req, ctx.res, authOptions);
 
   if (!session) {
     return {
@@ -40,22 +29,18 @@ export async function getServerSideProps(ctx) {
   }
   
 
-  let userName = session.user.name;
+  const userName = session.user.name;
+  const user = await UserInfoHelper.getUserInfoByUsername(userName);
+  const userInfo = JSON.parse(JSON.stringify(user, ObjectHelper.convertDateToString));
 
-  const user = await prisma.users.findFirst({
-    where: { username: userName },
-  });
-
-  const userInfo = JSON.parse(JSON.stringify(user, replacer));
-
-  let hasFitbitConnection =
+  const hasFitbitConnection =
     user.fitbitId != undefined &&
     user.accessToken != undefined &&
     user.refreshToken != undefined;
 
   let isAccessTokenActive = false;
 
-  const introspectResult = await FitbitHelper.introspectToken(
+  const introspectResult = await FitbitAPIHelper.introspectToken(
     user.accessToken,
     user.accessToken
   )
@@ -96,12 +81,9 @@ export async function getServerSideProps(ctx) {
 
 
   // baseline survey completed
-  let isBaselineSurveyCompleted = await DatabaseUtility.isSurveyCompletedByPerson("SV_81aWO5sJPDhGZNA", userInfo.username);
+  const isBaselineSurveyCompleted = await SurveyResponseHelper.isSurveyCompletedByPerson("SV_81aWO5sJPDhGZNA", userInfo.username);
 
-  console.log(`main.getServerSideProps: isSurveyCompletedByPerson: ${isBaselineSurveyCompleted}`);
-  //isAccessTokenActive = introspectResult.active;
-
-  let hostURL = `${process.env.HOST_URL}`;
+  const hostURL = `${process.env.HOST_URL}`;
 
   return {
     props: {
@@ -138,7 +120,6 @@ export default function Main({
   async function getInfo(
     username
   ) {
-    console.log(`Main.getInfo: ${username}`);
 
     const result = await fetch(
       "/api/user?function_name=get_info",
@@ -158,29 +139,27 @@ export default function Main({
     return result;
   }    
 
-  if(!GeneralUtility.isPreferredNameSet(userInfo)){
+  if(!AppHelper.isPreferredNameSet(userInfo)){
     router.push("/info-edit");
     return null;
   }
-  else if(!GeneralUtility.isWakeBedTimeSet(userInfo)){
+  else if(!AppHelper.isWakeBedTimeSet(userInfo)){
     router.push("/time-setting");
     return null;
   }
-  // GeneralUtility.doesFitbitInfoExist(userInfo)
-  else if(false && !GeneralUtility.doesFitbitInfoExist(userInfo)){
-    // likely the first time signing in
+  else if(false && !AppHelper.doesFitbitInfoExist(userInfo)){
     router.push("/fitbit-authorize");
     return null;
   }
-  else if(!GeneralUtility.isFitbitReminderTurnOff(userInfo)){
+  else if(!AppHelper.isFitbitReminderTurnOff(userInfo)){
     router.push("/turn-off-fitbit-reminder");
     return null;
   }
-  else if(!GeneralUtility.isWalkSetTo10(userInfo)){
+  else if(!AppHelper.isWalkSetTo10(userInfo)){
     router.push("/set-walk-auto-to-10");
     return null;
   }
-  else if(!GeneralUtility.isWalkToJoySaveToContacts(userInfo)){
+  else if(!AppHelper.isWalkToJoySaveToContacts(userInfo)){
     router.push("/save-walktojoy-to-contacts");
     return null;
   }
@@ -208,7 +187,7 @@ export default function Main({
     exclusive: true,
   };
 
-  let contactUsFormLink = "https://airtable.com/shr5NOZlCG0uBbe2w";
+  const contactUsFormLink = "https://airtable.com/shr5NOZlCG0uBbe2w";
 
   return (
     <Layout title={"Walk To Joy"} description={""}>
@@ -316,7 +295,7 @@ export default function Main({
           <div>Baseline survey completed: {JSON.stringify(isBaselineSurveyCompleted)} </div>
           <div>
             Fitbit:{" "}
-            {GeneralUtility.doesFitbitInfoExist(userInfo)
+            {AppHelper.doesFitbitInfoExist(userInfo)
               ? "connected"
               : "not connected"}
           </div>
@@ -377,10 +356,9 @@ export default function Main({
                 variant="contained"
                 style={{ width: "100%" }}
                 onClick={(event) => {
-                  GeneralUtility.sendTwilioMessage(
+                  TwilioHelper.sendMessage(
                     userInfo.phone,
-                    "https://walktojoy.info/image/gif/dancing-bear-7.gif", //`Hello ${userInfo.preferredName}`,
-                    //["https://walktojoy.info/image/gif/dancing-bear-7.gif"]
+                    "https://walktojoy.info/image/gif/dancing-bear-7.gif",
                   );
                   toast(`Hello ${userInfo.preferredName}`);
                 }}

@@ -85,7 +85,7 @@ export default function FitbitAuthorize({ userInfo, hostURL }) {
               <Button 
                 className="project-button"
                 variant="contained" 
-                color={GeneralUtility.doesFitbitInfoExist(userInfo)? "success":"primary"}>
+                color={AppHelper.doesFitbitInfoExist(userInfo)? "success":"primary"}>
                 Authorize your Fitbit
               </Button>
             </Link>

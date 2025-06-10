@@ -9,6 +9,7 @@ import UserInfoHelper from "@time-fit/helper/UserInfoHelper";
 import ObjectHelper from "@time-fit/helper/ObjectHelper";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
+import AppHelper from "@time-fit/helper/AppHelper";
 
 export async function getServerSideProps(ctx) {
   const session = await getServerSession(ctx.req, ctx.res, authOptions);
@@ -61,7 +62,7 @@ export default function FitbitAuthorize({ userInfo, hostURL }) {
               <Button 
                 className="project-button"
                 variant="contained" 
-                color={UserInfoHelper.doesFitbitInfoExist(userInfo)? "success":"primary"}>
+                color={AppHelper.doesFitbitInfoExist(userInfo)? "success":"primary"}>
                 Authorize your Fitbit
               </Button>
             </Link>

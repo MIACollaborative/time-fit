@@ -123,7 +123,7 @@ export default function InfoEdit({ userInfo }) {
 
   return (
     <Layout title={"Preferred Name"} description={""}>
-        <h1 className="project-text">Welcome to WalkToJoy Study!</h1>
+        <h1 className="project-text">Welcome to Fitbit Break!</h1>
         <h2 className="project-text">What name would you prefer to be called?</h2>
         <div>
           <TextField

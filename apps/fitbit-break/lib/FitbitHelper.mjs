@@ -157,48 +157,7 @@ export default class FitbitHelper {
       `${this.name}.myIntrospectToken: inspectToken: ${inspectToken}`
     );
 
-    // Active Response
-    // {"active":true,"scope":"{PROFILE=READ, ACTIVITY=READ, SETTINGS=READ}","client_id":"process.env.FITBIT_CLIENT_ID","user_id":"4SW9W9","token_type":"access_token","exp":1651145502000,"iat":1651116702000}
-
-    // Error Response
-    /*
- {
-  "message": "Request failed with status code 401",
-  "name": "Error",
-  "stack": "Error: Request failed with status code 401\n    at createError (/home/patrickretset/walktojoy-next/node_modules/axios/lib/core/createError.js:16:15)\n    at settle (/home/patrickretset/walktojoy-next/node_modules/axios/lib/core/settle.js:17:12)\n    at IncomingMessage.handleStreamEnd (/home/patrickretset/walktojoy-next/node_modules/axios/lib/adapters/http.js:322:11)\n    at IncomingMessage.emit (node:events:532:35)\n    at endReadableNT (node:internal/streams/readable:1346:12)\n    at processTicksAndRejections (node:internal/process/task_queues:83:21)",
-  "config": {
-    "transitional": {
-      "silentJSONParsing": true,
-      "forcedJSONParsing": true,
-      "clarifyTimeoutError": false
-    },
-    "transformRequest": [
-      null
-    ],
-    "transformResponse": [
-      null
-    ],
-    "timeout": 0,
-    "xsrfCookieName": "XSRF-TOKEN",
-    "xsrfHeaderName": "X-XSRF-TOKEN",
-    "maxContentLength": -1,
-    "maxBodyLength": -1,
-    "headers": {
-      "Accept": "application/json",
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzgyOVgiLCJzdWIiOiI5Qks0Q1MiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc2V0IHJhY3QgcnBybyIsImV4cCI6MTY0NzU2MDI0MiwiaWF0IjoxNjQ3NTMxNDQyfQ.vMTJyOAA8zM0-MLnwXjaJgGDKZ87evefBL0qrtORkoQ",
-      "User-Agent": "axios/0.26.1",
-      "Content-Length": 241
-    },
-    "method": "post",
-    "url": "https://api.fitbit.com/1.1/oauth2/introspect",
-    "data": "token=eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzgyOVgiLCJzdWIiOiI5Qks0Q1MiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc2V0IHJhY3QgcnBybyIsImV4cCI6MTY0NzU2MDI0MiwiaWF0IjoxNjQ3NTMxNDQyfQ.vMTJyOAA8zM0-MLnwXjaJgGDKZ87evefBL0qrtORkoQ"
-  },
-  "status": 401
-}
-*/
-
-    let introspectTokenResult = await FitbitHelper.introspectToken(
+    const introspectTokenResult = await FitbitHelper.introspectToken(
       accessToken,
       inspectToken
     )

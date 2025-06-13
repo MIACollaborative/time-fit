@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import { inspect } from 'util';
 import { DateTime } from "luxon";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "./auth/[...nextauth]";
+import { authOptions } from "./api/auth/[...nextauth]";
 import UserInfoHelper from "@time-fit/helper/UserInfoHelper";
 import FitbitAPIHelper from "@time-fit/data-source/fitbit/helper/FitbitAPIHelper";
 
@@ -144,12 +144,12 @@ export default function ActivitySummary({result, dateString}) {
         <Button variant="contained" onClick={(event) => {
             router.push("/main");
             return;
-          }} >Return to settings</Button>
+          }} >Return to home</Button>
 
       </main>
 
       <footer className={styles.main}>
-        <div>WalkToJoy Study</div>
+        <div>Fitbit Break</div>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           target="_blank"

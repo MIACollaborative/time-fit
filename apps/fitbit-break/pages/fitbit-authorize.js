@@ -9,7 +9,7 @@ import UserInfoHelper from "@time-fit/helper/UserInfoHelper";
 import ObjectHelper from "@time-fit/helper/ObjectHelper";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
-import AppHelper from "@time-fit/helper/AppHelper";
+import AppHelper from "../lib/AppHelper";
 
 export async function getServerSideProps(ctx) {
   const session = await getServerSession(ctx.req, ctx.res, authOptions);

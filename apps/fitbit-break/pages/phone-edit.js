@@ -124,7 +124,7 @@ export default function PhoneEdit({ userInfo }) {
 
     return (
         <Layout title={"Preferred Name"} description={""}>
-            <h1 className="project-text">Welcome to WalkToJoy Study!</h1>
+            <h1 className="project-text">Welcome to Fitbit Break!</h1>
             <h2 className="project-text">What is your phone number?</h2>
             <div>
                 <Fragment>{

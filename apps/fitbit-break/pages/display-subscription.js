@@ -1,17 +1,12 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-
-import prisma from '../lib/prisma';
-
-
-
-import { useSession, signIn, signOut, getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React from "react";
 import Button from '@mui/material/Button';
-import FitbitSubscriptionHelper from "@time-fit/data-source/fitbit/helper/FitbitSubscriptionHelper";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "./auth/[...nextauth]";
+import { authOptions } from "./api/auth/[...nextauth]";
+import FitbitSubscriptionHelper from "@time-fit/data-source/fitbit/helper/FitbitSubscriptionHelper";
 import UserInfoHelper from "@time-fit/helper/UserInfoHelper";
 
 export async function getServerSideProps(ctx) {
@@ -42,10 +37,6 @@ export default function DisplaySubscription({subscriptionList}) {
     return null;
   }
 
-  console.log(`session: ${JSON.stringify(session)}`);
-
-
-
   return (
     <div className={styles.container}>
       <Head>
@@ -67,12 +58,12 @@ export default function DisplaySubscription({subscriptionList}) {
         <Button variant="contained" onClick={(event) => {
             router.push("/main");
             return;
-          }} >Return to settings</Button>
+          }} >Return to home</Button>
 
       </main>
 
       <footer className={styles.main}>
-        <div>WalkToJoy Study</div>
+        <div>Fitbit Break Study</div>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           target="_blank"

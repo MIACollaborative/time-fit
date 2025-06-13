@@ -122,12 +122,12 @@ export default function GetActivitySummary({ result, dateString }) {
             return;
           }}
         >
-          Return to settings
+          Return to home
         </Button>
       </main>
 
       <footer className={styles.main}>
-        <div>WalkToJoy Study</div>
+        <div>Fitbit Break</div>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           target="_blank"

@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import UserInfoHelper from "../../../helper/UserInfoHelper";
 import FitbitAPIHelper from "./FitbitAPIHelper";
-
+import { inspect } from "util";
 
 export default class FitbitCredentialHelper {
   constructor() {}

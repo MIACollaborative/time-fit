@@ -214,7 +214,7 @@ export default function UserEdit({ userInfo }) {
 
     return (
         <Layout title={"Preferred Name"} description={""}>
-            <h1 className="project-text">Welcome to WalkToJoy Study!</h1>
+            <h1 className="project-text">Welcome to Fitbit Break!</h1>
             <h2 className="project-text">You are editing user info for: {userInfo.username}</h2>
             <div>
                 <Fragment>{

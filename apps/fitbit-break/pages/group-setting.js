@@ -1,40 +1,17 @@
 import Head from "next/head";
-import Image from "next/image";
 import styles from "../styles/Home.module.css";
-/*
-import logger from "../lib/logger";
-
-*/
-
-import { inspect } from "util";
-
-import Link from "next/link";
-import { useSession, signIn, signOut, getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
-
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-
 import Divider from "@mui/material/Divider";
-import prisma from "../lib/prisma.mjs";
-
-const { DateTime } = require("luxon");
-
-function replacer(key, value) {
-  if (typeof value === "Date") {
-    return value.toString();
-  }
-  return value;
-}
-
 import { authOptions } from "./auth/[...nextauth]";
 import UserInfoHelper from "@time-fit/helper/UserInfoHelper";
-import FitbitDataHelper from "@time-fit/data-source/fitbit/helper/FitbitDataHelper";
 import ObjectHelper from "@time-fit/helper/ObjectHelper";
 
 export async function getServerSideProps(ctx) {
@@ -49,7 +26,7 @@ export async function getServerSideProps(ctx) {
   const user = await UserInfoHelper.getUserInfoByUsername(session.user.name);
 
   const userInfo = JSON.parse(
-    JSON.stringify(uniqueUser, ObjectHelper.convertDateToString)
+    JSON.stringify(user, ObjectHelper.convertDateToString)
   );
 
   return {

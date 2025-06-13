@@ -1,11 +1,5 @@
-
-/*
-import logger from "../lib/logger";
-
-*/
-
-import React, { useState } from 'react';
-import { DateTime, Interval } from "luxon";
+import React,  { Fragment } from 'react';
+import Link from "next/link";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -13,78 +7,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import GeneralUtility from '../lib/GeneralUtility.mjs';
 import { Button } from '@mui/material';
-import { toast } from 'react-toastify';
-import Link from "next/link";
-import { Fragment } from 'react';
 import ObjectListExortToolbar from './ObjectListExortToolbar.js';
 
-function replacer(key, value) {
-  if (typeof value === "Date") {
-    return value.toString();
-  }
-  return value;
-}
 
 export default function UserTable({ infoList, userInfo, hostURL, renderData }) {
-
-  /*
-  id  String  @id @default(auto()) @map("_id") @db.ObjectId
-  username String @unique
-  password String
-  hash String @unique
-
-  // additional user information
-  preferredName String?
-  phone String?
-  timezone String?
-
-  // for study management
-  phase String @default("baseline") // baseline vs. intervention
-  joinAt DateTime?
-  activateAt DateTime?
-  fitbitReminderTurnOff Boolean? @default(false)
-  saveWalkToJoyToContacts Boolean? @default(false)
-
-  // for group assignment
-  gif Boolean? @default(false)
-  salience Boolean? @default(false)
-  modification Boolean? @default(false)
-
-  // reference other collections
-  taskLogList  taskLog[]
-
-
-  // for Fitbit
-  fitbitId String?
-  fitbitDisplayName String?
-  fitbitFullName String?
-  accessToken String?
-  refreshToken String?
-
-  // for Fitbit data and subscription
-  fitbitSubscriptionList fitbit_subscription[]
-  fitbitUpdateList fitbit_update[]
-  fitbitDataList fitbit_data[]
-  
-
-  // for survey response
-  responseList response[]
-
-  // for user preference
-  weekdayWakeup DateTime?
-  weekdayBed DateTime?
-  weekendWakeup DateTime?
-  weekendBed DateTime?
-
-
-  // for time
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
-  */
-
-  // {renderData? <TableContainer ...> ... </TableContaienr>:null}
 
   return (
     <Fragment>
@@ -103,9 +30,7 @@ export default function UserTable({ infoList, userInfo, hostURL, renderData }) {
               <TableCell align="right">Join At</TableCell>
               <TableCell align="right">Activate At</TableCell>
               <TableCell align="right">Complete At</TableCell>
-              <TableCell align="right">Gif</TableCell>
-              <TableCell align="right">Salience</TableCell>
-              <TableCell align="right">Modification</TableCell>
+              <TableCell align="right">Group Membership</TableCell>
               <TableCell align="right">Fitbit Id</TableCell>
               <TableCell align="right">Step Goal</TableCell>
               <TableCell align="right">Step Goal Time</TableCell>
@@ -135,9 +60,7 @@ export default function UserTable({ infoList, userInfo, hostURL, renderData }) {
                 <TableCell align="right">{row.joinAt}</TableCell>
                 <TableCell align="right">{row.activateAt}</TableCell>
                 <TableCell align="right">{row.completeAt}</TableCell>
-                <TableCell align="right">{JSON.stringify(row.gif)}</TableCell>
-                <TableCell align="right">{JSON.stringify(row.salience)}</TableCell>
-                <TableCell align="right">{JSON.stringify(row.modification)}</TableCell>
+                <TableCell align="right">{JSON.stringify(row.groupMembership)}</TableCell>
                 <TableCell align="right">{row.fitbitId}</TableCell>
                 <TableCell align="right">{row.dailyStepsGoal}</TableCell>
                 <TableCell align="right">{JSON.stringify(row.dailyStepsGoalMeta)}</TableCell>
@@ -155,51 +78,3 @@ export default function UserTable({ infoList, userInfo, hostURL, renderData }) {
     </Fragment>
   )
 }
-
-
-// extra
-
-/*
-const adminUsernameList = [
-  "test1",
-  "test2"
-];
-
-
-export async function getServerSideProps(ctx) {
-  
-  const session = await getSession(ctx);
-  console.log(
-    `main.getServerSideProps: session: ${JSON.stringify(session)}`
-  );
-
-  if(!session){
-    return {
-      props: {},
-    };
-  }
-
-  let userName = session.user.name;
-
-  
-  let responseList = [];
-  let responseInfoList = [];
-
-  if(adminUsernameList.includes(userName)){
-    responseList = await prisma.response.findMany({
-
-        orderBy: [
-            {
-              updatedAt: "desc",
-            },
-          ],
-        });
-      
-        responseInfoList = JSON.parse(JSON.stringify(responseList, replacer));
-    }
-    
-    return {
-      props: {responseInfoList},
-    };
-  }
-*/

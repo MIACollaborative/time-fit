@@ -3,6 +3,7 @@ import StringHelper from "@time-fit/helper/StringHelper";
 import SurveyResponseHelper from "@time-fit/helper/SurveyResponseHelper";
 import DateTimeHelper from "@time-fit/helper/DateTimeHelper";
 import TaskLogHelper from "@time-fit/helper/TaskLogHelper";
+
 export default class AppHelper {
   constructor() {}
   static isPreferredNameSet(userInfo) {

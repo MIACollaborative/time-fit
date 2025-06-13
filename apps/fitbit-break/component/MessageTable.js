@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
 import { toast } from 'react-toastify';
-import TwilioHelper from "@time-fit/helper/TwilioHelper"
+import AppHelper from "../lib/AppHelper";
 
 export default function MessageTable({ infoList, userInfo, assetHostURL, renderData }) {
   
@@ -62,7 +62,7 @@ export default function MessageTable({ infoList, userInfo, assetHostURL, renderD
                     gifURL = `${assetHostURL}/image/gif/${messageInfo.gif}.gif`;
                   }
 
-                  const msgPromise = TwilioHelper.sendMessage(userInfo.phone, messageBody, gifURL.length > 0 ? [gifURL] : []);
+                  const msgPromise = AppHelper.sendTwilioMessage(userInfo.phone, messageBody, gifURL.length > 0 ? [gifURL] : []);
 
                   toast(`Sending: ${messageBody}`);
 

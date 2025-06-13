@@ -14,11 +14,13 @@ import FitbitDataTable from "../component/FitbitDataTable";
 import UserTable from "../component/UserTable";
 import UpdateDiffTable from "../component/UpdateDiffTable";
 import { authOptions } from "./api/auth/[...nextauth]"
-import { getServerSession } from "next-auth/next"
+import { getServerSession } from "next-auth/next";
+import { useSession } from "next-auth/react";
 import { DateTime } from "luxon";
 import ObjectHelper from '@time-fit/helper/ObjectHelper';
 import UserInfoHelper from '@time-fit/helper/UserInfoHelper';
-
+import FitbitSubscriptionHelper from '@time-fit/data-source/fitbit/helper/FitbitSubscriptionHelper';
+import TaskHelper from '@time-fit/helper/TaskHelper';
 
 const adminUsernameList = ["test1", "test2", "test3", "test4"];
 
@@ -101,7 +103,7 @@ export async function getServerSideProps(ctx) {
 
   if (adminUsernameList.includes(userName)) {
     taskList = await TaskHelper.getTasksSortedByCreatedAt("asc");
-    taskInfoList = JSON.parse(JSON.stringify(taskList, replacer));
+    taskInfoList = JSON.parse(JSON.stringify(taskList, ObjectHelper.convertDateToString));
   }
 
   const assetHostURL = `${process.env.ASSET_HOST_URL}`;

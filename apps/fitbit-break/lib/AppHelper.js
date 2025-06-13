@@ -6,6 +6,26 @@ import TaskLogHelper from "@time-fit/helper/TaskLogHelper";
 
 export default class AppHelper {
   constructor() {}
+
+  static async sendTwilioMessage(phone, messageBody, mediaUrlList = []) {
+
+    const result = await fetch("/api/twilio?function_name=send_message", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            phone,
+            messageBody,
+            mediaUrlList: mediaUrlList.length > 0 ? mediaUrlList : null
+        }),
+    }).then((r) => {
+        return r.json();
+    });
+
+    return result;
+}
+
   static isPreferredNameSet(userInfo) {
     if (userInfo == null) {
       return false;

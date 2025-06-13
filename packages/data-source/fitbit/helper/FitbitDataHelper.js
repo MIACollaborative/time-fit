@@ -1,6 +1,6 @@
 import DateTimeHelper from "../../../helper/DateTimeHelper.js";
-import UserInfoHelper from "../../helper/UserInfoHelper.js";
-import UpdateDiffHelper from "../../helper/UpdateDiffHelper.js";
+import UserInfoHelper from "../../../helper/UserInfoHelper.js";
+import UpdateDiffHelper from "../../../helper/UpdateDiffHelper.js";
 import DataRecordHelper from "../../DataRecordHelper.js";
 import FitbitAPIHelper from "./FitbitAPIHelper.js";
 

@@ -1,248 +1,273 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
 /*
 import logger from "../lib/logger";
 
 */
 
-import { inspect } from 'util';
+import { inspect } from "util";
 
-import Link from 'next/link';
-import { useSession, signIn, signOut, getSession } from "next-auth/react"
-import { useRouter } from 'next/router'
-import React, { useState } from 'react';
-import Button from '@mui/material/Button';
+import Link from "next/link";
+import { useSession, signIn, signOut, getSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import Button from "@mui/material/Button";
 
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
 
 import Divider from "@mui/material/Divider";
-import prisma from '../lib/prisma.mjs';
+import prisma from "../lib/prisma.mjs";
 
 const { DateTime } = require("luxon");
 
 function replacer(key, value) {
-    if (typeof value === "Date") {
-        return value.toString();
-    }
-    return value;
+  if (typeof value === "Date") {
+    return value.toString();
+  }
+  return value;
 }
+
+import { authOptions } from "./auth/[...nextauth]";
+import UserInfoHelper from "@time-fit/helper/UserInfoHelper";
+import FitbitDataHelper from "@time-fit/data-source/fitbit/helper/FitbitDataHelper";
+import ObjectHelper from "@time-fit/helper/ObjectHelper";
 
 export async function getServerSideProps(ctx) {
+  const session = await getServerSession(ctx.req, ctx.res, authOptions);
 
-    const session = await getSession(ctx);
-    console.log(
-        `main.getServerSideProps: session: ${JSON.stringify(session)}`
-    );
-
-    if (!session) {
-        return {
-            props: {},
-        };
-    }
-
-    let userName = session.user.name;
-
-
-    const uniqueUser = await prisma.users.findFirst({
-        where: { username: userName },
-    });
-
-    console.log(
-        `main.getServerSideProps: user: ${JSON.stringify(uniqueUser)}`
-    );
-
-
-    const userInfo = JSON.parse(JSON.stringify(uniqueUser, replacer));
-
+  if (!session) {
     return {
-        props: { userInfo },
+      props: {},
     };
+  }
+
+  const user = await UserInfoHelper.getUserInfoByUsername(session.user.name);
+
+  const userInfo = JSON.parse(
+    JSON.stringify(uniqueUser, ObjectHelper.convertDateToString)
+  );
+
+  return {
+    props: { userInfo },
+  };
 }
 
-
 export default function GroupSetting({ userInfo }) {
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
-    const { data: session, status } = useSession();
-    const router = useRouter();
+  const [gif, setGif] = useState(userInfo.gif != undefined ? userInfo.gif : "");
+  const [salience, setSalience] = useState(
+    userInfo.salience != undefined ? userInfo.salience : ""
+  );
+  const [modification, setModification] = useState(
+    userInfo.modification != undefined ? userInfo.modification : ""
+  );
 
-    const [gif, setGif] = useState(userInfo.gif != undefined ? userInfo.gif : "");
-    const [salience, setSalience] = useState(userInfo.salience != undefined ? userInfo.salience : "");
-    const [modification, setModification] = useState(userInfo.modification != undefined ? userInfo.modification : "");
+  if (status == "loading") return <div>loading...</div>;
 
-    //logger.logToDB("main", {message: "test"});
+  if (!session) {
+    router.push("/");
+    return null;
+  }
 
-    //const [value1, setValue1] = useState('');
-    //const [value2, setValue2] = useState('');
+  async function updateGroupAssignment(username, gif, salience, modification) {
+    const result = await fetch(
+      "/api/user?function_name=update_group_assignment",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+          gif: gif,
+          salience: salience,
+          modification: modification,
+        }),
+      }
+    ).then((r) => {
+      return r.json();
+    });
 
+    return result;
+  }
 
+  function onSaveClick(event) {
+    const uGif = gif === "" ? null : gif;
+    const uSalience = salience === "" ? null : salience;
+    const uModification = modification === "" ? null : modification;
 
-    // status: enum mapping to three possible session states: "loading" | "authenticated" | "unauthenticated"
-    if (status == "loading") return <div>loading...</div>;
+    updateGroupAssignment(
+      userInfo.username,
+      uGif,
+      uSalience,
+      uModification
+    ).then((response) => {
+      router.push("/main");
+      return response;
+    });
+  }
 
-    if (!session) {
-        router.push('/');
-        return null;
+  const handleGifChange = (event) => {
+    let bValue = false;
+    if (event.target.value != "") {
+      bValue = event.target.value === "true";
+    } else {
+      bValue = ""; //event.target.value;
     }
+    setGif(bValue);
+  };
 
-    console.log(`session: ${JSON.stringify(session)}`);
-
-    async function updateGroupAssignment(username, gif, salience, modification) {
-        console.log(`GroupSetting.updateGroupAssignment: ${username}`);
-        console.log(`updateGroupAssignment, gif: ${gif}`);
-        console.log(`updateGroupAssignment, salience: ${salience}`);
-        console.log(`updateGroupAssignment, modification: ${modification}`);
-
-
-        const result = await fetch("/api/user?function_name=update_group_assignment", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                username: username,
-                gif: gif,
-                salience: salience,
-                modification: modification
-            }),
-        }).then((r) => {
-            return r.json();
-        });
-
-        return result;
+  const handleSalienceChange = (event) => {
+    let bValue = false;
+    if (event.target.value != "") {
+      bValue = event.target.value === "true";
+    } else {
+      bValue = ""; //event.target.value;
     }
+    setSalience(bValue);
+  };
 
-    function onSaveClick(event) {
-        console.log(`onSaveClick, gif: ${gif}`);
-        console.log(`onSaveClick, salience: ${salience}`);
-        console.log(`onSaveClick, modification: ${modification}`);
-        let uGif = gif === ""? null: gif;
-        let uSalience = salience === ""? null:salience;
-        let uModification = modification === ""? null: modification;
-
-        updateGroupAssignment(userInfo.username, uGif, uSalience, uModification)
-            .then((response) => {
-                router.push("/main");
-                return response;
-            })
+  const handleModificationChange = (event) => {
+    let bValue = false;
+    if (event.target.value != "") {
+      bValue = event.target.value === "true";
+    } else {
+      bValue = ""; //event.target.value;
     }
+    setModification(bValue);
+  };
 
-    const handleGifChange = (event) => {
-        let bValue = false;
-        if(event.target.value != ""){
-            bValue = event.target.value === "true";
-        }
-        else{
-            bValue = ""; //event.target.value;
-        }
-        setGif(bValue);
-    };
+  return (
+    <div className={styles.container}>
+      <Head>
+        <title>Group Assignment</title>
+        <meta name="description" content="Generated by create next app" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-    const handleSalienceChange = (event) => {
-        let bValue = false;
-        if(event.target.value != ""){
-            bValue = event.target.value === "true";
-        }
-        else{
-            bValue = ""; //event.target.value;
-        }
-        setSalience(bValue);
-    };
-
-    const handleModificationChange = (event) => {
-        let bValue = false;
-        if(event.target.value != ""){
-            bValue = event.target.value === "true";
-        }
-        else{
-            bValue = ""; //event.target.value;
-        }
-        setModification(bValue);
-    };
-
-
-    console.log(`GroupSetting before rendering: typeof gif ${typeof gif}`);
-
-
-    return (
-        <div className={styles.container}>
-            <Head>
-                <title>Group Assignment</title>
-                <meta name="description" content="Generated by create next app" />
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
-
-            <main className={styles.main}>
-                <div>
-                <FormControl>
-                    <FormLabel id="radio-buttons-group-gif-label">GIF group</FormLabel>
-                    <RadioGroup
-                        row
-                        aria-labelledby="radio-buttons-group-gif-label"
-                        name="radio-buttons-group-gif"
-                        value={gif}
-                    >
-                        <FormControlLabel value={true} control={<Radio />} label="Yes" onClick={handleGifChange} />
-                        <FormControlLabel value={false} control={<Radio />} label="No" onClick={handleGifChange}/>
-                        <FormControlLabel value={""} control={<Radio />} label="Undecided (null)" onClick={handleGifChange}/>
-                    </RadioGroup>
-                </FormControl>
-                <Divider />
-                <br />
-                <FormControl>
-                    <FormLabel id="radio-buttons-group-salience-label">Salience group</FormLabel>
-                    <RadioGroup
-                        row
-                        aria-labelledby="radio-buttons-group-salience-label"
-                        name="radio-buttons-group-salience"
-                        value={salience}
-                    >
-                        <FormControlLabel value={true} control={<Radio />} label="Yes" onClick={handleSalienceChange} />
-                        <FormControlLabel value={false} control={<Radio />} label="No" onClick={handleSalienceChange}/>
-                        <FormControlLabel value={""} control={<Radio />} label="Undecided (null)" onClick={handleSalienceChange}/>
-                    </RadioGroup>
-                </FormControl>
-                <Divider />
-                <br />
-                <FormControl>
-                    <FormLabel id="radio-buttons-group-modification-label">Modification group</FormLabel>
-                    <RadioGroup
-                        row
-                        aria-labelledby="radio-buttons-group-modification-label"
-                        name="radio-buttons-group-modification"
-                        value={modification}
-                    >
-                        <FormControlLabel value={true} control={<Radio />} label="Yes" onClick={handleModificationChange} />
-                        <FormControlLabel value={false} control={<Radio />} label="No" onClick={handleModificationChange}/>
-                        <FormControlLabel value={""} control={<Radio />} label="Undecided (null)" onClick={handleModificationChange}/>
-                    </RadioGroup>
-                </FormControl>
-                <Divider />
-                <br />
-                <Button variant="contained" style={{ width: "100%" }} onClick={onSaveClick} >Save</Button>
-                </div>
-                
-            </main>
-
-            <footer className={styles.main}>
-                <div>
-                    WalkToJoy Study
-                </div>
-                <a
-                    href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <div>School of Information</div>
-                    <div>University of Michigan</div>
-
-                </a>
-            </footer>
+      <main className={styles.main}>
+        <div>
+          <FormControl>
+            <FormLabel id="radio-buttons-group-gif-label">GIF group</FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="radio-buttons-group-gif-label"
+              name="radio-buttons-group-gif"
+              value={gif}
+            >
+              <FormControlLabel
+                value={true}
+                control={<Radio />}
+                label="Yes"
+                onClick={handleGifChange}
+              />
+              <FormControlLabel
+                value={false}
+                control={<Radio />}
+                label="No"
+                onClick={handleGifChange}
+              />
+              <FormControlLabel
+                value={""}
+                control={<Radio />}
+                label="Undecided (null)"
+                onClick={handleGifChange}
+              />
+            </RadioGroup>
+          </FormControl>
+          <Divider />
+          <br />
+          <FormControl>
+            <FormLabel id="radio-buttons-group-salience-label">
+              Salience group
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="radio-buttons-group-salience-label"
+              name="radio-buttons-group-salience"
+              value={salience}
+            >
+              <FormControlLabel
+                value={true}
+                control={<Radio />}
+                label="Yes"
+                onClick={handleSalienceChange}
+              />
+              <FormControlLabel
+                value={false}
+                control={<Radio />}
+                label="No"
+                onClick={handleSalienceChange}
+              />
+              <FormControlLabel
+                value={""}
+                control={<Radio />}
+                label="Undecided (null)"
+                onClick={handleSalienceChange}
+              />
+            </RadioGroup>
+          </FormControl>
+          <Divider />
+          <br />
+          <FormControl>
+            <FormLabel id="radio-buttons-group-modification-label">
+              Modification group
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="radio-buttons-group-modification-label"
+              name="radio-buttons-group-modification"
+              value={modification}
+            >
+              <FormControlLabel
+                value={true}
+                control={<Radio />}
+                label="Yes"
+                onClick={handleModificationChange}
+              />
+              <FormControlLabel
+                value={false}
+                control={<Radio />}
+                label="No"
+                onClick={handleModificationChange}
+              />
+              <FormControlLabel
+                value={""}
+                control={<Radio />}
+                label="Undecided (null)"
+                onClick={handleModificationChange}
+              />
+            </RadioGroup>
+          </FormControl>
+          <Divider />
+          <br />
+          <Button
+            variant="contained"
+            style={{ width: "100%" }}
+            onClick={onSaveClick}
+          >
+            Save
+          </Button>
         </div>
-    )
+      </main>
+
+      <footer className={styles.main}>
+        <div>WalkToJoy Study</div>
+        <a
+          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div>University of Michigan</div>
+        </a>
+      </footer>
+    </div>
+  );
 }

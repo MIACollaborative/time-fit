@@ -68,4 +68,44 @@ export default class FitbitSubscriptionHelper {
 
     return resultList;
   }
+
+  static async listSubscriptionsForUser(
+    userInfo,
+    collectionTypeList = ["activities", "userRevokedAccess"]
+  ) {
+    let resultList = [];
+
+    // validate user token first
+    // { value: "success", data: userInfo };
+    // { value: "failed", data: inspect(error.response.data) };
+    const validateTokenResult =
+      await FitbitCredentialHelper.ensureTokenValidForUser(
+        userInfo,
+        true,
+        30 * 60
+      );
+    let updatedUserInfo;
+
+    if (validateTokenResult.value == "success") {
+      updatedUserInfo = validateTokenResult.data;
+    } else {
+      // cannot update userInfo, need to abort
+      return resultList;
+    }
+
+    for (let i = 0; i < collectionTypeList.length; i++) {
+      const cType = collectionTypeList[i];
+
+      const subscriptionResult =
+        await FitbitAPIHelper.listSubscriptionForFitbitId(
+          updatedUserInfo.fitbitId,
+          cType,
+          updatedUserInfo.accessToken
+        );
+
+      resultList.push(subscriptionResult);
+    }
+
+    return resultList;
+  }
 }

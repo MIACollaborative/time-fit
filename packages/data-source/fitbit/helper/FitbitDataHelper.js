@@ -674,7 +674,7 @@ export default class FitbitDataHelper {
 
     if (refreshResult.value == "success") {
       // need to actually update the token
-      const updatedUserInfo = await DatabaseUtility.updateToken(
+      const updatedUserInfo = await UserInfoHelper.updateToken(
         userInfo.hash,
         refreshResult.data.accessToken,
         refreshResult.data.refreshToken,

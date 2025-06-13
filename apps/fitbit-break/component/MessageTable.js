@@ -1,10 +1,4 @@
-
-/*
-import logger from "../lib/logger";
-
-*/
-
-import React, { useState } from 'react';
+import React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -12,43 +6,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import GeneralUtility from '../lib/GeneralUtility.mjs';
 import { Button } from '@mui/material';
 import { toast } from 'react-toastify';
-
-function replacer(key, value) {
-  if (typeof value === "Date") {
-    return value.toString();
-  }
-  return value;
-}
+import TwilioHelper from "@time-fit/helper/TwilioHelper"
 
 export default function MessageTable({ infoList, userInfo, assetHostURL, renderData }) {
-
-  /*
-  id  String  @id @default(auto()) @map("_id") @db.ObjectId
-
-  // for message
-  label String @unique
-  group String
-  groupIndex Int
-  interventionMessage  String?
-  walkMessage String?
-  gif String?
-  timeOfDay String?
-  topic String?
-  sampleMessage String?
-  note String?
-
-  // reference other collections
-  taskLogList  taskLog[]
-
-
-  // for time
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
-  */
-
+  
   return (
     <>
     {renderData? <TableContainer component={Paper}>
@@ -73,8 +36,8 @@ export default function MessageTable({ infoList, userInfo, assetHostURL, renderD
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
           >
             <TableCell align="right"><Button variant="contained" onClick={(event) => {
-              let messageInfo = row;
-              let composePromise = fetch("/api/message-composer?function_name=compose_message", {
+              const messageInfo = row;
+              const composePromise = fetch("/api/message-composer?function_name=compose_message", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -86,11 +49,9 @@ export default function MessageTable({ infoList, userInfo, assetHostURL, renderD
                 }),
               })
 
-              composePromise
+              return composePromise
               .then((res) => res.json())
               .then((response) => {
-                console.log(`MessageTable - response: ${JSON.stringify(response, null, 2)}`);
-                // r.json();
                 return response.result;
               })
               .then((messageBody) => {
@@ -101,11 +62,11 @@ export default function MessageTable({ infoList, userInfo, assetHostURL, renderD
                     gifURL = `${assetHostURL}/image/gif/${messageInfo.gif}.gif`;
                   }
 
-                  let msgPromise = GeneralUtility.sendTwilioMessage(userInfo.phone, messageBody, gifURL.length > 0 ? [gifURL] : []);
+                  const msgPromise = TwilioHelper.sendMessage(userInfo.phone, messageBody, gifURL.length > 0 ? [gifURL] : []);
 
                   toast(`Sending: ${messageBody}`);
 
-
+                  return msgPromise;
               });
 
             }} >Send</Button></TableCell>
@@ -127,51 +88,3 @@ export default function MessageTable({ infoList, userInfo, assetHostURL, renderD
     
   )
 }
-
-
-// extra
-
-/*
-const adminUsernameList = [
-  "test1",
-  "test2"
-];
-
-
-export async function getServerSideProps(ctx) {
-  
-  const session = await getSession(ctx);
-  console.log(
-    `main.getServerSideProps: session: ${JSON.stringify(session)}`
-  );
-
-  if(!session){
-    return {
-      props: {},
-    };
-  }
-
-  let userName = session.user.name;
-
-  
-  let responseList = [];
-  let responseInfoList = [];
-
-  if(adminUsernameList.includes(userName)){
-    responseList = await prisma.response.findMany({
-
-        orderBy: [
-            {
-              updatedAt: "desc",
-            },
-          ],
-        });
-      
-        responseInfoList = JSON.parse(JSON.stringify(responseList, replacer));
-    }
-    
-    return {
-      props: {responseInfoList},
-    };
-  }
-*/

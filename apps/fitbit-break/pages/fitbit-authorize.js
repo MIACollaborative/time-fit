@@ -46,7 +46,7 @@ export default function FitbitAuthorize({ userInfo, hostURL }) {
 
   const redirectURL = `${hostURL}/fitbit-signin`;
 
-  const state = `auth-walktojoy-${md5(session.user.name)}`;
+  const state = `auth-fitbitbreak-${md5(session.user.name)}`;
 
   const scope = ["activity", "heartrate", "profile", "settings"].join("%20");
   

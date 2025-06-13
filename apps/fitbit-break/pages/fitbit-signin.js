@@ -194,7 +194,7 @@ export default function FitbitSignin({ result, fitbitId }) {
   }
 
   return (
-    <Layout title={"Walk To Joy"} description={""}>
+    <Layout title={"Fitbit Break"} description={""}>
       <div>
         {combinedResult ? (
           <h1 className={styles.title}>Fitbit authorized success!</h1>

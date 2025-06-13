@@ -1,4 +1,4 @@
-# WalkToJoy-Server
+# FitbitBreak-Server
 
 A full-stack application to deliver time-based Just-In-Time Adaptive Interventions (JITAIs) through SMS/MMS messaging that utilizes Fitbit data for intervention adaptation.
 

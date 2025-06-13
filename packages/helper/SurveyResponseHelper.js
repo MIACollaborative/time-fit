@@ -1,5 +1,5 @@
 import { getPrismaClient } from "./prisma.js";
-
+import { DateTime } from "luxon";
 export default class SurveyResponseHelper {
   constructor() {}
 
@@ -60,7 +60,8 @@ export default class SurveyResponseHelper {
         surveyId,
         startDate,
         endDate,
-        0
+        "asc",
+        1
       );
 
     const filteredResponseList = responseList.filter((responseInfo) => {

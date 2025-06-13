@@ -16,10 +16,10 @@ export default function Layout(props) {
       <footer className={styles.footer}>
         <br />
         <div>
-          <b>Fitbit Break Study</b>
+          <b>Fitbit Break</b>
         </div>
         <br />
-        <div>School of Information</div>
+
         <div>University of Michigan</div>
       </footer>
     </div>

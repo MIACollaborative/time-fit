@@ -278,7 +278,7 @@ export default function Dashboard({ fitbitSubscriptionInfoList, taskInfoList,  u
   }
 
   return (
-    <Layout title={"Walk To Joy"} description={""}>
+    <Layout title={"Fitbit Break"} description={""}>
       <ToggleButtonGroup
         value={tabName}
         exclusive

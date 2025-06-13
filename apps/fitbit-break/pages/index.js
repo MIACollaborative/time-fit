@@ -22,10 +22,10 @@ export default function Home({}) {
   }
 
   return (
-    <Layout title={"Walk To Joy"} description={""}>
+    <Layout title={"Fitbit Break"} description={""}>
     <Fragment>
         <h1 className="project-text">
-        Walk To Joy
+        Fitbit Break
         </h1>
         <br />
 

@@ -9,7 +9,7 @@ export default function Signout() {
     const router = useRouter();
 
     return (
-        <Layout title={"Walk To Joy"} description={""}>
+        <Layout title={"Fitbit Break"} description={""}>
             <Button 
                 variant="contained" 
                 className={"project-button-complete"}

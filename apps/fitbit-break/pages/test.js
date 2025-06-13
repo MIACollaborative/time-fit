@@ -119,7 +119,7 @@ export default function Dashboard({ userInfo, assetHostURL }) {
     // Function for getting taskLog
 
     return (
-        <Layout title={"Walk To Joy"} description={""}>
+        <Layout title={"Fitbit Break"} description={""}>
             <Button variant="contained" onClick={(event) => {
 
                 callTestEndPoint("query").then((data) => {

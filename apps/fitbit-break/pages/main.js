@@ -15,7 +15,7 @@ import { getServerSession } from "next-auth/next"
 import UserInfoHelper from '@time-fit/helper/UserInfoHelper';
 import FitbitAPIHelper from '@time-fit/data-source/fitbit/helper/FitbitAPIHelper';
 import SurveyResponseHelper from '@time-fit/helper/SurveyResponseHelper';
-import TwilioHelper from '@time-fit/helper/TwilioHelper';
+import AppHelper from '../lib/AppHelper';
 
 const adminUsernameList = ["test1", "test2", "test3", "test4"];
 
@@ -190,7 +190,7 @@ export default function Main({
   const contactUsFormLink = "https://airtable.com/shr5NOZlCG0uBbe2w";
 
   return (
-    <Layout title={"Walk To Joy"} description={""}>
+    <Layout title={"Fitbit Break"} description={""}>
     <div>
           <ToggleButtonGroup {...control} style={{display: "none"}}>
             <ToggleButton value="incomplete" key="incomplete">
@@ -250,9 +250,9 @@ export default function Main({
               <Link href={fitbitAuthorizeLink}>
                 <Button 
                 variant="contained" 
-                className={GeneralUtility.doesFitbitInfoExist(userInfo)? "project-button-complete": "project-button-incomplete"}
+                className={AppHelper.doesFitbitInfoExist(userInfo)? "project-button-complete": "project-button-incomplete"}
                   >
-                  {GeneralUtility.doesFitbitInfoExist(userInfo)? "Fitbit Authorized": "Authorize your Fitbit"}
+                  {AppHelper.doesFitbitInfoExist(userInfo)? "Fitbit Authorized": "Authorize your Fitbit"}
                 </Button>
               </Link>
               <br />
@@ -282,94 +282,6 @@ export default function Main({
           }
           </p>
           <Divider />
-          <br />
-          {false  ? (
-            <Fragment>
-          <div>[Debug] (admine only)</div>
-          <div>Signed in as {session.user.name} </div>
-          <div>Phone: {userInfo.phone} </div>
-          <div>Phase: {userInfo.phase} </div>
-          <div>Timezone: {userInfo.timezone} </div>
-          <div>joinAt: {userInfo.joinAt} </div>
-          <div>activateAt: {userInfo.activateAt} </div>
-          <div>Baseline survey completed: {JSON.stringify(isBaselineSurveyCompleted)} </div>
-          <div>
-            Fitbit:{" "}
-            {AppHelper.doesFitbitInfoExist(userInfo)
-              ? "connected"
-              : "not connected"}
-          </div>
-          <div>Access Token: {isAccessTokenActive ? "active" : "inactive"}</div>
-          <br />
-          <Divider />
-            </Fragment>
-          ) : null}
-
-          {false && adminUsernameList.includes(userInfo.username) ? (
-            <Fragment>
-              <br />
-              <div>For testing (admin only):</div>
-              <br />
-              <Link href={"/dashboard"}>
-                <Button variant="contained" style={{ width: "100%" }}>
-                  Dashboard
-                </Button>
-              </Link>
-              <br />
-              <br />
-              <Link href={"/group-setting"}>
-                <Button variant="contained" style={{ width: "100%" }}>
-                  Set Group Assignment
-                </Button>
-              </Link>
-              <br />
-              <br />
-              <Link href={"/phone-edit"}>
-                <Button variant="contained" style={{ width: "100%" }}>
-                  Add/Update phone number
-                </Button>
-              </Link>
-              <br />
-              <br />
-              <Link href={"/get-activity-summary"}>
-                <Button variant="contained" style={{ width: "100%" }}>
-                  Get Activity Summary (1 step process)
-                </Button>
-              </Link>
-              <br />
-              <br />
-              <Link href={"/get-heartrate"}>
-                <Button variant="contained" style={{ width: "100%" }}>
-                  Get HeartRate (1 step process)
-                </Button>
-              </Link>
-              <br />
-              <br />
-              <Link href={"/activity-summary"}>
-                <Button variant="contained" style={{ width: "100%" }}>
-                  Activity Summary (2 step process)
-                </Button>
-              </Link>
-              <br />
-              <br />
-              <Button
-                variant="contained"
-                style={{ width: "100%" }}
-                onClick={(event) => {
-                  TwilioHelper.sendMessage(
-                    userInfo.phone,
-                    "https://walktojoy.info/image/gif/dancing-bear-7.gif",
-                  );
-                  toast(`Hello ${userInfo.preferredName}`);
-                }}
-              >
-                Send myself hello SMS
-              </Button>
-              <br />
-              <br />
-              <Divider />
-            </Fragment>
-          ) : null}
           <br />
         </div>
         <div>

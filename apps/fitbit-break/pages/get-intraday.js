@@ -3,8 +3,6 @@ import styles from "../styles/Home.module.css";
 import { useRouter } from "next/router";
 import React from "react";
 import Button from '@mui/material/Button';
-import { inspect } from 'util';
-import DatabaseUtility from "../lib/DatabaseUtility.mjs";
 const { DateTime } = require("luxon");
 import { authOptions } from "./auth/[...nextauth]";
 import UserInfoHelper from "@time-fit/helper/UserInfoHelper";

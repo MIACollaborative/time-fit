@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "engine": "node engine.mjs",
     "cron": "node ./test_script/test_cron_job.mjs",
     "lint": "next lint",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"

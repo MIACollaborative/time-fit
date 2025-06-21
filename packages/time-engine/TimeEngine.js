@@ -91,10 +91,23 @@ export default class TimeEngine {
 
   static registerOneCronSystemActionTask(taskLabel, cronExpression, actionLabel){
     const newTask = TaskGeneratorHelper.generateCronActionTask(
-          "take-a-break",
-          //"*/30 * * * 1-5", // every 30 minutes on week days
-          "* * * * *", // every minutes
-          "take-a-break-message"
+      taskLabel,
+          cronExpression,
+      actionLabel
+    );
+    TimeEngine.taskList.push(newTask);
+    const myGetTaskList = () => {
+      return TimeEngine.taskList;
+    }
+    TimeEngine.registerGetTaskListFunction(myGetTaskList);
+  }
+
+  static registerOneCronUserConditionListActionListTask(taskLabel, cronExpression, conditionLabelInfoList, actionlabelInfoList){
+    const newTask = TaskGeneratorHelper.registerOneCronUserConditionListActionListTask(
+      taskLabel,
+      cronExpression,
+      conditionLabelInfoList,
+      actionlabelInfoList
     );
     TimeEngine.taskList.push(newTask);
     const myGetTaskList = () => {

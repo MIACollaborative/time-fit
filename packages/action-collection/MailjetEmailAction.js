@@ -1,16 +1,18 @@
 import MailjetHelper from "@time-fit/helper/MailjetHelper";
 
 export default class MailjetEmailAction {
-    #emailInfo;
+  emailInfo;
 
   constructor(emailInfo) {
-    this.#emailInfo = emailInfo;
+    this.emailInfo = emailInfo;
   }
 
   async execute(actionInfo, params) {
     const { userInfo, datetime } = params;
 
-    const emailInfo = actionInfo.emailInfo? actionInfo.emailInfo : this.#emailInfo;
+    const emailInfo = actionInfo.emailInfo
+      ? actionInfo.emailInfo
+      : this.emailInfo;
 
     const result = await MailjetHelper.sendEmail([emailInfo]);
 

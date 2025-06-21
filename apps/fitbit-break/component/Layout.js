@@ -19,8 +19,6 @@ export default function Layout(props) {
           <b>Fitbit Break</b>
         </div>
         <br />
-
-        <div>University of Michigan</div>
       </footer>
     </div>
   );

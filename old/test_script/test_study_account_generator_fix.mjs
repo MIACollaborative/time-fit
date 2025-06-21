@@ -103,7 +103,7 @@ const saltRounds = 10;
 
 for (let i = startIndex; i < endIndex; i++) {
   let username = `${prefix}${i}`;
-  let password = "test"; // cryptoRandomString({ length: 8, characters: 'abcdefghijkmnpqrstuvwxyz023456789' });
+  let password = "test";
 
   let passwordHash = await bcrypt.hash(password, saltRounds).then((hashPassword) => {
     // Store hash in your password DB.

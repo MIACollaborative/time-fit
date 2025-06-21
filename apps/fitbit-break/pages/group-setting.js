@@ -237,13 +237,6 @@ export default function GroupSetting({ userInfo }) {
 
       <footer className={styles.main}>
         <div>Fitbit Break</div>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <div>University of Michigan</div>
-        </a>
       </footer>
     </div>
   );

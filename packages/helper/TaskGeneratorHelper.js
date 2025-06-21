@@ -88,7 +88,7 @@ export default class TaskGeneratorHelper {
         randomizationEnabled: actionLabelInfoList.length > 1,
         outcomeList: actionLabelInfoList.map((actionLabelInfo) => {
           return {
-            chance: actionLabelInfo.params.chance,
+            chance: actionLabelInfo.info.chance,
             action: {
               type: actionLabelInfo.label
               // now, how to store the rest of the information?

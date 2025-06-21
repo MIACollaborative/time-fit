@@ -102,11 +102,12 @@ export default class TimeEngine {
     TimeEngine.registerGetTaskListFunction(myGetTaskList);
   }
 
-  static registerOneCronUserConditionListActionListTask(taskLabel, cronExpression, conditionLabelInfoList, actionlabelInfoList){
+  static registerOneCronUserConditionListActionListTask(taskLabel, cronExpression, conditionLabelInfoList, conditionListOperator, actionlabelInfoList){
     const newTask = TaskGeneratorHelper.registerOneCronUserConditionListActionListTask(
       taskLabel,
       cronExpression,
       conditionLabelInfoList,
+      conditionListOperator,
       actionlabelInfoList
     );
     TimeEngine.taskList.push(newTask);

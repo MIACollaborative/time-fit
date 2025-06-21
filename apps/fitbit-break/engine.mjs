@@ -11,10 +11,11 @@ TimeEngine.registerAction("take-a-break-message", newAction);
 // ideal
 TimeEngine.registerCondition("hasFitbitStepCountOverThresholdForPersonDuringPeriod", HasFitbitStepCountOverThresholdForPersonDuringPeriodCondition);
 
+// To Do: should use a function to generate this as well
 const conditionLabelInfoList = [
   {
       label: "hasFitbitStepCountOverThresholdForPersonDuringPeriod",
-      params:{
+      info:{
         opposite: false,
         criteria: {
             period: {
@@ -32,10 +33,11 @@ const conditionLabelInfoList = [
   }
 ];
 
+// To Do: should use a function to generate this as well
 const actionLabelInfoList = [
   {
     label: "take-a-break-message",
-    params: {
+    info: {
       chance: 1.0,
       message: "It's 30 minutes already. Take a break from your screen!",
     },

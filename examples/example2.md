@@ -116,7 +116,7 @@ const actionParametersList = [
     parameters: emailActionParameters,
   },
 ];
-// register a new task that will be executed periodically
+
 TimeEngine.registerOneCronUserConditionListActionListTask(
   "take-a-break",
   "*/30 * * * 1-5",
@@ -134,4 +134,4 @@ TimeEngine.start();
 ```
 
 ### References
-- Complete code example: [fitbit-break](../apps/fitbit-break/index.js)
+- Complete code example: [fitbit-break engine](../apps/fitbit-break/engine.js)

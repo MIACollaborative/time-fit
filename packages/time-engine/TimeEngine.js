@@ -117,6 +117,17 @@ export default class TimeEngine {
     TimeEngine.registerGetTaskListFunction(myGetTaskList);
   }
 
+  static generateCriteriaPeriod(referenceStart, offsetTypeStart, offsetValueStart, referenceEnd, offsetTypeEnd, offsetValueEnd) {
+    return TaskGeneratorHelper.generateCriteriaPeriod(
+      referenceStart,
+      offsetTypeStart,
+      offsetValueStart,
+      referenceEnd,
+      offsetTypeEnd,
+      offsetValueEnd
+    );
+  }
+
   static registerGetTaskListFunction(func){
     TimeEngine.getTaskListFunction = func;
   }

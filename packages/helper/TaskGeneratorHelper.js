@@ -52,9 +52,9 @@ export default class TaskGeneratorHelper {
   static registerOneCronUserConditionListActionListTask(
     taskLabel,
     cronExpression,
-    conditionLabelInfoList,
+    conditionParametersList,
     conditionListOperator="and",
-    actionLabelInfoList,
+    actionParametersList,
     participantIndependent = true,
     ignoreTimezone = true
   ) {
@@ -85,26 +85,48 @@ export default class TaskGeneratorHelper {
         type: "all",
       },
       outcomes: {
-        randomizationEnabled: actionLabelInfoList.length > 1,
-        outcomeList: actionLabelInfoList.map((actionLabelInfo) => {
+        randomizationEnabled: actionParametersList.length > 1,
+        outcomeList: actionParametersList.map((actionNameParameters) => {
           return {
-            chance: actionLabelInfo.info.chance,
+            chance: actionNameParameters.chance? actionNameParameters.chance : 1.0/actionParametersList.length,
             action: {
-              type: actionLabelInfo.label
-              // now, how to store the rest of the information?
+              type: actionNameParameters.name,
+              parameters: actionNameParameters.parameters
             },
           };
         })
       },
       preCondition: { 
-        enabled: conditionLabelInfoList.length > 0,
+        enabled: conditionParametersList.length > 0,
         conditionRelationship: conditionListOperator? conditionListOperator : "and",
-        conditionList: conditionLabelInfoList.map((conditionLabelInfo) => {
+        conditionList: conditionParametersList.map((conditionNameParameters) => {
           return {
-            type: conditionLabelInfo.label,
-            // now, how to store the rest of the information?
+            type: conditionNameParameters.name,
+            parameters: conditionNameParameters.parameters
           };
         })
+      },
+    };
+  }
+
+  static generateCriteriaPeriod(
+    referenceStart,
+    offsetTypeStart,
+    offsetValueStart,
+    referenceEnd,
+    offsetTypeEnd,
+    offsetValueEnd
+  ) {
+    return {
+      period: {
+        start: {
+          reference: referenceStart,
+          offset: { type: offsetTypeStart, value: offsetValueStart },
+        },
+        end: {
+          reference: referenceEnd,
+          offset: { type: offsetTypeEnd, value: offsetValueEnd },
+        },
       },
     };
   }

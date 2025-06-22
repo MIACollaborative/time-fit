@@ -10,8 +10,8 @@ const fitbitCondition =
 TimeEngine.registerCondition("fitbit-over-threshold", fitbitCondition);
 
 let fitbitConditionParameters = {};
-fitbitConditionParameters.opposite = false;
-fitbitConditionParameters.criteria = TimeEngine.generateCriteriaPeriod("now", "minus", { minutes: 30 }, "now", "plus", { hours: 0 });
+fitbitConditionParameters.criteria.threshold = 100; 
+fitbitConditionParameters.criteria.period = TimeEngine.generateCriteriaPeriod("now", "minus", { minutes: 30 }, "now", "plus", { hours: 0 });
 
 const conditionParametersList = [
   {

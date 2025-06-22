@@ -53,7 +53,7 @@ export default class TaskGeneratorHelper {
     taskLabel,
     cronExpression,
     conditionParametersList,
-    conditionListOperator="and",
+    conditionListOperator = "and",
     actionParametersList,
     participantIndependent = true,
     ignoreTimezone = true
@@ -88,23 +88,29 @@ export default class TaskGeneratorHelper {
         randomizationEnabled: actionParametersList.length > 1,
         outcomeList: actionParametersList.map((actionNameParameters) => {
           return {
-            chance: actionNameParameters.chance? actionNameParameters.chance : 1.0/actionParametersList.length,
+            chance: actionNameParameters.chance
+              ? actionNameParameters.chance
+              : 1.0 / actionParametersList.length,
             action: {
               type: actionNameParameters.name,
-              parameters: actionNameParameters.parameters
+              parameters: actionNameParameters.parameters,
             },
           };
-        })
+        }),
       },
-      preCondition: { 
+      preCondition: {
         enabled: conditionParametersList.length > 0,
-        conditionRelationship: conditionListOperator? conditionListOperator : "and",
-        conditionList: conditionParametersList.map((conditionNameParameters) => {
-          return {
-            type: conditionNameParameters.name,
-            parameters: conditionNameParameters.parameters
-          };
-        })
+        conditionRelationship: conditionListOperator
+          ? conditionListOperator
+          : "and",
+        conditionList: conditionParametersList.map(
+          (conditionNameParameters) => {
+            return {
+              type: conditionNameParameters.name,
+              parameters: conditionNameParameters.parameters,
+            };
+          }
+        ),
       },
     };
   }
@@ -118,15 +124,13 @@ export default class TaskGeneratorHelper {
     offsetValueEnd
   ) {
     return {
-      period: {
-        start: {
-          reference: referenceStart,
-          offset: { type: offsetTypeStart, value: offsetValueStart },
-        },
-        end: {
-          reference: referenceEnd,
-          offset: { type: offsetTypeEnd, value: offsetValueEnd },
-        },
+      start: {
+        reference: referenceStart,
+        offset: { type: offsetTypeStart, value: offsetValueStart },
+      },
+      end: {
+        reference: referenceEnd,
+        offset: { type: offsetTypeEnd, value: offsetValueEnd },
       },
     };
   }

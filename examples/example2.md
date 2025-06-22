@@ -20,7 +20,7 @@ For this intervention, you will need two components to make this work
 - A server that provide a web interface for users to authorize your app to access their Fitbigt data.
 - A engine that will execute the decision rules to decide whether it is time to intervene and if so, deliver the intervention through email.
 
-As developing a web application is not the focus of this framework, we will focus on developing the decision rule in thie tutorial.
+As developing a web application is not the focus of this framework, we will focus on developing the decision rule in this tutorial.
 
 Here is the step by step guide to create this example.
 

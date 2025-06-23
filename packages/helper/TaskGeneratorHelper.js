@@ -1,7 +1,7 @@
 export default class TaskGeneratorHelper {
   constructor() {}
 
-  static generateCronActionTask(
+  static generateSystemTaskWithCronAction(
     taskLabel,
     cronExpression,
     actionType,
@@ -49,7 +49,7 @@ export default class TaskGeneratorHelper {
     };
   }
 
-  static registerOneCronUserConditionListActionListTask(
+  static generaetOneUserTaskWithCronConditionListActionList(
     taskLabel,
     cronExpression,
     conditionParametersList,

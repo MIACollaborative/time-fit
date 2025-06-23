@@ -109,7 +109,7 @@ const emailActionParameters = {
 
 In `TimeFit`, all the logic is defined in the form of tasks. For this sample application, we want this task to be carried out for every user, so we will use a "user task" provided by the framework to execute an action periodically.
 
-In this example, we will register a user task using `registerOneCronUserConditionListActionListTask`, which creates a task that will be executed at a certain time for every user. We will supply the task label, the cron expression that determines the timing of when this task should be considered, a list of condition that need to be satisfied, and a list of actions to be considered as intervention. Note that by default, all conditions need to be satisfied for any action to be considered. If multiple actions are provided, each action will have equal chance to be selected by default. Addition parameters can be provided to configure the beahvior of using conditions and actions.
+In this example, we will register a user task using `registerOneUserTaskWithCronConditionListActionList`, which creates a task that will be executed at a certain time for every user. We will supply the task label, the cron expression that determines the timing of when this task should be considered, a list of condition that need to be satisfied, and a list of actions to be considered as intervention. Note that by default, all conditions need to be satisfied for any action to be considered. If multiple actions are provided, each action will have equal chance to be selected by default. Addition parameters can be provided to configure the beahvior of using conditions and actions.
 
 ```javascript
 const conditionParametersList = [
@@ -125,7 +125,7 @@ const actionParametersList = [
   },
 ];
 
-TimeEngine.registerOneCronUserConditionListActionListTask(
+TimeEngine.registerOneUserTaskWithCronConditionListActionList(
   "take-a-break",
   "*/30 * * * 1-5",
   conditionParametersList,
@@ -193,7 +193,7 @@ const actionParametersList = [
   { name: "take-a-break-message", parameters: emailActionParameters },
 ];
 
-TimeEngine.registerOneCronUserConditionListActionListTask(
+TimeEngine.registerOneUserTaskWithCronConditionListActionList(
   "take-a-break",
   "*/30 * * * 1-5",
   conditionParametersList,

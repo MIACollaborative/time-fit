@@ -126,13 +126,78 @@ TimeEngine.registerOneCronUserConditionListActionListTask(
 );
 ```
 
-### Step 4: Run the app
+### Step 7: Run the app
 
 Finally, we will start the time engine to begin the nudging intervention.
 
 ```javascript
 TimeEngine.start();
 ```
+
+In the temrinal, run
+```
+node index.js
+```
+
+---
+
+## Troubleshooting
+
+- Double-check your API keys and credentials for Fitbit and Mailjet.
+- Ensure your server is accessible and users have authorized Fitbit access.
+- Check logs for errors if emails are not sent.
+
+---
+
+## Complete Example
+
+```javascript
+import TimeEngine from "@time-fit/time-engine/TimeEngine.js";
+import CustomEmailAction from "@time-fit/action-collection/CustomEmailAction";
+import HasFitbitStepCountOverThresholdForPersonDuringPeriodCondition from "@time-fit/data-source/fitbit/condition/HasFitbitStepCountOverThresholdForPersonDuringPeriodCondition";
+
+// Register action
+const newAction = new CustomEmailAction();
+TimeEngine.registerAction("take-a-break-message", newAction);
+
+// Register condition
+const fitbitCondition = new HasFitbitStepCountOverThresholdForPersonDuringPeriodCondition();
+TimeEngine.registerCondition("fitbit-over-threshold", fitbitCondition);
+
+// Set parameters
+let fitbitConditionParameters = {
+  criteria: {
+    threshold: 100,
+    period: TimeEngine.generateCriteriaPeriod(
+      "now", "minus", { minutes: 30 },
+      "now", "plus", { hours: 0 }
+    )
+  }
+};
+const emailActionParameters = {
+  message: "It's been 30 minutes. Take a break from your screen!",
+};
+
+// Register task
+const conditionParametersList = [
+  { name: "fitbit-over-threshold", parameters: fitbitConditionParameters },
+];
+const actionParametersList = [
+  { name: "take-a-break-message", parameters: emailActionParameters },
+];
+
+TimeEngine.registerOneCronUserConditionListActionListTask(
+  "take-a-break",
+  "*/30 * * * 1-5",
+  conditionParametersList,
+  actionParametersList
+);
+
+// Start engine
+TimeEngine.start();
+```
+
+---
 
 ### References
 - Complete code example: [fitbit-break engine](../apps/fitbit-break/engine.js)

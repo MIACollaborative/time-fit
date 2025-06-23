@@ -5,7 +5,7 @@ In this example, we will create a simple nudging intervention that sends a messa
 You can run this example by running the following command in the project folder:
 
 ```
-yarn example2
+yarn engine
 ```
 
 

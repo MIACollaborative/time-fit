@@ -121,6 +121,8 @@ yarn index
 
 [Example 1: Nudge users to take a break every 30 minutes during week days](examples/example1.md)
 
+[Example 2: Nudge users to take a break every 30 minutes during week days if step count is too low](examples/example2.md)
+
 
 ## License
 

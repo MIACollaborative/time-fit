@@ -1,5 +1,4 @@
 import Twilio from "twilio";
-//process.loadEnvFile();
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -10,12 +9,12 @@ const client = Twilio(accountSid, authToken);
 export default class TwilioHelper {
   constructor() {}
 
-  static sendMessage(
+  static async sendMessage(
     phone,
     bodyMessage,
     mediaUrlList = ["https://demo.twilio.com/owl.png"]
   ) {
-    let msgConfigObj = {
+    const msgConfigObj = {
       messagingServiceSid: messagingServiceSid,
       body: bodyMessage,
       mediaUrl: mediaUrlList,

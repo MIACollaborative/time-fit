@@ -1,3 +1,4 @@
+import TaskLogHelper from "@time-fit/helper/TaskLogHelper.js";
 import FitbitUpdateHelper from "../helper/FitbitUpdateHelper.js";
 
 export default class ProcessFitbitUpdateAction {
@@ -25,7 +26,7 @@ export default class ProcessFitbitUpdateAction {
     });
 
     const recentTaskLogList =
-      await DatabaseUtility.findTaskLogWithActionTypeDuringPeriod(
+      await TaskLogHelper.findTaskLogWithActionTypeDuringPeriod(
         ProcessFitbitUpdateAction.type,
         beforeDateTime,
         nowDateTime,

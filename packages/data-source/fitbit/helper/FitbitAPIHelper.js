@@ -46,7 +46,7 @@ export default class FitbitAPIHelper {
       },
       //data: {}
     }).then((response) => {
-      let profileData = response.data;
+      const profileData = response.data;
 
       return profileData;
     });
@@ -64,24 +64,14 @@ export default class FitbitAPIHelper {
         grant_type: "refresh_token",
         refresh_token: refreshToken,
       },
-      //data: {}
     }).then((response) => {
-      let responseData = response.data;
+      const responseData = response.data;
 
       return responseData;
     });
   }
 
   static async introspectToken(accessToken, inspectToken) {
-    console.log(`${this.name}.inspectToken: inspectToken: ${inspectToken}`);
-
-    /*
-    curl -X POST "https://api.fitbit.com/1.1/oauth2/introspect" \
--H "accept: application/json" \
--H "authorization: Bearer <access_token> \" 
--d "token=<The OAuth 2.0 token to retrieve the state>"
-    */
-
     return axios({
       method: "post",
       url: `https://api.fitbit.com/1.1/oauth2/introspect`,
@@ -100,31 +90,7 @@ export default class FitbitAPIHelper {
       // Note, the {'token': inspectToken} approach won't work!
       data: `token=${inspectToken}`, //{'Token': inspectToken}
     }).then((response) => {
-      let responseData = response.data;
-      console.log(
-        `FitbitHelper.introspectToken: ${JSON.stringify(responseData)}`
-      );
-
-      /*
-        {
-          "active":true,
-          "scope":"{ACTIVITY=READ_WRITE}",
-          "client_id":"<Client Id>",
-          "user_id":"<User Id>",
-          "token_type":"access_token",
-          "exp":<expiration date>,
-          "iat":<issued date>
-      }
-      
-      
-      or
-      
-      
-      {
-        "active": false
-      }
-      */
-
+      const responseData = response.data;
       return responseData;
     });
   }
@@ -142,6 +108,51 @@ export default class FitbitAPIHelper {
       });
     
     return introspectTokenResult;
+  }
+
+  static async createSubscriptionForFitbitId(
+    fitbitId,
+    collectionPath,
+    subscriptionId,
+    accessToken
+  ) {
+    return axios({
+      method: "post",
+      url: `https://api.fitbit.com/1/user/${fitbitId}/${collectionPath}/apiSubscriptions/${subscriptionId}.json`,
+      // `headers` are custom headers to be sent
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        Accept: `application/json`,
+      },
+    }).then((response) => {
+      const responseData = response.data;
+      return responseData;
+    })
+    .catch((error) => {
+      // handle error
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+
+        if(error.response.status == "409"){
+          return error.response.data;
+        }
+
+
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message);
+      }
+      console.log(error.config);
+    });
   }
 
   static async getActivityGoalsForFitbitID(encodedId, accessToken, periodString="daily") {

@@ -25,6 +25,7 @@ model users {
 
   // additional user information
   preferredName String?
+  email         String?
   phone         String?
   timezone      String?
 

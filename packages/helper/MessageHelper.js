@@ -29,4 +29,15 @@ export default class MessageHelper {
     const pickedMessage = messageList[randomIndex];
     return pickedMessage;
   }
+
+  static async getMessagesSortedByUpdatedAt(sorting = "asc") {
+    const prisma = getPrismaClient();
+    return await prisma.message.findMany({
+      orderBy: [
+        {
+          updatedAt: sorting,
+        },
+      ],
+    });
+  }
 }

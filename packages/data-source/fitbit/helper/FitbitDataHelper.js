@@ -1,111 +1,168 @@
 import DateTimeHelper from "../../../helper/DateTimeHelper.js";
-import FitbitAPIHelper from "./FitbitAPIHelper.js";
-import prisma from "../../../helper/prisma.js";
+import UserInfoHelper from "../../../helper/UserInfoHelper.js";
+import UpdateDiffHelper from "../../../helper/UpdateDiffHelper.js";
 import DataRecordHelper from "../../DataRecordHelper.js";
+import FitbitAPIHelper from "./FitbitAPIHelper.js";
+
+import { getPrismaClient } from "../../../helper/prisma.js";
+import { DateTime } from "luxon";
 
 export default class FitbitDataHelper {
   constructor() {}
+
+  static async findFitbitDataByCriteria(criteria) {
+    const fitbitDataList = await getPrismaClient().fitbit_data.findMany(
+      criteria
+    );
+    return fitbitDataList;
+  }
 
   static generateCompositeIDForFitbitUpdate(aList = []) {
     return aList.join("_");
   }
 
-  static async getUserFitbitActivityDataDuringPeriodById(fitbitId, startDateString, endDateString){
-
-    const recordList = await prisma.fitbit_data.findMany({
-        where:{
-            ownerId: fitbitId,
-            dataType: GeneralUtility.FITBIT_INTRADAY_DATA_TYPE_ACTIVITY_SUMMARY,
-            dateTime: {
-                gte: startDateString,
-                lte: endDateString
-            }
-        }
+  static async getUserFitbitActivityDataDuringPeriodById(
+    fitbitId,
+    startDateString,
+    endDateString
+  ) {
+    const recordList = await getPrismaClient().fitbit_data.findMany({
+      where: {
+        ownerId: fitbitId,
+        dataType: FitbitAPIHelper.FITBIT_INTRADAY_DATA_TYPE_ACTIVITY_SUMMARY,
+        dateTime: {
+          gte: startDateString,
+          lte: endDateString,
+        },
+      },
     });
 
     return recordList;
-}
+  }
 
-static async getUserFitbitDailyStepsForWearingDaysDuringPeriodById(fitbitId, startDateString, endDateString, goalType, wearingLowerBoundMinutes, recentLimit){
-    const dateStepsList = await FitbitDataHelper.getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(fitbitId, startDateString, endDateString, "steps");
+  static async getUserFitbitDailyStepsForWearingDaysDuringPeriodById(
+    fitbitId,
+    startDateString,
+    endDateString,
+    goalType,
+    wearingLowerBoundMinutes,
+    recentLimit
+  ) {
+    const dateStepsList =
+      await FitbitDataHelper.getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(
+        fitbitId,
+        startDateString,
+        endDateString,
+        "steps"
+      );
 
     const wearingDateStepsList = dateStepsList.filter((dateSteps) => {
-        return dateSteps.wearingMinutes >= wearingLowerBoundMinutes;
+      return dateSteps.wearingMinutes >= wearingLowerBoundMinutes;
     });
 
     // get the last three elements of the list
     const recentWearingDateGoalList = wearingDateStepsList.slice(-recentLimit);
 
     return recentWearingDateGoalList;
-}
-
-static async getUserFitbitDateAndWearingMinutesListDuringPeriod(fitbitId, startDateTime, endDateTime){
-  let resultList = [];
-
-  let curDateTime = startDateTime;
-
-  while( GeneralUtility.diffDateTime(curDateTime, endDateTime, "seconds").toObject().seconds >= 0){
-      const aggregatedMinutes = await DatabaseUtility.getUserFitbitHeartRateIntradayMinutesByIdAndDate(fitbitId, curDateTime);
-
-      resultList.push({
-          dateTime: curDateTime.toFormat('yyyy-MM-dd'),
-          wearingMinutes: aggregatedMinutes,
-      })
-      // update curDate
-      curDateTime = DateTimeHelper.operateDateTime(curDateTime, {"days": 1}, "plus");
   }
 
-  return resultList;
-}
+  static async getUserFitbitDateAndWearingMinutesListDuringPeriod(
+    fitbitId,
+    startDateTime,
+    endDateTime
+  ) {
+    let resultList = [];
 
-static async getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(fitbitId, startDateString, endDateString, summaryType){
+    let curDateTime = startDateTime;
 
-  let dateStepsList = [];
+    while (
+      DateTimeHelper.diffDateTime(
+        curDateTime,
+        endDateTime,
+        "seconds"
+      ).toObject().seconds >= 0
+    ) {
+      const aggregatedMinutes =
+        await FitbitDataHelper.getUserFitbitHeartRateIntradayMinutesByIdAndDate(
+          fitbitId,
+          curDateTime
+        );
 
-  //const wearingLowerBoundMinutes = 60 * 8;
+      resultList.push({
+        dateTime: curDateTime.toFormat("yyyy-MM-dd"),
+        wearingMinutes: aggregatedMinutes,
+      });
+      // update curDate
+      curDateTime = DateTimeHelper.operateDateTime(
+        curDateTime,
+        { days: 1 },
+        "plus"
+      );
+    }
 
+    return resultList;
+  }
 
-  // This is activity-summary, with goals
-  const recordList = await FitbitDataHelper.getUserFitbitActivityDataDuringPeriodById(fitbitId, startDateString, endDateString);
+  static async getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(
+    fitbitId,
+    startDateString,
+    endDateString,
+    summaryType
+  ) {
+    let dateStepsList = [];
 
-  const startDate = DateTime.fromISO(startDateString);
-  const endDate = DateTime.fromISO(endDateString);
+    //const wearingLowerBoundMinutes = 60 * 8;
 
-  const dateAndMinsList = await FitbitDataHelper.getUserFitbitDateAndWearingMinutesListDuringPeriod(fitbitId, startDate, endDate);
+    // This is activity-summary, with goals
+    const recordList =
+      await FitbitDataHelper.getUserFitbitActivityDataDuringPeriodById(
+        fitbitId,
+        startDateString,
+        endDateString
+      );
 
-  // now, start from the ending, find days actual records
-  for(let i = 0; i <  dateAndMinsList.length; i++){
+    const startDate = DateTime.fromISO(startDateString);
+    const endDate = DateTime.fromISO(endDateString);
+
+    const dateAndMinsList =
+      await FitbitDataHelper.getUserFitbitDateAndWearingMinutesListDuringPeriod(
+        fitbitId,
+        startDate,
+        endDate
+      );
+
+    // now, start from the ending, find days actual records
+    for (let i = 0; i < dateAndMinsList.length; i++) {
       let dateAndSteps = {};
       const dateMins = dateAndMinsList[i];
 
       let record = undefined;
 
-      for(let j = recordList.length - 1; j >= 0; j--){
-          if(recordList[j].dateTime == dateMins.dateTime){
-              record = recordList[j];
-              break;
-          }
+      for (let j = recordList.length - 1; j >= 0; j--) {
+        if (recordList[j].dateTime == dateMins.dateTime) {
+          record = recordList[j];
+          break;
+        }
       }
 
-      if(record == undefined){
-          dateAndSteps =  {
-              dateTime: dateMins.dateTime,
-              steps: 0,
-              wearingMinutes: dateMins.wearingMinutes
-          };
-      }
-      else{
-          dateAndSteps =  {
-              dateTime: dateMins.dateTime,
-              steps: record.content.summary[summaryType],
-              wearingMinutes: dateMins.wearingMinutes
-          };
+      if (record == undefined) {
+        dateAndSteps = {
+          dateTime: dateMins.dateTime,
+          steps: 0,
+          wearingMinutes: dateMins.wearingMinutes,
+        };
+      } else {
+        dateAndSteps = {
+          dateTime: dateMins.dateTime,
+          steps: record.content.summary[summaryType],
+          wearingMinutes: dateMins.wearingMinutes,
+        };
       }
       dateStepsList.push(dateAndSteps);
-  }
+    }
 
-  return dateStepsList;
-}
+    return dateStepsList;
+  }
 
   static async queryAndStoreFitbitIntradayDataAtTargetDateForUser(
     userInfo,
@@ -208,13 +265,13 @@ static async getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(fitbitId, 
         );
         let lastModified = ""; // resultData.activities.length > 0? resultData.activities[0].lastModified: "";
 
-        const oldDocument = await prisma.fitbit_data.findFirst({
+        const oldDocument = await getPrismaClient().fitbit_data.findFirst({
           where: {
             compositeId: compositeId,
           },
         });
 
-        const newDocument = await prisma.fitbit_data.upsert({
+        const newDocument = await getPrismaClient().fitbit_data.upsert({
           where: {
             compositeId: compositeId,
           },
@@ -243,7 +300,7 @@ static async getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(fitbitId, 
             newDocument
           );
         }
-        await prisma.update_diff.create({
+        await getPrismaClient().update_diff.create({
           data: {
             collectionName: "fitbit_data",
             documentId: newDocument.id,
@@ -278,11 +335,10 @@ static async getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(fitbitId, 
     let resultData = {};
 
     // get the user first
-    const userInfo = await prisma.users.findFirst({
-      where: {
-        fitbitId: fitbitUpdate.ownerId,
-      },
-    });
+    const userInfo = await UserInfoHelper.getUserInfoByPropertyValue(
+      "fitbitId",
+      fitbitUpdate.ownerId
+    );
 
     const dateString = fitbitUpdate.date;
     const targetDate = DateTime.fromISO(fitbitUpdate.date);
@@ -310,7 +366,7 @@ static async getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(fitbitId, 
 
     // step intraday
     const intraStepResult =
-      await DatabaseUtility.queryAndStoreFitbitIntradayDataAtTargetDateForUser(
+      await FitbitDataHelper.queryAndStoreFitbitIntradayDataAtTargetDateForUser(
         updatedUserInfo,
         GeneralUtility.FITBIT_INTRADAY_DATA_TYPE_STEP,
         targetDate,
@@ -326,7 +382,7 @@ static async getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(fitbitId, 
 
     // heart rate intraday
     const intraHeartResult =
-      await DatabaseUtility.queryAndStoreFitbitIntradayDataAtTargetDateForUser(
+      await FitbitDataHelper.queryAndStoreFitbitIntradayDataAtTargetDateForUser(
         updatedUserInfo,
         GeneralUtility.FITBIT_INTRADAY_DATA_TYPE_HEART,
         targetDate,
@@ -359,13 +415,6 @@ static async getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(fitbitId, 
       resultStatus = "failed";
       resultErrorMessage += `${summaryActivityResult.data}`;
     }
-    /*
-    if (heartrateResult.value == "failed") {
-        resultErrorMessage += `${heartrateResult.data}`;
-    }
-    */
-
-    //let compositeId = GeneralUtility.generateCompositeIDForFitbitUpdate([fitbitUpdate.ownerId, fitbitUpdate.collectionType, fitbitUpdate.date]);
 
     return {
       value: resultStatus,
@@ -387,17 +436,9 @@ static async getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(fitbitId, 
         {
           value: summaryActivityResult.value,
           ownerId: userInfo.fitbitId,
-          dataType: GeneralUtility.FITBIT_INTRADAY_DATA_TYPE_ACTIVITY_SUMMARY,
+          dataType: FitbitAPIHelper.FITBIT_INTRADAY_DATA_TYPE_ACTIVITY_SUMMARY,
           dateTime: dateString,
         },
-        /*
-        , {
-            value: heartrateResult.value,
-            ownerId: userInfo.fitbitId,
-            dataType: "activities-heart",
-            dateTime: dateString
-        }
-        */
       ],
     };
   }
@@ -489,13 +530,13 @@ static async getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(fitbitId, 
             ? resultData.activities[0].lastModified
             : "";
 
-        const oldDocument = await prisma.fitbit_data.findFirst({
+        const oldDocument = await getPrismaClient().fitbit_data.findFirst({
           where: {
             compositeId: compositeId,
           },
         });
 
-        const newDocument = await prisma.fitbit_data.upsert({
+        const newDocument = await getPrismaClient().fitbit_data.upsert({
           where: {
             compositeId: compositeId,
           },
@@ -524,13 +565,14 @@ static async getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(fitbitId, 
             newDocument
           );
         }
-        await prisma.update_diff.create({
-          data: {
+
+        await UpdateDiffHelper.insertUpdateDiffList([
+          {
             collectionName: "fitbit_data",
             documentId: newDocument.id,
             documentDiff: documentDiff,
           },
-        });
+        ]);
       }
 
       resultList.push(activityResult);
@@ -632,7 +674,7 @@ static async getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(fitbitId, 
 
     if (refreshResult.value == "success") {
       // need to actually update the token
-      const updatedUserInfo = await DatabaseUtility.updateToken(
+      const updatedUserInfo = await UserInfoHelper.updateToken(
         userInfo.hash,
         refreshResult.data.accessToken,
         refreshResult.data.refreshToken,
@@ -645,39 +687,88 @@ static async getUserFitbitDailyStepsAndWearingMinutesDuringPeriodById(fitbitId, 
     return refreshResult;
   }
 
-  static async getUserFitbitWearingMinutesPerDayListDuringPeriod(fitbitId, startDateTime, endDateTime){
+  static async getUserFitbitWearingMinutesPerDayListDuringPeriod(
+    fitbitId,
+    startDateTime,
+    endDateTime
+  ) {
     let minsList = [];
 
     let curDateTime = startDateTime;
 
-    while( DateTimeHelper.diffDateTime(curDateTime, endDateTime, "seconds").toObject().seconds >= 0){
-        const aggregatedMinutes = await FitbitDataHelper.getUserFitbitHeartRateIntradayMinutesByIdAndDate(fitbitId, curDateTime);
-        minsList.push(aggregatedMinutes);
-        curDateTime = DateTimeHelper.operateDateTime(curDateTime, {"days": 1}, "plus");
+    while (
+      DateTimeHelper.diffDateTime(
+        curDateTime,
+        endDateTime,
+        "seconds"
+      ).toObject().seconds >= 0
+    ) {
+      const aggregatedMinutes =
+        await FitbitDataHelper.getUserFitbitHeartRateIntradayMinutesByIdAndDate(
+          fitbitId,
+          curDateTime
+        );
+      minsList.push(aggregatedMinutes);
+      curDateTime = DateTimeHelper.operateDateTime(
+        curDateTime,
+        { days: 1 },
+        "plus"
+      );
     }
     return minsList;
-}
-
-static async getUserFitbitHeartRateIntradayMinutesByIdAndDate(fitbitId, startDateTime){
-
-  let timeString = startDateTime.toFormat('yyyy-MM-dd');
-
-  const record = await prisma.fitbit_data.findFirst({
-      where:{
-          ownerId: fitbitId,
-          dataType: GeneralUtility.FITBIT_INTRADAY_DATA_TYPE_HEART,
-          dateTime: timeString,
-      },
-  });
-
-  let minutesTotal = 0;
-
-  if(record != undefined){
-      // version 2: use intraday
-      const heartRateDataSet = record["content"]["activities-heart-intraday"]["dataset"];
-      minutesTotal += heartRateDataSet.length;
   }
 
-  return minutesTotal;
-}
+  static async getUserFitbitHeartRateIntradayMinutesByIdAndDate(
+    fitbitId,
+    startDateTime
+  ) {
+    const timeString = startDateTime.toFormat("yyyy-MM-dd");
+
+    const record = await getPrismaClient().fitbit_data.findFirst({
+      where: {
+        ownerId: fitbitId,
+        dataType: GeneralUtility.FITBIT_INTRADAY_DATA_TYPE_HEART,
+        dateTime: timeString,
+      },
+    });
+
+    let minutesTotal = 0;
+
+    if (record != undefined) {
+      // version 2: use intraday
+      const heartRateDataSet =
+        record["content"]["activities-heart-intraday"]["dataset"];
+      minutesTotal += heartRateDataSet.length;
+    }
+
+    return minutesTotal;
+  }
+
+  static async getUserFitbitActivityListOfCategoryDuringPeriodById(
+    fitbitId,
+    category = "Walk",
+    startDateString,
+    endDateString
+  ) {
+    const recordList =
+      await FitbitDataHelper.getUserFitbitActivityDataDuringPeriodById(
+        fitbitId,
+        startDateString,
+        endDateString
+      );
+
+    let activityList = [];
+
+    recordList.forEach((record) => {
+      if (record.content.activities.length > 0) {
+        activityList = activityList.concat(record.content.activities);
+      }
+    });
+
+    const activityListByCategory = activityList.filter((item) => {
+      return item.activityParentName == category;
+    });
+
+    return activityListByCategory;
+  }
 }

@@ -1,14 +1,23 @@
 import DateTimeHelper from "../../../helper/DateTimeHelper.js";
+import UserInfoHelper from "../../../helper/UserInfoHelper.js";
+import { getPrismaClient } from "../../../helper/prisma.js";
 import FitbitDataHelper from "./FitbitDataHelper.js";
-import prisma from "../../../helper/prisma.js";
+
 export default class FitbitUpdateHelper {
   constructor() {}
 
+  static async findFitbitUpdateByCriteria(
+    criteria
+  ) {
+    const fitbitUpdateList = await getPrismaClient().fitbit_update.findMany(criteria);
+    return fitbitUpdateList;
+  }
+
   static async insertFitbitUpdateList(updateList) {
-    const createResult = await prisma.fitbit_update.createMany({
+    const createResult = await getPrismaClient().fitbit_update.createMany({
       data: updateList,
     });
-    return createResult;
+    return createResult;s
   }
 
   static async updateFitbitUpdateStatusWithSameSignatureBeforeTime(
@@ -17,7 +26,7 @@ export default class FitbitUpdateHelper {
     newStatus = "processed",
     timestamp
   ) {
-    const updateOlderList = await prisma.fitbit_update.updateMany({
+    const updateOlderList = await getPrismaClient().fitbit_update.updateMany({
       where: {
         status: oldStatus,
         ownerId: fUpdate.ownerId,
@@ -36,17 +45,13 @@ export default class FitbitUpdateHelper {
   }
 
   static async isFitbitUpdateDateWithinAppropriateScope(fitbitUpdate) {
-    const aUser = await prisma.users.findFirst({
-      where: {
-        fitbitId: fitbitUpdate.ownerId,
-      },
-    });
+    const aUser = await UserInfoHelper.getUserInfoByPropertyValue("fitbitId", fitbitUpdate.ownerId);
 
     if (aUser == undefined) {
       return false;
     }
 
-    const userInfo = aUser; //JSON.parse(JSON.stringify(aUser, replacer));
+    const userInfo = aUser; 
 
     const timezone = userInfo.timezone;
 

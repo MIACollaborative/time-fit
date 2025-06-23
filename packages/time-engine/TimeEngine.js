@@ -89,8 +89,8 @@ export default class TimeEngine {
     TimeEngine.getUserListFunction = func;
   }
 
-  static registerOneCronSystemActionTask(taskLabel, cronExpression, actionLabel){
-    const newTask = TaskGeneratorHelper.generateCronActionTask(
+  static registerOneSystemTaskWithCronAction(taskLabel, cronExpression, actionLabel){
+    const newTask = TaskGeneratorHelper.generateSystemTaskWithCronAction(
       taskLabel,
           cronExpression,
       actionLabel
@@ -102,8 +102,8 @@ export default class TimeEngine {
     TimeEngine.registerGetTaskListFunction(myGetTaskList);
   }
 
-  static registerOneCronUserConditionListActionListTask(taskLabel, cronExpression, conditionLabelInfoList, conditionListOperator, actionlabelInfoList){
-    const newTask = TaskGeneratorHelper.registerOneCronUserConditionListActionListTask(
+  static registerOneUserTaskWithCronConditionListActionList(taskLabel, cronExpression, conditionLabelInfoList, conditionListOperator, actionlabelInfoList){
+    const newTask = TaskGeneratorHelper.generaetOneUserTaskWithCronConditionListActionList(
       taskLabel,
       cronExpression,
       conditionLabelInfoList,

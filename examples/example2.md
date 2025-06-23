@@ -119,7 +119,7 @@ const actionParametersList = [
   },
 ];
 
-TimeEngine.registerOneCronUserConditionListActionListTask(
+TimeEngine.registerOneUserTaskWithCronConditionListActionList(
   "take-a-break",
   "*/30 * * * 1-5",
   conditionParametersList,
@@ -189,7 +189,7 @@ const actionParametersList = [
   { name: "take-a-break-message", parameters: emailActionParameters },
 ];
 
-TimeEngine.registerOneCronUserConditionListActionListTask(
+TimeEngine.registerOneUserTaskWithCronConditionListActionList(
   "take-a-break",
   "*/30 * * * 1-5",
   conditionParametersList,

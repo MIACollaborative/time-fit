@@ -49,10 +49,10 @@ TimeEngine.registerAction("take-a-break-message", newAction);
 
 In TimeFit, all the logic is defined in the form of tasks. For simplicity, we wil use a system task that is provided by the framework to execute an action periodically. You can also create user tasks that will be executed for each user at a certain time.
 
-In this example, we will register a system task using `registerOneCronSystemActionTask`, which creates a task that will be executed at a certain time. We will supply the task label, the cron expression that determines the timing of the action, and the label of the action to be executed. Since we already register an action, "take-a-break-message", earlier, we can simply refers to this action by its label when registering the task.
+In this example, we will register a system task using `registerOneSystemTaskWithCronAction`, which creates a task that will be executed at a certain time. We will supply the task label, the cron expression that determines the timing of the action, and the label of the action to be executed. Since we already register an action, "take-a-break-message", earlier, we can simply refers to this action by its label when registering the task.
 
 ```javascript
-TimeEngine.registerOneCronSystemActionTask(
+TimeEngine.registerOneSystemTaskWithCronAction(
   "take-a-break",
   "*/30 * * * 1-5",
   "take-a-break-message"

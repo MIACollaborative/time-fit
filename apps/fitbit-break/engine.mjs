@@ -31,7 +31,7 @@ const actionParametersList = [
   },
 ];
 // register a new task that will be executed periodically
-TimeEngine.registerOneCronUserConditionListActionListTask(
+TimeEngine.registerOneUserTaskWithCronConditionListActionList(
   "take-a-break",
   "*/30 * * * 1-5",
   conditionParametersList,

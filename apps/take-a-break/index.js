@@ -10,7 +10,7 @@ const newAction = new DesktopNotificationAction(
 TimeEngine.registerAction("take-a-break-message", newAction);
 
 // register a new task that will be executed periodically
-TimeEngine.registerOneCronSystemActionTask(
+TimeEngine.registerOneSystemTaskWithCronAction(
   "take-a-break",
   "*/30 * * * 1-5",
   "take-a-break-message"

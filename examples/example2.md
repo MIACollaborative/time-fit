@@ -75,10 +75,17 @@ As we discussed in the previous step, in `TimeFit`, we can specify a list of con
 In the case of `HasFitbitStepCountOverThresholdForPersonDuringPeriodCondition`, the first parameter to specify is the threshold of step count, such as 100.
 
 The second parameter to specify is the period of time we consider when checking step counts. The `TimeEngine` provides a function, `generateCriteriaPeriod()`,  to specify a period of time. You can specify the following parameters to the function:
-- Period start reference: the reference point for the start of this period
-- Period start offet type: the type of offset, such as adding time (i.e., "plus") and substracting time (i.e., "minus")
-- Period start offset value: the amount of offset, such as 30 minutes, representing as `{ minutes: 30 }`.
-The same set of parameters apply to the end of period as well.
+
+**`generateCriteriaPeriod` parameters:**
+
+| Parameter                | Description                          | Example         |
+|--------------------------|--------------------------------------|-----------------|
+| Period start reference   | Start point (e.g., "now")            | "now"           |
+| Period start offset type | "plus" or "minus"                    | "minus"         |
+| Period start offset      | Offset object                        | { minutes: 30 } |
+| Period end reference     | End point                            | "now"           |
+| Period end offset type   | "plus" or "minus"                    | "plus"          |
+| Period end offset        | Offset object                        | { hours: 0 }    |
 
 ```javascript
 let fitbitConditionParameters = {};

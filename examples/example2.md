@@ -22,7 +22,7 @@ For this intervention, you will need two components to make this work
 
 As developing a web application is not the focus of this framework, we will focus on developing the decision rule in this tutorial.
 
-Here is the step by step guide to create this example.
+Here is the step by step guide to create this intervention.
 
 ### Create the app
 
@@ -34,13 +34,15 @@ In TimeFit, the TimeEngine is the main entry point of the framework. It is respo
 
 
 ```javascript
-import TimeEngine from "../time-engine/TimeEngine.js";
+import TimeEngine from "@time-fit/time-engine/TimeEngine.js";
 ```
 ### Step 2: Register an action that will send emails to users.
 
+In `TimeFit`, each task will decide whether to perofrom an action such as sending out a push notification or an email. This framework provides a collection of action, under `action-collection` module, that developers can use to deliver content-based interventions.
+
 First, import the `CustomEmailAction` provided by the framework.
 
-Second, create an instance using `new` and supply the title and mesasge parameters of the notification.
+Second, create an instance using `new`.
 
 Third, register this action to the engine and give it a name, "take-a-break-message." You can use this name later when creating a task that specifies when such action should be carried out.
 
@@ -52,11 +54,13 @@ TimeEngine.registerAction("take-a-break-message", newAction);
 
 ### Step 3: Register a condition that will check Fitbit step counts
 
-First, import the `CustomEmailAction` provided by the framework.
+In `TimeFit`, each task has the capability to check a series of conditions, in addition to time, to determine whether to deliver an intervention. For simpple time-based intervention that will be considered at a regular bassis, checking time is enough. However, an advanced condition could be developed to enhance the intervention adaptation to a user's state and context (e.g., step count). The `TimeFit` framework provides a collection of condition, and also separatedly under `data-source/fitbit/condition` for Fitbit specific conditions, that developers can use to quickly construct complex interventions. See below for how to check step count from Fitbit to decide whether to intervene.
 
-Second, create an instance using `new` and supply the title and mesasge parameters of the notification.
+First, import the `HasFitbitStepCountOverThresholdForPersonDuringPeriodCondition` provided by the framework.
 
-Third, register this action to the engine and give it a name, "fitbit-over-threshold." You can use this name later when creating a task that specifies a condition that needs to be satisfied for an action to be considered.
+Second, create an instance using `new`.
+
+Third, register this condition to the engine and give it a name, "fitbit-over-threshold." You can use this name later when creating a task that specifies a condition that needs to be satisfied for an action to be considered.
 
 ```javascript
 import HasFitbitStepCountOverThresholdForPersonDuringPeriodCondition from "@time-fit/data-source/fitbit/condition/HasFitbitStepCountOverThresholdForPersonDuringPeriodCondition";
@@ -66,15 +70,15 @@ TimeEngine.registerCondition("fitbit-over-threshold", fitbitCondition);
 ```
 
 ### Step 4: Provide parameters for the Fitbit condition to check step counts over the last 30 minutes
-In `TimeFit`, we can specify a list of conditions that need to be satisfied before a task/action to be considered. The conditions are designed to accept parameters to configure what is being checked. Condition-specific parameters will be stored in a property named `criteria`.
+As we discussed in the previous step, in `TimeFit`, we can specify a list of conditions that need to be satisfied before a task/action to be considered. The conditions are designed to accept parameters to configure what is being checked. Condition-specific parameters will be stored in a property named `criteria`.
 
-In the case of `HasFitbitStepCountOverThresholdForPersonDuringPeriodCondition`, the first parameter to specify is the threshold of step counts, such as 100.
+In the case of `HasFitbitStepCountOverThresholdForPersonDuringPeriodCondition`, the first parameter to specify is the threshold of step count, such as 100.
 
-The second parameter to specify is the period of time we consider when checking step counts. The `TimeEngine` provides a function, `generateCriteriaPeriod()`,  to specify a period of time using simple syntax. You can specify the following parameters to the function:
+The second parameter to specify is the period of time we consider when checking step counts. The `TimeEngine` provides a function, `generateCriteriaPeriod()`,  to specify a period of time. You can specify the following parameters to the function:
 - Period start reference: the reference point for the start of this period
 - Period start offet type: the type of offset, such as adding time (i.e., "plus") and substracting time (i.e., "minus")
-- Period start offset value: the amount of offset, such as 30 minutes, representing as `{minutes: 30}`.
-- (The same for period end)
+- Period start offset value: the amount of offset, such as 30 minutes, representing as `{ minutes: 30 }`.
+The same set of parameters apply to the end of period as well.
 
 ```javascript
 let fitbitConditionParameters = {};
@@ -85,8 +89,7 @@ fitbitConditionParameters.criteria.period = TimeEngine.generateCriteriaPeriod("n
 ### Step 5: Provide parameters for the email action to send a message
 In `TimeFit`, a action is designed to accept parameters to configure its beahvior.
 
-In the case of `CustomEmailAction`, the first parameter to specify is the content of the email, such as "It's 30 minutes already. Take a break from your screen!"
-
+In the case of `CustomEmailAction`, the first parameter to specify is the content of the email, such as "It's 30 minutes already. Take a break from your screen!" The action is designed to autmatically extract the email from user information from the database to send this email. That means, this action will use the email associated with each user to send the email. No additional parameter is needed.
 
 ```javascript
 const emailActionParameters = {
@@ -95,13 +98,11 @@ const emailActionParameters = {
 ```
 
 
-
-
 ### Step 6: Register a new task that will be executed periodically (every 30 minutes)
 
-In TimeFit, all the logic is defined in the form of tasks. For this sample application, we want this task to be carried out for every user, so we will use a "user task" provided by the framework to execute an action periodically.
+In `TimeFit`, all the logic is defined in the form of tasks. For this sample application, we want this task to be carried out for every user, so we will use a "user task" provided by the framework to execute an action periodically.
 
-In this example, we will register a system task using `registerOneCronUserConditionListActionListTask`, which creates a task that will be executed at a certain time for every user. We will supply the task label, the cron expression that determines the timing of when this task should be considered, a list of condition that need to be satisfied, and a list of actions to be considered as intervention. Note that by default, all conditions need to be satisfied for any action to be considered. If multiple actions are provided, each action will have equal chance to be selected by default.
+In this example, we will register a user task using `registerOneCronUserConditionListActionListTask`, which creates a task that will be executed at a certain time for every user. We will supply the task label, the cron expression that determines the timing of when this task should be considered, a list of condition that need to be satisfied, and a list of actions to be considered as intervention. Note that by default, all conditions need to be satisfied for any action to be considered. If multiple actions are provided, each action will have equal chance to be selected by default. Addition parameters can be provided to configure the beahvior of using conditions and actions.
 
 ```javascript
 const conditionParametersList = [

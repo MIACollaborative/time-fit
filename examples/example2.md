@@ -1,4 +1,4 @@
-# Example 2: Nudge users to take a break if step count is too low
+# Example 2: Nudge users to take a break every 30 minutes if step count is too low
 
 This example shows how to create a nudging intervention that emails users who have not reached a step count threshold (e.g., 100 steps) in the last 30 minutes, every 30 minutes on weekdays. A Fitbit wristband is used to measure step count.
 

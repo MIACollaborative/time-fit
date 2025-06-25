@@ -79,6 +79,10 @@ FITBIT_CLIENT_ID=[fitbit client id]
 FITBIT_AUTH_TOKEN=[fitbit authentication token]
 FITBIT_AUTH_CODE=[fitbit authorization code]
 
+# for using Mailjet service to send emails
+MAILJET_API_KEY=[mailjet api key]
+MAILJET_SECRET_KEY=[mailjet secret key]
+
 # for using Twilio service to send SMS/MMS
 TWILIO_ACCOUNT_SID=[twilio account id]
 TWILIO_AUTH_TOKEN=[twilio authentication token]

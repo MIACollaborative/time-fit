@@ -8,7 +8,10 @@ const SIZES = Object.freeze([
   Object.freeze({ participants: 1_000, tasks: 5 }),
   Object.freeze({ participants: 10_000, tasks: 20 }),
 ]);
-const CONCURRENCIES = Object.freeze([1, 8]);
+const MEMORY_CONCURRENCIES = Object.freeze([1, 8]);
+const SIMULATED_IO_CONCURRENCIES = Object.freeze([1, 8, 32]);
+const SIMULATED_IO_DELAY_MILLISECONDS = 1;
+const TIMED_TICKS_PER_CONFIGURATION = 3;
 const alwaysMetCondition = Object.freeze({
   type: "benchmark-met",
   evaluate: async () => Object.freeze({ ok: true, met: true }),
@@ -18,18 +21,37 @@ const alwaysUnavailableCondition = Object.freeze({
   evaluate: async () => Object.freeze({ ok: true, met: false }),
 });
 
-for (const size of SIZES) {
-  for (const concurrency of CONCURRENCIES) {
-    const measurement = await measureTick(size, concurrency);
-    printMeasurement(measurement);
+const memoryMeasurements = await measureMatrix(SIZES, MEMORY_CONCURRENCIES, 0);
+printMeasurements("Memory decision log", memoryMeasurements);
+
+const simulatedIoMeasurements = await measureMatrix([SIZES[0]], SIMULATED_IO_CONCURRENCIES, SIMULATED_IO_DELAY_MILLISECONDS);
+printMeasurements(`Simulated ${SIMULATED_IO_DELAY_MILLISECONDS} ms I/O per decision-log call`, simulatedIoMeasurements);
+
+async function measureMatrix(sizes, concurrencies, decisionLogLatencyMilliseconds) {
+  const measurements = [];
+  for (const size of sizes) {
+    for (const concurrency of concurrencies) {
+      measurements.push(await measureConfiguration(size, concurrency, decisionLogLatencyMilliseconds));
+    }
   }
+  return measurements;
 }
 
-async function measureTick(size, concurrency) {
+async function measureConfiguration(size, concurrency, decisionLogLatencyMilliseconds) {
+  await runTick(size, concurrency, decisionLogLatencyMilliseconds);
+  const samples = [];
+  for (let index = 0; index < TIMED_TICKS_PER_CONFIGURATION; index += 1) {
+    samples.push(await runTick(size, concurrency, decisionLogLatencyMilliseconds));
+  }
+  return medianByElapsedMilliseconds(samples);
+}
+
+async function runTick(size, concurrency, decisionLogLatencyMilliseconds) {
   const participants = buildParticipants(size.participants);
   const tasks = buildTasks(size.tasks);
   const store = createMemoryStore({ participants, tasks });
-  const timedDecisionLog = measureDecisionLog(store.decisionLog);
+  const delayedDecisionLog = withSimulatedLatency(store.decisionLog, decisionLogLatencyMilliseconds);
+  const timedDecisionLog = measureDecisionLog(delayedDecisionLog);
   const engine = createTimeEngine({
     participants: store.participants,
     decisionLog: timedDecisionLog.port,
@@ -57,6 +79,28 @@ async function measureTick(size, concurrency) {
     decisionLogMilliseconds: timedDecisionLog.totalMilliseconds(),
     unavailableClaimMilliseconds: timedDecisionLog.unavailableClaimMilliseconds(),
   });
+}
+
+function medianByElapsedMilliseconds(samples) {
+  const sorted = [...samples].sort((left, right) => left.elapsedMilliseconds - right.elapsedMilliseconds);
+  return sorted[Math.floor(sorted.length / 2)];
+}
+
+function withSimulatedLatency(decisionLog, latencyMilliseconds) {
+  if (latencyMilliseconds === 0) return decisionLog;
+  const delayOperation = async (operation) => {
+    await delay(latencyMilliseconds);
+    return operation();
+  };
+  return Object.freeze({
+    claim: (record, options) => delayOperation(() => decisionLog.claim(record, options)),
+    complete: (decisionId, result) => delayOperation(() => decisionLog.complete(decisionId, result)),
+    fail: (decisionId, error) => delayOperation(() => decisionLog.fail(decisionId, error)),
+  });
+}
+
+function delay(milliseconds) {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
 function assertExpectedDecisionCount(decisions, { participants, tasks }) {
@@ -125,16 +169,22 @@ function measureDecisionLog(decisionLog) {
   });
 }
 
-function printMeasurement(measurement) {
-  const fields = [
-    `${measurement.participants} participants x ${measurement.tasks} tasks`,
-    `concurrency=${measurement.concurrency}`,
-    `decisions=${measurement.decisions}`,
-    `ticks/sec=${measurement.ticksPerSecond.toFixed(3)}`,
-    `decisions/sec=${measurement.decisionsPerSecond.toFixed(1)}`,
-    `ms/tick=${measurement.elapsedMilliseconds.toFixed(1)}`,
-    `decision-log-ms=${measurement.decisionLogMilliseconds.toFixed(1)}`,
-    `unavailable-claim-ms=${measurement.unavailableClaimMilliseconds.toFixed(1)}`,
-  ];
-  process.stdout.write(`${fields.join(" | ")}\n`);
+function printMeasurements(title, measurements) {
+  process.stdout.write(`\n${title} (median of ${TIMED_TICKS_PER_CONFIGURATION} ticks after 1 warm-up)\n`);
+  process.stdout.write("| participants | tasks | concurrency | decisions | ticks/sec | decisions/sec | ms/tick | decision-log-ms | unavailable-claim-ms |\n");
+  process.stdout.write("|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n");
+  measurements.forEach((measurement) => {
+    const fields = [
+      measurement.participants,
+      measurement.tasks,
+      measurement.concurrency,
+      measurement.decisions,
+      measurement.ticksPerSecond.toFixed(3),
+      measurement.decisionsPerSecond.toFixed(1),
+      measurement.elapsedMilliseconds.toFixed(1),
+      measurement.decisionLogMilliseconds.toFixed(1),
+      measurement.unavailableClaimMilliseconds.toFixed(1),
+    ];
+    process.stdout.write(`| ${fields.join(" | ")} |\n`);
+  });
 }

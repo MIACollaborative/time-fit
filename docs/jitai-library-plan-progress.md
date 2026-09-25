@@ -234,3 +234,10 @@ Runs 3–5 were self-critiqued (Codex unavailable).
   decisions/sec and 6.23 s/tick. The benchmark uses the default 10,000-record cap, tick state
   is bundled into an immutable context, and the internal occurrence memo is required; the
   corrected before/after table and evidence are in `docs/stage-f-review/run-1-codex-response.md`.
+
+- **Stage F review run 2:** the report-only benchmark now uses one warm-up plus the median of
+  three fresh-engine samples and includes a 1 ms simulated decision-log I/O case. With an
+  I/O-bound adapter, throughput scales roughly with concurrency until the database saturates;
+  start at 8 and tune for the deployment, while the ADR 0005 default remains 1. The 1,000 × 5
+  latency case improved from 407.7 decisions/sec at concurrency 1 to 2,713.0 at 8 and 6,987.7
+  at 32; details are in `docs/stage-f-review/run-2-codex-response.md`.

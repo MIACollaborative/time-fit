@@ -2,6 +2,7 @@ import { jest } from "@jest/globals";
 import { createTimeEngine, timeWindowCondition } from "../src/index.js";
 import { createMemoryStore } from "../src/memory/index.js";
 import { mapWithConcurrency } from "../src/engine/pool.js";
+import { findDueOccurrences } from "../src/engine/schedule.js";
 import { tallyOutcomes } from "../src/engine/summary.js";
 import { bindLogger, describeError } from "../src/engine/logging.js";
 import { capPayload, invokeIsolated, normalizeActionResult } from "../src/engine/plugins.js";
@@ -157,6 +158,22 @@ describe("task ordering", () => {
     expect(calls.map((call) => call.ctx.taskId)).toEqual(["alpha", "mid", "zeta"]);
   });
 
+  test("concurrent participants preserve priority order independently", async () => {
+    const participants = ["a", "b", "c", "d"].map((id) => ({ id, timeZone: "UTC" }));
+    const tasks = [
+      participantTask({ id: "third", priority: 30 }),
+      participantTask({ id: "first", priority: 10 }),
+      participantTask({ id: "second", priority: 20 }),
+    ];
+    const calls = [];
+    const { engine } = engineWith({ participants, tasks, actions: [recordingAction(calls)], options: { concurrency: 3, pageSize: 2 } });
+    await engine.tick(NINE);
+    for (const participant of participants) {
+      const taskIds = calls.filter((call) => call.ctx.participant.id === participant.id).map((call) => call.ctx.taskId);
+      expect(taskIds).toEqual(["first", "second", "third"]);
+    }
+  });
+
   test("the default clock is the system clock", async () => {
     const { engine } = engineWith();
     const before = Date.now();
@@ -190,7 +207,65 @@ describe("participants", () => {
     const people = Array.from({ length: 7 }, (_, i) => ({ id: `p${i}`, timeZone: "UTC" }));
     const { engine, calls } = engineWith({ participants: people, options: { concurrency: 3, pageSize: 5 } });
     expect((await counts(engine)).completed).toBe(7);
-    expect(new Set(calls.map((call) => call.ctx.participant.id)).size).toBe(7);
+    expect(calls.map((call) => call.ctx.participant.id).sort()).toEqual(people.map(({ id }) => id));
+  });
+
+  test("a slow action keeps page fetches and started work bounded by concurrency", async () => {
+    const people = Array.from({ length: 6 }, (_, index) => ({ id: `p${index}`, timeZone: "UTC" }));
+    const requestedCursors = [];
+    let activePageFetches = 0;
+    let maximumPageFetches = 0;
+    const participants = {
+      async iterate({ cursor, limit }) {
+        activePageFetches += 1;
+        maximumPageFetches = Math.max(maximumPageFetches, activePageFetches);
+        requestedCursors.push(cursor);
+        try {
+          await new Promise((resolve) => setImmediate(resolve));
+          const offset = cursor === null ? 0 : Number(cursor);
+          const items = people.slice(offset, offset + limit);
+          return { items, nextCursor: offset + items.length < people.length ? String(offset + items.length) : null };
+        } finally {
+          activePageFetches -= 1;
+        }
+      },
+    };
+    let releaseAction;
+    const actionGate = new Promise((resolve) => { releaseAction = resolve; });
+    const actionStarts = [];
+    let activeActions = 0;
+    let maximumActions = 0;
+    const blockingAction = {
+      type: "blocking",
+      execute: async (_params, context) => {
+        actionStarts.push(context.participant.id);
+        activeActions += 1;
+        maximumActions = Math.max(maximumActions, activeActions);
+        try {
+          await actionGate;
+          return { ok: true };
+        } finally {
+          activeActions -= 1;
+        }
+      },
+    };
+    const engine = createTimeEngine({
+      participants,
+      decisionLog: createMemoryStore().decisionLog,
+      tasks: [participantTask({ outcomes: [{ id: "send", probability: 1, action: { type: "blocking" } }] })],
+      actions: [blockingAction],
+      options: { concurrency: 2, pageSize: 2 },
+    });
+    const pending = engine.tick(NINE);
+    await waitForAsynchronousCondition(() => actionStarts.length === 2);
+    expect(actionStarts).toEqual(["p0", "p1"]);
+    expect(requestedCursors).toEqual([null]);
+    expect(maximumPageFetches).toBe(1);
+    expect(maximumActions).toBe(2);
+    releaseAction();
+    await pending;
+    expect(requestedCursors).toEqual([null, "2", "4"]);
+    expect([...actionStarts].sort()).toEqual(people.map(({ id }) => id));
   });
 
   test("snapshot is stored, capped, and a throwing snapshot is recorded", async () => {
@@ -202,6 +277,63 @@ describe("participants", () => {
     expect(failing.store.decisionLog.records()[0].snapshot.snapshotFailed.code).toBe("snapshot-threw");
   });
 });
+
+async function waitForAsynchronousCondition(condition) {
+  for (let attempts = 0; attempts < 50; attempts += 1) {
+    if (condition()) return;
+    await new Promise((resolve) => setImmediate(resolve));
+  }
+  throw new Error("asynchronous condition was not met");
+}
+
+describe("occurrence memoization", () => {
+  const fixedCheckpoint = Object.freeze({ id: "fixed", time: "09:00", daysOfWeek: [1, 2, 3, 4, 5, 6, 7], offsetMinutes: 0 });
+  const preferenceCheckpoint = Object.freeze({ id: "wake", preference: "wakeTime", daysOfWeek: [1, 2, 3, 4, 5, 6, 7], offsetMinutes: 0 });
+  test("keys fixed-time occurrences by task version, checkpoint, zone, and window", async () => {
+    const occurrenceMemo = new Map();
+    const input = scheduleInput({ checkpoint: fixedCheckpoint, occurrenceMemo });
+    expect((await findDueOccurrences(input)).due).toHaveLength(1);
+    expect((await findDueOccurrences(input)).due).toHaveLength(1);
+    expect(occurrenceMemo.size).toBe(1);
+    await findDueOccurrences(scheduleInput({ checkpoint: fixedCheckpoint, occurrenceMemo, taskVersion: "version-two" }));
+    await findDueOccurrences(scheduleInput({ checkpoint: fixedCheckpoint, occurrenceMemo, timeZone: "Etc/GMT" }));
+    await findDueOccurrences(scheduleInput({ checkpoint: fixedCheckpoint, occurrenceMemo, window: { from: new Date("2026-09-22T08:58:00.000Z"), to: NINE } }));
+    expect(occurrenceMemo.size).toBe(4);
+  });
+
+  test("preference occurrences remain per participant and invalid memo input is rejected", async () => {
+    const occurrenceMemo = new Map();
+    let resolutions = 0;
+    const preferenceResolver = async () => {
+      resolutions += 1;
+      return { ok: true, value: "09:00" };
+    };
+    const input = scheduleInput({ checkpoint: preferenceCheckpoint, occurrenceMemo, preferenceResolver });
+    await findDueOccurrences(input);
+    await findDueOccurrences(input);
+    expect(resolutions).toBe(2);
+    expect(occurrenceMemo.size).toBe(0);
+    await findDueOccurrences(scheduleInput({ checkpoint: fixedCheckpoint }));
+    await expect(findDueOccurrences(scheduleInput({ checkpoint: fixedCheckpoint, occurrenceMemo: null }))).rejects.toThrow("occurrenceMemo must be a Map");
+  });
+});
+
+function scheduleInput({ checkpoint, occurrenceMemo, taskVersion = "version-one", timeZone = "UTC", window: requestedWindow = defaultMemoizationWindow(), preferenceResolver = async () => ({ ok: true, value: "09:00" }) }) {
+  return {
+    task: { taskVersion, spec: { id: "task", checkpoints: [checkpoint] } },
+    participant: alice,
+    timeZone,
+    window: requestedWindow,
+    occurrenceMemo,
+    preferenceResolver,
+    pluginTimeoutMs: 1_000,
+    logger: Object.freeze({ debug() {} }),
+  };
+}
+
+function defaultMemoizationWindow() {
+  return { from: new Date("2026-09-22T08:59:00.000Z"), to: new Date(NINE) };
+}
 
 describe("preference checkpoints", () => {
   const task = participantTask({ checkpoints: [{ id: "wake", preference: "wakeupTime", offsetMinutes: 15 }] });

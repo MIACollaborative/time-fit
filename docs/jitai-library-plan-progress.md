@@ -212,3 +212,19 @@ Runs 3–5 were self-critiqued (Codex unavailable).
   vendor peer dependency: because the package imports no SDK, declaring one would force an
   unnecessary dependency contract; this and Twilio's lack of a safe idempotency field are
   documented in ADR 0011. No new core or legacy bug was found or changed; next is Stage F.
+
+## Stage F: implementation (run 0)
+
+- Added a report-only core benchmark over 1,000 × 5 and 10,000 × 20 participant-task grids
+  with memory storage, no-op actions, cron/fixed-time checkpoints, zones, and preconditions.
+  On macOS 26.6.2 arm64 / Node v26.4.0, the 10,000 × 20 case improved from 7,365 to 65,650
+  decisions/sec at concurrency 1 and from 7,432 to 76,487 decisions/sec at concurrency 8.
+- Added per-tick memoization for cron and fixed-time occurrence enumeration keyed by task
+  version, checkpoint id, zone, and exact window; preference checkpoints deliberately remain
+  per participant. All 18 engine fixtures now run at concurrency 1 and 3, with focused tests
+  covering ordering, no duplicate participant processing, and bounded page/action work.
+- Skipped optional unavailable-record batching: terminal unavailable claims measured 239.0 ms
+  (7.8%) of the optimized 10,000 × 20 concurrency-1 tick, while claimed records cannot be
+  batched before actions. `Condition.evaluateBatch` remains reserved because no realistic
+  DB-backed condition benchmark established it as a bottleneck; details are in
+  `docs/stage-f-review/run-0-codex-implementation.md`.

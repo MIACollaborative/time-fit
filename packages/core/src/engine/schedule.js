@@ -10,14 +10,16 @@ import { invokeIsolated } from "./plugins.js";
  * tick window. Preference checkpoints ask the resolver once per candidate local date.
  * @param {{ task: { spec: import("../taskSpec.js").TaskSpec }, participant: object | null,
  *           timeZone: string, window: { from: Date, to: Date },
+ *           occurrenceMemo?: Map<string, ReadonlyArray<number>>,
  *           preferenceResolver: Function | null, pluginTimeoutMs: number,
  *           logger: import("./logging.js").Logger }} input
  * @returns {Promise<{ due: DueOccurrence[], outcomes: import("./summary.js").TickOutcome[] }>}
  */
 export async function findDueOccurrences(input) {
+  const occurrenceMemo = resolveOccurrenceMemo(input.occurrenceMemo);
   const perCheckpoint = [];
   for (const checkpoint of input.task.spec.checkpoints) {
-    perCheckpoint.push(await occurrencesForCheckpoint(checkpoint, input));
+    perCheckpoint.push(await occurrencesForCheckpoint(checkpoint, { ...input, occurrenceMemo }));
   }
   return {
     due: perCheckpoint.flatMap((result) => result.due),
@@ -28,13 +30,34 @@ export async function findDueOccurrences(input) {
 async function occurrencesForCheckpoint(checkpoint, input) {
   const { timeZone, window } = input;
   const base = { checkpoint, timeZone, from: window.from, to: window.to };
-  const resolution =
-    checkpointKind(checkpoint) === "preference" ? await resolvePreferenceTimes(checkpoint, input) : { resolvedTimes: {}, outcomes: [] };
-  const due = occurrences({ ...base, resolvedTimes: resolution.resolvedTimes }).map((scheduledAt) => ({
+  const kind = checkpointKind(checkpoint);
+  const resolution = kind === "preference" ? await resolvePreferenceTimes(checkpoint, input) : { resolvedTimes: {}, outcomes: [] };
+  const scheduledAt = kind === "preference"
+    ? occurrences({ ...base, resolvedTimes: resolution.resolvedTimes })
+    : memoizedOccurrences(input.task.taskVersion, checkpoint, base, input.occurrenceMemo);
+  const due = scheduledAt.map((instant) => ({
     checkpointId: checkpoint.id,
-    scheduledAt,
+    scheduledAt: instant,
   }));
   return { due, outcomes: resolution.outcomes };
+}
+
+function resolveOccurrenceMemo(occurrenceMemo) {
+  if (occurrenceMemo === undefined) return new Map();
+  if (!(occurrenceMemo instanceof Map)) throw new TypeError("findDueOccurrences: occurrenceMemo must be a Map when provided");
+  return occurrenceMemo;
+}
+
+function memoizedOccurrences(taskVersion, checkpoint, { timeZone, from, to }, occurrenceMemo) {
+  const key = JSON.stringify([taskVersion, checkpoint.id, timeZone, from.toISOString(), to.toISOString()]);
+  const milliseconds = occurrenceMemo.get(key) ?? cacheOccurrences(key, checkpoint, timeZone, from, to, occurrenceMemo);
+  return milliseconds.map((instant) => new Date(instant));
+}
+
+function cacheOccurrences(key, checkpoint, timeZone, from, to, occurrenceMemo) {
+  const milliseconds = Object.freeze(occurrences({ checkpoint, timeZone, from, to }).map((instant) => instant.getTime()));
+  occurrenceMemo.set(key, milliseconds);
+  return milliseconds;
 }
 
 async function resolvePreferenceTimes(checkpoint, input) {

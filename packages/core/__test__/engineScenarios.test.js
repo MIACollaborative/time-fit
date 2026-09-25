@@ -2,6 +2,7 @@ import { loadFixture } from "./support/fixtures.js";
 import { runScenario } from "./support/scenarioHarness.js";
 
 const { scenarios } = loadFixture("engine-scenarios.json");
+const scenarioRuns = scenarios.flatMap((scenario) => [1, 3].map((concurrency) => ({ scenario, concurrency })));
 
 const recordKey = (record) =>
   [record.scope === "system" ? "s:system" : `p:${record.participantId}`, record.taskId, record.checkpointId, record.scheduledAt].join("|");
@@ -25,8 +26,8 @@ function expectRecordFields(record, expected, observations, scenario) {
 }
 
 describe("engine scenarios (ADR 0001-0005)", () => {
-  test.each(scenarios)("$name", async (scenario) => {
-    const observations = await runScenario(scenario);
+  test.each(scenarioRuns)("$scenario.name at concurrency $concurrency", async ({ scenario, concurrency }) => {
+    const observations = await runScenario(scenario, { concurrency });
     const { expect: expected } = scenario;
 
     if (expected.records !== undefined) {

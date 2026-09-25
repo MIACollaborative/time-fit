@@ -319,6 +319,10 @@ reference/idempotency field. Tests mock the SDKs.
 works. **take-a-break runs on core** (memory store + `/desktop`) with no DB config.
 
 ### Stage F: Concurrency and throughput
+> **Status (2026-09-25): in review.** A per-tick cron/fixed-time occurrence memo, report-only
+> benchmark, and concurrency/backpressure coverage are implemented. The run-0 measurements and
+> scope decisions are in [`stage-f-review/run-0-codex-implementation.md`](stage-f-review/run-0-codex-implementation.md).
+
 **Change:** enable and test `concurrency > 1` (per-participant order preserved,
 backpressure on page fetches), per-zone memoization of `occurrences()` within a tick, batched decision writes that keep per-decision claim
 integrity, log levels, benchmark script (decisions/sec for synthetic N × M,

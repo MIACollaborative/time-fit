@@ -3,20 +3,20 @@ import { createMemoryStore } from "../../src/memory/index.js";
 import { err, ok } from "../../src/result.js";
 
 /** Runs one scenario from engine-scenarios.json and returns everything tests assert on. */
-export async function runScenario(scenario) {
-  const harness = createHarness(scenario);
+export async function runScenario(scenario, options = {}) {
+  const harness = createHarness(scenario, options);
   for (const step of scenario.steps) await harness.apply(step);
   return harness.observations();
 }
 
-function createHarness(scenario) {
+function createHarness(scenario, { concurrency }) {
   const callLog = [];
   const logEvents = [];
   const gate = createGate();
   const plugins = fixturePlugins(callLog, gate);
   const store = createMemoryStore({ participants: scenario.participants, tasks: scenario.tasks });
   const logger = Object.fromEntries(["debug", "info", "warn", "error"].map((level) => [level, (event) => logEvents.push(event)]));
-  const makeEngine = () => createTimeEngine({ storage: store, ...plugins, logger, options: scenario.options });
+  const makeEngine = () => createTimeEngine({ storage: store, ...plugins, logger, options: scenarioEngineOptions(scenario.options, concurrency) });
   let engine = makeEngine();
   let lastSummary = null;
   const pending = [];
@@ -68,6 +68,10 @@ function createHarness(scenario) {
       };
     },
   };
+}
+
+function scenarioEngineOptions(options, concurrency) {
+  return concurrency === undefined ? options : { ...options, concurrency };
 }
 
 function versionOf(spec, plugins) {

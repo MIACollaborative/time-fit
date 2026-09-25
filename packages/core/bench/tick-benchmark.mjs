@@ -28,9 +28,7 @@ for (const size of SIZES) {
 async function measureTick(size, concurrency) {
   const participants = buildParticipants(size.participants);
   const tasks = buildTasks(size.tasks);
-  // A tick never repeats a decision ID. Retaining one record exercises the real memory port
-  // while avoiding an artificial O(N²) retention scan for this single-pass throughput probe.
-  const store = createMemoryStore({ participants, tasks, maxRecords: 1 });
+  const store = createMemoryStore({ participants, tasks });
   const timedDecisionLog = measureDecisionLog(store.decisionLog);
   const engine = createTimeEngine({
     participants: store.participants,

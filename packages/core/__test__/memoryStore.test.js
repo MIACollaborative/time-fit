@@ -1,3 +1,4 @@
+import { jest } from "@jest/globals";
 import { createMemoryStore } from "../src/memory/index.js";
 import { decisionLogConformanceChecks } from "../src/testing/index.js";
 
@@ -60,6 +61,20 @@ describe("createMemoryStore", () => {
     expect(decisionLog.records().map((stored) => stored.decisionId)).toEqual(["a", "b"]);
     await decisionLog.claim(record("c", "2026-09-22T09:01:00.000Z"), { token: "t" });
     expect(decisionLog.records().map((stored) => stored.decisionId)).toEqual(["b", "c"]);
+  });
+
+  test("does not rescan retained records when no retention or cap eviction is due", async () => {
+    const values = jest.spyOn(Map.prototype, "values");
+    const initialCalls = values.mock.calls.length;
+    const { decisionLog } = createMemoryStore({ retentionMinutes: 60, maxRecords: 10 });
+    try {
+      await decisionLog.claim(record("a"), { token: "t" });
+      await decisionLog.claim(record("b"), { token: "t" });
+      await decisionLog.claim(record("c"), { token: "t" });
+      expect(values.mock.calls).toHaveLength(initialCalls);
+    } finally {
+      values.mockRestore();
+    }
   });
 
   test("records transitions, gaps, and returns copies", async () => {

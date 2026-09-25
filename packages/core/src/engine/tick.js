@@ -80,20 +80,24 @@ async function reportMissedWindow(engine, logger, lastTick, window, tick) {
 
 async function evaluateWindow(engine, tick, window, logger) {
   const { tasks, outcomes: taskOutcomes } = await loadTasks(engine, tick, logger);
-  const occurrenceMemo = new Map();
+  const tickContext = createTickContext(engine, tick, window, logger);
   const systemTasks = tasks.filter(({ spec }) => spec.scope === "system");
   const participantTasks = tasks.filter(({ spec }) => spec.scope === "participant");
   const systemOutcomes = [];
   for (const task of systemTasks) {
-    systemOutcomes.push(...(await evaluateSubject(engine, tick, window, logger, task, null, task.spec.timeZone, occurrenceMemo)));
+    systemOutcomes.push(...(await evaluateSubject(tickContext, task, null, task.spec.timeZone)));
   }
   const earlierOutcomes = [...taskOutcomes, ...systemOutcomes];
   try {
-    const participantOutcomes = participantTasks.length === 0 ? [] : await evaluateParticipants(engine, tick, window, logger, participantTasks, occurrenceMemo);
+    const participantOutcomes = participantTasks.length === 0 ? [] : await evaluateParticipants(tickContext, participantTasks);
     return [...earlierOutcomes, ...participantOutcomes];
   } catch (error) {
     throw error instanceof TickAbort ? error.withEarlierOutcomes(earlierOutcomes) : error;
   }
+}
+
+function createTickContext(engine, tick, window, logger) {
+  return Object.freeze({ engine, tick, window, logger, occurrenceMemo: new Map() });
 }
 
 async function loadTasks(engine, tick, logger) {
@@ -132,9 +136,10 @@ function sortByPriority(tasks) {
   return [...tasks].sort((a, b) => a.spec.priority - b.spec.priority || (a.spec.id < b.spec.id ? -1 : 1));
 }
 
-async function evaluateParticipants(engine, tick, window, logger, tasks, occurrenceMemo) {
+async function evaluateParticipants(tickContext, tasks) {
+  const { engine, logger } = tickContext;
   const outcomes = [];
-  const evaluateOne = (raw) => evaluateParticipant(engine, tick, window, logger, tasks, raw, occurrenceMemo);
+  const evaluateOne = (raw) => evaluateParticipant(tickContext, tasks, raw);
   try {
     for await (const page of participantPages(engine, logger)) {
       (await mapWithConcurrency(page, engine.options.concurrency, evaluateOne)).forEach((list) => outcomes.push(...list));
@@ -172,7 +177,8 @@ async function fetchParticipantPage(engine, cursor, limit) {
   return page;
 }
 
-async function evaluateParticipant(engine, tick, window, logger, tasks, raw, occurrenceMemo) {
+async function evaluateParticipant(tickContext, tasks, raw) {
+  const { logger } = tickContext;
   const intake = intakeParticipant(raw);
   if (!intake.ok) {
     logger.debug(intake.reason === "participantInvalidTimezone" ? "participant-invalid-timezone" : "participant-invalid", { participantId: raw?.id });
@@ -180,7 +186,7 @@ async function evaluateParticipant(engine, tick, window, logger, tasks, raw, occ
   }
   const outcomes = [];
   for (const task of tasks) {
-    outcomes.push(...(await evaluateSubject(engine, tick, window, logger, task, intake.participant, intake.participant.timeZone, occurrenceMemo)));
+    outcomes.push(...(await evaluateSubject(tickContext, task, intake.participant, intake.participant.timeZone)));
   }
   return outcomes;
 }
@@ -198,7 +204,8 @@ function intakeParticipant(raw) {
   }
 }
 
-async function evaluateSubject(engine, tick, window, logger, task, participant, timeZone, occurrenceMemo) {
+async function evaluateSubject(tickContext, task, participant, timeZone) {
+  const { engine, tick, window, logger, occurrenceMemo } = tickContext;
   const scheduleInput = { task, participant, timeZone, window, occurrenceMemo, preferenceResolver: engine.preferenceResolver, pluginTimeoutMs: engine.options.pluginTimeoutMs, logger };
   const { due, outcomes } = await findDueOccurrences(scheduleInput);
   const decisionOutcomes = [];

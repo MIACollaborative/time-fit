@@ -320,8 +320,8 @@ works. **take-a-break runs on core** (memory store + `/desktop`) with no DB conf
 
 ### Stage F: Concurrency and throughput
 > **Status (2026-09-25): in review.** A per-tick cron/fixed-time occurrence memo, report-only
-> benchmark, and concurrency/backpressure coverage are implemented. The run-0 measurements and
-> scope decisions are in [`stage-f-review/run-0-codex-implementation.md`](stage-f-review/run-0-codex-implementation.md).
+> benchmark, and concurrency/backpressure coverage are implemented. Run-0 measurements and
+> the latest review response are in [`stage-f-review/`](stage-f-review/).
 
 **Change:** enable and test `concurrency > 1` (per-participant order preserved,
 backpressure on page fetches), per-zone memoization of `occurrences()` within a tick, batched decision writes that keep per-decision claim

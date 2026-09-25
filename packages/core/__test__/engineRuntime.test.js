@@ -301,7 +301,7 @@ describe("occurrence memoization", () => {
     expect(occurrenceMemo.size).toBe(4);
   });
 
-  test("preference occurrences remain per participant and invalid memo input is rejected", async () => {
+  test("preference occurrences remain per participant", async () => {
     const occurrenceMemo = new Map();
     let resolutions = 0;
     const preferenceResolver = async () => {
@@ -313,8 +313,6 @@ describe("occurrence memoization", () => {
     await findDueOccurrences(input);
     expect(resolutions).toBe(2);
     expect(occurrenceMemo.size).toBe(0);
-    await findDueOccurrences(scheduleInput({ checkpoint: fixedCheckpoint }));
-    await expect(findDueOccurrences(scheduleInput({ checkpoint: fixedCheckpoint, occurrenceMemo: null }))).rejects.toThrow("occurrenceMemo must be a Map");
   });
 });
 

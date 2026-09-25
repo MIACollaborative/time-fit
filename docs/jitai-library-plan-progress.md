@@ -228,3 +228,9 @@ Runs 3–5 were self-critiqued (Codex unavailable).
   batched before actions. `Condition.evaluateBatch` remains reserved because no realistic
   DB-backed condition benchmark established it as a bottleneck; details are in
   `docs/stage-f-review/run-0-codex-implementation.md`.
+
+- **Stage F review run 1:** integrated insertion-order memory pruning after the default store
+  measured 862.7 decisions/sec and 231.8 s/tick at 10,000 × 20; it now measures 32,115
+  decisions/sec and 6.23 s/tick. The benchmark uses the default 10,000-record cap, tick state
+  is bundled into an immutable context, and the internal occurrence memo is required; the
+  corrected before/after table and evidence are in `docs/stage-f-review/run-1-codex-response.md`.

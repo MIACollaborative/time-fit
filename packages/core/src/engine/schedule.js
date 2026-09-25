@@ -10,16 +10,15 @@ import { invokeIsolated } from "./plugins.js";
  * tick window. Preference checkpoints ask the resolver once per candidate local date.
  * @param {{ task: { spec: import("../taskSpec.js").TaskSpec }, participant: object | null,
  *           timeZone: string, window: { from: Date, to: Date },
- *           occurrenceMemo?: Map<string, ReadonlyArray<number>>,
+ *           occurrenceMemo: Map<string, ReadonlyArray<number>>,
  *           preferenceResolver: Function | null, pluginTimeoutMs: number,
  *           logger: import("./logging.js").Logger }} input
  * @returns {Promise<{ due: DueOccurrence[], outcomes: import("./summary.js").TickOutcome[] }>}
  */
 export async function findDueOccurrences(input) {
-  const occurrenceMemo = resolveOccurrenceMemo(input.occurrenceMemo);
   const perCheckpoint = [];
   for (const checkpoint of input.task.spec.checkpoints) {
-    perCheckpoint.push(await occurrencesForCheckpoint(checkpoint, { ...input, occurrenceMemo }));
+    perCheckpoint.push(await occurrencesForCheckpoint(checkpoint, input));
   }
   return {
     due: perCheckpoint.flatMap((result) => result.due),
@@ -40,12 +39,6 @@ async function occurrencesForCheckpoint(checkpoint, input) {
     scheduledAt: instant,
   }));
   return { due, outcomes: resolution.outcomes };
-}
-
-function resolveOccurrenceMemo(occurrenceMemo) {
-  if (occurrenceMemo === undefined) return new Map();
-  if (!(occurrenceMemo instanceof Map)) throw new TypeError("findDueOccurrences: occurrenceMemo must be a Map when provided");
-  return occurrenceMemo;
 }
 
 function memoizedOccurrences(taskVersion, checkpoint, { timeZone, from, to }, occurrenceMemo) {

@@ -16,6 +16,8 @@ const CLAIMABLE_STATES = new Set(["claimed", "unavailable"]);
 /**
  * @param {{ participants?: object[], tasks?: object[], retentionMinutes?: number, maxRecords?: number }} [options]
  *   retentionMinutes must be at least the engine's catchUpWindowMinutes, or restarts could re-deliver.
+ *   Retention pruning follows insertion order; an out-of-order `scheduledAt` record after an
+ *   in-window record can remain until later cap eviction.
  */
 export function createMemoryStore({
   participants = [],
@@ -82,11 +84,7 @@ function createDecisionLog({ retentionMilliseconds, maxRecords }) {
     storeRecord({ ...existing, ...change });
     return { applied: true };
   };
-  const prune = (newestScheduledAt) => {
-    const cutoff = newestScheduledAt - retentionMilliseconds;
-    [...records.values()].filter((record) => Date.parse(record.scheduledAt) < cutoff).forEach((record) => records.delete(record.decisionId));
-    [...records.keys()].slice(0, Math.max(0, records.size - maxRecords)).forEach((decisionId) => records.delete(decisionId));
-  };
+  const prune = (newestScheduledAt) => pruneRecords(records, newestScheduledAt, retentionMilliseconds, maxRecords);
 
   return Object.freeze({
     async claim(record, { token }) {
@@ -120,6 +118,21 @@ function createDecisionLog({ retentionMilliseconds, maxRecords }) {
       return gaps.map(copy);
     },
   });
+}
+
+function pruneRecords(records, newestScheduledAt, retentionMilliseconds, maxRecords) {
+  const cutoff = newestScheduledAt - retentionMilliseconds;
+  for (const [decisionId, record] of records) {
+    if (Date.parse(record.scheduledAt) >= cutoff) break;
+    records.delete(decisionId);
+  }
+  pruneExcessRecords(records, maxRecords);
+}
+
+function pruneExcessRecords(records, maxRecords) {
+  while (records.size > maxRecords) {
+    records.delete(records.keys().next().value);
+  }
 }
 
 function assertClaimable(record, token) {

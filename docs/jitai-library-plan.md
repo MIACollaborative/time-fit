@@ -319,7 +319,7 @@ reference/idempotency field. Tests mock the SDKs.
 works. **take-a-break runs on core** (memory store + `/desktop`) with no DB config.
 
 ### Stage F: Concurrency and throughput
-> **Status (2026-09-25): in review.** A per-tick cron/fixed-time occurrence memo, report-only
+> **Status (2026-09-27): done.** A per-tick cron/fixed-time occurrence memo, report-only
 > benchmark, and concurrency/backpressure coverage are implemented. Run-0 measurements and
 > the latest review response are in [`stage-f-review/`](stage-f-review/).
 >

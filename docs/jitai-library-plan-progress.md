@@ -254,3 +254,8 @@ Runs 3–5 were self-critiqued (Codex unavailable).
   the ADR 0005 defaults. The Stage F status block now records the built work, measured declined
   scope, headline measurements, and Stage G README follow-up; details are in
   `docs/stage-f-review/run-4-codex-response.md`.
+
+- **Stage F review run 5:** clarified that the JSDoc benchmark evidence path is repository-only,
+  added the review index, and changed the plan status to done. Stage F is done; Stage G is next,
+  starting with publishing the measured envelope in the README; details are in
+  `docs/stage-f-review/run-5-codex-response.md`.

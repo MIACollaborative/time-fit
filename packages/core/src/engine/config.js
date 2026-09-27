@@ -8,7 +8,7 @@ import { PLUGIN_TYPE_PATTERN } from "./plugins.js";
 /**
  * @typedef {object} EngineOptions
  * @property {number} catchUpWindowMinutes  1-1440, default 5
- * @property {number} concurrency           1-64, default 1; for I/O-bound adapters, start at 8 and tune for the deployment (see stage-f-review/)
+ * @property {number} concurrency           1-64, default 1; for I/O-bound adapters, start at 8 and tune for the deployment (see docs/stage-f-review/ in the repository)
  * @property {number} pageSize              1-1000, default 100; keep >= 4 x concurrency to reduce underfilled final page waves
  * @property {number} maxParticipants       default 100,000
  * @property {number} maxTasks              default 500

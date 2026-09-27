@@ -322,6 +322,18 @@ works. **take-a-break runs on core** (memory store + `/desktop`) with no DB conf
 > **Status (2026-09-25): in review.** A per-tick cron/fixed-time occurrence memo, report-only
 > benchmark, and concurrency/backpressure coverage are implemented. Run-0 measurements and
 > the latest review response are in [`stage-f-review/`](stage-f-review/).
+>
+> **Built:** a per-tick occurrence memo, O(1) memory-store pruning for a quadratic review-found
+> bug, a latency-case benchmark, and concurrency coverage including Prisma SQLite at 8.
+>
+> **Declined with evidence:** batched unavailable writes (15.8% of a default-store tick) and
+> `Condition.evaluateBatch` (no measured bottleneck); log levels already existed, with
+> per-participant events at debug level.
+>
+> **Headline:** the 10,000 × 20 default-memory tick improved from 231.8 s to 6.2 s; with
+> simulated 1 ms I/O, concurrency 32 is about 22× concurrency 1.
+>
+> **Follow-up:** Stage G will publish this measured envelope in the README.
 
 **Change:** enable and test `concurrency > 1` (per-participant order preserved,
 backpressure on page fetches), per-zone memoization of `occurrences()` within a tick, batched decision writes that keep per-decision claim

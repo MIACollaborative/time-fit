@@ -248,3 +248,9 @@ Runs 3–5 were self-critiqued (Codex unavailable).
   deployments using concurrency should keep `pageSize` several times larger than concurrency
   (for example, `pageSize >= 4 × concurrency`) to reduce underfilled final page waves without
   prefetching; details are in `docs/stage-f-review/run-3-codex-response.md`.
+
+- **Stage F review run 4:** `EngineOptions` now documents the deployment guidance to start
+  I/O-bound adapters at concurrency 8 and keep `pageSize >= 4 × concurrency`, while retaining
+  the ADR 0005 defaults. The Stage F status block now records the built work, measured declined
+  scope, headline measurements, and Stage G README follow-up; details are in
+  `docs/stage-f-review/run-4-codex-response.md`.

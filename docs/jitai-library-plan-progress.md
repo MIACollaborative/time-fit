@@ -241,3 +241,10 @@ Runs 3–5 were self-critiqued (Codex unavailable).
   start at 8 and tune for the deployment, while the ADR 0005 default remains 1. The 1,000 × 5
   latency case improved from 407.7 decisions/sec at concurrency 1 to 2,713.0 at 8 and 6,987.7
   at 32; details are in `docs/stage-f-review/run-2-codex-response.md`.
+
+- **Stage F review run 3:** a 50-participant × 2-task engine tick against the real Prisma
+  SQLite adapter completes all 100 decisions at concurrency 8 without claim or finalize
+  failures. Benchmark call-time columns now state that they sum overlapping calls, and
+  deployments using concurrency should keep `pageSize` several times larger than concurrency
+  (for example, `pageSize >= 4 × concurrency`) to reduce underfilled final page waves without
+  prefetching; details are in `docs/stage-f-review/run-3-codex-response.md`.

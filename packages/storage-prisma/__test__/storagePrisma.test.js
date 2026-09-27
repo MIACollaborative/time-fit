@@ -2,11 +2,13 @@ import { afterAll, beforeAll, beforeEach, describe, expect, test } from "@jest/g
 import { execFileSync } from "node:child_process";
 import { rmSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { createTimeEngine } from "@time-fit/core";
 import { decisionLogConformanceChecks } from "@time-fit/core/testing";
 import { createPrismaStorage } from "../src/index.js";
 
 const testDirectory = fileURLToPath(new URL(".", import.meta.url));
 const databasePath = fileURLToPath(new URL("storage-prisma-test.db", import.meta.url));
+const TICK_AT = new Date("2026-09-22T09:00:00.000Z");
 let prisma;
 
 beforeAll(async () => {
@@ -87,6 +89,24 @@ test("concurrent claims make exactly one different token owner", async () => {
   expect(results.filter(({ claimed }) => claimed)).toHaveLength(1);
 });
 
+test("SQLite storage completes concurrent engine decisions", async () => {
+  const participants = Array.from({ length: 50 }, (_unused, index) => ({ id: `participant-${index}`, timeZone: "UTC" }));
+  await prisma.participant.createMany({ data: participants });
+  const storage = createPrismaStorage({ prisma });
+  const engine = createTimeEngine({
+    storage,
+    tasks: [engineTask("first", 10), engineTask("second", 20)],
+    options: { concurrency: 8 },
+  });
+
+  const summary = await engine.tick(TICK_AT);
+
+  expect(summary.counts).toMatchObject({ occurrence: 100, claimed: 100, completed: 100, claimFailed: 0, finalizeFailed: 0, skippedClaimed: 0 });
+  const decisions = await prisma.decision.findMany({ orderBy: { decisionId: "asc" } });
+  expect(decisions).toHaveLength(100);
+  expect(decisions.every((decision) => decision.state === "completed")).toBe(true);
+});
+
 test("rejects malformed adapter input at the port boundary", async () => {
   expect(() => createPrismaStorage()).toThrow("prisma must provide");
   const storage = createPrismaStorage({ prisma });
@@ -119,5 +139,15 @@ function sampleRecord(decisionId) {
     timeZone: "UTC", evaluatedAt: "2026-09-22T09:00:00.000Z", latenessMs: 0,
     availability: { available: true, reasons: [], conditions: [] }, randomization: null, action: null,
     state: "claimed", claimedAt: "2026-09-22T09:00:00.000Z",
+  };
+}
+
+function engineTask(id, priority) {
+  return {
+    id,
+    scope: "participant",
+    priority,
+    checkpoints: [{ id: "morning", time: "09:00" }],
+    outcomes: [{ id: "control", probability: 1, action: null }],
   };
 }

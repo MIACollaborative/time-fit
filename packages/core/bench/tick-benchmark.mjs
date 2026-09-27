@@ -171,7 +171,7 @@ function measureDecisionLog(decisionLog) {
 
 function printMeasurements(title, measurements) {
   process.stdout.write(`\n${title} (median of ${TIMED_TICKS_PER_CONFIGURATION} ticks after 1 warm-up)\n`);
-  process.stdout.write("| participants | tasks | concurrency | decisions | ticks/sec | decisions/sec | ms/tick | decision-log-ms | unavailable-claim-ms |\n");
+  process.stdout.write("| participants | tasks | concurrency | decisions | ticks/sec | decisions/sec | ms/tick | decision-log-call-ms (summed; overlaps) | unavailable-claim-ms |\n");
   process.stdout.write("|---:|---:|---:|---:|---:|---:|---:|---:|---:|\n");
   measurements.forEach((measurement) => {
     const fields = [

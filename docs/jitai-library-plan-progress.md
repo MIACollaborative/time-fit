@@ -330,3 +330,8 @@ Runs 3–5 were self-critiqued (Codex unavailable).
   was declined because the owner required verbatim Covenant text except for the contact
   placeholder; see
   [`stage-g-review/section-3-run-1-codex-response.md`](stage-g-review/section-3-run-1-codex-response.md).
+
+- **Stage G section 3 review run 2:** added a one-line private-security-reporting notice to
+  the direct bug-report template, closing the path that bypasses the issue chooser's security
+  contact link; see
+  [`stage-g-review/section-3-run-2-codex-response.md`](stage-g-review/section-3-run-2-codex-response.md).

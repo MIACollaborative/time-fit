@@ -5,6 +5,8 @@ title: "bug: "
 labels: bug
 ---
 
+> **Security vulnerability?** Do not file it here; use [private reporting](https://github.com/peiyaoh/time-fit/security/advisories/new).
+
 ## What happened?
 
 ## How can we reproduce it?

@@ -300,3 +300,9 @@ Runs 3–5 were self-critiqued (Codex unavailable).
   and 3 no longer resolve on `refactor-1`.
   The full evidence and recommendation are in
   [`stage-g-review/run-0-codex-implementation.md`](stage-g-review/run-0-codex-implementation.md).
+
+- **Stage G section 1 review run 1:** replaced the generated-client cache and cross-process
+  lock with Prisma's direct generation command after repeated concurrent generation and
+  coverage runs passed with the isolated SQLite database. Recorded the accepted legacy advisory
+  policy in `contrib/legacy/README.md`, evaluated the shared development-tooling fixes, and
+  documented every decision in `docs/stage-g-review/run-1-codex-response.md`.

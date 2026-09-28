@@ -14,3 +14,12 @@ The root `yarn test` command pins `TZ=America/New_York` because characterization
 encode that server-time-zone behavior. New work belongs in `packages/core`; generic legacy
 conditions are superseded by core's `time-window` condition. See
 [`docs/jitai-library-plan.md`](../../docs/jitai-library-plan.md).
+
+## Known dependency advisories
+
+As of 2026-09-28, the Stage G dependency audit classified 0 publishable-runtime alerts, 111
+legacy/non-publishable alerts, 29 shared development-tooling alerts, and 3 alerts for packages
+no longer resolved on `refactor-1`. This frozen legacy code is quarantined, so its advisories
+are accepted rather than repaired; publishable runtime dependencies remain separately audited.
+GitHub's Dependabot counts will change when `main` includes this branch and its lockfile is
+recomputed.

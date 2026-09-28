@@ -20,7 +20,7 @@
   "scripts": {
     "test": "yarn prisma:generate:test && cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "test:coverage": "yarn prisma:generate:test && cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage",
-    "prisma:generate:test": "node ./scripts/ensure-test-client.mjs"
+    "prisma:generate:test": "prisma generate --schema __test__/schema.prisma"
   },
   "peerDependencies": {
     "@prisma/client": "^6.5.0",

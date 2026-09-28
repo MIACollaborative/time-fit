@@ -341,6 +341,8 @@ integrity, log levels, benchmark script (decisions/sec for synthetic N × M,
 report-only).
 
 ### Stage G: Open-source release readiness
+> **Status (2026-09-28): in progress (section 1).**
+
 Library-first README + quickstart; per-package READMEs; API docs + `.d.ts` from JSDoc;
 CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, GOVERNANCE; `engines` + CI Node matrix; privacy
 guidance; delivery-semantics doc (at-most-once, missed windows); the measured scale

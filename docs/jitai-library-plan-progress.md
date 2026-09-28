@@ -280,3 +280,23 @@ Runs 3–5 were self-critiqued (Codex unavailable).
 - **Observed once:** one root `yarn test` run failed 17 tests (the size of the storage-prisma
   suite). Four reruns passed, and the failure was not reproduced. The likely cause is that
   suite's test-time `prisma generate`/`db push` setup; worth hardening in Stage G.
+
+## Stage G section 1: implementation (run 0)
+
+- Reproduced the storage-prisma failure with two concurrent coverage runs: both used the same
+  SQLite file, one run observed zero persisted engine decisions while the other reported
+  SQLite "attempt to write a readonly database" errors. Tests now use a unique OS-temp
+  database directory and an explicit Prisma datasource URL; `db push` receives that URL only
+  in its child-process environment, so Jest's `process.env` is not modified.
+- Added a schema-and-Prisma-version keyed generated-client guard, protected by a temporary
+  cross-process lock. Root and package test commands invoke it before Jest, so a clean checkout
+  generates the client once while normal reruns reuse it; two concurrent coverage runs now
+  pass all 18 storage-prisma tests independently at 100% coverage. A no-generated-client root
+  run generated before Jest and then passed 32 suites / 458 tests.
+- Dependabot's current default-branch counts are 147 removed `package-lock.json` alerts, 143
+  `yarn.lock` alerts, and 52 stale fitbit-break-manifest alerts. Production recursive audits
+  for all three publishable packages found zero advisories; of the 143 lock alerts, 111 have a
+  legacy/non-publishable path but none through a published package, 29 are shared dev tooling,
+  and 3 no longer resolve on `refactor-1`.
+  The full evidence and recommendation are in
+  [`stage-g-review/run-0-codex-implementation.md`](stage-g-review/run-0-codex-implementation.md).

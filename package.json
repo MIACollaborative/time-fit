@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "example1": "node ./apps/take-a-break/index.js",
-    "test": "cross-env TZ=America/New_York NODE_OPTIONS=--experimental-vm-modules jest"
+    "test": "yarn workspace @time-fit/storage-prisma prisma:generate:test && cross-env TZ=America/New_York NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",

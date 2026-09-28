@@ -1,29 +1,35 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, test } from "@jest/globals";
 import { execFileSync } from "node:child_process";
-import { rmSync } from "node:fs";
-import { fileURLToPath } from "node:url";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { createTimeEngine } from "@time-fit/core";
 import { decisionLogConformanceChecks } from "@time-fit/core/testing";
 import { createPrismaStorage } from "../src/index.js";
+import { PrismaClient } from "./generated/index.js";
 
-const testDirectory = fileURLToPath(new URL(".", import.meta.url));
-const databasePath = fileURLToPath(new URL("storage-prisma-test.db", import.meta.url));
+const databaseDirectory = mkdtempSync(join(tmpdir(), "time-fit-storage-prisma-"));
+const databasePath = join(databaseDirectory, "storage-prisma-test.db");
+const databaseUrl = pathToFileURL(databasePath).href;
+const initialDatabaseUrl = process.env.DATABASE_URL;
+const packageDirectory = fileURLToPath(new URL("..", import.meta.url));
 const TICK_AT = new Date("2026-09-22T09:00:00.000Z");
 let prisma;
 
 beforeAll(async () => {
-  rmSync(databasePath, { force: true });
-  execFileSync("yarn", ["prisma", "generate", "--schema", "__test__/schema.prisma"], { cwd: fileURLToPath(new URL("..", import.meta.url)), stdio: "inherit" });
-  process.env.DATABASE_URL = `file:${databasePath}`;
-  const { PrismaClient } = await import("./generated/index.js");
-  prisma = new PrismaClient();
-  execFileSync("yarn", ["prisma", "db", "push", "--skip-generate", "--schema", "__test__/schema.prisma"], { cwd: fileURLToPath(new URL("..", import.meta.url)), env: { ...process.env }, stdio: "inherit" });
+  execFileSync("yarn", ["prisma", "db", "push", "--skip-generate", "--schema", "__test__/schema.prisma"], {
+    cwd: packageDirectory,
+    env: { ...process.env, DATABASE_URL: databaseUrl },
+    stdio: "inherit",
+  });
+  prisma = new PrismaClient({ datasources: { db: { url: databaseUrl } } });
   await prisma.$connect();
 });
 
 afterAll(async () => {
   await prisma?.$disconnect();
-  rmSync(databasePath, { force: true });
+  rmSync(databaseDirectory, { recursive: true, force: true });
 });
 
 beforeEach(async () => {
@@ -39,6 +45,11 @@ describe("decisionLog conformance", () => {
       await check.run(async () => createPrismaStorage({ prisma }).decisionLog);
     });
   }
+});
+
+test("uses an isolated database without changing process-wide configuration", () => {
+  expect(process.env.DATABASE_URL).toBe(initialDatabaseUrl);
+  expect(databaseUrl).not.toBe(initialDatabaseUrl);
 });
 
 test("participants use stable bounded cursors and preserve JSON attributes", async () => {

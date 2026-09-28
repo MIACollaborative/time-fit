@@ -12,4 +12,16 @@ Outcome: 0 advisories in the publishable packages' production trees; 9 of 10 aff
 dev-tooling families patched; `tar` 6.2.1 accepted as legacy-only. The storage test flake is
 eliminated at its cause.
 
-Sections 2–5 (docs, policy files, release tooling, owner decisions) are still to do.
+## Section 3: project policy files (2026-09-28): done
+| Run | File(s) | Summary |
+|---|---|---|
+| 0 | [implementation](section-3-run-0-codex-implementation.md) | Added concise project policies, contribution guidance, templates, and README links |
+| 1 | [review](section-3-run-1-claude-review.md) · [response](section-3-run-1-codex-response.md) | Clean-clone Prisma setup added; Covenant made source-faithful; conduct route clarified |
+| 2 | [review](section-3-run-2-claude-review.md) · [response](section-3-run-2-codex-response.md) | Added private-security-reporting notice to direct bug reports |
+| 3 | [final review](section-3-run-3-claude-review.md) · [response](section-3-run-3-codex-response.md) | Approved; close-out documentation completed |
+
+Outcome: policies, templates, and README guidance match the owner's GitHub-only reporting,
+single-maintainer, and BSD 3-Clause decisions. The owner must enable GitHub private
+vulnerability reporting in repository Settings → Security before the private-report links work.
+
+Sections 2, 4, and 5 (docs, release tooling, owner decisions) are still to do.

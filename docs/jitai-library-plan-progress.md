@@ -335,3 +335,9 @@ Runs 3–5 were self-critiqued (Codex unavailable).
   the direct bug-report template, closing the path that bypasses the issue chooser's security
   contact link; see
   [`stage-g-review/section-3-run-2-codex-response.md`](stage-g-review/section-3-run-2-codex-response.md).
+
+- **Stage G section 3 review run 3:** Claude approved the policy-file bundle with no further
+  content changes. Section 3 is done; the owner must enable **Settings → Security → Private
+  vulnerability reporting** before the links in `SECURITY.md`, `CODE_OF_CONDUCT.md`, and the
+  issue chooser are available. See
+  [`stage-g-review/section-3-run-3-codex-response.md`](stage-g-review/section-3-run-3-codex-response.md).

@@ -306,3 +306,7 @@ Runs 3–5 were self-critiqued (Codex unavailable).
   coverage runs passed with the isolated SQLite database. Recorded the accepted legacy advisory
   policy in `contrib/legacy/README.md`, evaluated the shared development-tooling fixes, and
   documented every decision in `docs/stage-g-review/run-1-codex-response.md`.
+- Round 2 (implemented by Claude; Codex was at its usage limit): lockfile-only refreshes moved
+  8 of 9 shared dev-tooling families to patched versions. `tar` 6.2.1 remains, pinned only by
+  legacy `bcrypt@5`, and is accepted. All checks are green, and the production audits of the
+  three publishable packages are clean.

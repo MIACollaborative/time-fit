@@ -313,3 +313,13 @@ Runs 3–5 were self-critiqued (Codex unavailable).
 - Round 3 (final review by Claude): section 1 approved. Codex could not take rounds 2–3
   (usage limit), so an independent Codex pass is recommended before release. Section 1 is done;
   sections 2–5 remain.
+
+## Stage G section 3: implementation (run 0)
+
+- Added concise contribution, conduct, security, and governance policies; the conduct policy is
+  Contributor Covenant 2.1 with GitHub-only reporting and no published email address.
+- Added short bug, feature, security-routing, and pull-request templates, and linked the new
+  policies from the root README.
+- Recorded that the owner must enable GitHub private vulnerability reporting in repository
+  settings; the release-report details are in
+  [`stage-g-review/section-3-run-0-codex-implementation.md`](stage-g-review/section-3-run-0-codex-implementation.md).

@@ -38,6 +38,12 @@ The library is split into three packages (published under `@time-fit/*` in a lat
 Design decisions are recorded in [`docs/adr/`](docs/adr/); the refactoring plan and progress
 are in [`docs/`](docs/).
 
+## Contributing
+
+See the [contribution guide](CONTRIBUTING.md), [Code of Conduct](CODE_OF_CONDUCT.md),
+[security policy](SECURITY.md), and [governance](GOVERNANCE.md). The
+[`contrib/legacy/`](contrib/legacy/README.md) study code is frozen.
+
 ## Examples
 
 - [Example 1: Nudge yourself to take a break every 30 minutes on weekdays](examples/example1.md)

@@ -323,3 +323,10 @@ Runs 3–5 were self-critiqued (Codex unavailable).
 - Recorded that the owner must enable GitHub private vulnerability reporting in repository
   settings; the release-report details are in
   [`stage-g-review/section-3-run-0-codex-implementation.md`](stage-g-review/section-3-run-0-codex-implementation.md).
+
+- **Stage G section 3 review run 1:** added the CI-required legacy Prisma generation step to
+  `CONTRIBUTING.md`, made the Covenant source-faithful, and clarified that its private GitHub
+  reporting form also accepts conduct reports. The separate GitHub-content-report suggestion
+  was declined because the owner required verbatim Covenant text except for the contact
+  placeholder; see
+  [`stage-g-review/section-3-run-1-codex-response.md`](stage-g-review/section-3-run-1-codex-response.md).

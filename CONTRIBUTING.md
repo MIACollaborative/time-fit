@@ -9,7 +9,10 @@ Use Node.js 20 or later and Yarn 4 through Corepack:
 ```sh
 corepack enable
 yarn install --immutable
+yarn prisma generate --schema contrib/legacy/prisma/schema.prisma
 ```
+
+The final command generates the Prisma client imported by the frozen legacy test suites.
 
 ## Required checks
 

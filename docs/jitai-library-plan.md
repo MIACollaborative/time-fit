@@ -341,7 +341,10 @@ integrity, log levels, benchmark script (decisions/sec for synthetic N × M,
 report-only).
 
 ### Stage G: Open-source release readiness
-> **Status (2026-09-28): in progress (section 1).**
+> **Status (2026-09-28): in progress. Section 1 (fix known issues) is done**: the storage test
+> flake is fixed at its cause, publishable packages have 0 production advisories, and the legacy
+> advisories are documented as accepted. See [`stage-g-review/`](stage-g-review/). Sections 2–5
+> (docs, policy files, release tooling, owner decisions) remain.
 
 Library-first README + quickstart; per-package READMEs; API docs + `.d.ts` from JSDoc;
 CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, GOVERNANCE; `engines` + CI Node matrix; privacy

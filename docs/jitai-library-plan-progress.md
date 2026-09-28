@@ -310,3 +310,6 @@ Runs 3–5 were self-critiqued (Codex unavailable).
   8 of 9 shared dev-tooling families to patched versions. `tar` 6.2.1 remains, pinned only by
   legacy `bcrypt@5`, and is accepted. All checks are green, and the production audits of the
   three publishable packages are clean.
+- Round 3 (final review by Claude): section 1 approved. Codex could not take rounds 2–3
+  (usage limit), so an independent Codex pass is recommended before release. Section 1 is done;
+  sections 2–5 remain.

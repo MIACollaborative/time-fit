@@ -2,7 +2,7 @@
   "name": "time-fit",
   "version": "0.1.0",
   "type": "module",
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "workspaces": [
     "packages/*",
     "apps/*",
@@ -10,9 +10,7 @@
     "contrib/legacy/fitbit-break"
   ],
   "scripts": {
-    "index": "node ./src/index.js",
     "example1": "node ./apps/take-a-break/index.js",
-    "example2": "node ./contrib/legacy/fitbit-break/index.js",
     "test": "cross-env TZ=America/New_York NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "devDependencies": {

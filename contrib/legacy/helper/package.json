@@ -4,7 +4,7 @@
   "private": true,
   "main": "index.js",
   "type": "module",
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "scripts": {
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
   },

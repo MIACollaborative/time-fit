@@ -1,3 +1,10 @@
+> **Legacy, frozen.** This walkthrough documents the original fitbit-break study engine
+> (`TimeEngine`, `action-collection`, and the Fitbit data helpers), all quarantined under
+> `contrib/legacy/` and no longer maintained. It does not run as written: `engine.mjs` imports
+> a `@time-fit/data-source` package that never existed, and the legacy executor has the known
+> defects listed in [`contrib/legacy/README.md`](../../README.md). For the current library, see
+> [`examples/`](../../../../examples/) and [`docs/jitai-library-plan.md`](../../../../docs/jitai-library-plan.md).
+
 # Example 2: Nudge all users who did not have enough steps count to take a break every 30 minutes during week days
 
 In this example, we will create a simple nudging intervention that sends a message through email to users who did not have enought step count (e.g., 100) in the last 30 minutes, every 30 minutes during week days. A Fitbit wristband is used to measure step count. This example will show you how to develop an intervention that is a adapted to one's sensor data (Fitbit).
@@ -207,4 +214,4 @@ TimeEngine.start();
 ---
 
 ### References
-- Complete code example: [legacy fitbit-break engine](../contrib/legacy/fitbit-break/engine.mjs)
+- Complete code example: [legacy fitbit-break engine](../engine.mjs)

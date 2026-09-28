@@ -5,7 +5,7 @@
   "description": "API handlers for Time Fit projects",
   "main": "index.js",
   "type": "module",
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "scripts": {
     "test": "node --test"
   },

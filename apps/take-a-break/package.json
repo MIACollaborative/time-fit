@@ -2,7 +2,7 @@
   "name": "take-a-break",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "type": "module",
   "scripts": {
     "start": "node index.js",

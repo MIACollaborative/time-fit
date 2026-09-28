@@ -259,3 +259,24 @@ Runs 3–5 were self-critiqued (Codex unavailable).
   added the review index, and changed the plan status to done. Stage F is done; Stage G is next,
   starting with publishing the measured envelope in the README; details are in
   `docs/stage-f-review/run-5-codex-response.md`.
+
+## Docs cleanup: legacy examples (2026-09-28)
+- The fitbit-break walkthroughs (`examples/example2.md`, `example2-brief.md`) moved to
+  `contrib/legacy/fitbit-break/docs/` (`fitbit-step-nudge*.md`) with a "legacy, frozen"
+  banner; they describe the quarantined engine and do not run as written.
+- `examples/example1.md` was rewritten for the current API (`createTimeEngine`, memory store,
+  `/desktop` action, system task with `timeZone`). Its code was executed with a fake notifier:
+  one decision completed, one notification sent.
+- The root README's MongoDB/Fitbit/Mailjet/Twilio setup moved verbatim to
+  `contrib/legacy/fitbit-break/docs/setup.md`. The README now has a short current "Getting
+  started", a package table, and an examples list; the project description no longer mentions
+  Fitbit. The full library-first README is still Stage G.
+- Removed two broken root scripts: `index` (`./src/index.js` does not exist) and `example2`
+  (`contrib/legacy/fitbit-break/index.js` does not exist).
+- **License resolved (owner decision, 2026-09-28): BSD 3-Clause**, matching `LICENSE.txt`
+  (© 2025 The Regents of the University of Michigan). All 17 tracked `package.json` files now
+  declare `BSD-3-Clause` (previously MIT, or unset for two private packages). Each publishable
+  package ships a `LICENSE` copy. Recorded in ADR 0012, which supersedes ADR 0007's MIT item.
+- **Observed once:** one root `yarn test` run failed 17 tests (the size of the storage-prisma
+  suite). Four reruns passed, and the failure was not reproduced. The likely cause is that
+  suite's test-time `prisma generate`/`db push` setup; worth hardening in Stage G.

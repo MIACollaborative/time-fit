@@ -4,7 +4,7 @@
   "private": true,
   "description": "Injected Prisma storage ports for @time-fit/core",
   "type": "module",
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "exports": {
     ".": "./src/index.js"
   },

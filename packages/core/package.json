@@ -4,7 +4,7 @@
   "private": true,
   "description": "Time-based JITAI engine core: task specs, scheduling, decision identity, and randomization",
   "type": "module",
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "exports": {
     ".": "./src/index.js",
     "./memory": "./src/memory/index.js",

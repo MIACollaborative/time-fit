@@ -4,7 +4,7 @@
   "private": true,
   "description": "Injected delivery actions for @time-fit/core",
   "type": "module",
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "exports": {
     "./desktop": "./src/desktop.js",
     "./twilio": "./src/twilio.js",

@@ -18,6 +18,7 @@ and an implementation is correct when every fixture passes.
 | [0009](0009-stage-c2-engine-clarifications.md) | Clarifications found while implementing the engine (port payloads, tick semantics, counters, memory/testing APIs) |
 | [0010](0010-stage-d-storage-prisma.md) | Legacy boundary and injected Prisma storage adapter |
 | [0011](0011-stage-e-integrations.md) | Injected integrations and database-free take-a-break |
+| [0012](0012-license-bsd-3-clause.md) | License is BSD 3-Clause (supersedes ADR 0007's MIT item) |
 
 **Status of all ADRs: Accepted (2026-09-22).** To change an accepted decision, add a new
 ADR that supersedes it. Do not rewrite an accepted ADR.

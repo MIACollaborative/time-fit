@@ -4,6 +4,12 @@ export const MAX_MESSAGE_LENGTH = 32_000;
 const SAFE_DOTTED_PATH = /^[A-Za-z_$][A-Za-z0-9_$]*(\.[A-Za-z_$][A-Za-z0-9_$]*)*$/;
 const FORBIDDEN_SEGMENTS = new Set(["__proto__", "prototype", "constructor"]);
 
+/**
+ * @typedef {{ ok: true, value: undefined } | { ok: false, error: { code: string, message: string, details?: object } }} ValidationResult
+ * @typedef {{ ok: true, value: string } | { ok: false, error: { code: string, message: string, details?: object } }} DestinationResult
+ */
+
+/** @returns {ValidationResult} */
 export function validateTextParams(params, requiredKeys) {
   if (!isPlainObject(params)) return err("invalid-action-params", "action parameters must be an object");
   const missingKey = requiredKeys.find((key) => typeof params[key] !== "string" || params[key].trim() === "");
@@ -13,6 +19,7 @@ export function validateTextParams(params, requiredKeys) {
   return ok(undefined);
 }
 
+/** @returns {ValidationResult} */
 export function validateMailjetParams(params) {
   if (!isPlainObject(params)) return err("invalid-action-params", "action parameters must be an object");
   const subjectResult = validateTextParams(params, ["subject"]);
@@ -24,6 +31,7 @@ export function validateMailjetParams(params) {
   return ok(undefined);
 }
 
+/** @returns {DestinationResult} */
 export function destinationFor(participant, path, errorCode, label) {
   const value = readOwnPath(participant, path);
   if (typeof value !== "string" || value.trim() === "") return err(errorCode, `participant ${label} at "${path}" is required`);

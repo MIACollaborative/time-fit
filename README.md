@@ -1,60 +1,39 @@
 # TimeFit
 
-## Project Description
-
-A compact framework for constructing time-based Just-In-Time Adaptive Interventions (JITAIs): declare when to decide, who is eligible, what conditions must hold, and which (optionally randomized) intervention to deliver, with an auditable decision log for micro-randomized trials.
-
-Note: This project is periodically updated. Watch the repository for updates.
-
-## Citation
-
-If you use this software, please cite it as below.
-```
-
-Hung, P-Y, & Newman, M. W. (2025). TimeFit (Version 0.0.1) [Computer software]. https://github.com/peiyaoh/time-fit
-
-```
-
-
-## Getting started
-
-Requires Node.js 20 or later and [Yarn](https://yarnpkg.com/) 4 (via Corepack).
-
-```bash
-corepack enable
-yarn install
-yarn test        # full test suite
-yarn example1    # desktop reminder every 30 minutes on weekdays (no database)
-```
-
-The library is split into three packages (published under `@time-fit/*` in a later release):
+TimeFit is a Node 20+ library for time-based Just-In-Time Adaptive Interventions (JITAIs):
+declare decision points, eligibility and availability, randomized outcomes, and delivery plugins;
+then run an auditable decision engine from your scheduler.
 
 | Package | Purpose |
 |---|---|
-| [`@time-fit/core`](packages/core/) | The time-based decision engine: tasks, checkpoints, eligibility, preconditions, randomized outcomes, and an auditable decision log. Includes an in-memory store (`/memory`) and adapter conformance checks (`/testing`). |
-| [`@time-fit/storage-prisma`](packages/storage-prisma/) | Stores participants, tasks, and decisions with a Prisma client you provide (SQLite and Postgres schema fragments included). |
-| [`@time-fit/integrations`](packages/integrations/) | Delivery actions for desktop notifications, Twilio SMS, and Mailjet email, using clients you provide. |
+| [`@time-fit/core`](packages/core/README.md) | Engine, task validation, memory demo store, and storage conformance checks. |
+| [`@time-fit/storage-prisma`](packages/storage-prisma/README.md) | Injected Prisma implementation of TimeFit storage ports. |
+| [`@time-fit/integrations`](packages/integrations/README.md) | Injected desktop, Twilio, and Mailjet delivery Actions. |
 
-Design decisions are recorded in [`docs/adr/`](docs/adr/); the refactoring plan and progress
-are in [`docs/`](docs/).
+Start with [core concepts and quickstart](packages/core/README.md), then see
+[delivery guarantees](docs/guides/delivery-guarantees.md), [privacy guidance](docs/guides/privacy.md),
+and the [architecture decisions](docs/adr/README.md). Runnable examples include the
+[memory quickstart](examples/quickstart/index.mjs), [Prisma example](examples/prisma/), and
+[desktop reminder](examples/example1.md).
+
+## Scale and scheduling
+
+Stage F measured a 10,000-participant × 20-task default-memory tick at about **6.2 seconds**
+on its benchmark machine. For simulated 1 ms decision-log I/O, concurrency 32 measured about
+22× concurrency 1. Defaults remain conservative (`concurrency: 1`, `pageSize: 100`): begin
+I/O-bound production tuning near concurrency 8, measure your adapter, and keep page size at
+least four times concurrency. Full methods and limits: [Stage F review](docs/stage-f-review/README.md).
+
+## Citing and MRT use
+
+Use [CITATION.cff](CITATION.cff) when citing TimeFit. For MRT analysis, retain your
+application-owned decision log and read the [decision-record ADR](docs/adr/0004-decision-record-identity-delivery.md),
+including the meaning of unavailable and claimed records.
 
 ## Contributing
 
-See the [contribution guide](CONTRIBUTING.md), [Code of Conduct](CODE_OF_CONDUCT.md),
-[security policy](SECURITY.md), and [governance](GOVERNANCE.md). The
+Read [CONTRIBUTING.md](CONTRIBUTING.md), [security policy](SECURITY.md),
+[code of conduct](CODE_OF_CONDUCT.md), and [governance](GOVERNANCE.md). The
 [`contrib/legacy/`](contrib/legacy/README.md) study code is frozen.
 
-## Examples
-
-- [Example 1: Nudge yourself to take a break every 30 minutes on weekdays](examples/example1.md)
-- [Quickstart: a randomized reminder for one participant, in about 20 lines](examples/quickstart/index.mjs)
-- [Prisma: the same engine backed by a SQLite database](examples/prisma/)
-
-The original fitbit-break study (Fitbit step-count nudges) is frozen under
-[`contrib/legacy/`](contrib/legacy/README.md), with its
-[setup instructions](contrib/legacy/fitbit-break/docs/setup.md) and
-[walkthrough](contrib/legacy/fitbit-break/docs/fitbit-step-nudge.md).
-
-## License
-
-This project is open-sourced under the [BSD 3-Clause License](LICENSE.txt), allowing for free use, distribution, and modification with attribution.
+TimeFit is licensed under the [BSD 3-Clause License](LICENSE.txt).

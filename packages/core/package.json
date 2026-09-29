@@ -5,13 +5,26 @@
   "description": "Time-based JITAI engine core: task specs, scheduling, decision identity, and randomization",
   "type": "module",
   "license": "BSD-3-Clause",
+  "types": "./types/index.d.ts",
   "exports": {
-    ".": "./src/index.js",
-    "./memory": "./src/memory/index.js",
-    "./testing": "./src/testing/index.js"
+    ".": {
+      "types": "./types/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./memory": {
+      "types": "./types/memory/index.d.ts",
+      "default": "./src/memory/index.js"
+    },
+    "./testing": {
+      "types": "./types/testing/index.d.ts",
+      "default": "./src/testing/index.js"
+    }
   },
   "files": [
-    "src"
+    "src",
+    "types",
+    "README.md",
+    "LICENSE"
   ],
   "sideEffects": false,
   "engines": {
@@ -20,7 +33,10 @@
   "scripts": {
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "benchmark": "node ./bench/tick-benchmark.mjs",
-    "test:coverage": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage"
+    "test:coverage": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+    "build:types": "tsc --project tsconfig.types.json",
+    "prepack": "yarn build:types",
+    "postpack": "node -e \"require('node:fs').rmSync('types', { recursive: true, force: true })\""
   },
   "dependencies": {
     "cron-parser": "^5.0.6",

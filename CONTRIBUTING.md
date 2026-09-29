@@ -26,10 +26,17 @@ yarn workspace @time-fit/integrations test:coverage
 node scripts/check-core-dependencies.mjs
 yarn depcruise --config .dependency-cruiser.cjs packages
 ./scripts/verify-packed-quickstart.sh
+yarn check:licenses
 ```
 
 Each publishable package requires 100% coverage. CI uses Node 20 and installs dependencies
 with `yarn install --immutable`.
+
+## Versioning
+
+The three publishable packages are versioned independently with Changesets. Add one for every
+user-visible package change with `yarn changeset`; do not add Changesets for frozen
+`contrib/legacy/` work.
 
 ## Scope and design
 

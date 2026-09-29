@@ -5,13 +5,19 @@
   "description": "Injected Prisma storage ports for @time-fit/core",
   "type": "module",
   "license": "BSD-3-Clause",
+  "types": "./types/index.d.ts",
   "exports": {
-    ".": "./src/index.js"
+    ".": {
+      "types": "./types/index.d.ts",
+      "default": "./src/index.js"
+    }
   },
   "files": [
     "src",
+    "types",
     "prisma",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "sideEffects": false,
   "engines": {
@@ -20,7 +26,10 @@
   "scripts": {
     "test": "yarn prisma:generate:test && cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "test:coverage": "yarn prisma:generate:test && cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage",
-    "prisma:generate:test": "prisma generate --schema __test__/schema.prisma"
+    "prisma:generate:test": "prisma generate --schema __test__/schema.prisma",
+    "build:types": "tsc --project tsconfig.types.json",
+    "prepack": "yarn build:types",
+    "postpack": "node -e \"require('node:fs').rmSync('types', { recursive: true, force: true })\""
   },
   "peerDependencies": {
     "@prisma/client": "^6.5.0",

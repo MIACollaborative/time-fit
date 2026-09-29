@@ -5,14 +5,26 @@
   "description": "Injected delivery actions for @time-fit/core",
   "type": "module",
   "license": "BSD-3-Clause",
+  "types": "./types/desktop.d.ts",
   "exports": {
-    "./desktop": "./src/desktop.js",
-    "./twilio": "./src/twilio.js",
-    "./mailjet": "./src/mailjet.js"
+    "./desktop": {
+      "types": "./types/desktop.d.ts",
+      "default": "./src/desktop.js"
+    },
+    "./twilio": {
+      "types": "./types/twilio.d.ts",
+      "default": "./src/twilio.js"
+    },
+    "./mailjet": {
+      "types": "./types/mailjet.d.ts",
+      "default": "./src/mailjet.js"
+    }
   },
   "files": [
     "src",
-    "README.md"
+    "types",
+    "README.md",
+    "LICENSE"
   ],
   "sideEffects": false,
   "engines": {
@@ -20,7 +32,10 @@
   },
   "scripts": {
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
-    "test:coverage": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage"
+    "test:coverage": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+    "build:types": "tsc --project tsconfig.types.json",
+    "prepack": "yarn build:types",
+    "postpack": "node -e \"require('node:fs').rmSync('types', { recursive: true, force: true })\""
   },
   "peerDependencies": {
     "@time-fit/core": ">=0.0.0 <1"

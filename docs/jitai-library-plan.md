@@ -345,7 +345,7 @@ report-only).
 > fixed at its cause, publishable packages have 0 production advisories, the legacy advisories
 > are documented as accepted, and the project policy files are approved. See
 > [`stage-g-review/`](stage-g-review/). Sections 2, 4, and 5 (docs, release tooling, owner
-> decisions) remain.
+> decisions) are in review.
 
 Library-first README + quickstart; per-package READMEs; API docs + `.d.ts` from JSDoc;
 CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, GOVERNANCE; `engines` + CI Node matrix; privacy

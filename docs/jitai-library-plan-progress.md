@@ -348,3 +348,17 @@ Runs 3–5 were self-critiqued (Codex unavailable).
   `README.md` now use the canonical address; the license copyright holder (University of
   Michigan / MIA Collaborative) is unchanged. Private vulnerability reporting was enabled on
   the repository at the owner's request (`{"enabled": true}`).
+
+## Stage G sections 2 and 4: implementation (run 0)
+
+- Added library-first root and core package documentation, delivery guarantees, privacy guidance,
+  links to ADRs and examples, Stage F's measured envelope, and an honest BSD-3-Clause citation
+  without an invented release version or date.
+- Added generated JSDoc declarations to packed artifacts for all public entry points; the packed
+  fixture asserts declaration files and compiles TypeScript imports for core, memory, testing,
+  Prisma storage, and every integration subpath. Generated declarations are ignored and removed
+  after packing.
+- Added Node 20/22/24 test matrix, Changesets configured to ignore root/app/frozen legacy
+  workspaces, grouped weekly Dependabot updates, and a BSD-compatible direct production/peer
+  dependency license check. Publish remains deferred to Stage G section 5: candidates are still
+  `private: true`, so the packed-tarball verification is the release-content check.

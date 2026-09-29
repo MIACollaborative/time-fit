@@ -8,8 +8,12 @@ on:
 
 jobs:
   test:
-    name: Test
+    name: Test (Node ${{ matrix.node }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22, 24]
     steps:
       - uses: actions/checkout@v4
 
@@ -18,7 +22,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ matrix.node }}
 
       - name: Install dependencies
         run: yarn install --immutable
@@ -39,6 +43,9 @@ jobs:
       - name: Check published candidate dependencies and imports
         run: node scripts/check-core-dependencies.mjs
 
+      - name: Check published dependency licenses
+        run: yarn check:licenses
+
       - name: Check workspace dependency boundaries
         run: yarn depcruise --config .dependency-cruiser.cjs packages
 
@@ -57,9 +64,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Enable Corepack (Yarn 4 / Berry)
+        run: corepack enable
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+
+      - name: Install declaration build dependencies
+        run: yarn install --immutable
 
       - name: Pack core, Prisma storage, and integrations into empty directories, run examples
         # No workspace install on purpose: only the tarball's declared dependencies exist.

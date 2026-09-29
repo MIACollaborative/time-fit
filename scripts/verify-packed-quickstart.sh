@@ -16,6 +16,22 @@ core_tarball="$(cd "$repo_root/packages/core" && npm pack --silent --pack-destin
 storage_tarball="$(cd "$repo_root/packages/storage-prisma" && npm pack --silent --pack-destination "$work_dir")"
 integrations_tarball="$(cd "$repo_root/packages/integrations" && npm pack --silent --pack-destination "$work_dir")"
 cd "$work_dir"
+
+assert_tarball_file() {
+  local tarball="$1"
+  local file="$2"
+  tar -tf "$work_dir/$tarball" | grep -qx "package/$file"
+}
+
+assert_tarball_file "$core_tarball" "types/index.d.ts"
+assert_tarball_file "$core_tarball" "types/memory/index.d.ts"
+assert_tarball_file "$core_tarball" "types/testing/index.d.ts"
+assert_tarball_file "$storage_tarball" "types/index.d.ts"
+assert_tarball_file "$integrations_tarball" "types/desktop.d.ts"
+assert_tarball_file "$integrations_tarball" "types/twilio.d.ts"
+assert_tarball_file "$integrations_tarball" "types/mailjet.d.ts"
+echo "packed declaration files OK"
+
 npm init -y >/dev/null
 npm pkg set type=module >/dev/null
 npm install --silent --no-audit --no-fund "./$core_tarball"
@@ -41,6 +57,27 @@ node --input-type=module -e '
   if (missing.length > 0) { console.error("missing exports:", missing); process.exit(1); }
   console.log("export subpaths OK");
 '
+
+types_dir="$work_dir/types-consumer"
+mkdir "$types_dir"
+cd "$types_dir"
+npm init -y >/dev/null
+npm pkg set type=module >/dev/null
+npm install --silent --no-audit --no-fund "../$core_tarball" "../$storage_tarball" "../$integrations_tarball" @prisma/client@6.10.0
+cat > index.ts <<'EOF'
+import { createTimeEngine } from "@time-fit/core";
+import { createMemoryStore } from "@time-fit/core/memory";
+import { decisionLogConformanceChecks } from "@time-fit/core/testing";
+import { createPrismaStorage } from "@time-fit/storage-prisma";
+import { desktopNotificationAction } from "@time-fit/integrations/desktop";
+import { twilioSmsAction } from "@time-fit/integrations/twilio";
+import { mailjetEmailAction } from "@time-fit/integrations/mailjet";
+
+void [createTimeEngine, createMemoryStore, decisionLogConformanceChecks, createPrismaStorage,
+  desktopNotificationAction, twilioSmsAction, mailjetEmailAction];
+EOF
+"$repo_root/node_modules/.bin/tsc" --noEmit --module NodeNext --moduleResolution NodeNext --target ES2022 --skipLibCheck index.ts
+echo "packed TypeScript public imports OK"
 
 integrations_dir="$work_dir/integrations-example"
 mkdir "$integrations_dir"

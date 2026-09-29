@@ -341,11 +341,12 @@ integrity, log levels, benchmark script (decisions/sec for synthetic N × M,
 report-only).
 
 ### Stage G: Open-source release readiness
-> **Status (2026-09-28): in progress. Sections 1 and 3 are done**: the storage test flake is
-> fixed at its cause, publishable packages have 0 production advisories, the legacy advisories
-> are documented as accepted, and the project policy files are approved. See
-> [`stage-g-review/`](stage-g-review/). Sections 2, 4, and 5 (docs, release tooling, owner
-> decisions) are in review.
+> **Status (2026-09-29): sections 1–4 are done.** The storage test flake is fixed at its cause,
+> publishable packages have 0 production advisories, project policies are approved, and library
+> docs/release tooling are complete. See [`stage-g-review/`](stage-g-review/). **Section 5
+> remains an owner release decision:** confirm npm scope, merge to `main`, flip publishable
+> packages from `private: true`, run the provenance publish dry run, and make the first `0.x`
+> release.
 
 Library-first README + quickstart; per-package READMEs; API docs + `.d.ts` from JSDoc;
 CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, GOVERNANCE; `engines` + CI Node matrix; privacy

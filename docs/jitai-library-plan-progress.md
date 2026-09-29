@@ -371,3 +371,8 @@ Runs 3–5 were self-critiqued (Codex unavailable).
 - **Stage G sections 2 and 4 review run 2:** added an honest pre-release install path and
   replaced internal stage names in user-facing benchmark language. Both findings integrated;
   details are in `stage-g-review/sections-2-4-run-2-codex-response.md`.
+
+- **Stage G sections 2 and 4 review run 3:** final review approved sections 2 and 4. Close-out
+  records the review index and leaves section 5's owner release decisions; the Node 22/24 matrix
+  is first verified by CI on push. Details are in
+  `stage-g-review/sections-2-4-run-3-codex-response.md`.

@@ -4,6 +4,10 @@ TimeFit is a Node 20+ library for time-based Just-In-Time Adaptive Interventions
 declare decision points, eligibility and availability, randomized outcomes, and delivery plugins;
 then run an auditable decision engine from your scheduler.
 
+TimeFit is not yet published to npm. Until the first release, clone this repository, run
+`yarn install`, then try [the memory quickstart](examples/quickstart/index.mjs) or
+`yarn example1`. Package installation instructions take effect after release.
+
 | Package | Purpose |
 |---|---|
 | [`@time-fit/core`](packages/core/README.md) | Engine, task validation, memory demo store, and storage conformance checks. |
@@ -18,11 +22,11 @@ and the [architecture decisions](docs/adr/README.md). Runnable examples include 
 
 ## Scale and scheduling
 
-Stage F measured a 10,000-participant × 20-task default-memory tick at about **6.2 seconds**
+The performance benchmark measured a 10,000-participant × 20-task default-memory tick at about **6.2 seconds**
 on its benchmark machine. For simulated 1 ms decision-log I/O, concurrency 32 measured about
 22× concurrency 1. Defaults remain conservative (`concurrency: 1`, `pageSize: 100`): begin
 I/O-bound production tuning near concurrency 8, measure your adapter, and keep page size at
-least four times concurrency. Full methods and limits: [Stage F review](docs/stage-f-review/README.md).
+least four times concurrency. Full methods and limits: [performance benchmark report](docs/stage-f-review/README.md).
 
 ## Citing and MRT use
 

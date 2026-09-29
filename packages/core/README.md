@@ -1,8 +1,11 @@
 # @time-fit/core
 
 TimeFit's ESM decision engine for time-based JITAIs. Define decision points, provide storage
-ports and plugins, then call `tick()` from your scheduler. Node 20+ required.
+ports and plugins, then call `tick()` from your scheduler. Node 20+ required. TimeFit is not yet
+published to npm; until first release, clone this repository, run `yarn install`, and try
+`examples/quickstart` or `yarn example1`.
 
+After release:
 ```sh
 npm install @time-fit/core
 ```
@@ -78,8 +81,8 @@ its own ticks, while atomic decision-log claims protect overlapping ticks and se
 Defaults: `catchUpWindowMinutes: 5`, `concurrency: 1`, `pageSize: 100`, and
 `pluginTimeoutMs: 30_000`. Start I/O-bound deployment tuning near concurrency 8, measure it, and
 keep `pageSize` at least four times concurrency to avoid underfilled page waves. Concurrency is
-1–64; it preserves order within each participant, not across participants. See the measured
-[Stage F envelope](../../docs/stage-f-review/README.md), [calendar ADR](../../docs/adr/0005-calendar-and-scheduling.md), and [engine clarifications](../../docs/adr/0009-stage-c2-engine-clarifications.md).
+1–64; it preserves order within each participant, not across participants. See the
+[performance benchmark](../../docs/stage-f-review/README.md), [calendar ADR](../../docs/adr/0005-calendar-and-scheduling.md), and [engine clarifications](../../docs/adr/0009-stage-c2-engine-clarifications.md).
 
 Read [delivery guarantees](../../docs/guides/delivery-guarantees.md) and
 [privacy guidance](../../docs/guides/privacy.md) before a study deployment. Generated `.d.ts`

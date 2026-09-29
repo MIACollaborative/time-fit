@@ -367,3 +367,7 @@ Runs 3–5 were self-critiqued (Codex unavailable).
   corrected Changesets release defaults and citation metadata, and tightened privacy and
   Dependabot wording. All five review findings integrated; details are in
   `stage-g-review/sections-2-4-run-1-codex-response.md`.
+
+- **Stage G sections 2 and 4 review run 2:** added an honest pre-release install path and
+  replaced internal stage names in user-facing benchmark language. Both findings integrated;
+  details are in `stage-g-review/sections-2-4-run-2-codex-response.md`.

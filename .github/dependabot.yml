@@ -1,6 +1,6 @@
 version: 2
 updates:
-  # contrib/legacy is frozen; dependency updates are intentionally limited to active root tooling.
+  # One grouped root entry covers Yarn workspaces; legacy bumps may appear and follow frozen-legacy policy.
   - package-ecosystem: npm
     directory: "/"
     schedule:

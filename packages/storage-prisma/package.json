@@ -5,6 +5,13 @@
   "description": "Injected Prisma storage ports for @time-fit/core",
   "type": "module",
   "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peiyaoh/time-fit.git",
+    "directory": "packages/storage-prisma"
+  },
+  "homepage": "https://github.com/peiyaoh/time-fit/tree/main/packages/storage-prisma#readme",
+  "bugs": "https://github.com/peiyaoh/time-fit/issues",
   "types": "./types/index.d.ts",
   "exports": {
     ".": {

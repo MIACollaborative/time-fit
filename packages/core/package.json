@@ -5,6 +5,13 @@
   "description": "Time-based JITAI engine core: task specs, scheduling, decision identity, and randomization",
   "type": "module",
   "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peiyaoh/time-fit.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/peiyaoh/time-fit/tree/main/packages/core#readme",
+  "bugs": "https://github.com/peiyaoh/time-fit/issues",
   "types": "./types/index.d.ts",
   "exports": {
     ".": {

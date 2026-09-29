@@ -5,6 +5,13 @@
   "description": "Injected delivery actions for @time-fit/core",
   "type": "module",
   "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peiyaoh/time-fit.git",
+    "directory": "packages/integrations"
+  },
+  "homepage": "https://github.com/peiyaoh/time-fit/tree/main/packages/integrations#readme",
+  "bugs": "https://github.com/peiyaoh/time-fit/issues",
   "types": "./types/desktop.d.ts",
   "exports": {
     "./desktop": {

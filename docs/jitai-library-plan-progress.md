@@ -362,3 +362,8 @@ Runs 3–5 were self-critiqued (Codex unavailable).
   workspaces, grouped weekly Dependabot updates, and a BSD-compatible direct production/peer
   dependency license check. Publish remains deferred to Stage G section 5: candidates are still
   `private: true`, so the packed-tarball verification is the release-content check.
+
+- **Stage G sections 2 and 4 review run 1:** added package repository/homepage/bug metadata,
+  corrected Changesets release defaults and citation metadata, and tightened privacy and
+  Dependabot wording. All five review findings integrated; details are in
+  `stage-g-review/sections-2-4-run-1-codex-response.md`.

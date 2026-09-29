@@ -17,8 +17,9 @@ the snapshot hook. `logUnavailable: false` avoids storing unavailable eligible d
 trades MRT completeness for less stored data.
 
 Structured logs carry correlation IDs such as `tickId`, `decisionId`, task ID, and participant
-ID. Configure the application logger and its retention/access controls accordingly; plugin errors
-may include stack traces. The memory store retains bounded, short-lived records and is not a
+ID. Warning and error events can include capped condition evidence and error messages, so plugins
+must keep evidence free of personal data. Configure the application logger and its retention/access
+controls accordingly; plugin errors may include stack traces. The memory store retains bounded, short-lived records and is not a
 research-data store.
 
 Before deployment, define informed consent and a data inventory; set retention/deletion rules;

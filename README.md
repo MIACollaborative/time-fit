@@ -11,7 +11,7 @@ Note: This project is periodically updated. Watch the repository for updates.
 If you use this software, please cite it as below.
 ```
 
-Hung, P-Y, & Newman, M. W. (2025). TimeFit (Version 0.0.1) [Computer software]. https://github.com/MIACollaborative/time-fit
+Hung, P-Y, & Newman, M. W. (2025). TimeFit (Version 0.0.1) [Computer software]. https://github.com/peiyaoh/time-fit
 
 ```
 

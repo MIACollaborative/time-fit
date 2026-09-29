@@ -341,3 +341,10 @@ Runs 3–5 were self-critiqued (Codex unavailable).
   vulnerability reporting** before the links in `SECURITY.md`, `CODE_OF_CONDUCT.md`, and the
   issue chooser are available. See
   [`stage-g-review/section-3-run-3-codex-response.md`](stage-g-review/section-3-run-3-codex-response.md).
+
+## Repository home (2026-09-29)
+- Owner decision: the project stays under `github.com/peiyaoh/time-fit` (option A). The old
+  name `MIACollaborative/time-fit` redirects to it. The citation URLs in `CITATION.cff` and
+  `README.md` now use the canonical address; the license copyright holder (University of
+  Michigan / MIA Collaborative) is unchanged. Private vulnerability reporting was enabled on
+  the repository at the owner's request (`{"enabled": true}`).

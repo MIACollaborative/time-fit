@@ -376,3 +376,16 @@ Runs 3–5 were self-critiqued (Codex unavailable).
   records the review index and leaves section 5's owner release decisions; the Node 22/24 matrix
   is first verified by CI on push. Details are in
   `stage-g-review/sections-2-4-run-3-codex-response.md`.
+
+## Release checklist (2026-10-02)
+- Section 5's remaining owner steps are written up in `docs/release-checklist.md`: npm scope,
+  merging PR #30, the first version via Changesets, flipping `private`, the publish dry run,
+  provenance, publishing, and post-release follow-ups.
+- Checking the release commands found two packaging defects, both fixed:
+  - `yarn pack` / `yarn npm publish` failed at `prepack` with `command not found: tsc`, because
+    `typescript` was a root-only devDependency and Yarn runs workspace scripts with only that
+    workspace's binaries. `npm pack` (used by the packed verification) masked it. Each
+    publishable package now declares `typescript` as a devDependency.
+  - The unanchored `files` entry `README.md` matched `packages/core/__test__/fixtures/README.md`;
+    `README.md` and `LICENSE` are now anchored (`/README.md`, `/LICENSE`) in all three packages.
+  - All checks pass: 458 root tests, dependency/license/depcruise checks, and 6/6 packed checks.

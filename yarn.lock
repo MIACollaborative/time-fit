@@ -2123,6 +2123,7 @@ __metadata:
     jest: "npm:^29.7.0"
     luxon: "npm:^3.6.0"
     seedrandom: "npm:^3.0.5"
+    typescript: "npm:^5.9.3"
   languageName: unknown
   linkType: soft
 
@@ -2176,6 +2177,7 @@ __metadata:
     "@time-fit/core": "workspace:*"
     cross-env: "npm:^7.0.3"
     jest: "npm:^29.7.0"
+    typescript: "npm:^5.9.3"
   peerDependencies:
     "@time-fit/core": ">=0.0.0 <1"
   languageName: unknown
@@ -2201,6 +2203,7 @@ __metadata:
     cross-env: "npm:^7.0.3"
     jest: "npm:^29.7.0"
     prisma: "npm:^6.5.0"
+    typescript: "npm:^5.9.3"
   peerDependencies:
     "@prisma/client": ^6.5.0
     "@time-fit/core": ">=0.0.0 <1"

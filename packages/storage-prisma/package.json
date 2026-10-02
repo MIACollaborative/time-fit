@@ -23,8 +23,8 @@
     "src",
     "types",
     "prisma",
-    "README.md",
-    "LICENSE"
+    "/README.md",
+    "/LICENSE"
   ],
   "sideEffects": false,
   "engines": {
@@ -47,6 +47,7 @@
     "@time-fit/core": "workspace:*",
     "cross-env": "^7.0.3",
     "jest": "^29.7.0",
-    "prisma": "^6.5.0"
+    "prisma": "^6.5.0",
+    "typescript": "^5.9.3"
   }
 }

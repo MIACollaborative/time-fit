@@ -30,8 +30,8 @@
   "files": [
     "src",
     "types",
-    "README.md",
-    "LICENSE"
+    "/README.md",
+    "/LICENSE"
   ],
   "sideEffects": false,
   "engines": {
@@ -50,6 +50,7 @@
   "devDependencies": {
     "@time-fit/core": "workspace:*",
     "cross-env": "^7.0.3",
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "typescript": "^5.9.3"
   }
 }
